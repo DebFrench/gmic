@@ -17,7 +17,20 @@
 
       <hr noshade="noshade" size="1" width="90%"></hr>
       <p><table width="90%" border="0" cellspacing="0" cellpadding="0"><tr>
-            <td><a href="morechocolate.shtml"><img src="img/gift.png" /></a></td>
+            <td>
+              <a id="gift_id" href="morechocolate.shtml"><img src="img/gift.png" /></a>
+              <script>
+                $("#gift_id").mousedown(function(){
+                $(this).removeClass("over").addClass("down");
+                }).mouseup(function(){
+                $(this).removeClass("down");
+                }).mouseover(function(){
+                $(this).removeClass("down").addClass("over");
+                }).mouseout(function(){
+                $(this).removeClass("over");
+                })
+              </script>
+            </td>
             <td align="center"><a href="morechocolate.shtml"><font size="-1">Want to reward the developers ?</font></a></td>
       </tr></table></p>
       <hr noshade="noshade" size="1" width="90%"></hr>
@@ -33,7 +46,9 @@
     filters in it.<br/><br/>
 
     Here you will find pre-compiled binaries of the plug-in for common architectures. Pick one archive below, and run the installer or unzip the file contents
-    into your <a href="http://www.gimp.org">GIMP</a> plug-in directory.<br/><br/>
+    into your <a href="http://www.gimp.org">GIMP</a> plug-in directory.
+    If you want to build the plug-in directly from the sources, <a href="download.shtml#sources">follow these instructions</a>.
+    <br/><br/>
 
   <script language="javascript">
     function hop() {
@@ -74,27 +89,27 @@
     <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
       <tr>
         <td><a href="http://gmic.eu/files/latest/gmic_gimp_win64.exe"><img alt="" src="img/download_win64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-        <td><a href="http://gmic.eu/files/latest/gmic_gimp_win64.exe"><font size="3">Plug-in for Windows (64bits)</font></a><br/>
+        <td><a href="http://gmic.eu/files/latest/gmic_gimp_win64.exe"><font size="3">G'MIC plug-in for Windows (64bits)</font></a><br/>
           installer, alternative: <a href="http://gmic.eu/files/latest/gmic_gimp_win64.zip">zip file</a><br/><br/></td>
       </tr>
       <tr>
         <td><a href="http://gmic.eu/files/latest/gmic_gimp_win32.exe"><img alt="" src="img/download_win32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-        <td><a href="http://gmic.eu/files/latest/gmic_gimp_win32.exe"><font size="3">Plug-in for Windows (32bits)</font></a><br/>
+        <td><a href="http://gmic.eu/files/latest/gmic_gimp_win32.exe"><font size="3">G'MIC plug-in for Windows (32bits)</font></a><br/>
           installer, alternative: <a href="http://gmic.eu/files/latest/gmic_gimp_win32.zip">zip file</a><br/><br/></td>
       </tr>
       <tr>
         <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux64.zip"><img alt="" src="img/download_linux64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-        <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux64.zip"><font size="3">Plug-in for Linux (64bits)</font></a><br/>
+        <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux64.zip"><font size="3">G'MIC plug-in for Linux (64bits)</font></a><br/>
           zip file<br/><br/></td>
       </tr>
       <tr>
         <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux32.zip"><img alt="" src="img/download_linux32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-        <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux32.zip"><font size="3">Plug-in for Linux (32bits)</font></a><br/>
+        <td><a href="http://gmic.eu/files/latest/gmic_gimp_linux32.zip"><font size="3">G'MIC plug-in for Linux (32bits)</font></a><br/>
           zip file<br/><br/></td>
       </tr>
       <tr>
         <td><a href="http://karo03.bplaced.de/gmic/release/"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-        <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">Plug-in for Mac Intel</font></a><br/>
+        <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC plug-in for Mac Intel</font></a><br/>
           dmg file</td>
       </tr>
     </table>

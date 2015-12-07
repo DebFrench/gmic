@@ -216,6 +216,7 @@ cp -f gmic_stdlib.gmic ../html/gmic_stdlib.$SVERSION
 make stdlib CImg.h
 
 if [ "$1" == "final" ]; then
+    git tag -d v.$SVERSION
     git tag v.$SVERSION
     gmic_commit "Final release "${VERSION}
     git push --tags

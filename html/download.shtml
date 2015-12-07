@@ -21,7 +21,20 @@
 
               <hr noshade="noshade" size="1" width="90%"></hr>
               <p><table width="90%" border="0" cellspacing="0" cellpadding="0"><tr>
-                    <td><a href="morechocolate.shtml"><img src="img/gift.png" /></a></td>
+                    <td>
+                      <a id="gift_id" href="morechocolate.shtml"><img src="img/gift.png" /></a>
+                      <script>
+                        $("#gift_id").mousedown(function(){
+                        $(this).removeClass("over").addClass("down");
+                        }).mouseup(function(){
+                        $(this).removeClass("down");
+                        }).mouseover(function(){
+                        $(this).removeClass("down").addClass("over");
+                        }).mouseout(function(){
+                        $(this).removeClass("over");
+                        })
+                      </script>
+                    </td>
                     <td align="center"><a href="morechocolate.shtml"><font size="-1">Want to reward the developers ?</font></a></td>
               </tr></table></p>
               <hr noshade="noshade" size="1" width="90%"></hr>
@@ -147,8 +160,15 @@
         $ cd gmic-src/src
         $ make
       </pre>
-      and go out for a long drink. The compilation takes time. There are few source files, but many lines to compile anyway.<br/>
-      If you just want to compile the <b><a href="libgmic.shtml">libgmic</a></b> library, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make lib</tt>&nbsp;&nbsp; instead.<br/><br/>
+      and go out for a long drink (the compilation takes time). Alternatively, you may want to:<br/>
+      <ul>
+        <li>
+          Compile the <b><a href="libgmic.shtml">libgmic</a></b> library only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make lib</tt>&nbsp;&nbsp; instead.
+        </li>
+        <li>
+          Compile the <b><a href="gimp.shtml">GIMP plug-in</a></b> only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make gimp</tt>&nbsp;&nbsp;
+        </li>
+        </ul>
       Note that compiling issues (compiler segfault) may happen with versions of <i>g++ 4.8.1</i> and <i>4.8.2</i>.
       If you encounter this kind of errors, you probably have to disable the support of OpenMP
       in <b><font color="#000066">G'MIC</font></b> to make it work, by compiling it with:
