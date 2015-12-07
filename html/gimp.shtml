@@ -46,7 +46,9 @@
     filters in it.<br/><br/>
 
     Here you will find pre-compiled binaries of the plug-in for common architectures. Pick one archive below, and run the installer or unzip the file contents
-    into your <a href="http://www.gimp.org">GIMP</a> plug-in directory.<br/><br/>
+    into your <a href="http://www.gimp.org">GIMP</a> plug-in directory.
+    If you want to build the plug-in directly from the sources, <a href="download.shtml#sources">follow these instructions</a>.
+    <br/><br/>
 
   <script language="javascript">
     function hop() {
