@@ -12264,6 +12264,27 @@ frame_round : -skip ${1=10},${2=10},${3=0},${4=0},${5=255},${6=$5},${7=$6},${8=2
     -b. $3 -i... 100%,100%,1,4 -fc... $5,$6,$7,$8 -blend_fade[0,1] [-1] -rm.
   -nm $nm -endl -done -v +
 
+#@gmic frame_seamless : frame_size>=0,_patch_size>0,_blend_size>=0,_frame_direction={ 0=inner (preserve image size) | 1=outer }
+#@gmic : Insert frame in selected images, so that tiling the resulting image makes less visible seams.
+#@gmic : Default values: 'patch_size=7', 'blend_size=5' and 'frame_direction=1'.
+#@gmic : $ image.jpg --frame_seamless 30 -array 2,2
+frame_seamless : -check "$1>=0 && isint(${2=7}) && $2>0 && isint(${3=5}) && $3>=0" -skip ${4=1}
+  -v - s0="inner" s1="outer"
+  -v + -e[^-1] "Insert "${s{!!$4}}" seamless frame in image$?, with size $1, patch size $2 and blend size $3." -v -
+  -repeat $! -l[$>]
+    w2={round(w/2)} h2={round(h/2)}
+    w4={round(w/4)} h4={round(h/4)}
+    -if {!$4} -r {w-$1},{h-$1},1,100%,0,0,0.5,0.5 -endif
+    100%,100%,1,1,-1 -r[-2,-1] {w+$1},{h+$1},1,100%,0,0,0.5,0.5 -n. 0,1
+    -shift -$w2,-$h2,0,0,2
+    -inpaint_patchmatch.. [1],0,$2,10,$3
+    -rectangle. $1,$1,{w-1-$1},{h-1-$1}
+    -shift -$w4,-$h4,0,0,2
+    -inpaint_patchmatch.. [1],0,$2,10,$3
+    -rm.
+    -shift {$w4+$w2},{$h4+$h2},0,0,2
+  -endl -done -v +
+
 #@gmic frame_x : size_x[%],_col1,...,_colN
 #@gmic : Insert colored frame along the x-axis in selected images.
 #@gmic : Default values: 'col1=col2=col3=255' and 'col4=255'.
