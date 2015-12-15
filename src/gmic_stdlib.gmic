@@ -20764,10 +20764,10 @@ gimp_make_seamless_preview :
 
 #@gimp Make seamless [patch-based] : gimp_frame_seamless, gimp_frame_seamless_preview(0)
 #@gimp : Frame size = float(32,0,256)
-#@gimp : Patch size = int(7,3,128)
-#@gimp : Blend size = int(0,0,128)
+#@gimp : Patch size = int(9,3,64)
+#@gimp : Blend size = int(0,0,64)
 #@gimp : Frame type = choice(1,"Inner","Outer")
-#@gimp : Equalize light = float(0,0,100)
+#@gimp : Equalize light = float(100,0,100)
 #@gimp : sep = separator(),
 #@gimp : Preview original = bool(0)
 #@gimp : Tiled preview = choice(3,"None","2x1","1x2","2x2","3x3","4x4")
