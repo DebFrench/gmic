@@ -20742,7 +20742,7 @@ gimp_imagegrid_triangular :
     -imagegrid_triangular ${1-3},{$7/255},${4-6}
   -endl -a c -endl -done
 
-#@gimp Make seamless : gimp_make_seamless, gimp_make_seamless_preview(1)
+#@gimp Make seamless [diffusion] : gimp_make_seamless, gimp_make_seamless_preview(1)
 #@gimp : Equalize light = float(0,0,100)
 #@gimp : sep = separator(),
 #@gimp : Preview original = bool(0)
@@ -20759,6 +20759,28 @@ gimp_make_seamless :
 gimp_make_seamless_preview :
   u={arg($3,2,1,2,3,4)} v={arg($3,1,2,2,3,4)}
   -gimp_split_preview "-if {!$2} -gimp_make_seamless $* -endif -if $3 -array "$u","$v" -endif",$-1
+
+#@gimp Make seamless [patch-based] : gimp_frame_seamless, gimp_frame_seamless_preview(0)
+#@gimp : Frame size = float(32,0,256)
+#@gimp : Patch size = int(7,3,128)
+#@gimp : Blend size = int(5,3,128)
+#@gimp : Frame type = choice(1,"Inner","Outer")
+#@gimp : Equalize light = float(0,0,100)
+#@gimp : sep = separator(),
+#@gimp : Preview original = bool(0)
+#@gimp : Tiled preview = choice(3,"None","2x1","1x2","2x2","3x3","4x4")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b> This filter helps in converting your input pattern as a <b>seamless</b> (a.k.a periodic) texture.</small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/15/2015</i>.</small>")
+gimp_frame_seamless :
+  -repeat $! -l[$>]
+    -if $5 --b {20.5-$1/50}% --[0] [1] -fc. ${-average_color.} -+ -endif
+  -endl -done
+  -frame_seamless ${1-4}
+
+gimp_frame_seamless_preview :
+  u={arg($7,2,1,2,3,4)} v={arg($7,1,2,2,3,4)}
+  -gimp_split_preview "-if {!$6} -gimp_frame_seamless $* -endif -if $7 -array "$u","$v" -endif",$-1
 
 #@gimp Ministeck : gimp_ministeck, gimp_ministeck_preview(1)
 #@gimp : Number of colors = int(8,2,24)
