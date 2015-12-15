@@ -20763,7 +20763,7 @@ gimp_make_seamless_preview :
   -gimp_split_preview "-if {!$2} -gimp_make_seamless $* -endif -if $3 -array "$u","$v" -endif",$-1
 
 #@gimp Make seamless [patch-based] : gimp_frame_seamless, gimp_frame_seamless_preview(0)
-#@gimp : Frame size = float(32,0,256)
+#@gimp : Frame size = int(32,0,256)
 #@gimp : Patch size = int(9,3,64)
 #@gimp : Blend size = int(0,0,64)
 #@gimp : Frame type = choice(1,"Inner","Outer")
@@ -20778,7 +20778,7 @@ gimp_frame_seamless :
   -repeat $! -l[$>]
     -if $5 --b {20.5-$1/50}% --[0] [1] -fc. ${-average_color.} -+ -endif
   -endl -done
-  -frame_seamless ${1-4}
+  -frame_seamless ${1-4} -c 0,255
 
 gimp_frame_seamless_preview :
   u={arg($7,2,1,2,3,4)} v={arg($7,1,2,2,3,4)}
