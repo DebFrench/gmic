@@ -10,10 +10,11 @@
   <table><tr>
   <td valign="top">
     <center>
-      <div><a href="img/gmicky_wilber_large.jpg" class="highslide" onclick="return hs.expand(this)"><img alt="" border="0" src="img/gmicky_wilber_small.jpg"/></a>
-        <div class="highslide-caption"><i><b>Gmicky</b>, the G'MIC mascot, by <a href="http://www.mahvin.com/">Mahvin</a>.</i></div></div><br/>
+
+      <div><a href="img/gmicky_deevad600.jpg" class="highslide" onclick="return hs.expand(this)"><img alt="" border="0" src="img/gmicky_deevad220.jpg" /></a>
+        <div class="highslide-caption"><i><b>Gmicky</b>, the G'MIC mascot, artwork by <a href="http://www.davidrevoy.com/">David Revoy</a>.</i></div></div>
       <font size="-2"><i><b>Gmicky</b>, the G'MIC mascot<br/>
-          (by <a href="http://www.mahvin.com/">Mahvin</a>)</i></font><br/>
+          (artwork by <a href="http://www.davidrevoy.com/">David Revoy</a>)</i></font><br/>
 
       <!-- <a href='https://pledgie.com/campaigns/29756'><img alt='Click here to lend your support to: G&#x27;MIC' src='img/donate.png' border='0' ></a> -->
       <!-- <br/><font size="-2">to help develop the project !</font> -->
