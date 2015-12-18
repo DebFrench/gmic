@@ -2475,24 +2475,37 @@ function1d : -check "${1=1}>=0 && $1<=1" -skip ${2=0},${3=0}
   --sqr. --*[-2,-1] -a[-4--1] c -*[-2,-1] -s. c -+[-4--1] -rm..
   -endl -v +
 
-#@gmic gmicky
+#@gmic gmicky_deevad
 #@gmic : Load a new image of the G'MIC mascot 'Gmicky'.
-#@gmic : $ -gmicky
-gmicky :
-  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky'."
+#@gmic : $ -gmicky_deevad
+gmicky_deevad :
+  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky', from Deevad."
   -v -
-  filename=${-path_rc}/gmicky_large.cimgz
+  filename=${-path_rc}/gmicky_large_deevad.cimgz
   -if $filename $filename
-  -else http://gmic.eu/img/gmicky_large.cimgz -o. $filename -+. 0
+  -else http://gmic.eu/img/gmicky_large_deevad.cimgz -o. $filename -+. 0
   -endif
-  -nm. [gmicky]
+  -nm. [gmicky_deevad]
+  -v +
+
+#@gmic gmicky_mahvin
+#@gmic : Load a new image of the G'MIC mascot 'Gmicky' from Mahvin.
+#@gmic : $ -gmicky_mahvin
+gmicky_mahvin :
+  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky', from Mahvin."
+  -v -
+  filename=${-path_rc}/gmicky_large_mahvin.cimgz
+  -if $filename $filename
+  -else http://gmic.eu/img/gmicky_large_mahvin.cimgz -o. $filename -+. 0
+  -endif
+  -nm. [gmicky_mahvin]
   -v +
 
 #@gmic gmicky_wilber
 #@gmic : Load a new image of the G'MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'.
 #@gmic : $ -gmicky_wilber
 gmicky_wilber :
-  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'."
+  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky' together with GIMP mascot 'Wilber', from Mahvin."
   -v -
   filename=${-path_rc}/gmicky_wilber_large.cimgz
   -if $filename $filename
@@ -19850,7 +19863,7 @@ gimp_download_all_data :
   _prefix_lightleak=
 
   # Logos.
-  _filenames_logo=gmicky_large,gmicky_small,gmicky_wilber_large,gmicky_wilber_small,roddy_large,roddy_small
+  _filenames_logo=gmicky_large_deevad,gmicky_small_deevad,gmicky_large_mahvin,gmicky_small_mahvin,gmicky_wilber_large,gmicky_wilber_small,roddy_large,roddy_small
   _url_logo=http://gmic.eu/img
   _prefix_logo=
 
@@ -20102,7 +20115,7 @@ _heart80x73 :
   40,73,1,1,0 -ellipse 22,22,20,20,0,1,1 -polygon 3,7,37,42,72,42,27,1,1 --mirror x -a x
 
 #@gimp Gmicky - Roddy : gimp_gmicky, gimp_gmicky_preview
-#@gimp : Mascot image = choice("Gmicky","Gmicky &amp; Wilber","Roddy")
+#@gimp : Mascot image = choice("Gmicky (by Deevad)","Gmicky (by Mahvin)","Gmicky &amp; Wilber (by Mahvin)","Roddy (by Mahvin)")
 #@gimp : sep = separator()
 #@gimp : note = note{"<b><i>Gmicky</i></b> is the name of the <b>G'MIC</b> mascot. He is a small and cute tiger who knows how to do magic.
 #@gimp : <b><i>Gmicky</i></b> is a tiger, i.e. fast, agile and elegant, just as the <b>G'MIC</b> code is :).
@@ -20111,19 +20124,25 @@ _heart80x73 :
 #@gimp : note = note{"<b><i>Roddy</i></b> is another mascot designed specifically for the <i>Artistic / Rodilius</i> filter of <b>G'MIC</b>.\n"}
 #@gimp : note = note{"<b><i>Gmicky</i></b> and <b><i>Roddy</i></b> have been both created and drawn by "}
 #@gimp : link = link("Mahvelous Mahvin","http://www.mahvin.com/")
+#@gimp : note = note{"and"}
+#@gimp : link = link("David Revoy","http://www.davidrevoy.com/")
 gimp_gmicky :
-  -rm
-  -if {$1==0} -gmicky -nm name(Gmicky)
-  -elif {$1==1} -gmicky_wilber -nm "name(Gmicky & Wilber)"
-  -else -roddy -nm name(Roddy)
+-rm
+  -if {$1==0} -gmicky_deevad -nm "name(Gmicky)"
+  -elif {$1==1} -gmicky_mahvin -nm "name(Gmicky)"
+  -elif {$1==2} -gmicky_wilber -nm "name(Gmicky & Wilber)"
+  -else -roddy -nm "name(Roddy)"
   -endif
 
 gimp_gmicky_preview :
   w={w} h={h} -rm
   -if {$1==0}
-    filename=${-path_rc}gmicky_small.cimgz
-    url=http://gmic.eu/img/gmicky_small.cimgz
+    filename=${-path_rc}gmicky_small_deevad.cimgz
+    url=http://gmic.eu/img/gmicky_small_deevad.cimgz
   -elif {$1==1}
+    filename=${-path_rc}gmicky_small_mahvin.cimgz
+    url=http://gmic.eu/img/gmicky_small_mahvin.cimgz
+  -elif {$1==2}
     filename=${-path_rc}gmicky_wilber_small.cimgz
     url=http://gmic.eu/img/gmicky_wilber_small.cimgz
   -else
