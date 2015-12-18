@@ -21097,8 +21097,8 @@ gimp_bokeh :
     -done
     -rm. -nm. name($nm),opacity(100),mode(screen)
     -rv
-    -if {$_output_mode==0} -gimp_merge_layers
-    -elif {$_output_mode<2} -rm.
+    -if {0$_output_mode==0} -gimp_merge_layers
+    -elif {0$_output_mode<2} -rm.
     -endif
   -endl -done
 
