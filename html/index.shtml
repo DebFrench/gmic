@@ -10,10 +10,10 @@
       <table><tr>
           <td valign="top">
             <center>
-              <div><a href="img/gmicky_large.jpg" class="highslide" onclick="return hs.expand(this)"><img alt="" border="0" src="img/gmicky_small.jpg" /></a>
-                <div class="highslide-caption"><i><b>Gmicky</b>, the G'MIC mascot, by <a href="http://www.mahvin.com/">Mahvin</a>.</i></div></div><br/>
+              <div><a href="img/gmicky_deevad600.jpg" class="highslide" onclick="return hs.expand(this)"><img alt="" border="0" src="img/gmicky_deevad240.jpg" /></a>
+                <div class="highslide-caption"><i><b>Gmicky</b>, the G'MIC mascot, artwork by <a href="http://www.davidrevoy.com/">David Revoy</a>.</i></div></div>
               <font size="-2"><i><b>Gmicky</b>, the G'MIC mascot<br/>
-                  (by <a href="http://www.mahvin.com/">Mahvin</a>)</i></font><br/>
+                  (artwork by <a href="http://www.davidrevoy.com/">David Revoy</a>)</i></font><br/>
 
               <a id="download_id" href="download.shtml"><img alt="" border="0" src="img/download_icon.png" /></a>
               <script>
@@ -251,7 +251,7 @@
             </ul></td>
             <td valign="top"><ul>
                 <li><a href="http://polariscorp.free.fr"><b>Stephane de la Linuxerie</b></a> (design).</li>
-                <li><a href="http://www.mahvin.com/"><b>Mahvin</b></a> (testing, design).</li>
+                <li><a href="http://www.mahvin.com/"><b>Mahvin</b></a> (mascott design, design).</li>
                 <li><a href="http://www.omtefotograferen.nl/"><b>Mark</b></a> (translation).</li>
                 <li><a href="https://plus.google.com/115686188945991205104/about"><b>Jovana Milutinovich</b></a> (translation).</li>
                 <li><b>MareroQ</b> (translation).</li>
@@ -264,7 +264,7 @@
                 <li><b>Josef Radinger</b> (packaging).</li>
                 <li><a href="http://razgrizbox.wordpress.com"><b>Guilherme Razgriz</b></a> (translation).</li>
                 <li><a href="http://www.valdyas.org/fading"><b>Boudewijn Rempt</b></a> (code, testing).</li>
-                <li><a href="http://www.davidrevoy.com/"><b>David Revoy</b></a> (testing).</li>
+                <li><a href="http://www.davidrevoy.com/"><b>David Revoy</b></a> (mascott design, testing).</li>
                 <li><a href="http://karo03.bplaced.net/"><b>Karsten Rodenacker</b></a> (testing, packaging).</li>
                 <li><a href="http://www.flickr.com/photos/danisarda/"><b>Dani Sarda&agrave;</b></a> (translation).</li>
                 <li><b>Yuri Shemanin</b> (debugging).</li>
