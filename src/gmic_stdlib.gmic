@@ -20116,7 +20116,7 @@ _heart80x73 :
   40,73,1,1,0 -ellipse 22,22,20,20,0,1,1 -polygon 3,7,37,42,72,42,27,1,1 --mirror x -a x
 
 #@gimp Gmicky - Roddy : gimp_gmicky, gimp_gmicky_preview
-#@gimp : Mascot image = choice("Gmicky (by Deevad)","Gmicky (by Mahvin)","Gmicky &amp; Wilber (by Mahvin)","Roddy (by Mahvin)")
+#@gimp : Mascot image = choice{"Gmicky (by Deevad)","Gmicky (by Mahvin)","Gmicky &amp; Wilber (by Mahvin)","Roddy (by Mahvin)"}
 #@gimp : sep = separator()
 #@gimp : note = note{"<b><i>Gmicky</i></b> is the name of the <b>G'MIC</b> mascot. He is a small and cute tiger who knows how to do magic.
 #@gimp : <b><i>Gmicky</i></b> is a tiger, i.e. fast, agile and elegant, just as the <b>G'MIC</b> code is :).
@@ -20126,7 +20126,7 @@ _heart80x73 :
 #@gimp : note = note{"<b><i>Gmicky</i></b> and <b><i>Roddy</i></b> have been both created and drawn by "}
 #@gimp : link = link("Mahvelous Mahvin","http://www.mahvin.com/")
 #@gimp : note = note{"and"}
-#@gimp : link = link("David Revoy","http://www.davidrevoy.com/")
+#@gimp : link = link{"David Revoy (Deevad)","http://www.davidrevoy.com/"}
 gimp_gmicky :
 -rm
   -if {$1==0} -gmicky_deevad -nm "name(Gmicky)"
