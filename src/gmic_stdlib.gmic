@@ -1128,7 +1128,7 @@ _help_header_latex :
 \n\\newcommand{\\Cb}[1]{\\textcolor{cb}{#1}}
 \n\\newcommand{\\Cc}[1]{\\textcolor{cc}{#1}}
 \n\\newcommand{\\Cd}[1]{\\textcolor{cd}{#1}}
-\n\\title{\\fbox{\\parbox{\\textwidth}{\\begin{center}\\vspace*{2cm}\\includegraphics[width=12cm]{logo4.jpg}\\\\\\vspace*{1cm}{\\Huge \\textbf{The Handbook}\\\\{\\small Version "$strver$strprerelease"}\\\\\\vspace*{1cm}}\\end{center}}}}
+\n\\title{\\fbox{\\parbox{\\textwidth}{\\begin{center}\\vspace*{2cm}\\includegraphics[width=12cm]{gmic_banner.jpg}\\\\\\vspace*{1cm}{\\Huge \\textbf{The Handbook}\\\\{\\small Version "$strver$strprerelease"}\\\\\\vspace*{1cm}}\\end{center}}}}
 \n\\author{\\Large \\bf David Tschumperl\\'e}
 \n\\renewcommand\\indexname{Index of commands}
 \n\\makeindex

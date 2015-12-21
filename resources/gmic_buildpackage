@@ -141,7 +141,7 @@ fi
 DIST=`lsb_release -d | tail -c+13 | xargs`
 BITS=`uname -m`
 
-if [ "$DIST" != "Ubuntu 14.04.3 LTS" ] || [ "$BITS" != "x86_64" ] ; then
+if [ "$DIST" != "Ubuntu 15.10" ] || [ "$BITS" != "x86_64" ] ; then
     SF_HOME=/media/sf_dtschump/
     cd ${SF_HOME}/work/src
     RELEASE0=`grep "#define gmic_version" gmic/src/gmic.h | tail -c5`
@@ -359,7 +359,7 @@ cp -f ${TARFILE}.gz ${HOME}/work/src/
 if [ "$1" == "final" ]; then
     lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz; quit";
 fi
-lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/latest/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
+#lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/latest/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
 
 # Create debian packages for debian/ubuntu 64 bits.
 #--------------------------------------------------
@@ -367,7 +367,7 @@ echo " - Create debian packages."
 
 cp ${HOME}/work/src/deb_${TARFILE}.gz /tmp/ &&
 cd /tmp/ &&
-PAK=gmic_${VERSION}${SUFFIX}_ubuntu_trusty_amd64.deb &&
+PAK=gmic_${VERSION}${SUFFIX}_ubuntu_wily_amd64.deb &&
 DIR=gmic-${VERSION}${SUFFIX} &&
 rm -rf $PAK &&
 touch deb_${TARFILE}.gz &&
@@ -384,7 +384,7 @@ echo ELARA_DONE
 echo " - Waiting for all packages.".
 
 cd ${HOME}/work/src/
-gmic -_update_server_binaries ${VERSION}${SUFFIX}
+#gmic -_update_server_binaries ${VERSION}${SUFFIX}
 
 #
 # End of file.
