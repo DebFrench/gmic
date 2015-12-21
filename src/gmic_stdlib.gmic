@@ -3925,8 +3925,9 @@ _update_server_binaries :
         -if {!$is_pre}
           is_win=${-strcontains[]" "$file,win}
           -if $is_win folder="windows" -else folder="linux" -endif
-          -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/"$folder/$file"' and 'http://gmic.eu/files/"$folder/$file_short"'." -v -
+          -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/"$folder/$file"'." -v -
           -_update_server_upload $file,"files/"$folder/$file
+          -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/"$folder/$file_short"'." -v -
           -_update_server_upload $file,"files/"$folder/$file_short
         -endif
         file$>= N-=1
