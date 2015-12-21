@@ -2475,11 +2475,16 @@ function1d : -check "${1=1}>=0 && $1<=1" -skip ${2=0},${3=0}
   --sqr. --*[-2,-1] -a[-4--1] c -*[-2,-1] -s. c -+[-4--1] -rm..
   -endl -v +
 
+#@gmic gmicky
+#@gmic :  Insert new image of the G'MIC mascot 'Gmicky'.
+gmicky :
+  -gmicky_deevad -nm. [gmicky]
+
 #@gmic gmicky_deevad
-#@gmic : Load a new image of the G'MIC mascot 'Gmicky'.
+#@gmic : Insert new image of the G'MIC mascot 'Gmicky', by David Revoy.
 #@gmic : $ -gmicky_deevad
 gmicky_deevad :
-  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky', from Deevad."
+  -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky', by David Revoy."
   -v -
   filename=${-path_rc}/gmicky_large_deevad.cimgz
   -if $filename $filename
@@ -2489,10 +2494,10 @@ gmicky_deevad :
   -v +
 
 #@gmic gmicky_mahvin
-#@gmic : Load a new image of the G'MIC mascot 'Gmicky' from Mahvin.
+#@gmic : Insert new image of the G'MIC mascot 'Gmicky', by Mahvin.
 #@gmic : $ -gmicky_mahvin
 gmicky_mahvin :
-  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky', from Mahvin."
+  -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky', by Mahvin."
   -v -
   filename=${-path_rc}/gmicky_large_mahvin.cimgz
   -if $filename $filename
@@ -2502,10 +2507,10 @@ gmicky_mahvin :
   -v +
 
 #@gmic gmicky_wilber
-#@gmic : Load a new image of the G'MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'.
+#@gmic : Insert new image of the G'MIC mascot 'Gmicky' together with GIMP mascot 'Wilber', by Mahvin.
 #@gmic : $ -gmicky_wilber
 gmicky_wilber :
-  -e[^-1] "Load image of the G\47MIC mascot 'Gmicky' together with GIMP mascot 'Wilber', from Mahvin."
+  -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky' together with GIMP mascot 'Wilber', by Mahvin."
   -v -
   filename=${-path_rc}/gmicky_wilber_large.cimgz
   -if $filename $filename
