@@ -68,7 +68,8 @@
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><img alt="" src="img/download_ubuntu64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><font size="3">G'MIC for Ubuntu 15.04 <i>Vivid</i> (64 bits)</font></a><br/>
-                  deb file, alternative: <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb">for Ubuntu 14.04 <i>Trusty</i> (64 bits)</a><br/><br/></td>
+                  deb file, alternative1: <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb">for Ubuntu 14.04 <i>Trusty</i> (64 bits)</a><br/>
+                  alternative2: <a href="http://gmic.eu/files/linux/gmic_ubuntu_wily_amd64.deb">for Ubuntu 15.10 <i>Wily</i> (64 bits)</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><img alt="" src="img/download_ubuntu32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
@@ -97,8 +98,8 @@
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/prerelease"><font size="3">Get current prerelease</font></a><br/>
-                  For testing (sources, Windows/Linux binaries)<br/><br/></td>
+                <td><a href="http://gmic.eu/files/prerelease"><font size="3">G'MIC pre-release for testing</font></a><br/>
+                  sources and Windows/Linux installers/binaries<br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/"><img alt="" src="img/download_browse.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
