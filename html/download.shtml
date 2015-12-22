@@ -63,22 +63,26 @@
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><img alt="" src="img/download_debian64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (64 bits)</font></a><br/>
-                  deb file, alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_amd64.deb">for Debian 7 <i>Wheezy</i> (64 bits)</a><br/><br/></td>
+                  deb file<br/>
+                  alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_amd64.deb">for Debian 7 <i>Wheezy</i> (64 bits)</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><img alt="" src="img/download_debian32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (32 bits)</font></a><br/>
-                  deb file, alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_i386.deb">for Debian 7 <i>Wheezy</i> (32 bits)</a><br/><br/></td>
+                  deb file<br/>
+                  alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_i386.deb">for Debian 7 <i>Wheezy</i> (32 bits)</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><img alt="" src="img/download_ubuntu64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><font size="3">G'MIC for Ubuntu 15.04 <i>Vivid</i> (64 bits)</font></a><br/>
-                  deb file, alternative1: <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb">for Ubuntu 14.04 <i>Trusty</i> (64 bits)</a><br/>
+                <td>
+                  <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (64 bits)</font></a><br/>
+                  deb file<br/>
+                  alternative1: <a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb">for Ubuntu 15.04 <i>Vivid</i> (64 bits)</a><br/>
                   alternative2: <a href="http://gmic.eu/files/linux/gmic_ubuntu_wily_amd64.deb">for Ubuntu 15.10 <i>Wily</i> (64 bits)</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><img alt="" src="img/download_ubuntu32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><font size="3">for Ubuntu 14.04 <i>Trusty</i> (32 bits)</font></a><br/>
+                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (32 bits)</font></a><br/>
                   deb file<br/><br/></td>
               </tr>
               <tr>
@@ -94,12 +98,14 @@
               <tr>
                 <td><a href="http://karo03.bplaced.de/gmic/git/Macgmic_macosx_64-Yosemite.dmg"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://karo03.bplaced.de/gmic/git/Macgmic_macosx_64-Yosemite.dmg"><font size="3">G'MIC for MacOSX 10.6-10.10 (64bits)</font></a><br/>
-                  dmg file, alternative: <a href="http://karo03.bplaced.de/gmic/release/">dmg for previous versions</a><br/><br/></td>
+                  dmg file<br/>
+                  alternative: <a href="http://karo03.bplaced.de/gmic/release/">dmg for previous versions</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC sources</font></a><br/>
-                  tar.gz file, alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
+                  tar.gz file<br/>
+                  alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
