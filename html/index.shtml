@@ -55,7 +55,7 @@
           <td valign="top">
             <b><font color="#000066">G'MIC</font></b> is a full-featured open-source framework for <b><a href="https://en.wikipedia.org/wiki/Image_processing">image processing</a></b>.
             It provides several different <b><a href="https://en.wikipedia.org/wiki/User_interface">user interfaces</a></b> to convert/manipulate/filter/visualize
-            <b>generic image datasets</b>, ranging from 1d scalar signals to 3d+t sequences of multi-spectral volumetric images, including 2d color images.<br/><br/>
+            <b>generic image datasets</b>, ranging from 1d scalar signals to 3d+t sequences of multi-spectral volumetric images, thus including 2d color images.<br/><br/>
             These interfaces are:<br/><br/>
 
             <table cellpadding="10" cellspacing="0">
@@ -86,7 +86,7 @@
                 <td valign="top">
                   <b>3</b> - A web service <a href="http://gmicol.greyc.fr"><b>G'MIC Online</b></a>, to allow users applying image processing algorithms
                   on their images, directly from a web browser.
-                  <p align="right"><i><font size="-1"><a href="http://gmicol.greyc.fr">[learn more...]</a></font></i></p>
+                  <p align="right"><i><font size="-1"><a href="http://gmicol.greyc.fr">[try it now...]</a></font></i></p>
                   <hr noshade="noshade" size="1" width="80%"/>
                 </td>
                 <td valign="top"><div><a href="img/gmic_gmicol.jpg" class="highslide" onclick="return hs.expand(this)"><img alt="" border="0" src="img/gmic_gmicol_thumb.jpg" /></a>
@@ -137,7 +137,7 @@
       <b><font color="#000066">G'MIC</font></b> is actually a handy toolbox for many image/signal processing applications.
       See also the <a href="gallery.shtml">Gallery section</a> for more detailed examples on its use.
       You can also try the <a href="http://gmicol.greyc.fr">online version</a> of <b><font color="#000066">G'MIC</font></b>
-      to see some of its possibilities!<br/><br/>
+      to try some of the filters it proposes!<br/><br/>
 
       <center>
         <img src="img/ss_brain3d.jpg" border="0" alt="G'MIC screenshot"></img>

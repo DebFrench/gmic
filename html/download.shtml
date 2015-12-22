@@ -7,7 +7,7 @@
   <div id="center"><div id="text_centre_intro">
 
       <p>The packages below provide both the command-line tool <a href="tutorial/basics.shtml">gmic</a> and the plug-in for <a href="http://www.gimp.org">GIMP</a>
-        for some common architectures (also <i>ZArt</i> and the <i>libgmic</i> interfaces in the deb packages).
+        for some common architectures (also <i>ZArt</i> and the <i>libgmic</i> interfaces in the .deb packages).
         If you are looking for the <a href="http://www.gimp.org">GIMP</a> plug-in only, please <a href="gimp.shtml">check this dedicated page</a> instead.
         It is recommended you uninstall any previous installations of <b><font color="#000066">G'MIC</font></b>, before installing a new version.
       </p>
@@ -94,6 +94,11 @@
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC sources</font></a><br/>
                   tar.gz file, alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
+              </tr>
+              <tr>
+                <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                <td><a href="http://gmic.eu/files/prerelease"><font size="3">Get current prerelease</font></a><br/>
+                  For testing (sources, Windows/Linux binaries)<br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/"><img alt="" src="img/download_browse.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
