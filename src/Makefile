@@ -161,8 +161,8 @@ X11_LIBS = `pkg-config --libs x11` -lpthread #`pkg-config --libs xrandr`
 
 # Flags to enable fast display, using XShm.
 # This requires the presence of the X11 extension include and library files.
-XSHM_CFLAGS = -Dcimg_use_xshm
-XSHM_LIBS = -L$(USR)/X11R6/lib -lXext
+XSHM_CFLAGS = -Dcimg_use_xshm `pkg-config --cflags xcb-shm`
+XSHM_LIBS = `pkg-config --libs xcb-shm`
 
 # Flags to enable image display, using GDI32.
 # This requires the presence of the GDI32 include and library files.
