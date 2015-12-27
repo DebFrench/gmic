@@ -78,6 +78,9 @@ ifeq ($(OS),FreeBSD)
 OS = Unix
 USR = /usr/local
 endif
+ifeq ($(OS),NetBSD)
+OS = Unix
+endif
 LIB=lib
 BIN=bin
 INCLUDE=include
