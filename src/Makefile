@@ -181,8 +181,8 @@ JPEG_LIBS = -ljpeg
 
 # Flags to enable native support for TIFF image files, using the TIFF library.
 # This requires the presence of the libtiff include and library files.
-TIFF_CFLAGS = -Dcimg_use_tiff
-TIFF_LIBS = -ltiff
+TIFF_CFLAGS = -Dcimg_use_tiff `pkg-config --cflags libtiff-4`
+TIFF_LIBS = `pkg-config --libs libtiff-4`
 
 # Flags to enable native support for MINC2 image files, using the MINC2 library.
 # ( http://en.wikibooks.org/wiki/MINC/Reference/MINC2.0_Users_Guide )
