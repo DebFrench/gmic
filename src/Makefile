@@ -156,8 +156,8 @@ OPENMP_LIBS = -lgomp
 # Flags to enable image display, using X11
 # (keep /usr/ dirname here since X11 is located in /usr/ on Mac too).
 # This requires the presence of the X11 include and library files.
-X11_CFLAGS = -Dcimg_display=1 -Dcimg_appname=\\\"gmic\\\" -I/usr/X11R6/include #-Dcimg_use_xrandr
-X11_LIBS = -L/usr/X11R6/lib -lX11 -lpthread #-lXrandr
+X11_CFLAGS = -Dcimg_display=1 -Dcimg_appname=\\\"gmic\\\" `pkg-config --cflags x11` #-Dcimg_use_xrandr
+X11_LIBS = `pkg-config --libs x11` -lpthread #`pkg-config --libs xrandr`
 
 # Flags to enable fast display, using XShm.
 # This requires the presence of the X11 extension include and library files.
