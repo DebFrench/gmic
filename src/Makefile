@@ -191,8 +191,8 @@ MINC2_LIBS = -lminc_io -lvolume_io2 -lminc2 -lnetcdf -lhdf5 -lz -L${HOME}/local/
 
 # Flags to enable native support for downloading files from the network.
 # ( http://curl.haxx.se/libcurl/ )
-CURL_CFLAGS = -Dcimg_use_curl
-CURL_LIBS = -lcurl
+CURL_CFLAGS = -Dcimg_use_curl `pkg-config --cflags libcurl`
+CURL_LIBS = `pkg-config --libs libcurl`
 
 # Flags to enable native support of webcams and video streaming, using the OpenCV library.
 # This requires the presence of the OpenCV include and library files.
