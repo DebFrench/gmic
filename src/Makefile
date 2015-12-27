@@ -211,11 +211,10 @@ EXR_LIBS = -lIlmImf -lHalf
 
 # Flags to enable the use of the FFTW3 library.
 # This requires the presence of the FFTW3 include and library files.
-FFTW_CFLAGS = -Dcimg_use_fftw3
-ifeq ($(OSTYPE),msys)
-FFTW_LIBS = -lfftw3
-else
-FFTW_LIBS = -lfftw3 -lfftw3_threads
+FFTW_CFLAGS = -Dcimg_use_fftw3 `pkg-config --cflags fftw3`
+FFTW_LIBS = `pkg-config --libs fftw3`
+ifneq ($(OSTYPE),msys)
+FFTW_LIBS += -lfftw3_threads
 endif
 
 # Flags to enable the use of the BOARD library.
