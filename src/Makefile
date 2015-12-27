@@ -201,12 +201,8 @@ OPENCV_LIBS = `pkg-config opencv --libs`
 
 # Flags to enable native support of most classical image file formats, using the GraphicsMagick++ library.
 # This requires the presence of the GraphicsMagick++ include and library files.
-MAGICK_CFLAGS = -Dcimg_use_magick -I$(USR)/$(INCLUDE)/GraphicsMagick
-ifeq ($(OS),Darwin)
-MAGICK_LIBS = -L$(USR)/$(LIB) -lGraphicsMagick++ -lGraphicsMagick -llcms -ltiff -lfreetype -ljpeg -lpng -lbz2 -lxml2 -lz -lm -lltdl
-else
-MAGICK_LIBS = -lGraphicsMagick++
-endif
+MAGICK_CFLAGS = -Dcimg_use_magick `pkg-config --cflags GraphicsMagick++`
+MAGICK_LIBS = `pkg-config --libs GraphicsMagick++`
 
 # Flags to enable native support of EXR file format, using the OpenEXR library/
 # This requires the presence of the OpenEXR include and library files.
