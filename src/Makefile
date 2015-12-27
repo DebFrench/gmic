@@ -98,8 +98,8 @@ endif
 PRERELEASE_CFLAGS = -Dgmic_prerelease="\\\"`date +%m%d%y`\\\""
 
 # Flags that are mandatory to compile 'gmic'.
-MANDATORY_CFLAGS = -Dgmic_build -Dcimg_use_zlib -I$(USR)/$(INCLUDE) $(PRERELEASE_CFLAGS)
-MANDATORY_LIBS = -lz
+MANDATORY_CFLAGS = -Dgmic_build -Dcimg_use_zlib `pkg-config --cflags zlib` $(PRERELEASE_CFLAGS)
+MANDATORY_LIBS = `pkg-config --libs zlib`
 ifndef NO_SRIPDLIB
 MANDATORY_CFLAGS += -std=c++11
 endif
