@@ -171,8 +171,8 @@ GDI32_LIBS = -lgdi32
 
 # Flags to enable native support for PNG image files, using the PNG library.
 # This requires the presence of the libpng include and library files.
-PNG_CFLAGS = -Dcimg_use_png
-PNG_LIBS = -lpng -lz
+PNG_CFLAGS = -Dcimg_use_png `pkg-config --cflags libpng`
+PNG_LIBS = `pkg-config --libs libpng`
 
 # Flags to enable native support for JPEG image files, using the JPEG library.
 # This requires the presence of the libjpeg include and library files.
