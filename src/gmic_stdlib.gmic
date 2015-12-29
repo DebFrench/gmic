@@ -13472,7 +13472,7 @@ equirectangular2nadirzenith :
       (++X)*=0.5*w;
       (Y+=0.5)*=h;
       i(#-2) = X; Y;"
-    -warp[0] [1],0,1,1 -k...
+    -warp[0] [1],0,0,1 -k...
   -endl -done -v +
 
 #@gmic fisheye : _center_x,_center_y,0<=_radius<=100,_amplitude>=0
@@ -24112,6 +24112,12 @@ gimp_drop_water_preview :
       -gimp_drop_water $* -gimp_merge_layers
     -endl -done
   -endif
+
+#@gimp Equirectangular to nadir/zenith : gimp_equirectangular2nadirzenith, gimp_equirectangular2nadirzenith(1)
+#@gimp : Mode = choice{"to nadir/zenith","to equirectangular"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2015</i>.</small>")
+gimp_equirectangular2nadirzenith :
+  -if $1 -nadirzenith2equirectangular -else -equirectangular2nadirzenith -endif
 
 #@gimp Euclidean - polar : gimp_euclidean2polar, gimp_euclidean2polar(1)
 #@gimp : X-center (%) = float(50,0,100)
