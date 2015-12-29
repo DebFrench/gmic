@@ -24113,7 +24113,7 @@ gimp_drop_water_preview :
     -endl -done
   -endif
 
-#@gimp Equirectangular to nadir/zenith : gimp_equirectangular2nadirzenith, gimp_equirectangular2nadirzenith(1)
+#@gimp Equirectangular to nadir-zenith : gimp_equirectangular2nadirzenith, gimp_equirectangular2nadirzenith(1)
 #@gimp : Mode = choice{"to nadir/zenith","to equirectangular"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2015</i>.</small>")
 gimp_equirectangular2nadirzenith :
@@ -30063,6 +30063,7 @@ gmicol_rotate :
 #@gmicol : Output as separate layers = const(0)
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/21/2015</i>.</small>")
 
+#@gmicol clone("Equirectangular to nadir-zenith")
 #@gmicol clone("Euclidean - polar")
 #@gmicol clone("Fish-eye")
 #@gmicol clone("Flower")
