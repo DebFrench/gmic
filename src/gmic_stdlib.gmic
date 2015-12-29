@@ -13531,6 +13531,36 @@ map_sphere : -check "${1=512}>0 && ${2=512}>0 && ${5=0}>=0 && ${6=0.5}>=0" -skip
      -warp.. [-1],0,1,1 -rm. # Apply image warping
    -endl -done -v +
 
+#@gmic nadirzenith2equirectangular
+#@gmic : Transform selected nadir/zenith rectilinear projections to equirectangular images.
+nadirzenith2equirectangular :
+  -e[^-1] "Transform nadir/zenith rectilinear projection$? to equirectangular images."
+  -v - -repeat $! -l[$>]
+    100%,100%,1,2
+    -sh. 100%
+    -f. "
+      X = 2*x/(w-1) - 1;
+      Y = y/(h-1) - 0.5;
+      output = 1;
+      if (Y>0.125,
+        sinphi1 = 1; xc = -0.5,
+      if (Y<-0.125,
+        sinphi1 = -1; xc = 0.5,
+        output = 0
+      ));
+      cosc = sinphi1*sin(Y*pi);
+      xx = cos(Y*pi)*sin(X*pi)/cosc;
+      yy = -sinphi1*cos(Y*pi)*cos(X*pi)/cosc;
+      if (abs(xx)>1, output=0);
+      (xx*=0.5)+=xc;
+      yy*=0.5;
+      if (!output, xx = yy = -1);
+      (++xx)*=0.5*w;
+      (yy+=0.5)*=h;
+      i(#-2) = xx; yy;"
+    -to_a[0] -warp[0] [1],0,0,0 -k...
+  -endl -done -v +
+
 #@gmic polar2euclidean : _center_x[%],_center_y[%],_stretch_factor>0,_boundary={ 0=dirichlet | 1=neumann | 2=periodic }
 #@gmic : Apply euclidean to polar transform on selected images.
 #@gmic : Default values: 'center_x=center_y=50%', 'stretch_factor=1' and 'boundary=1'.
