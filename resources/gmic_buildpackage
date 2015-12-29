@@ -51,6 +51,7 @@ if [ "$OSTYPE" == "msys" ]; then
     # Input sources.
     rm -rf gmic-src &&
     cp -rf /e/work/src/gmic/src gmic-src &&
+    alias pkg-config=nok
 
     # Get version number.
     cd gmic-src &&
