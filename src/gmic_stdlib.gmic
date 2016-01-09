@@ -28762,7 +28762,7 @@ gimp_neon_lightning :
   -endl -done
 
 #@gimp Quick copyright : gimp_quick_copyright, gimp_quick_copyright(0)
-#@gimp : Text = text{"\251 G'MIC"}
+#@gimp : Text = text{"\\251 G'MIC"}
 #@gimp : Size = int(27,13,128)
 #@gimp : Color = color(255,255,255,128)
 #@gimp : Outline = int(1,0,4)
