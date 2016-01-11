@@ -19876,6 +19876,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Stepanekos</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Thorsten "otto" Stettin</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Lukas Tvrdy</i> <small>(Krita integration)</small>
+#@gimp : <b> -</b> <i>Martin Wolff</i> <small>(testing &amp; filters)</small>
 #@gimp : <b> -</b> <i>Bernd Zeimetz</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Matthias Zepper</i> <small>(testing)</small>
 #@gimp : <b> -</b>"}
