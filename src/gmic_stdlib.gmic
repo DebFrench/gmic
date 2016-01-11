@@ -16219,7 +16219,7 @@ x_colorize : -skip ${1=0},${3=0},${4=0},${5=0} -check "${2=1024}==0 || $2>=128"
   -e[] "\n
 --------------------------------------------------------------------------------------\n
 ---- Left mouse button creates a new colored control point (or moves an existing one).\n
----- Right mouse button over a control point deletes it.\n
+---- Right mouse button or key 'X' over a control point deletes it.\n
 ---- Right mouse button anywhere else picks a color from the image.\n
 ---- Mouse wheel, or keys 'CTRL+arrows UP/DOWN' zoom view in/out.\n
 ---- 'CTRL+mouse wheel', 'SHIFT+mouse wheel' or arrow keys move image in zoomed view.\n
