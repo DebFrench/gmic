@@ -30045,6 +30045,7 @@ gmicol_rotate :
 
 #@gmicol clone("Cartesian transform")
 #@gmicol clone("Circle transform")
+#@gmicol clone("Continuous droste")
 
 #@gmicol Drop water : gimp_drop_water_preview, gimp_drop_water_preview(1)
 #@gmicol : note = note("<small><b>Shape geometry:</b></small>")
