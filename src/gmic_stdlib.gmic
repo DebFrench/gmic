@@ -20260,7 +20260,7 @@ gimp_gmicky_preview :
 #@gimp : - <b>09/25/2015</b> : version <i>1.6.6.1</i>.\n
 #@gimp : - <b>10/23/2015</b> : version <i>1.6.7</i>.\n
 #@gimp : - <span foreground="purple"><b>12/07/2015</b> : version <i>1.6.8</i> (Current stable).</span>\n
-#@gimp : - <b>12/21/2015</b> : version <i>1.6.9</i> (Current prerelease).\n
+#@gimp : - <b>12/21/2015</b> : version <i>1.6.9</i> (Current pre-release).\n
 #@gimp : "}
 #@gimp : sep = separator()
 #@gimp : link = link("View latest changelog","https://discuss.pixls.us/t/release-of-gmic-1-6-8")
