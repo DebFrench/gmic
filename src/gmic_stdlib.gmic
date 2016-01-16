@@ -3606,6 +3606,10 @@ update_server : -skip ${1=$_version},${2=1}
     ind={$>-$offset}
     -if {{{$ind-1},[-1]}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,[6]}==32" || "{$ind,[6]}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
+      -if {i[6]=={'_'}} locale=_{`{i[7]}`}{`{i[8]}`}  # Retrieve locale if any specified
+      -else locale=
+      -endif
+
       is_folder=0
       -s +,10
       -if {{0,[6]}=={'_'}} --rows[0] 9,100% -rows[0] 0,8 # Treat a localized filter as a regular filter.
@@ -3725,13 +3729,13 @@ update_server : -skip ${1=$_version},${2=1}
 
       # Deduce the G'MIC command to apply.
       command=
-      -if $nb_up 1,$nb_up,1,1,{'_'} command="#@gimp "{t}"\n" -rm. -endif
+      -if $nb_up 1,$nb_up,1,1,{'_'} command="#@gimp"$locale" "{t}"\n" -rm. -endif
       -if $nb_down -l[]
         ({'$npath'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
         level={${"-nb_levels "$path}-$nb_up}
         balise=${"-if "{$level<=0" && "{$npath'!='/About/}}" -u b -else -u i -endif"}
         -repeat $!
-          command=$command"#@gimp <"$balise">"{$>,t}"</"$balise">\n"
+          command=$command"#@gimp"$locale" <"$balise">"{$>,t}"</"$balise">\n"
           balise="i"
         -done -rm
       -endl -endif
