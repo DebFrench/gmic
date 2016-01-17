@@ -3521,9 +3521,10 @@ update_server : -skip ${1=$_version},${2=1}
   -_update_server_move[] "/Finger~paint","/Artistic"
 
   # Define useful sub-commands.
-  -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path.
+  -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path
   -m "_max : ({'\"$""1\"'}) ({'\"$""2\"'}) -f[-2,-1] 'if(i>=97&&i<=122,i-32,i)' -r[-2,-1] {max(w,{-2,w})},1,1,1,0 --[-2,-1] -autocrop. 0 "\
-     "-u {i>0} -rm." # Command to compare two strings (eq. to strcasecmp).
+     "-u {i>0} -rm." # Command to compare two strings (eq. to strcasecmp)
+  -m "varname : ({'\"$""1\"'}) -f. if((i>=48&&i<=57)||(i>=65&&i<=90)||(i>=97&&i<=122),i,95) -u {t} -rm." # Convert string to a valid variable name
   -m "load_gmic : "\
      "_nb_sources+=1 filename=${\"-basename $""1\"} "\
      "-v + -e[] \"  \"$_nb_sources\". \"$filename\"  \" -v - "\
@@ -3606,6 +3607,10 @@ update_server : -skip ${1=$_version},${2=1}
     ind={$>-$offset}
     -if {{{$ind-1},[-1]}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,[6]}==32" || "{$ind,[6]}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
+      -if {i[6]=={'_'}} locale=_{`{i[7]}`}{`{i[8]}`}  # Retrieve locale if any specified
+      -else locale=
+      -endif
+
       is_folder=0
       -s +,10
       -if {{0,[6]}=={'_'}} --rows[0] 9,100% -rows[0] 0,8 # Treat a localized filter as a regular filter.
@@ -3635,12 +3640,17 @@ update_server : -skip ${1=$_version},${2=1}
             -v + -e[] "  "$nb_filters". "$name" ("{round($>*$progress_factor)}"%)." -v -
 
           -else # Found new folder (opt. parent(s)).
+
             -if {i=={'_'}} # Folder has parents before creating it.
               -do path=${"-parent[] "$path} -shift 0,-1,0,0 -while {i=={'_'}}
-              -autocrop 0 -autocrop 32
-              -if {w} -calibrate_name -replace 32,{'~'} path=$path{0,t}/ -endif # Folder name specified after the underscore(s).
-            -else # Folder name don't start with '_'.
-              -autocrop 32 -calibrate_name -replace 32,{'~'} path=$path{0,t}/
+              -autocrop 0
+            -endif
+            -autocrop 32
+            -if {w} # Folder name specified after the underscore(s).
+              -varname {0,t} locale_${}=$locale # Keep locale of each folder
+              -calibrate_name
+              -replace 32,{'~'}
+              path=$path{0,t}/
             -endif
             is_folder=1
 
@@ -3731,7 +3741,8 @@ update_server : -skip ${1=$_version},${2=1}
         level={${"-nb_levels "$path}-$nb_up}
         balise=${"-if "{$level<=0" && "{$npath'!='/About/}}" -u b -else -u i -endif"}
         -repeat $!
-          command=$command"#@gimp <"$balise">"{$>,t}"</"$balise">\n"
+          -varname {$>,t} locale=${locale_${}} # Retrieve locale of folder name
+          command=$command"#@gimp"$locale" <"$balise">"{$>,t}"</"$balise">\n"
           balise="i"
         -done -rm
       -endl -endif
