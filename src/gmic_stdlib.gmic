@@ -3510,6 +3510,7 @@ update_server : -skip ${1=$_version},${2=1}
   -_update_server_move[] "/Testing/Iain~fergusson/Simple~local~contrast","/Details"
   -_update_server_move[] "/Testing/Garagecoder/Aurora","/Artistic"
   -_update_server_move[] "/Testing/Garagecoder/Despeckle","/Repair"
+  -_update_server_move[] "/Testing/Garagecoder/Emboss","/Black~&amp;~white"
   -_update_server_move[] "/Testing/Garagecoder/HSL~adjustment","/Colors"
   -_update_server_move[] "/Testing/Garagecoder/HSV~select","/Colors"
   -_update_server_move[] "/Testing/Garagecoder/Stereo~image","/Stereoscopic~3d"
@@ -3517,6 +3518,7 @@ update_server : -skip ${1=$_version},${2=1}
   -_update_server_move[] "/Testing/Garagecoder/Sharpen~[gradient]","/Details"
   -_update_server_move[] "/Testing/Garagecoder/Sharpen~[tones]","/Details"
   -_update_server_move[] "/Testing/Garagecoder/Tone~enhance","/Details"
+  -_update_server_move[] "/Testing/Garagecoder/Wiremap","/Rendering"
   -_update_server_move[] "/Testing/Naggobot/Blockism","/Artistic"
   -_update_server_move[] "/Testing/Samj/Chalk~it~up","/Artistic"
   -_update_server_move[] "/Testing/Samj/Denim~texture","/Patterns"
@@ -20071,6 +20073,7 @@ _gimp_manage_filter_sources :
 #@gimp : note = note("<small><b>Bitcoin address:</b> 1N5BsWvLRGHq42KLdCEtXuGvu9pat93kHD</small>")
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
+#@gimp : link = link(0,"[74] Doug McGregor","")
 #@gimp : link = link(0,"[73] Marcel Dahm","")
 #@gimp : link = link(0,"[72] Nicola Giaccobe","")
 #@gimp : link = link(0,"[71] Susan Voitel","")
@@ -20291,23 +20294,16 @@ gimp_search_filters : -skip "${1=}"
   -l[]
 
     # Retrieve filter file.
-    file_now=${-path_tmp}gmic_now.cimgz
-    0 -o $file_now -rm
-    date_now={date(2,$file_now)+31*(date(1,$file_now)+12*date(0,$file_now))} # Current date.
+    date_current={date(2)+31*(date(1)+12*date(0))}
     file_filters=${-path_rc}gimp_filters
     date_filters={date(2,$file_filters)+31*(date(1,$file_filters)+12*date(0,$file_filters))} # Date of filter file.
-    -if {$date_filters<0" || "$date_now-$date_filters>0} # Filter file needs to be refreshed.
-      -l[]
-        -i raw:http://gmic.eu/gimp_filters.txt,uchar
-        -o raw:$file_filters,uchar
-      -onfail -i raw:$file_filters,uchar
-      -endl
-    -else -i raw:$file_filters,uchar
+    -if {$date_filters<0" || "$date_current-$date_filters>0} # Filter file needs to be refreshed.
+      -l[] -i raw:http://gmic.eu/gimp_filters.txt,uchar -o raw:$file_filters,uchar -onfail -endl -rm
     -endif
+    -l[] -i raw:$file_filters,uchar -onfail 0 -endl
 
     # Format search term.
-    ({'" $1"'}) -+ 'if(i>=65&&i<=90,32,0)' -autocrop 32
-    term={t} -rm.
+    ({'" $1"'}) -+. 'if(i>=65&&i<=90,32,0)' -autocrop. 32 term={t} -rm.
 
     # Perform the search.
     --l
@@ -29951,6 +29947,7 @@ gmicol_rotate :
 #@gmicol clone("Charcoal")
 #@gmicol clone("Colorize [with colormap]")
 #@gmicol clone("Dithering")
+#@gmicol clone("Emboss")
 
 #@gmicol Engrave : gimp_engrave_preview, gimp_engrave_preview(0)
 #@gmicol : note = note("<small><b>Black &amp; White foreground:</b></small>")
@@ -30030,6 +30027,7 @@ gmicol_rotate :
 #@gmicol clone("Mixer [CMYK]")
 #@gmicol clone("RGB tone")
 #@gmicol clone("Select-replace color")
+#@gmicol clone("Specific saturation")
 #@gmicol clone("Sepia")
 #@gmicol clone("Tone presets")
 #@gmicol clone("Vintage style")
@@ -30148,13 +30146,16 @@ gmicol_rotate :
 #@gmicol clone("Mighty details")
 #@gmicol clone("Sharpen [deblur]")
 #@gmicol clone("Sharpen [gold-meinel]")
+#@gmicol clone("Sharpen [gradient]")
 #@gmicol clone("Sharpen [inverse diffusion]")
 #@gmicol clone("Sharpen [octave sharpening]")
 #@gmicol clone("Sharpen [richardson-lucy]")
-#@gmicol clone("Sharpen [shock filters]")
+#@gmicol clone("Sharpen [shock filters]"
+#@gmicol clone("Sharpen [tones]")
 #@gmicol clone("Sharpen [unsharp mask]")
 #@gmicol clone("Simple local contrast")
 #@gmicol clone("Texture enhance")
+#@gmicol clone("Tone enhance")
 #@gmicol clone("Tone mapping")
 #@gmicol clone("Tone mapping [fast]")
 #@gmicol clone("Yag effect")
@@ -30309,6 +30310,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol clone("Stars")
 #@gmicol clone("Superformula")
 #@gmicol clone("Truchet")
+#@gmicol clone("Wiremap")
 
 #@gmicol _<b>Repair</b>
 #----------------------
