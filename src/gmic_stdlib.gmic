@@ -20294,23 +20294,16 @@ gimp_search_filters : -skip "${1=}"
   -l[]
 
     # Retrieve filter file.
-    file_now=${-path_tmp}gmic_now.cimgz
-    0 -o $file_now -rm
-    date_now={date(2,$file_now)+31*(date(1,$file_now)+12*date(0,$file_now))} # Current date.
+    date_current={date(2)+31*(date(1)+12*date(0))}
     file_filters=${-path_rc}gimp_filters
     date_filters={date(2,$file_filters)+31*(date(1,$file_filters)+12*date(0,$file_filters))} # Date of filter file.
-    -if {$date_filters<0" || "$date_now-$date_filters>0} # Filter file needs to be refreshed.
-      -l[]
-        -i raw:http://gmic.eu/gimp_filters.txt,uchar
-        -o raw:$file_filters,uchar
-      -onfail -i raw:$file_filters,uchar
-      -endl
-    -else -i raw:$file_filters,uchar
+    -if {$date_filters<0" || "$date_current-$date_filters>0} # Filter file needs to be refreshed.
+      -l[] -i raw:http://gmic.eu/gimp_filters.txt,uchar -o raw:$file_filters,uchar -onfail -endl -rm
     -endif
+    -l[] -i raw:$file_filters,uchar -onfail 0 -endl
 
     # Format search term.
-    ({'" $1"'}) -+ 'if(i>=65&&i<=90,32,0)' -autocrop 32
-    term={t} -rm.
+    ({'" $1"'}) -+. 'if(i>=65&&i<=90,32,0)' -autocrop. 32 term={t} -rm.
 
     # Perform the search.
     --l
