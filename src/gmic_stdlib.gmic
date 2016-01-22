@@ -8572,10 +8572,9 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
     -repeat {$1-1} --b. {$ss+$>*$ds/($1-2)} --.. [-1] -rv[-2,-1] -done
   -endl -done -v +
 
-#@gmic structuretensors : _scheme : (+)
+#@gmic structuretensors : _scheme={ 0=forward/backward | 1=centered } : (+)
 #@gmic : Compute the structure tensor field of selected images.
-#@gmic : 'scheme' can be { 0=centered | 1=forward-backward1 | 2=forward-backward2 }.
-#@gmic : Default value: 'scheme=2'.
+#@gmic : Default value: 'scheme=1'.
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
 #@gmic : $$
 
