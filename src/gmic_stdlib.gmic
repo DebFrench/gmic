@@ -7716,7 +7716,7 @@ diffusiontensors : -check "${1=0.7}>=0 && ${2=0.3}>=0 && $2<=1" -skip ${3=0.6},$
   -v -
   p1={if($5,0.5,1)*max($1,1e-5)}
   p2={$p1/(1e-7+1-$2)}
-  -b $3 -n 0,255 -structuretensors 2 -b $4
+  -b $3 -n 0,255 -structuretensors 0 -b $4
   -repeat $! -l[$>]
     -eigen -max.. 0
     -if {s==2} -s.. c -+[-3,-2] -+.. 1 --^.. -$p1 -^... -$p2 -a[-3,-1] c                  # 2d
@@ -8572,7 +8572,7 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
     -repeat {$1-1} --b. {$ss+$>*$ds/($1-2)} --.. [-1] -rv[-2,-1] -done
   -endl -done -v +
 
-#@gmic structuretensors : _scheme={ 0=forward/backward | 1=centered } : (+)
+#@gmic structuretensors : _scheme={ 0=centerd | 1=forward/backward } : (+)
 #@gmic : Compute the structure tensor field of selected images.
 #@gmic : Default value: 'scheme=1'.
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
