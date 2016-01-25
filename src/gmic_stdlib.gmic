@@ -719,6 +719,27 @@ _help_usage :
 \n           the pixel access operators (i.e. when the boundary condition argument is not explicitly specified,
 \n           see below for more details on pixel access operators).
 \n
+\n    _ "${g}"Vector calculus:"$n" Most operators are able to work with vector elements.
+\n       . '"${c}"[ a0,a1,..,aN ]"$n"' defines a "${g}"(N+1)"$n"-dimensional vector with specified scalar coefficients "${g}"ak"$n".
+\n       . '"${c}"vectorN(a0,a1,,..,)"$n"' does the same, with the "${g}"ak"$n" being repeated periodically.
+\n       . In both expressions, the "${g}"ak"$n" can be vectors themselves, to concatenate them into a single vector.
+\n       . The scalar element "${g}"ak"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[k]"$n".
+\n       . The sub-vector "${g}"[ ap..aq ]"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[p,q]"$n".
+\n       . Some vector-specific functions can be used on vector values:
+\n         '"${c}"cross(X,Y)"$n"' (cross product), '"${c}"dot(X,Y)"$n"' (dot product), '"${c}"size(X)"$n"' (vector dimension)
+\n         and '"${c}"sort(X,_is_increasing)"$n"' (sorting values),
+\n       . A "${g}"2"$n"-dimensional vector may be seen as a complex number and used in those particular functions/operators:
+\n         '"${c}"**"$n"' (complex multiplication), '"${c}"//"$n"' (complex division), '"${c}"^^"$n"' (complex exponentiation),
+\n         '"${c}"**="$n"' (complex self-multiplication), '"${c}"//="$n"' (complex self-division), '"${c}"^^="$n"' (complex self-exponentiation),
+\n         '"${c}"cabs()"$n"' (complex modulus), '"${c}"carg()"$n"' (complex argument), '"${c}"cconj()"$n"' (complex conjugate),
+\n         '"${c}"cexp()"$n"' (complex exponential) and '"${c}"clog()"$n"' (complex logarithm).
+\n       . A "${g}"MN"$n"-dimensional vector may be seen as a MxN matrix and used in those particular functions/operators:
+\n         '"${c}"**"$n"' (matrix-vector multiplication), '"${c}"mdet(A)"$n"' (determinant), '"${c}"mdiag(V)"$n"' (diagonal matrix from vector),
+\n         '"${c}"meig(A)"$n"' (eigenvalues/eigenvectors), '"${c}"meye(n)"$n"' (n x n identity matrix), '"${c}"minv(A)"$n"' (matrix inverse),
+\n         '"${c}"mmul(A,B,nb_colsB)"$n"' (matrix multiplication), '"${c}"mrot(x,y,z,angle)"$n"' (3 x 3 rotation matrix),
+\n         '"${c}"msolve(A,B,nb_colsB)"$n"' (least-square solver of linear system A.X = B), '"${c}"mtrace(A)"$n"' (matrix trace) and
+\n         '"${c}"mtrans(A,nb_colsA)"$n"' (matrix transpose).
+\n
 \n    _ "${g}"Special operators"$n" can be used:
 \n
 \n       . '"$c";"$n"': expression separator. The returned value is always the last encountered
@@ -749,9 +770,12 @@ _help_usage :
 \n       . '"${c}"i[offset,_boundary_conditions]"$n"' returns the value of the pixel located at specified '"${g}"offset"$n"'
 \n          in the associated image buffer (or "${g}"0"$n" if offset is out-of-bounds).
 \n       . '"${c}"j[offset,_boundary_conditions]"$n"' does the same for an offset relative to the current pixel "$g"(x,y,z,c)"$n".
-\n       . '"${c}"i(#ind,_a,_b,_c,_d,_interpolation,_boundary)"$n"', '"${c}"j(#ind,_dx,_dy,_dz,_dc,_interpolation,_boundary)"$n"',
+\n       . '"${c}"i(#ind,_x,_y,_z,_c,_interpolation,_boundary)"$n"', '"${c}"j(#ind,_dx,_dy,_dz,_dc,_interpolation,_boundary)"$n"',
 \n          '"${c}"i[#ind,offset,_boundary]"$n"' and '"${c}"i[offset,_boundary]"$n"' are similar expressions used to access
 \n          pixel values for any numbered image "${g}"[ind]"$n" of the list.
+\n       . '"${c}"I/J[offset,_boundary_conditions]"$n"' and '"${c}"I/J(#ind,_x,_y,_z,_interpolation,_boundary)"$n"' do the same
+\n          as '"${c}"i/j[offset,_boundary_conditions]"$n"' and '"${c}"i/j(#ind,_x,_y,_z,_c,_interpolation,_boundary)"$n"' but return
+\n          a vector instead of a scalar (e.g. a vector "${g}"[ R,G,B ]"$n" for a pixel at "${g}"(a,b,c)"$n" in a color image).
 \n       . '"${c}"if(condition,expr_then,_expr_else)"$n"': return value of '"${c}"expr_then"$n"' or '"${c}"expr_else"$n"',
 \n          depending on the value of '"${c}"condition"$n"' "${g}"(0=false, other=true)"$n". '"${c}"expr_else"$n"' can be
 \n          omitted in which case "${g}"0"$n" is returned if the condition does not hold. Using the ternary operator
@@ -781,6 +805,16 @@ _help_usage :
 \n          done by the math parser to evaluate the expression (and returns its value).
 \n       . '"${c}"init(expression)"$n" evaluates the specified expression only once, even when multiple
 \n          evaluations are required (e.g. in '"${c}"-fill init(foo=0);++foo"$n"').
+\n
+\n    - "${g}"User-defined functions:"$n"
+\n
+\n       . Custom functions can be defined in a math expression, using the assignment operator '"${c}"="$n"', e.g.
+\n         '"${c}"foo(x,y) = cos(x + y); result = foo(1,2) + foo(2,3)"$n"'.
+\n       . Overriding a built-in function has no effect.
+\n       . Overriding an already defined custom function replaces its old definition.
+\n       . Custom functions are processed as "${g}"macros"$n" by the mathematical evaluator. You should avoid invoking
+\n          them with arguments that are results of assignments or self-operations. For instance,
+\n          '"${c}"foo(x) = x + x; z = 0; result = foo(++x)"$n"' will set '"${c}"result = 4"$n"' rather than expected value '"${c}"2"$n"'.
 \n
 \n    - "${g}"Multi-threaded"$n" and "${g}"in-place"$n" evaluation:
 \n
