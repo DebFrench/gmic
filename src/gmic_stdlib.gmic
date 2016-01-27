@@ -676,7 +676,6 @@ _help_usage :
 \n          an arbitrary number of arguments.
 \n       . '"${c}"round(value,rounding_value,direction)"$n"' returns a rounded value.
 \n          '"${g}"direction"$n"' can be "${g}"{ -1=to-lowest | 0=to-nearest | 1=to-highest }"$n".
-\n       . '"${c}"swap(var1,var2)"$n"' swaps the values of the two specified variables.
 \n
 \n    _ "${g}"Variable names"$n" below are pre-defined. They can be overrided.
 \n
