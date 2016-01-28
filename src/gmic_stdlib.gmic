@@ -718,10 +718,10 @@ _help_usage :
 \n           the pixel access operators (i.e. when the boundary condition argument is not explicitly specified,
 \n           see below for more details on pixel access operators).
 \n
-\n    _ "${g}"Vector calculus:"$n" Most operators are able to work with vector elements.
+\n    _ "${g}"Vector calculus:"$n" Most operators are also able to work with vector-valued elements.
 \n       . '"${c}"[ a0,a1,..,aN ]"$n"' defines a "${g}"(N+1)"$n"-dimensional vector with specified scalar coefficients "${g}"ak"$n".
 \n       . '"${c}"vectorN(a0,a1,,..,)"$n"' does the same, with the "${g}"ak"$n" being repeated periodically.
-\n       . In both expressions, the "${g}"ak"$n" can be vectors themselves, to concatenate them into a single vector.
+\n       . In both expressions, the "${g}"ak"$n" can be vectors themselves, to be concatenated into a single vector.
 \n       . The scalar element "${g}"ak"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[k]"$n".
 \n       . The sub-vector "${g}"[ ap..aq ]"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[p,q]"$n".
 \n       . Some vector-specific functions can be used on vector values:
@@ -738,6 +738,9 @@ _help_usage :
 \n         '"${c}"mmul(A,B,nb_colsB)"$n"' (matrix multiplication), '"${c}"mrot(x,y,z,angle)"$n"' (3 x 3 rotation matrix),
 \n         '"${c}"msolve(A,B,nb_colsB)"$n"' (least-square solver of linear system A.X = B), '"${c}"mtrace(A)"$n"' (matrix trace) and
 \n         '"${c}"mtrans(A,nb_colsA)"$n"' (matrix transpose).
+\n       . Specifying a vector-valued math expression as an argument of a command that operates on image values
+\n          (e.g. '"$c"-fill"$n"') modifies the whole spectrum range of the processed image(s), for each spatial
+\n          coordinates "$g"(x,y,z)"$n". The command does not loop over the "${g}"C"$n"-axis in this case.
 \n
 \n    _ "${g}"Special operators"$n" can be used:
 \n
