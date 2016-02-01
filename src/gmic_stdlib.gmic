@@ -20694,7 +20694,7 @@ gimp_array_preview :
 #@gimp : Output filename = _text("gmic_asciiart.txt")
 #@gimp : sep = separator(), link = link("Click here for a detailed description of this filter.","http://www.gimpchat.com/viewtopic.php?f=28&t=10047")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/27/2014</i>.</small>")
-gimp_asciiart :
+gimp_asciiart : -skip ${10=},${11=},${12=}
   -repeat $! -l[$>] -to_rgb
     -apply_gamma {10^$7} -b $8% -n 0,255
     -if {$1==0} dict="$2"
@@ -20727,7 +20727,7 @@ gimp_asciiart :
 gimp_asciiart_preview :
   -repeat $! -l[$>]
     w={w} h={h}
-    -gimp_asciiart $1,"$2",${3--4},0,foo,foo
+    -gimp_asciiart $1,"$2",${3-9},0,foo,foo
     -r $w,$h,1,100%,0,0,0.5,0.5
   -endl -done
 
@@ -29806,7 +29806,22 @@ gmicol_logo_en :
 #@gmicol clone("Array [mirrored]")
 #@gmicol clone("Array [random]")
 #@gmicol clone("Array [regular]")
-#@gmicol clone("Ascii art")
+
+#@gmicol Ascii art : gimp_asciiart, gimp_asciiart(0)
+#@gmicol : Charset = choice(5,"Custom","Binary digits","Digits","Lowercase letters","Uppercase letters","Ascii","Card suits","Math symbols")
+#@gmicol : Custom dictionnary = text{" .oO0"}
+#@gmicol : Analysis scale = int(16,8,103)
+#@gmicol : Analysis smoothness = float(15,0,100)
+#@gmicol : Synthesis scale = int(16,8,103)
+#@gmicol : Result type = choice(2,"White on black","Black on white","Colored on black","Colored on transparent")
+#@gmicol : sep = separator()
+#@gmicol : Gamma = float(0,-3,3)
+#@gmicol : Smoothness = float(0.2,0,5)
+#@gmicol : Colors = choice("Full colors","2 colors","3 colors","4 colors","8 colors","12 colors","16 colors",
+#@gmicol :                 "Grayscale","2 grays","3 grays","4 grays","8 grays","12 grays","16 grays")
+#@gmicol : sep = separator(), link = link("Click here for a detailed description of this filter.","http://www.gimpchat.com/viewtopic.php?f=28&t=10047")
+#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/27/2014</i>.</small>")
+
 #@gmicol clone("Chessboard")
 #@gmicol : thumbnail_parameters = 16,16,0,0,0,0.5,0,0,0,255,255,255,255,255,0
 
