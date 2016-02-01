@@ -98,10 +98,9 @@
                   zip file, <i>beware: without display capabilities!</i><br/><br/></td>
               </tr>
               <tr>
-                <td><a href="http://karo03.bplaced.de/gmic/git/Macgmic_macosx_64-Yosemite.dmg"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://karo03.bplaced.de/gmic/git/Macgmic_macosx_64-Yosemite.dmg"><font size="3">G'MIC for MacOSX 10.6-10.10 (64bits)</font></a><br/>
-                  dmg file<br/>
-                  alternative: <a href="http://karo03.bplaced.de/gmic/release/">dmg for previous versions</a><br/><br/></td>
+                <td><a href="http://karo03.bplaced.de/gmic/release/"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC for MacOSX 10.6-10.10 (64bits)</font></a><br/>
+                  dmg file<br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
