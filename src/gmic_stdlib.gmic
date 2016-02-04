@@ -20303,25 +20303,11 @@ gimp_gmicky_preview :
 #@gimp : - <b>01/13/2009</b> : version <i>1.3</i> (initial plug-in release).\n
 #@gimp : - <b>09/03/2010</b> : version <i>1.4</i>.\n
 #@gimp : - <b>07/07/2011</b> : version <i>1.5.0.0</i>.\n
-#@gimp : - <b>03/01/2012</b> : version <i>1.5.1.0</i>.\n
-#@gimp : - <b>10/15/2012</b> : version <i>1.5.2.0</i>.\n
-#@gimp : - <b>01/07/2013</b> : version <i>1.5.3.0</i>.\n
-#@gimp : - <b>01/28/2013</b> : version <i>1.5.4.0</i>.\n
-#@gimp : - <b>03/08/2013</b> : version <i>1.5.5.0</i>.\n
-#@gimp : - <b>06/03/2013</b> : version <i>1.5.6.0</i>.\n
-#@gimp : - <b>09/09/2013</b> : version <i>1.5.7.0</i>.\n
-#@gimp : - <b>12/07/2013</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <b>05/14/2014</b> : version <i>1.5.9.0</i>.\n
 #@gimp : - <b>08/20/2014</b> : version <i>1.6.0.0</i>.\n
-#@gimp : - <b>06/22/2015</b> : version <i>1.6.5.0</i>.\n
-#@gimp : - <b>09/04/2015</b> : version <i>1.6.5.2</i>.\n
-#@gimp : - <b>09/25/2015</b> : version <i>1.6.6.1</i>.\n
-#@gimp : - <b>10/23/2015</b> : version <i>1.6.7</i>.\n
-#@gimp : - <span foreground="purple"><b>12/07/2015</b> : version <i>1.6.8</i> (Current stable).</span>\n
-#@gimp : - <b>12/21/2015</b> : version <i>1.6.9</i> (Current pre-release).\n
+#@gimp : - <span foreground="purple"><b>02/04/2016</b> : version <i>1.6.9</i> (Current stable).</span>\n
 #@gimp : "}
 #@gimp : sep = separator()
-#@gimp : link = link("View latest changelog","https://discuss.pixls.us/t/release-of-gmic-1-6-8")
+#@gimp : link = link("View latest changelog","https://discuss.pixls.us/t/release-of-gmic-1-6-9")
 
 #@gimp Search filters : _none_, gimp_search_filters
 #@gimp : note = note("<small><i>Type the filter name you want to search for...</i></small>")
