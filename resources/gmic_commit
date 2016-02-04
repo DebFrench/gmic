@@ -34,12 +34,12 @@ cd $HOME/work/src/gmic-minimal
 git commit -uno -am "$COM"
 git push
 
-echo -e "\n  ** gmic-minimal-mirror\n"
-cd $HOME/work/src/gmic-minimal-mirror
-git commit -uno -am "$COM"
-git push
+# echo -e "\n  ** gmic-minimal-mirror\n"
+# cd $HOME/work/src/gmic-minimal-mirror
+# git commit -uno -am "$COM"
+# git push
 
-echo -e "\n  ** gmic-mirror\n"
-cd $HOME/work/src/gmic-mirror
-git commit -uno -am "$COM"
-git push
+# echo -e "\n  ** gmic-mirror\n"
+# cd $HOME/work/src/gmic-mirror
+# git commit -uno -am "$COM"
+# git push
