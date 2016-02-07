@@ -20110,121 +20110,122 @@ _gimp_manage_filter_sources :
 #@gimp : note = note("<small><b>Bitcoin address:</b> 1N5BsWvLRGHq42KLdCEtXuGvu9pat93kHD</small>")
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
-#@gimp : link = link(0,"[78] MysticAli3n-Wear","http://www.mysticali3n-wear.com")
-#@gimp : link = link(0,"[77] Mika Mantere","")
-#@gimp : link = link(0,"[76] Christian Beuschel","")
-#@gimp : link = link(0,"[75] Tore Busch","")
-#@gimp : link = link(0,"[74] Doug McGregor","")
-#@gimp : link = link(0,"[73] Marcel Dahm","")
-#@gimp : link = link(0,"[72] Nicola Giaccobe","")
-#@gimp : link = link(0,"[71] Susan Voitel","")
-#@gimp : link = link(0,"[70] Anonymous","")
-#@gimp : link = link(0,"[69] Henk Koning","https://www.flickr.com/photos/henkkoning")
-#@gimp : link = link(0,"[68] Arnie Jordan","")
-#@gimp : link = link(0,"[67] Carol Jennings","")
-#@gimp : link = link(0,"[66] S&#233;bastien Huart","")
-#@gimp : link = link(0,"[65] Sabine Sch&#228;fers","https://joeysl.wordpress.com/")
-#@gimp : link = link(0,"[64] Bull O'Woods","http://www.viewbug.com/member/KennZaney")
-#@gimp : link = link(0,"[63] Jess Stryker","http://www.jessstryker.com/")
-#@gimp : link = link(0,"[62] Rui Luis","")
-#@gimp : link = link(0,"[61] Renato Salles","https://www.flickr.com/photos/sallesrenato/")
-#@gimp : link = link(0,"[60] Petr Zagalak","http://www.viewbug.com/member/alef0")
-#@gimp : link = link(0,"[59] Antonio Vici&#233;n Faure","http://www.antonio.cat")
-#@gimp : link = link(0,"[58] Vincent Bermel","")
-#@gimp : link = link(0,"[57] Christian Stocco","")
-#@gimp : link = link(0,"[56] Richard Benedict","https://www.flickr.com/photos/136307651@N04/")
-#@gimp : link = link(0,"[55] Dr. Helmut Jarausch","")
-#@gimp : link = link(0,"[54] Michael Beck","http://www.michaeljamesbeck.com")
-#@gimp : link = link(0,"[53] Riccardo Leone","http://rickleone.tumblr.com/")
-#@gimp : link = link(0,"[52] Gisela Looram","")
-#@gimp : link = link(0,"[51] Frank Tegtmeyer","https://plus.google.com/u/0/+FrankTegtmeyer/posts")
-#@gimp : link = link(0,"[50] David Kettrey","")
-#@gimp : link = link(0,"[49] Peter Hoge","https://www.youtube.com/user/kncpt1")
-#@gimp : link = link(0,"[48] Alexander Heitmann","")
-#@gimp : link = link(0,"[47] Sudi","http://www.captivemoment.com")
-#@gimp : link = link(0,"[46] Mahvin","http://www.mahvin.com/")
-#@gimp : link = link(0,"[45] Anonymous","")
-#@gimp : link = link(0,"[44] Olivier Larski","http://harlequin.webcomics.fr/page/episode-1-page-1")
-#@gimp : link = link(0,"[43] Victor Fandrey","http://victorfandrey.blogspot.ca")
-#@gimp : link = link(0,"[42] Stefan Peter","")
-#@gimp : link = link(0,"[41] Dimitrios Psychogios","https://plus.google.com/u/0/+DimitriosPsychogios")
-#@gimp : link = link(0,"[40] Pat David","http://blog.patdavid.net/")
-#@gimp : link = link(0,"[39] Antti Luoma","https://plus.google.com/+AnttiLuoma")
-#@gimp : link = link(0,"[38] Eddy Young Tie Yang","https://twitter.com/jeyoung")
-#@gimp : link = link(0,"[37] Thomas Elfstrom","")
-#@gimp : link = link(0,"[36] Valentine Boyce","")
-#@gimp : link = link(0,"[35] George Harnett","")
-#@gimp : link = link(0,"[34] Darius Manka","")
-#@gimp : link = link(0,"[33] Chris Knox","")
-#@gimp : link = link(0,"[32] Thomas Tapping","http://tomtappingphotoblog.blogspot.fr/")
-#@gimp : link = link(0,"[31] Phillip R Ziesemer","")
-#@gimp : link = link(0,"[30] Jean Francois","")
-#@gimp : link = link(0,"[29] Franz Ziereis","")
-#@gimp : link = link(0,"[28] Alessandro Renzi","")
-#@gimp : link = link(0,"[27] Tsuda Koshi","")
-#@gimp : link = link(0,"[26] Boxrec Ltd","http://www.boxrec.com")
-#@gimp : link = link(0,"[25] Wolfgang Schweizer","http://www.wolfgangschweizer.com/")
-#@gimp : link = link(0,"[24] Ramon Miranda","http://www.ramonmiranda.com/")
-#@gimp : link = link(0,"[23] Volker Bradley","")
-#@gimp : link = link(0,"[22] Marco Zara","http://plus.google.com/+MarcoZara")
-#@gimp : link = link(0,"[21] Marco Tedaldi","http://plus.google.com/+MarcoTedaldi")
-#@gimp : link = link(0,"[20] Rodney Lee","http://cybertographer.com")
-#@gimp : link = link(0,"[19] Konstantinos Blatzonis","")
-#@gimp : link = link(0,"[18] Simon Chanson","")
-#@gimp : link = link(0,"[17] Herbert Malle","")
-#@gimp : link = link(0,"[16] Matthias Zepper","http://www.matthias-zepper.de/")
-#@gimp : link = link(0,"[15] Christian Mariucci","")
-#@gimp : link = link(0,"[14] M. R.","")
-#@gimp : link = link(0,"[13] Mark Link","")
-#@gimp : link = link(0,"[12] Rolf Steinort","http://blog.meetthegimp.org/")
-#@gimp : link = link(0,"[11] Pat David","http://blog.patdavid.net/")
-#@gimp : link = link(0,"[10] Daniel Tauro","https://plus.google.com/112357088505488756823/posts")
-#@gimp : link = link(0,"[9] Ben Langhinrichs","http://geniisoft.com/")
-#@gimp : link = link(0,"[8] Paolo Pedaletti","http://www.openlabs.it/")
-#@gimp : link = link(0,"[7] Ricardo Corin","http://blog.photomontager.com")
-#@gimp : link = link(0,"[6] James Prichard","https://plus.google.com/115953666279509959258")
-#@gimp : link = link(0,"[5] Matt Jones","https://plus.google.com/116658221461047313647")
-#@gimp : link = link(0,"[4] Eddy Vervest","http://www.flickr.com/people/twekkel/")
-#@gimp : link = link(0,"[3] Steven Shupe","http://www.flickr.com/photos/ssshupe/")
-#@gimp : link = link(0,"[2] Flavio Casadei Della Chiesa","http://www.flaviocdc.net/wiki/")
-#@gimp : link = link(0,"[1] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
+#@gimp : note = note{"<i>
+#@gimp : <a href="http://www.mysticali3n-wear.com">MysticAli3n-Wear</a>,
+#@gimp : Mika Mantere,
+#@gimp : Christian Beuschel,
+#@gimp : Tore Busch,
+#@gimp : Douc McGregor,
+#@gimp : Marcel Dahm,
+#@gimp : Nicola Giaccobe,
+#@gimp : Susan Voitel,
+#@gimp : <a href="https://www.flickr.com/photos/henkkoning">Henk Koning</a>,
+#@gimp : Arnie Jordan,
+#@gimp : Carol Jennings,
+#@gimp : S&#233;bastien Huart,
+#@gimp : <a href="https://joeysl.wordpress.com/">Sabine Sch&#228;fers</a>,
+#@gimp : <a href="http://www.viewbug.com/member/KennZaney">Bull O'Woods</a>,
+#@gimp : <a href="http://www.jessstryker.com/">Jess Stryker</a>,
+#@gimp : Rui Luis,
+#@gimp : <a href="https://www.flickr.com/photos/sallesrenato/">Renato Salles</a>,
+#@gimp : <a href="http://www.viewbug.com/member/alef0"> Petr Zagalak</a>,
+#@gimp : <a href="http://www.antonio.cat">Antonio Vici&#233;n Faure</a>,
+#@gimp : Vincent Bermel,
+#@gimp : Christian Stocco,
+#@gimp : <a href="https://www.flickr.com/photos/136307651@N04/">Richard Benedict</a>,
+#@gimp : Dr. Helmut Jarausch,
+#@gimp : <a href="http://www.michaeljamesbeck.com">Michael Beck</a>,
+#@gimp : <a href="http://rickleone.tumblr.com/">Riccardo Leone</a>,
+#@gimp : Gisela Looram,
+#@gimp : <a href="https://plus.google.com/u/0/+FrankTegtmeyer/posts">Frank Tegtmeyer</a>,
+#@gimp : David Kettrey,
+#@gimp : <a href="https://www.youtube.com/user/kncpt1">Peter Hoge</a>,
+#@gimp : Alexander Heitmann,
+#@gimp : <a href="http://www.captivemoment.com">Sudi</a>,
+#@gimp : <a href="http://www.mahvin.com/">Mahvin</a>,
+#@gimp : <a href="http://harlequin.webcomics.fr/page/episode-1-page-1">Olivier Larski</a>,
+#@gimp : <a href="http://victorfandrey.blogspot.ca">Victor Fandrey</a>,
+#@gimp : Stefan Peter,
+#@gimp : <a href="https://plus.google.com/u/0/+DimitriosPsychogios">Dimitrios Psychogios</a>,
+#@gimp : <a href="http://blog.patdavid.net/">Pat David</a>,
+#@gimp : <a href="https://plus.google.com/+AnttiLuoma">Antti Luoma</a>,
+#@gimp : <a href="https://twitter.com/jeyoung">Eddy Young Tie Yang</a>,
+#@gimp : Thomas Elfstrom,
+#@gimp : Valentine Boyce,
+#@gimp : George Harnett,
+#@gimp : Darius Manka,
+#@gimp : Chris Knox,
+#@gimp : <a href="http://tomtappingphotoblog.blogspot.fr/">Thomas Tapping</a>,
+#@gimp : Phillip R Ziesemer,
+#@gimp : Jean Francois,
+#@gimp : Franz Ziereis,
+#@gimp : Alessandro Renzi,
+#@gimp : Tsuda Koshi,
+#@gimp : <a href="http://www.boxrec.com">Boxrec Ltd</a>,
+#@gimp : <a href="http://www.wolfgangschweizer.com/">Wolfgang Schweizer</a>,
+#@gimp : <a href="http://www.ramonmiranda.com/">Ramon Miranda</a>,
+#@gimp : Volker Bradley,
+#@gimp : <a href="http://plus.google.com/+MarcoZara">Marco Zara</a>,
+#@gimp : <a href="http://plus.google.com/+MarcoTedaldi">Marco Tedaldi</a>,
+#@gimp : <a href="http://cybertographer.com">Rodney Lee</a>,
+#@gimp : Konstantinos Blatzonis,
+#@gimp : Simon Chanson,
+#@gimp : Herbert Malle,
+#@gimp : <a href="http://www.matthias-zepper.de/">Matthias Zepper</a>,
+#@gimp : Christian Mariucci,
+#@gimp : M. R.,
+#@gimp : Mark Link,
+#@gimp : <a href="http://blog.meetthegimp.org/">Rolf Steinort</a>,
+#@gimp : <a href="https://plus.google.com/112357088505488756823/posts">Daniel Tauro</a>,
+#@gimp : <a href="http://geniisoft.com/">Ben Langhinrichs</a>,
+#@gimp : <a href="http://www.openlabs.it/">Paolo Pedaletti</a>,
+#@gimp : <a href="http://blog.photomontager.com">Ricardo Corin</a>,
+#@gimp : <a href="https://plus.google.com/115953666279509959258">James Prichard</a>,
+#@gimp : <a href="https://plus.google.com/116658221461047313647">Matt Jones</a>,
+#@gimp : <a href="http://www.flickr.com/people/twekkel/">Eddy Vervest</a>,
+#@gimp : <a href="http://www.flickr.com/photos/ssshupe/">Steven Shupe</a>,
+#@gimp : <a href="http://www.flaviocdc.net/wiki/">Flavio Casadei Della Chiesa</a>,
+#@gimp : <a href="http://www.artwanted.com/artist.cfm?artid=10918">Lyle Kroll</a>.
+#@gimp : </i>"}
 #@gimp : sep = separator()
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
 #@gimp : note = note{" <b>-</b> We've received <b>32</b> postcards from <b>G'MIC</b> enthusiasts so far.
 #@gimp :               You could be the <b>33rd</b> sender :)"}
 #@gimp : note = note{" <b>-</b> A big hug goes to these postcard senders (recently received first) :"}
-#@gimp : link = link(0,"[32] Peter Neave - Sydney/Australia","http://cimg.eu/img/postcard58.jpg")
-#@gimp : link = link(0,"[31] Andrea [Photoflow] - Italy","http://cimg.eu/img/postcard57.jpg")
-#@gimp : link = link(0,"[30] Garry R. Osgood - New York/USA","http://cimg.eu/img/postcard56.jpg")
-#@gimp : link = link(0,"[29] Justin Pletzfeld - Germany","http://cimg.eu/img/postcard55.jpg")
-#@gimp : link = link(0,"[28] Werner Meier - Germany","http://cimg.eu/img/postcard54.jpg")
-#@gimp : link = link(0,"[27] Patrick Wauters - Roma/Italy","http://cimg.eu/img/postcard53.jpg")
-#@gimp : link = link(0,"[26] Marc Lis - Belgium","http://cimg.eu/img/postcard52.jpg")
-#@gimp : link = link(0,"[25] ZondeR - France","http://cimg.eu/img/postcard51.jpg")
-#@gimp : link = link(0,"[24] Bill C. - USA","http://cimg.eu/img/postcard50.jpg")
-#@gimp : link = link(0,"[23] Michael T. - France","http://cimg.eu/img/postcard49.jpg")
-#@gimp : link = link(0,"[22] Patrick Wauters - Lisboa","http://cimg.eu/img/postcard48.jpg")
-#@gimp : link = link(0,"[21] Akky [Gimpchat] - Australia","http://cimg.eu/img/postcard47.jpg")
-#@gimp : link = link(0,"[20] Michel Thomas - Germany","http://cimg.eu/img/postcard45.jpg")
-#@gimp : link = link(0,"[19] Pierre-Yves - Ile de Batz/France","http://cimg.eu/img/postcard44.jpg")
-#@gimp : link = link(0,"[18] Family Hamacher - Trier/Germany","http://cimg.eu/img/postcard43.jpg")
-#@gimp : link = link(0,"[17] Benoit Gauzere and Francois Lozes - Hokusai/Japan","http://cimg.eu/img/postcard41.jpg")
-#@gimp : link = link(0,"[16] Dr. Rainer Teubner - Seligenstadt/Germany","http://cimg.eu/img/postcard40.jpg")
-#@gimp : link = link(0,"[15] Mauro Mitrino - Mantova/Italy","http://cimg.eu/img/postcard39.jpg")
-#@gimp : link = link(0,"[14] Werner Meier - Mettlach/Germany","http://cimg.eu/img/postcard37.jpg")
-#@gimp : link = link(0,"[13] Arto Huotari - Helsinki/Finland","http://cimg.eu/img/postcard36.jpg")
-#@gimp : link = link(0,"[12] Benoit Gauzere - California/USA","http://cimg.eu/img/postcard33.jpg")
-#@gimp : link = link(0,"[11] Arkadi Gelfond - Foster City - California/USA","http://cimg.eu/img/postcard30.jpg")
-#@gimp : link = link(0,"[10] Corinne Masimann - Neuchatel/Switzerland","http://cimg.eu/img/postcard29.jpg")
-#@gimp : link = link(0,"[9] Mahvin - Portland/USA","http://cimg.eu/img/postcard27.jpg")
-#@gimp : link = link(0,"[8] Vincent Roullier - Caen/France","http://cimg.eu/img/postcard26.jpg")
-#@gimp : link = link(0,"[7] M???? - Munich/Germany","http://cimg.eu/img/postcard24.jpg")
-#@gimp : link = link(0,"[6] F. Albior - Jaca/Spain","http://cimg.eu/img/postcard23.jpg")
-#@gimp : link = link(0,"[5] PhotoComIX - Frascati/Italy","http://cimg.eu/img/postcard22.jpg")
-#@gimp : link = link(0,"[4] Guy Poizat - Cabestany/France","http://cimg.eu/img/postcard21.jpg")
-#@gimp : link = link(0,"[3] Institut for Biomathematik und Biometrie - Neuherberg/Germany","http://cimg.eu/img/postcard20.jpg")
-#@gimp : link = link(0,"[2] Jaime - Barcelona/Spain","http://cimg.eu/img/postcard14.jpg")
-#@gimp : link = link(0,"[1] Jean-Michel Webbe - Guadeloupe/France","http://cimg.eu/img/postcard15.jpg")
+#@gimp : note = note{"<i>
+#@gimp : <a href="http://cimg.eu/img/postcard58.jpg">Peter Neave</a> (Sydney/Australia),
+#@gimp : <a href="http://cimg.eu/img/postcard57.jpg">Andrea [Photoflow]</a> (Italy),
+#@gimp : <a href="http://cimg.eu/img/postcard56.jpg">Garry R. Osgood</a> (New York/USA),
+#@gimp : <a href="http://cimg.eu/img/postcard55.jpg">Justin Pletzfeld</a> (Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard54.jpg">Werner Meier</a> (Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard53.jpg">Patrick Wauters</a> (Roma/Italy),
+#@gimp : <a href="http://cimg.eu/img/postcard52.jpg">Marc Lis</a> (Belgium),
+#@gimp : <a href="http://cimg.eu/img/postcard51.jpg">ZondeR</a> (France),
+#@gimp : <a href="http://cimg.eu/img/postcard50.jpg">Bill C.</a> (USA),
+#@gimp : <a href="http://cimg.eu/img/postcard49.jpg">Michael T.</a> (France),
+#@gimp : <a href="http://cimg.eu/img/postcard48.jpg">Patrick Wauters</a> (Lisboa),
+#@gimp : <a href="http://cimg.eu/img/postcard47.jpg">Akky [Gimpchat]</a> (Australia),
+#@gimp : <a href="http://cimg.eu/img/postcard45.jpg">Michel Thomas</a> (Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard44.jpg">Pierre-Yves</a> (Ile de Batz/France),
+#@gimp : <a href="http://cimg.eu/img/postcard43.jpg">Family Hamacher</a> (Trier/Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard41.jpg">Benoit Gauzere and Francois Lozes</a> (Hokusai/Japan),
+#@gimp : <a href="http://cimg.eu/img/postcard40.jpg">Dr. Rainer Teubner</a> (Seligenstadt/Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard39.jpg">Mauro Mitrino</a> (Mantova/Italy),
+#@gimp : <a href="http://cimg.eu/img/postcard37.jpg">Werner Meier</a> (Mettlach/Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard36.jpg">Arto Huotari</a> (Helsinki/Finland),
+#@gimp : <a href="http://cimg.eu/img/postcard33.jpg">Benoit Gauzere</a> (California/USA),
+#@gimp : <a href="http://cimg.eu/img/postcard30.jpg">Arkadi Gelfond</a> (Foster City - California/USA),
+#@gimp : <a href="http://cimg.eu/img/postcard29.jpg">Corinne Masimann</a> (Neuchatel/Switzerland),
+#@gimp : <a href="http://cimg.eu/img/postcard27.jpg">Mahvin</a> (Portland/USA),
+#@gimp : <a href="http://cimg.eu/img/postcard26.jpg">Vincent Roullier</a> (Caen/France),
+#@gimp : <a href="http://cimg.eu/img/postcard24.jpg">M????</a> (Munich/Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard23.jpg">F. Albior</a> (Jaca/Spain),
+#@gimp : <a href="http://cimg.eu/img/postcard22.jpg">PhotoComIX</a> (Frascati/Italy),
+#@gimp : <a href="http://cimg.eu/img/postcard21.jpg">Guy Poizat</a> (Cabestany/France),
+#@gimp : <a href="http://cimg.eu/img/postcard20.jpg">Institut for Biomathematik und Biometrie</a> (Neuherberg/Germany),
+#@gimp : <a href="http://cimg.eu/img/postcard15.jpg">Jean-Michel Webbe</a> (Guadeloupe/France),
+#@gimp : <a href="http://cimg.eu/img/postcard14.jpg">Jaime</a> (Barcelona/Spain).
+#@gimp : </i>"}
 #@gimp : sep = separator()
 #@gimp : note = note{"\nMay the force be with you!"}
 gimp_friends :
