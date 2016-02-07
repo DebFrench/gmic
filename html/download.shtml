@@ -103,8 +103,8 @@
                   dmg file<br/><br/></td>
               </tr>
               <tr>
-                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC sources</font></a><br/>
+                <td><a href="http://gmic.eu/files/source/gmic_sources.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                <td><a href="http://gmic.eu/files/source/gmic_sources.tar.gz"><font size="3">G'MIC sources</font></a><br/>
                   tar.gz file<br/>
                   alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
               </tr>
@@ -169,7 +169,7 @@
       </pre>
       If you need more than the sources (i.e. the additional resources and web pages), use the <i>git</i> repository named <tt style="font-family:monospace;">gmic</tt>
       instead of <tt style="font-family:monospace;">gmic-minimal</tt>.
-      Alternatively, you may also prefer to get the sources from <a href="http://gmic.eu/files/source/gmic_source.tar.gz">the last released stable <i>.tar.gz</i> file</a>
+      Alternatively, you may also prefer to get the sources from <a href="http://gmic.eu/files/source/gmic_sources.tar.gz">the last released stable <i>.tar.gz</i> file</a>
       instead of the current development version.<br/><br/>
       You are now ready to compile the following <b><font color="#000066">G'MIC</font></b> interfaces:
       <a href="http://gmic.eu/reference.shtml"><i>gmic</i></a> (command-line tool),
