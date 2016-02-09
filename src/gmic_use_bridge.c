@@ -48,36 +48,38 @@ int main(int argc, char **argv) {
   gmic_bridge_image images[1];
   memset(&images, 0, sizeof(gmic_bridge_image));
 
-  // we only use 1 input image
+  // We only use 1 input image.
   unsigned int nofImages = 1;
 
-  // set the name of the image (optional)
+  // Set the name of the image (optional)
+  *(images[0].name) = 0; // Do this if you don't want a name
   strcpy(images[0].name, "test_input");
 
-  // set the dimensions of the input image 0
-  // (usually depth will be 1 and spectrum will be 4 for RGBA or 3 for RGB)
+  // Set the dimensions of the input image 0
+  // (usually 'depth' will be '1' and 'spectrum' will be '4' for RGBA or '3' for RGB).
   images[0].width = 500;
   images[0].height = 500;
   images[0].spectrum = 4;
   images[0].depth = 1;
 
-  // if "is_interleaved" is set to true, the input data buffer is supposed to consist
+  // If "is_interleaved" is set to true, the input data buffer is supposed to consist
   // of interleaved color channels (RGBA RGBA RGBA RGBA ...)
   // if it is set to false, color channels are seen as separate planar buffers in memory
-  // (RRRR... GGGG... BBBB... AAAA...), which is G'MIC's native format and there a bit faster
+  // (RRRR... GGGG... BBBB... AAAA...), which is G'MIC's native format and there a bit faster.
   images[0].is_interleaved = false;
 
-  // if input is 32bpc float values, set this to E_FORMAT_FLOAT
-  // if it is 8bpc char values, set this to E_FORMAT_BYTE
+  // If input is 32bpc float values, set this to E_FORMAT_FLOAT.
+  // If it is 8bpc char values, set this to E_FORMAT_BYTE.
   images[0].format = E_FORMAT_FLOAT;
 
-  // allocate memory for the input image
-  float* inp = (float*)malloc(images[0].width * images[0].height * images[0].spectrum * images[0].depth * sizeof(float));
-  // set pointer to this memory in the images structure
+  // Allocate memory for the input image.
+  float* inp = (float*)malloc(images[0].width*images[0].height*images[0].spectrum*images[0].depth*sizeof(float));
+
+  // Set pointer to this memory in the images structure.
   images[0].data = inp;
 
-  // now fill the input image
-  // in this example, 3 vertical bars in red, green and blue are drawn
+  // Now fill the input image
+  // in this example, 3 vertical bars in red, green and blue are drawn.
   float* ptr = inp;
   for (unsigned int c = 0; c < images[0].spectrum; ++c)
     for (unsigned int y = 0; y < images[0].height; ++y)
@@ -102,44 +104,45 @@ int main(int argc, char **argv) {
         }
       }
 
-  // create options structure and initialize it
+  // Create options structure and initialize it.
   gmic_bridge_options options;
   memset(&options, 0, sizeof(gmic_bridge_options));
 
-  // if this is set to true, the G'MIC standard library won't be loaded
-  // usually you want this library, so be sure to set it to false
+  // If this is set to true, the G'MIC standard library won't be loaded
+  // usually you want this library, so be sure to set it to false.
   options.ignore_stdlib = false;
 
-  // define abort and progress variables
+  // Define abort and progress variables.
   bool abort = false;
   float progress;
   options.p_is_abort = &abort;
   options.p_progress = &progress;
 
-  // if this is set to true, the color channels of the output will be
+  // If this is set to true, the color channels of the output will be
   // interleaved, i.e. in the format RGBA RGBA RGBA... else they
   // will be in G'MIC's native non-interleaved/planar format
   // RRRR... GGGG... BBBB... AAAA...
   options.interleave_output = false;
 
-  // if you want to prevent the source image buffer from being changed,
+  // If you want to prevent the source image buffer from being changed,
   // set this to true. If it is set to false, the input data
-  // may be overwritten and set as the actual output data
+  // may be overwritten and set as the actual output data.
   options.no_inplace_processing = true;
 
-  // if the output should be 32bpc float values, set this to E_FORMAT_FLOAT
-  // if it should be 8bpc char values, set this to E_FORMAT_BYTE
+  // If the output should be 32bpc float values, set this to E_FORMAT_FLOAT.
+  // If it should be 8bpc char values, set this to E_FORMAT_BYTE.
   options.output_format = E_FORMAT_FLOAT;
 
-  // and here is the actual call to the G'MIC library!
-  // in this example, it will get the input buffer we created, divide only the red channel by 2
-  // and then display the result
-  gmic_call("-v 0 -apply_channels \"-div 2\",rgba_r -mul 255 -polaroid 5,30 -rotate 20 -drop_shadow , -display", &nofImages, &images[0], &options);
+  // And here is the actual call to the G'MIC library!
+  // In this example, it will get the input buffer we created, divide only the red channel by 2
+  // and then display the result.
+  gmic_call("-v 0 -apply_channels \"-div 2\",rgba_r -mul 255 -polaroid 5,30 -rotate 20 -drop_shadow , -display",
+            &nofImages, &images[0], &options);
 
-  // we have to dispose output images we got back from the gmic_call that were
-  // not created by this thread
-  // therefore, for any image data we did not allocate ourselves, we have to call the
-  // external delete function
+  // We have to dispose output images we got back from the gmic_call that were
+  // not created by this thread.
+  // Therefore, for any image data we did not allocate ourselves, we have to call the
+  // external delete function.
   for (int i = 0; i < nofImages; i++) {
     if (images[i].data != inp) {
       gmic_delete_external((float*)images[i].data);
