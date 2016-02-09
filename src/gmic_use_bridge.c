@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   // Set the name of the image (optional)
   strcpy(images[0].name, "test_input");
 
-  // Set the dimensions of the input image 0
+  // Set the dimensions of the input image [0]
   // (usually 'depth' will be '1' and 'spectrum' will be '4' for RGBA or '3' for RGB).
   images[0].width = 500;
   images[0].height = 500;
@@ -77,8 +77,8 @@ int main(int argc, char **argv) {
   // Set pointer to this memory in the images structure.
   images[0].data = inp;
 
-  // Now fill the input image
-  // in this example, 3 vertical bars in red, green and blue are drawn.
+  // Now fill the input image:
+  // In this example, 3 vertical bars in red, green and blue are drawn.
   float* ptr = inp;
   for (unsigned int c = 0; c < images[0].spectrum; ++c)
     for (unsigned int y = 0; y < images[0].height; ++y)
