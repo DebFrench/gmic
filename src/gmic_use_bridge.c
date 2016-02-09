@@ -41,8 +41,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "gmic_bridge.h"
 #include <math.h>
+#include "gmic_bridge.h"
 
 int main(int argc, char **argv) {
   gmic_bridge_image images[1];
@@ -52,7 +52,6 @@ int main(int argc, char **argv) {
   unsigned int nofImages = 1;
 
   // Set the name of the image (optional)
-  *(images[0].name) = 0; // Do this if you don't want a name
   strcpy(images[0].name, "test_input");
 
   // Set the dimensions of the input image 0
