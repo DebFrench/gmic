@@ -122,7 +122,7 @@ if [ "$OSTYPE" == "msys" ]; then
         fi
     fi
     cp -f gmic_gimp.exe ../gmic-gimp-build/ &&
-        cp -f gmic_gimp.exe gmic.exe ../gmic-build/ &&
+        cp -f gmic_gimp.exe gmic.exe libgmicbridge.dll libgmicbridge.def ../gmic-build/ &&
         cd .. &&
 
         # Construct full G'MIC binary archive.
