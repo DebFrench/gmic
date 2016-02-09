@@ -44,93 +44,108 @@
 # Handle package building on Windows.
 #------------------------------------
 if [ "$OSTYPE" == "msys" ]; then
-    echo &&
-    echo " - Build G'MIC package for Windows." &&
-    cd &&
 
-    # Input sources.
-    rm -rf gmic-src &&
-    cp -rf /e/work/src/gmic/src gmic-src &&
+    echo &&
+        echo " - Build G'MIC package for Windows." &&
+        cd &&
+
+        # Input sources.
+        rm -rf gmic-src &&
+        cp -rf /e/work/src/gmic/src gmic-src
 
     # Get version number.
     cd gmic-src &&
-    RELEASE0=`grep "#define gmic_version" gmic.h | tail -c5` &&
-    RELEASE1=`echo $RELEASE0 | head -c1` &&
-    RELEASE2=`echo $RELEASE0 | head -c2 | tail -c1` &&
-    RELEASE3=`echo $RELEASE0 | head -c3 | tail -c1` &&
-    VERSION=$RELEASE1.$RELEASE2.$RELEASE3 &&
+        RELEASE0=`grep "#define gmic_version" gmic.h | tail -c5` &&
+        RELEASE1=`echo $RELEASE0 | head -c1` &&
+        RELEASE2=`echo $RELEASE0 | head -c2 | tail -c1` &&
+        RELEASE3=`echo $RELEASE0 | head -c3 | tail -c1` &&
+        VERSION=$RELEASE1.$RELEASE2.$RELEASE3 &&
 
-    if [ "$1" == "final" ]; then
-        SUFFIX="";
-        sed "s/PRERELEASE_CFLAGS = /NO_PRERELEASE_CFLAGS = /" Makefile > /tmp/Makefile
-        mv /tmp/Makefile Makefile
-    else SUFFIX=_pre;
-    fi &&
-    sed "s/rm -rf CImg.h gmic_stdlib.h /rm -rf /" Makefile > /tmp/Makefile
+        if [ "$1" == "final" ]; then
+            SUFFIX="";
+            sed "s/PRERELEASE_CFLAGS = /NO_PRERELEASE_CFLAGS = /" Makefile > /tmp/Makefile
+            mv /tmp/Makefile Makefile
+        else SUFFIX=_pre;
+        fi &&
+        sed "s/rm -rf CImg.h gmic_stdlib.h /rm -rf /" Makefile > /tmp/Makefile
     mv /tmp/Makefile Makefile
-    cd .. &&
+    cd ..
 
-    if [ -f is_64bits ]; then
+    if [ -f msys2 ]; then
 
-        # For 64 bits version:
+        # For 64 bits version (MSYS2)
         echo " - Release number : $VERSION$SUFFIX (64 bits)" &&
-        OUTDIR1=gmic-${VERSION}${SUFFIX}-win64 &&
-        OUTDIR2=gmic-gimp-${VERSION}${SUFFIX}-win64 &&
-        OUTZIP1=gmic_${VERSION}${SUFFIX}_win64.zip &&
-        OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win64.zip &&
-        OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win64.exe &&
-        rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
+            OUTDIR1=gmic-${VERSION}${SUFFIX}-win64 &&
+            OUTDIR2=gmic-gimp-${VERSION}${SUFFIX}-win64 &&
+            OUTZIP1=gmic_${VERSION}${SUFFIX}_win64.zip &&
+            OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win64.zip &&
+            OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win64.exe &&
+            rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
 
-        cd gmic-src && make OSTYPE="msys" clean && rm -f gmic gmic_gimp && \
-            make -j OSTYPE="msys" CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
-            MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
-            OPT_CFLAGS="-O3 -m64 -mtune=generic" \
-            OPENCV_LIBS+="/opencv/x64/mingw/lib/libopencv_calib3d2410.dll.a /opencv/x64/mingw/lib/libopencv_contrib2410.dll.a /opencv/x64/mingw/lib/libopencv_core2410.dll.a /opencv/x64/mingw/lib/libopencv_features2d2410.dll.a /opencv/x64/mingw/lib/libopencv_flann2410.dll.a /opencv/x64/mingw/lib/libopencv_gpu2410.dll.a /opencv/x64/mingw/lib/libopencv_highgui2410.dll.a /opencv/x64/mingw/lib/libopencv_imgproc2410.dll.a /opencv/x64/mingw/lib/libopencv_legacy2410.dll.a /opencv/x64/mingw/lib/libopencv_ml2410.dll.a /opencv/x64/mingw/lib/libopencv_nonfree2410.dll.a /opencv/x64/mingw/lib/libopencv_objdetect2410.dll.a /opencv/x64/mingw/lib/libopencv_ocl2410.dll.a /opencv/x64/mingw/lib/libopencv_photo2410.dll.a /opencv/x64/mingw/lib/libopencv_stitching2410.dll.a /opencv/x64/mingw/lib/libopencv_superres2410.dll.a /opencv/x64/mingw/lib/libopencv_video2410.dll.a /opencv/x64/mingw/lib/libopencv_videostab2410.dll.a"
-
+            cd gmic-src && make OSTYPE="msys" clean && rm -f gmic gmic_gimp && \
+            make -j OSTYPE="msys" OPT_CFLAGS="-O3 -m64 -mtune=generic"
     else
+        if [ -f is_64bits ]; then
 
-        # For 32 bits version:
-        echo " - Release number : $VERSION$SUFFIX (32 bits)" &&
-        OUTDIR1=gmic-${VERSION}${SUFFIX}-win32 &&
-        OUTDIR2=gmic-gimp-${VERSION}${SUFFIX}-win32 &&
-        OUTZIP1=gmic_${VERSION}${SUFFIX}_win32.zip &&
-        OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win32.zip &&
-        OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win32.exe &&
-        rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
+            # For 64 bits version (MSYS1)
+            echo " - Release number : $VERSION$SUFFIX (64 bits)" &&
+                OUTDIR1=gmic-${VERSION}${SUFFIX}-win64 &&
+                OUTDIR2=gmic-gimp-${VERSION}${SUFFIX}-win64 &&
+                OUTZIP1=gmic_${VERSION}${SUFFIX}_win64.zip &&
+                OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win64.zip &&
+                OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win64.exe &&
+                rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
 
-        cd gmic-src && make OSTYPE="msys" clean && rm -f gmic gmic_gimp && \
-            make -j OSTYPE="msys" CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
-            MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
-            OPT_CFLAGS="-O3 -march=i686 -mtune=generic" \
-            OPENCV_LIBS+="/opencv/lib/opencv_calib3d2410.lib /opencv/lib/opencv_contrib2410.lib /opencv/lib/opencv_core2410.lib /opencv/lib/opencv_features2d2410.lib /opencv/lib/opencv_flann2410.lib /opencv/lib/opencv_gpu2410.lib /opencv/lib/opencv_highgui2410.lib /opencv/lib/opencv_imgproc2410.lib /opencv/lib/opencv_legacy2410.lib /opencv/lib/opencv_ml2410.lib /opencv/lib/opencv_nonfree2410.lib /opencv/lib/opencv_objdetect2410.lib /opencv/lib/opencv_ocl2410.lib /opencv/lib/opencv_photo2410.lib /opencv/lib/opencv_stitching2410.lib /opencv/lib/opencv_superres2410.lib /opencv/lib/opencv_video2410.lib /opencv/lib/opencv_videostab2410.lib"
+                cd gmic-src && make OSTYPE="msys" clean && rm -f gmic gmic_gimp && \
+                make -j OSTYPE="msys" CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
+                     MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
+                     OPT_CFLAGS="-O3 -m64 -mtune=generic" \
+                     OPENCV_LIBS+="/opencv/x64/mingw/lib/libopencv_calib3d2410.dll.a /opencv/x64/mingw/lib/libopencv_contrib2410.dll.a /opencv/x64/mingw/lib/libopencv_core2410.dll.a /opencv/x64/mingw/lib/libopencv_features2d2410.dll.a /opencv/x64/mingw/lib/libopencv_flann2410.dll.a /opencv/x64/mingw/lib/libopencv_gpu2410.dll.a /opencv/x64/mingw/lib/libopencv_highgui2410.dll.a /opencv/x64/mingw/lib/libopencv_imgproc2410.dll.a /opencv/x64/mingw/lib/libopencv_legacy2410.dll.a /opencv/x64/mingw/lib/libopencv_ml2410.dll.a /opencv/x64/mingw/lib/libopencv_nonfree2410.dll.a /opencv/x64/mingw/lib/libopencv_objdetect2410.dll.a /opencv/x64/mingw/lib/libopencv_ocl2410.dll.a /opencv/x64/mingw/lib/libopencv_photo2410.dll.a /opencv/x64/mingw/lib/libopencv_stitching2410.dll.a /opencv/x64/mingw/lib/libopencv_superres2410.dll.a /opencv/x64/mingw/lib/libopencv_video2410.dll.a /opencv/x64/mingw/lib/libopencv_videostab2410.dll.a"
 
+        else
+
+            # For 32 bits version (MSYS1)
+            echo " - Release number : $VERSION$SUFFIX (32 bits)" &&
+                OUTDIR1=gmic-${VERSION}${SUFFIX}-win32 &&
+                OUTDIR2=gmic-gimp-${VERSION}${SUFFIX}-win32 &&
+                OUTZIP1=gmic_${VERSION}${SUFFIX}_win32.zip &&
+                OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win32.zip &&
+                OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win32.exe &&
+                rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
+
+                cd gmic-src && make OSTYPE="msys" clean && rm -f gmic gmic_gimp && \
+                make -j OSTYPE="msys" CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
+                     MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
+                     OPT_CFLAGS="-O3 -march=i686 -mtune=generic" \
+                     OPENCV_LIBS+="/opencv/lib/opencv_calib3d2410.lib /opencv/lib/opencv_contrib2410.lib /opencv/lib/opencv_core2410.lib /opencv/lib/opencv_features2d2410.lib /opencv/lib/opencv_flann2410.lib /opencv/lib/opencv_gpu2410.lib /opencv/lib/opencv_highgui2410.lib /opencv/lib/opencv_imgproc2410.lib /opencv/lib/opencv_legacy2410.lib /opencv/lib/opencv_ml2410.lib /opencv/lib/opencv_nonfree2410.lib /opencv/lib/opencv_objdetect2410.lib /opencv/lib/opencv_ocl2410.lib /opencv/lib/opencv_photo2410.lib /opencv/lib/opencv_stitching2410.lib /opencv/lib/opencv_superres2410.lib /opencv/lib/opencv_video2410.lib /opencv/lib/opencv_videostab2410.lib"
+
+        fi
     fi
-
     cp -f gmic_gimp.exe ../gmic-gimp-build/ &&
-    cp -f gmic_gimp.exe gmic.exe ../gmic-build/ &&
-    cd .. &&
+        cp -f gmic_gimp.exe gmic.exe ../gmic-build/ &&
+        cd .. &&
 
-    # Construct full G'MIC binary archive.
-    cp -rf gmic-build ${OUTDIR1} &&
-    cp -f /e/work/src/gmic/COPYING ${OUTDIR1} &&
-    sed s\/_gmic_version\/${VERSION}${SUFFIX}\/ /e/work/src/gmic/README > ${OUTDIR1}/README &&
-    zip -r -9 ${OUTZIP1} ${OUTDIR1} &&
-    cp -f ${OUTZIP1} /e/work/src/ &&
+        # Construct full G'MIC binary archive.
+        cp -rf gmic-build ${OUTDIR1} &&
+        cp -f /e/work/src/gmic/COPYING ${OUTDIR1} &&
+        sed s\/_gmic_version\/${VERSION}${SUFFIX}\/ /e/work/src/gmic/README > ${OUTDIR1}/README &&
+        zip -r -9 ${OUTZIP1} ${OUTDIR1} &&
+        cp -f ${OUTZIP1} /e/work/src/ &&
 
-    # Construct G'MIC/GIMP binary archive.
-    cp -rf gmic-gimp-build ${OUTDIR2} &&
-    cp -f /e/work/src/gmic/COPYING ${OUTDIR2} &&
-    sed s\/_gmic_version\/${VERSION}${SUFFIX}\/ /e/work/src/gmic/README > ${OUTDIR2}/README &&
-    zip -r -9 ${OUTZIP2} ${OUTDIR2} &&
-    cp -f ${OUTZIP2} /e/work/src/ &&
+        # Construct G'MIC/GIMP binary archive.
+        cp -rf gmic-gimp-build ${OUTDIR2} &&
+        cp -f /e/work/src/gmic/COPYING ${OUTDIR2} &&
+        sed s\/_gmic_version\/${VERSION}${SUFFIX}\/ /e/work/src/gmic/README > ${OUTDIR2}/README &&
+        zip -r -9 ${OUTZIP2} ${OUTDIR2} &&
+        cp -f ${OUTZIP2} /e/work/src/ &&
 
-    # Construct Inno Setup installer.
-    sed s\/XXX\/${VERSION}${SUFFIX}\/g gmic_gimp.iss > tmp.iss &&
-    /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe tmp.iss
+        # Construct Inno Setup installer.
+        sed s\/XXX\/${VERSION}${SUFFIX}\/g gmic_gimp.iss > tmp.iss &&
+        /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe tmp.iss
     touch ${OUTINST} &&
-    sleep 3 &&
-    cp -f ${OUTINST} /e/work/src/ &&
-    rm -f tmp.iss &
+        sleep 3 &&
+        cp -f ${OUTINST} /e/work/src/ &&
+        rm -f tmp.iss &
 
     echo " - All done!"
     return;
@@ -163,24 +178,24 @@ if [ "$DIST" != "Ubuntu 15.10" ] || [ "$BITS" != "x86_64" ] ; then
     while [ ! -f deb_${TARFILE}.gz ]; do sleep 10; done
     sleep 10
     cp deb_${TARFILE}.gz /tmp/ &&
-    cd /tmp/ &&
-    rm -rf $PAK $PLU $DIR &&
-    touch deb_${TARFILE}.gz &&
-    tar zxvf deb_${TARFILE}.gz &&
-    find gmic-${VERSION}${SUFFIX} -exec touch {} ;
+        cd /tmp/ &&
+        rm -rf $PAK $PLU $DIR &&
+        touch deb_${TARFILE}.gz &&
+        tar zxvf deb_${TARFILE}.gz &&
+        find gmic-${VERSION}${SUFFIX} -exec touch {} ;
     cd $DIR &&
-    dpkg-buildpackage -d -j3 -rfakeroot;
+        dpkg-buildpackage -d -j3 -rfakeroot;
     mv ../gmic_${VERSION}_${ARCH}.deb ../$PAK
 
     if [ "$CODENAME" == "debian_wheezy" ]; then
         zip -j -r -9 ../$PLU src/gmic_gimp README &&
-        cd src && make clean && make STATIC_CLI_PATH=/usr/lib/${PARCH}-linux-gnu static && mv gmic ../ &&
-        cd .. && rm -rf man src zart debian && cd .. &&
-        zip -j -r -9 $STA $DIR &&
-        cp -f $PLU $PAK $STA $SF_HOME/work/src/
+            cd src && make clean && make STATIC_CLI_PATH=/usr/lib/${PARCH}-linux-gnu static && mv gmic ../ &&
+            cd .. && rm -rf man src zart debian && cd .. &&
+            zip -j -r -9 $STA $DIR &&
+            cp -f $PLU $PAK $STA $SF_HOME/work/src/
     else
         cd .. &&
-        cp -f $PAK $SF_HOME/work/src/
+            cp -f $PAK $SF_HOME/work/src/
     fi
     echo VIRTUALBOX_DONE
     return;
@@ -198,11 +213,11 @@ SVERSION=$RELEASE1$RELEASE2$RELEASE3
 if [ "$1" == "final" ]; then SUFFIX=""; else SUFFIX=_pre; fi
 DIR=/tmp/gmic-${VERSION}${SUFFIX}
 rm -f gmic_${VERSION}${SUFFIX}_*.deb gmic_${VERSION}${SUFFIX}.tar.gz deb_gmic_${VERSION}${SUFFIX}.tar.gz \
-    gmic_${VERSION}${SUFFIX}_win32.zip gmic_${VERSION}${SUFFIX}_win64.zip \
-    gmic_gimp_${VERSION}${SUFFIX}_linux32.zip gmic_gimp_${VERSION}${SUFFIX}_linux64.zip \
-    gmic_gimp_${VERSION}${SUFFIX}_win32.zip gmic_gimp_${VERSION}${SUFFIX}_win32.exe \
-    gmic_gimp_${VERSION}${SUFFIX}_win64.zip gmic_gimp_${VERSION}${SUFFIX}_win64.exe \
-    gmic_static_${VERSION}${SUFFIX}_*.zip
+   gmic_${VERSION}${SUFFIX}_win32.zip gmic_${VERSION}${SUFFIX}_win64.zip \
+   gmic_gimp_${VERSION}${SUFFIX}_linux32.zip gmic_gimp_${VERSION}${SUFFIX}_linux64.zip \
+   gmic_gimp_${VERSION}${SUFFIX}_win32.zip gmic_gimp_${VERSION}${SUFFIX}_win32.exe \
+   gmic_gimp_${VERSION}${SUFFIX}_win64.zip gmic_gimp_${VERSION}${SUFFIX}_win64.exe \
+   gmic_static_${VERSION}${SUFFIX}_*.zip
 
 echo
 echo " - Release number : $VERSION$SUFFIX"
@@ -332,7 +347,7 @@ mv /tmp/Makefile Makefile
 make clean
 rm -f gmic_buildpackage
 for i in *.h *.cpp *.gmic *.scm; do
-  sed -e 's/ *$//' $i >/tmp/gmic_buildpackage$$ && mv /tmp/gmic_buildpackage$$ $i
+    sed -e 's/ *$//' $i >/tmp/gmic_buildpackage$$ && mv /tmp/gmic_buildpackage$$ $i
 done
 
 cd $DIR
@@ -367,18 +382,18 @@ lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/prere
 echo " - Create debian packages."
 
 cp ${HOME}/work/src/deb_${TARFILE}.gz /tmp/ &&
-cd /tmp/ &&
-PAK=gmic_${VERSION}${SUFFIX}_ubuntu_wily_amd64.deb &&
-DIR=gmic-${VERSION}${SUFFIX} &&
-rm -rf $PAK &&
-touch deb_${TARFILE}.gz &&
-tar zxvf deb_${TARFILE}.gz &&
-find gmic-${VERSION}${SUFFIX} -exec touch {} \; &&
-cd $DIR &&
-dpkg-buildpackage -d -j3 -rfakeroot;
+    cd /tmp/ &&
+    PAK=gmic_${VERSION}${SUFFIX}_ubuntu_wily_amd64.deb &&
+    DIR=gmic-${VERSION}${SUFFIX} &&
+    rm -rf $PAK &&
+    touch deb_${TARFILE}.gz &&
+    tar zxvf deb_${TARFILE}.gz &&
+    find gmic-${VERSION}${SUFFIX} -exec touch {} \; &&
+    cd $DIR &&
+    dpkg-buildpackage -d -j3 -rfakeroot;
 mv ../gmic_${VERSION}_amd64.deb ../$PAK &&
-cp -f ../$PAK $HOME/work/src/ &&
-echo ELARA_DONE
+    cp -f ../$PAK $HOME/work/src/ &&
+    echo ELARA_DONE
 
 # Wait for packages to be generated from Virtual machines, and copy them to G'MIC server.
 #----------------------------------------------------------------------------------------

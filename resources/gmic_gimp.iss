@@ -17,13 +17,13 @@
 [Setup]
 AppName={#AppName}
 AppVersion=XXX
-AppPublisherURL=http://gmic.sourceforge.net/
+AppPublisherURL=http://gmic.eu/
 DefaultDirName={%USERPROFILE|{userdesktop}\..}\.gimp-2.8\plug-ins\
 DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\gmic_gimp.exe
 LicenseFile={#file AddBackslash(SourcePath) + "CeCILL.rtf"}
 VersionInfoVersion={#AppVersion}
-OutputDir=C:\petit-msys-mingw-64bits-gimp28\msys\home\david
+OutputDir={#SourcePath}
 UninstallFilesDir={app}\uninst
 AppendDefaultDirName=false
 UsePreviousAppDir=true
