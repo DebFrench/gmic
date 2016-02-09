@@ -304,7 +304,7 @@ mkdir $DIR
 cp -Lrf COPYING README $DIR
 mkdir $DIR/src
 cd src
-cp -Lrf Makefile CImg.h gmic.cpp gmic.h gmic_stdlib.h gmic_stdlib.gmic gmic_gimp.cpp gmic_in_script.scm gmic_use_lib.cpp $DIR/src
+cp -Lrf Makefile CImg.h gmic.cpp gmic.h gmic_stdlib.h gmic_stdlib.gmic gmic_gimp.cpp gmic_in_script.scm gmic_use_lib.cpp gmic_bridge.cpp gmic_bridge.h gmic_use_bridge.c $DIR/src
 touch $DIR/src/gmic_stdlib.h
 cd ..
 mkdir $DIR/man
@@ -346,7 +346,7 @@ sed "s/rm -rf CImg.h gmic_stdlib.h /rm -rf /" Makefile > /tmp/Makefile
 mv /tmp/Makefile Makefile
 make clean
 rm -f gmic_buildpackage
-for i in *.h *.cpp *.gmic *.scm; do
+for i in *.h *.cpp *.c *.gmic *.scm; do
     sed -e 's/ *$//' $i >/tmp/gmic_buildpackage$$ && mv /tmp/gmic_buildpackage$$ $i
 done
 
