@@ -312,7 +312,7 @@ Setting image names is generally useless, except if one of the commands you invo
 
       <p>
         In the <b><font color="#000066">G'MIC</font></b> sources, you will a sample file
-        <tt style="font-family:monospace;"><a href="https://github.com/dtschump/gmic-minimal/blob/master/src/gmic_use_lib.cpp">gmic_use_lib.cpp</a></tt> which contains all
+        <tt style="font-family:monospace;"><a href="https://github.com/dtschump/gmic-minimal/blob/master/src/use_libgmic.cpp">use_libgmic.cpp</a></tt> which contains all
         the stuffs we've summarized in this page. Check it out and compile it to have another example on how the <b>libgmic</b> can do for you.
       </p>
 
