@@ -103,15 +103,15 @@
                   dmg file<br/><br/></td>
               </tr>
               <tr>
-                <td><a href="http://gmic.eu/files/source/gmic_sources.tar.gz"><img alt="" src="img/download_sources.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/source/gmic_sources.tar.gz"><font size="3">G'MIC sources</font></a><br/>
+                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_source.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC source</font></a><br/>
                   tar.gz file<br/>
                   alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                 <td><a href="http://gmic.eu/files/prerelease"><font size="3">G'MIC pre-release for testing</font></a><br/>
-                  sources and Windows/Linux installers/binaries<br/><br/></td>
+                  source and Windows/Linux installers/binaries<br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/"><img alt="" src="img/download_browse.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
@@ -152,7 +152,7 @@
 
   </div></div><div id="footer"><img alt="" src="images/footer.jpg" /></div></div>
 
-<div id="bloc_option"><div id="top_bleu"><div id="text_top"><a id="sources"></a>From sources</div></div>
+<div id="bloc_option"><div id="top_bleu"><div id="text_top"><a id="source"></a>From source</div></div>
   <div id="center"><div id="text_centre_intro">
       The source code of <b><font color="#000066">G'MIC</font></b> is hosted on a <a href="http://git-scm.com/"><i>git</i></a> repository with public access.
       Accessing it via <a href="http://git-scm.com/"><i>git</i></a> ensures you get the latest code available, and will ease the
@@ -163,13 +163,13 @@
         $ sudo apt-get install git build-essential libgimp2.0-dev libcv-dev libopencv-dev \
         libhighgui-dev libcurl4-openssl-dev libfftw3-dev
       </pre>
-      Then, get the <b><font color="#000066">G'MIC</font></b> sources from the <i>git</i> repository:
+      Then, get the <b><font color="#000066">G'MIC</font></b> source from the <i>git</i> repository:
       <pre style="font-family:monospace;">
         $ git clone <a href="https://github.com/dtschump/gmic-minimal">https://github.com/dtschump/gmic-minimal.git</a> gmic-src
       </pre>
-      If you need more than the sources (i.e. the additional resources and web pages), use the <i>git</i> repository named <tt style="font-family:monospace;">gmic</tt>
+      If you need more than the source (i.e. the additional resources and web pages), use the <i>git</i> repository named <tt style="font-family:monospace;">gmic</tt>
       instead of <tt style="font-family:monospace;">gmic-minimal</tt>.
-      Alternatively, you may also prefer to get the sources from <a href="http://gmic.eu/files/source/gmic_sources.tar.gz">the last released stable <i>.tar.gz</i> file</a>
+      Alternatively, you may also prefer to get the source from <a href="http://gmic.eu/files/source/gmic_source.tar.gz">the last released stable <i>.tar.gz</i> file</a>
       instead of the current development version.<br/><br/>
       You are now ready to compile the following <b><font color="#000066">G'MIC</font></b> interfaces:
       <a href="http://gmic.eu/reference.shtml"><i>gmic</i></a> (command-line tool),

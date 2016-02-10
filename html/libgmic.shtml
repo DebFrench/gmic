@@ -30,7 +30,7 @@
         <li>
           The dynamic library file <tt style="font-family:monospace;">libgmic.so</tt> (or its static version <tt style="font-family:monospace;">libgmic.a</tt>) that needs to be linked
           against your code. These binary files are of course platform-dependent.
-          It is recommended you compile them directly from the latest sources (following <a href="http://gmic.eu/download.shtml#sources">these instructions</a>).
+          It is recommended you compile them directly from the latest source (following <a href="http://gmic.eu/download.shtml#source">these instructions</a>).
           Alternatively, you may have the <b>libgmic</b> files already present on your system (in <tt style="font-family:monospace;">/usr/lib/</tt>), if you have installed <b><font color="#000066">G'MIC</font></b>
           from the <a href="download.shtml"><b>.deb</b> packages</a> we provide.
         </li>
@@ -311,7 +311,7 @@ Setting image names is generally useless, except if one of the commands you invo
       </ul>
 
       <p>
-        In the <b><font color="#000066">G'MIC</font></b> sources, you will a sample file
+        In the <b><font color="#000066">G'MIC</font></b> source, you will a sample file
         <tt style="font-family:monospace;"><a href="https://github.com/dtschump/gmic-minimal/blob/master/src/use_libgmic.cpp">use_libgmic.cpp</a></tt> which contains all
         the stuffs we've summarized in this page. Check it out and compile it to have another example on how the <b>libgmic</b> can do for you.
       </p>

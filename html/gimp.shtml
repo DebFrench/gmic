@@ -47,7 +47,7 @@
 
     Here you will find pre-compiled binaries of the plug-in for common architectures. Pick one archive below, and run the installer or unzip the file contents
     into your <a href="http://www.gimp.org">GIMP</a> plug-in directory.
-    If you want to build the plug-in directly from the sources, <a href="download.shtml#sources">follow these instructions</a>.
+    If you want to build the plug-in directly from the source, <a href="download.shtml#source">follow these instructions</a>.
     <br/><br/>
 
   <script language="javascript">
@@ -116,7 +116,7 @@
       <tr>
         <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
         <td><a href="http://gmic.eu/files/prerelease"><font size="3">G'MIC plug-in pre-release for testing</font></a><br/>
-          sources and Windows/Linux installers/binaries<br/><br/></td>
+          source and Windows/Linux installers/binaries<br/><br/></td>
       </tr>
     </table>
     </font>
