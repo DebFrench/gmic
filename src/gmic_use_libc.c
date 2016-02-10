@@ -1,6 +1,6 @@
 /*
  #
- #  File        : gmic_use_bridge.c
+ #  File        : gmic_use_libc.c
  #                ( C source file )
  #
  #  Description : Show how to call the C bridge to the G'MIC interpreter from a C source code.
@@ -42,7 +42,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "gmic_bridge.h"
+#include "gmic_libc.h"
 
 int main(int argc, char **argv) {
   gmic_bridge_image images[1];
