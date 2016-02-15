@@ -20111,6 +20111,8 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : William Tweedy,
+#@gimp : Shawnee Horn,
 #@gimp : Stephan Munsch,
 #@gimp : <a href="http://www.mysticali3n-wear.com">MysticAli3n-Wear</a>,
 #@gimp : Mika Mantere,
