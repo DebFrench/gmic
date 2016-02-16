@@ -30115,7 +30115,6 @@ gmicol_rotate :
 #@gmicol : Radius = float(2,0,5)
 #@gmicol : Variability = float(80,0,100)
 #@gmicol : Random seed = int(0,0,16384)
-#@gmicol : note = note("<small>Parameters <i>Density</i>, <i>Radius</i>, <i>Variability</i> and <i>Random seed</i> are used only in <i>Procedural shapes</i> mode.</small>")
 #@gmicol : sep = separator(), note = note("<small><b>Rendering:</b></small>")
 #@gmicol : Refraction = float(3,0,20)
 #@gmicol : Light angle = float(35,0,360)
