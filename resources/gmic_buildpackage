@@ -189,7 +189,7 @@ if [ "$DIST" != "Ubuntu 15.10" ] || [ "$BITS" != "x86_64" ] ; then
 
     if [ "$CODENAME" == "debian_wheezy" ]; then
         zip -j -r -9 ../$PLU src/gmic_gimp README &&
-            cd src && make clean && make STATIC_CLI_PATH=/usr/lib/${PARCH}-linux-gnu static && mv gmic ../ &&
+            cd src && make clean && make GMIC_STATIC_CLI_PATH=/usr/lib/${PARCH}-linux-gnu static && mv gmic ../ &&
             cd .. && rm -rf man src zart debian && cd .. &&
             zip -j -r -9 $STA $DIR &&
             cp -f $PLU $PAK $STA $SF_HOME/work/src/
