@@ -3313,7 +3313,7 @@ update_gallery_html :
   -_update_gallery_html "-wave 15,0.2"
   -_update_gallery_html "-deform 10"
   -_update_gallery_html "-light_patch 4,0.7,1.7"
-  -_update_gallery_html "-mosaic 0.5,80,1"
+  -_update_gallery_html "-mosaic 0.5"
 
   -_update_gallery_html "-sponge 13"
   -_update_gallery_html "-hearts 15"
@@ -13187,7 +13187,6 @@ mosaic : -skip ${1=0.8}
   -v - -repeat $! -l[$>]
     label0={1+im} -+ $label0
     100%,100% -noise. {$1*2},2 -*.. [-1] -distance. 1 -*. -1 -watershed.. [-1] -rm.
-    -if $2 --l. -> 0 -s c -& -endl --.. $label0 -*[-2,-1] -else --. $label0 -endif
   -endl -done -v +
 
 #@gmic old_photo
