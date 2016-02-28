@@ -8689,7 +8689,7 @@ syntexturize_patchmatch : -check "${1=100%}>0 && ${2=$1}>0 && isint(${3=0}) && $
         {1+round(w*$width/{0,w},1,1)},{1+round(h*$height/{0,h},1,1)},1,1
 
         -noise. 0.2,2 --distance. 1 -*. -1
-        -label_fg.. 0 -watershed.. [-1],1 -rm.
+        -label_fg.. 0 -watershed.. [-1] -rm.
 
         100%,100%,1,1,x --f. y -a[-2,-1] c -channels. 0,2
         --blend. [-2],shapeaverage --.. [-1] -rm.
@@ -8821,9 +8821,8 @@ watermark_fourier : -check ${2=33}>0
   -mv. 1 -done
   -rm[0] -v +
 
-#@gmic watershed : [priority_image],_fill_lines={ 0 | 1 } : (+)
+#@gmic watershed : [priority_image] : (+)
 #@gmic : Compute the watershed transform of selected images.
-#@gmic : Default value: 'fill_lines=1'.
 #@gmic : $ 400,400 -noise 0.2,2 --distance 1 -mul. -1 -label.. -watershed.. [-1] -mod.. 256 -map.. 0 -reverse
 
 #---------------------------------
@@ -9225,11 +9224,11 @@ psnr : -skip ${1=255}
   -e[^-1] "Compute the "$!x$!" matrix of PSNR values, from image$? with maximum value $1."
   -v - -mse -log10 -- {log10($1*$1)} -* -10 -nm. [PSNR] -v +
 
-#@gmic segment_watershed : _threshold>=0,_fill_lines={ 0 | 1 }
+#@gmic segment_watershed : _threshold>=0
 #@gmic : Apply watershed segmentation on selected images.
-#@gmic : Default values: 'threshold=2' and 'fill_lines=1'.
-#@gmic : $ image.jpg --segment_watershed 2,0
-segment_watershed : -check "${1=2}>=0" -skip ${2=1}
+#@gmic : Default values: 'threshold=2'.
+#@gmic : $ image.jpg --segment_watershed 2
+segment_watershed : -check "${1=2}>=0"
   -e[^-1] "Apply watershed segmentation on image$?, with edge threshold $1."
   -v - -repeat $! -l[$>]
     min={im}
@@ -9237,7 +9236,7 @@ segment_watershed : -check "${1=2}>=0" -skip ${2=1}
     -if {d>1} --f. "if(i<$1 && i<j(1) && i<j(-1) && i<j(0,1) && i<j(0,-1) && i<j(0,0,1) && i<j(0,0,-1),1,0)"
     -else --f. "if(i<$1 && i<j(1) && i<j(-1) && i<j(0,1) && i<j(0,-1),1,0)"
     -endif
-    -*[-3,-1] -*. -1 -watershed.. [-1],$2 -rm.
+    -*[-3,-1] -*. -1 -watershed.. [-1] -rm.
     -- {1+$min}
   -endl -done -v +
 
@@ -13179,15 +13178,15 @@ light_relief : -skip ${1=0.3},${2=0.5},${3=0.2},${4=0},${5=0.2},${6=0.5},${7=0.5
     -split_opacity[0] -+[0,-1] -a c -c 0,255
   -endl -done -v +
 
-#@gmic mosaic : _density>=0,_edges={ 0 | 1 }
+#@gmic mosaic : _density>=0
 #@gmic : Create random mosaic from selected images.
-#@gmic : Default values: 'density=0.8' and 'edges=1'.
+#@gmic : Default values: 'density=0.8'.
 #@gmic : $ image.jpg --mosaic ,
-mosaic : -skip ${1=0.8},${2=1}
+mosaic : -skip ${1=0.8}
   -e[^-1] "Apply mosaic effect on image$?, with density $1."
   -v - -repeat $! -l[$>]
     label0={1+im} -+ $label0
-    100%,100% -noise. {$1*2},2 -*.. [-1] -distance. 1 -*. -1 -watershed.. [-1],{if($2,0,1)} -rm.
+    100%,100% -noise. {$1*2},2 -*.. [-1] -distance. 1 -*. -1 -watershed.. [-1] -rm.
     -if $2 --l. -> 0 -s c -& -endl --.. $label0 -*[-2,-1] -else --. $label0 -endif
   -endl -done -v +
 
@@ -16465,7 +16464,7 @@ _x_colorize :
         -pointcloud. -1,$pw,$ph
         --compose_channels. max -!=. 0 -distance. 1 -*. 0.02 -+. 1 -^. -1 -+. [potential] # Additional term that depends on marker's positions.
         -if {!$1} -dilate.. 3 -endif
-        -watershed.. [-1],1 -rm. --. 1
+        -watershed.. [-1] -rm. --. 1
       -else [potential],[potential],1,3,255
       -endif
       -nm. colors
@@ -16541,7 +16540,7 @@ _x_colorize :
     -pointcloud[points] -1,$w,$h
     --compose_channels[points] max -!=. 0 -distance. 1 -*. 0.02 -+. 1 -^. -1 -+[potential,-1]
     -if {!$1} zfact={{img,max(w,h)}/{potential,max(w,h)}} -dilate[points] {int(3*$zfact)} -endif
-    -watershed[points] [potential],1 --[points] 1 -nm[points] colors
+    -watershed[points] [potential] --[points] 1 -nm[points] colors
   -else [img],[img],1,3,255 -nm. colors
   -endif
 
@@ -18591,7 +18590,7 @@ x_segment : -check "${1=1024}==0 || $1>=128"
       status={points,^}
       [img] -_x_segment. -pointcloud[points] -1,$w,$h
       zfact={{img,max(w,h)}/{potential,max(w,h)}} -dilate[points] {int(3*$zfact)}
-      -watershed[points] [potential],1 --[points] 1 -k[img,points]
+      -watershed[points] [potential] --[points] 1 -k[img,points]
       -*. 255
     -else -k[img] [img],[img],1,1,255
     -endif
