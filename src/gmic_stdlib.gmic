@@ -8821,8 +8821,9 @@ watermark_fourier : -check ${2=33}>0
   -mv. 1 -done
   -rm[0] -v +
 
-#@gmic watershed : [priority_image] : (+)
+#@gmic watershed : [priority_image],_is_high_connectivity={ 0 | 1 } : (+)
 #@gmic : Compute the watershed transform of selected images.
+#@gmic : Default value: 'is_high_connectivity=0'.
 #@gmic : $ 400,400 -noise 0.2,2 --distance 1 -mul. -1 -label.. -watershed.. [-1] -mod.. 256 -map.. 0 -reverse
 
 #---------------------------------
@@ -20196,10 +20197,11 @@ _gimp_manage_filter_sources :
 #@gimp : </i>"}
 #@gimp : sep = separator()
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
-#@gimp : note = note{" <b>-</b> We've received <b>33</b> postcards from <b>G'MIC</b> enthusiasts so far.
-#@gimp :               You could be the <b>34th</b> sender :)"}
+#@gimp : note = note{" <b>-</b> We've received <b>34</b> postcards from <b>G'MIC</b> enthusiasts so far.
+#@gimp :               You could be the <b>35th</b> sender :)"}
 #@gimp : note = note{" <b>-</b> A big hug goes to these postcard senders (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : <a href="http://cimg.eu/img/postcard60.jpg">Bruno Steinbach</a> (Pondicherry/India),
 #@gimp : <a href="http://cimg.eu/img/postcard59.jpg">Steve Gillow</a> (Fort Worth/Texas/USA),
 #@gimp : <a href="http://cimg.eu/img/postcard58.jpg">Peter Neave</a> (Sydney/Australia),
 #@gimp : <a href="http://cimg.eu/img/postcard57.jpg">Andrea [Photoflow]</a> (Italy),
