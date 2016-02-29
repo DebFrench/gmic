@@ -99,8 +99,9 @@
               </tr>
               <tr>
                 <td><a href="http://karo03.bplaced.de/gmic/release/"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC for MacOSX (64bits)</font></a><br/>
-                  dmg file<br/><br/></td>
+                <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC for MacOSX (64bits, LISANET version)</font></a><br/>
+                  dmg file<br/>
+                  alternative: <a href="http://www.partha.com/">Partha version (64 bits)</a><br/><br/></td>
               </tr>
               <tr>
                 <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_source.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
