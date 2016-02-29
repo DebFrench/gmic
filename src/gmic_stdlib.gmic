@@ -8821,8 +8821,9 @@ watermark_fourier : -check ${2=33}>0
   -mv. 1 -done
   -rm[0] -v +
 
-#@gmic watershed : [priority_image] : (+)
+#@gmic watershed : [priority_image],_is_high_connectivity={ 0 | 1 } : (+)
 #@gmic : Compute the watershed transform of selected images.
+#@gmic : Default value: 'is_high_connectivity=0'.
 #@gmic : $ 400,400 -noise 0.2,2 --distance 1 -mul. -1 -label.. -watershed.. [-1] -mod.. 256 -map.. 0 -reverse
 
 #---------------------------------
