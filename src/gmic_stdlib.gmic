@@ -8610,7 +8610,7 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
     ss={max(0.3,if(${-is_percent\ $2},$2*max(w,h),$2))}
     se={max(0.3,if(${-is_percent\ $3},$3*max(w,h),$3))}
     ds={$se-$ss}
-    -repeat {$1-1} --b. {$ss+$>*$ds/($1-2)} --.. [-1] -rv[-2,-1] -done
+    -repeat {$1-1} --b. {$ss+$>*$ds/max(1,$1-2)} --.. [-1] -rv[-2,-1] -done
   -endl -done -v +
 
 #@gmic structuretensors : _scheme={ 0=centerd | 1=forward/backward } : (+)
