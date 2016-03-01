@@ -672,8 +672,8 @@ _help_usage :
 \n          is a valid path to a file (resp. to a directory) or not.
 \n       . '"${c}"isin(v,a_1,...,a_n)"$n"' returns "${g}"0 (false)"$n" or "${g}"1 (true)"$n" whether the first value '"${g}"v"$n"' appears
 \n          in the set of other values 'a_i'.
-\n       . '"${c}"min()"$n"', '"${c}"max()"$n"', '"${c}"argmin()"$n"', '"${c}"argmax()"$n"', '"${c}"med()"$n"' and '"${c}"kth()"$n"' can be called with
-\n          an arbitrary number of arguments.
+\n       . '"${c}"argmin()"$n"', '"${c}"argmax()"$n"', '"${c}"kth()"$n"', '"${c}"max()"$n"', '"${c}"mean()"$n"', '"${c}"med()"$n"', '"${c}"min()"$n"', '"${c}"std()"$n"', '"${c}"sum()"$n"'
+\n          and '"${c}"var()"$n"' can be called with an arbitrary number of scalar/vector arguments.
 \n       . '"${c}"round(value,rounding_value,direction)"$n"' returns a rounded value.
 \n          '"${g}"direction"$n"' can be "${g}"{ -1=to-lowest | 0=to-nearest | 1=to-highest }"$n".
 \n
