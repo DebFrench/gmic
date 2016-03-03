@@ -777,8 +777,13 @@ _help_usage :
 \n          '"${c}"i[#ind,offset,_boundary]"$n"' and '"${c}"i[offset,_boundary]"$n"' are similar expressions used to access
 \n          pixel values for any numbered image "${g}"[ind]"$n" of the list.
 \n       . '"${c}"I/J[offset,_boundary_conditions]"$n"' and '"${c}"I/J(#ind,_x,_y,_z,_interpolation,_boundary)"$n"' do the same
-\n          as '"${c}"i/j[offset,_boundary_conditions]"$n"' and '"${c}"i/j(#ind,_x,_y,_z,_c,_interpolation,_boundary)"$n"' but return
-\n          a vector instead of a scalar (e.g. a vector "${g}"[ R,G,B ]"$n" for a pixel at "${g}"(a,b,c)"$n" in a color image).
+\n          as '"${c}"i/j[offset,_boundary_conditions]"$n"' and '"${c}"i/j(#ind,_x,_y,_z,_c,_interpolation,_boundary)"$n"' but
+\n          return a vector instead of a scalar (e.g. a vector "${g}"[ R,G,B ]"$n" for a pixel at "${g}"(a,b,c)"$n" in a color image).
+\n       . '"${c}"crop(_#ind,_x,_y,_z,_c,_dx,_dy,_dz,_dc,_boundary)"$n"' returns a vector whose values come from the
+\n          cropped region of image "${g}"[ind]"$n" (or from default image selected if '"${c}"ind"$n"' is not specified).
+\n          Cropped region starts from point "${g}"(x,y,z,c)"$n" and has a size of "${g}"dx x dy x dz x dc"$n". Arguments for
+\n          coordinates and sizes can be omitted if they are not ambiguous (e.g. '"${c}"crop(#ind,x,y,dx,dy)"$n"' is a
+\n          valid invokation of this function).
 \n       . '"${c}"if(condition,expr_then,_expr_else)"$n"': return value of '"${c}"expr_then"$n"' or '"${c}"expr_else"$n"',
 \n          depending on the value of '"${c}"condition"$n"' "${g}"(0=false, other=true)"$n". '"${c}"expr_else"$n"' can be
 \n          omitted in which case "${g}"0"$n" is returned if the condition does not hold. Using the ternary operator
