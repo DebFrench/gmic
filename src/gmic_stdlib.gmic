@@ -733,12 +733,12 @@ _help_usage :
 \n         '"${c}"**="$n"' (complex self-multiplication), '"${c}"//="$n"' (complex self-division), '"${c}"^^="$n"' (complex self-exponentiation),
 \n         '"${c}"cabs()"$n"' (complex modulus), '"${c}"carg()"$n"' (complex argument), '"${c}"cconj()"$n"' (complex conjugate),
 \n         '"${c}"cexp()"$n"' (complex exponential) and '"${c}"clog()"$n"' (complex logarithm).
-\n       . A "${g}"MN"$n"-dimensional vector may be seen as a MxN matrix and used in those particular functions/operators:
-\n         '"${c}"**"$n"' (matrix-vector multiplication), '"${c}"mdet(A)"$n"' (determinant), '"${c}"mdiag(V)"$n"' (diagonal matrix from vector),
-\n         '"${c}"meig(A)"$n"' (eigenvalues/eigenvectors), '"${c}"meye(n)"$n"' (n x n identity matrix), '"${c}"minv(A)"$n"' (matrix inverse),
-\n         '"${c}"mmul(A,B,_nb_colsB)"$n"' (matrix multiplication), '"${c}"mrot(x,y,z,angle)"$n"' (3 x 3 rotation matrix),
-\n         '"${c}"msolve(A,B,_nb_colsB)"$n"' (least-square solver of linear system A.X = B), '"${c}"mtrace(A)"$n"' (matrix trace) and
-\n         '"${c}"mtrans(A,nb_colsA)"$n"' (matrix transpose). Argument '"${c}"nb_colsB"$n"' may be omitted if equal to "${g}"1"$n".
+\n       . A "${g}"MN"$n"-dimensional vector may be seen as a "${g}"M"${n}" x "${g}"N"$n" matrix and used in those particular functions/operators:
+\n         '"${c}"**"$n"' (matrix-vector multiplication), '"${c}"det(A)"$n"' (determinant), '"${c}"diag(V)"$n"' (diagonal matrix from vector),
+\n         '"${c}"eig(A)"$n"' (eigenvalues/eigenvectors), '"${c}"eye(n)"$n"' (n x n identity matrix), '"${c}"inv(A)"$n"' (matrix inverse),
+\n         '"${c}"mul(A,B,_nb_colsB)"$n"' (matrix-matrix multiplication), '"${c}"rot(x,y,z,angle)"$n"' (3 x 3 rotation matrix),
+\n         '"${c}"solve(A,B,_nb_colsB)"$n"' (least-square solver of linear system A.X = B), '"${c}"trace(A)"$n"' (matrix trace) and
+\n         '"${c}"transp(A,nb_colsA)"$n"' (matrix transpose). Argument '"${c}"nb_colsB"$n"' may be omitted if equal to "${g}"1"$n".
 \n       . Specifying a vector-valued math expression as an argument of a command that operates on image values
 \n          (e.g. '"$c"-fill"$n"') modifies the whole spectrum range of the processed image(s), for each spatial
 \n          coordinates "$g"(x,y,z)"$n". The command does not loop over the "${g}"C"$n"-axis in this case.
@@ -813,7 +813,7 @@ _help_usage :
 \n          done by the math parser to evaluate the expression (and returns its value).
 \n       . '"${c}"init(expression)"$n" evaluates the specified expression only once, even when multiple
 \n          evaluations are required (e.g. in '"${c}"-fill init(foo=0);++foo"$n"').
-\n       . '"${c}"mcopy(dest,src,_nb_elts,_inc_d,_inc_s)"$n" copies an entire memory block of '"${c}"nb_elts"$n"' elements
+\n       . '"${c}"copy(dest,src,_nb_elts,_inc_d,_inc_s)"$n" copies an entire memory block of '"${c}"nb_elts"$n"' elements
 \n          starting from a source value '"${c}"src"$n"' to a specified destination '"${c}"dest"$n"', with increments
 \n          defined by '"${c}"inc_d"$n"' and '"${c}"inc_s"$n"' respectively for the destination and source pointers.
 \n
