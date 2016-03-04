@@ -187,6 +187,8 @@ MainWindow::MainWindow( QWidget * parent )
   action->setShortcutContext( Qt::ApplicationShortcut );
 
   _outputWindowAction = new QAction("&Secondary window",this);
+  _outputWindowAction->setShortcut(QKeySequence("Ctrl+O"));
+  _outputWindowAction->setShortcutContext( Qt::ApplicationShortcut );
   _outputWindowAction->setCheckable(true);
   connect( _outputWindowAction, SIGNAL(toggled(bool)),
            this, SLOT(onOutputWindow(bool)) );
