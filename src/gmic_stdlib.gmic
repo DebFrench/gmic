@@ -833,8 +833,10 @@ _help_usage :
 \n         the math expression passed to a '"$c"-fill"$n"' or '"$c"-input"$n"' command is evaluated in parallel, using
 \n         multiple computation threads.
 \n
-\n       . Starting an expression with '"$c"*"$n"' forces the evaluations required for an image to be run in
-\n         parallel, even if the amount of data to process is small (beware, it may be slower to evaluate!).
+\n       . Starting an expression with '"$c"!"$n"' or '"$c"*"$n"' forces the evaluations required for an image to be run in
+\n         parallel, even if the amount of data to process is small (beware, it may be slower to evaluate!). Specify
+\n         '"$c"!"$n"' (instead of '"$c"*"$n"') to avoid possible image copy done before the evaluation (this saves memory,
+\n         but do this only if you are sure this step is not required!)
 \n
 \n       . If the specified expression starts with '"$c">"$n"' or '"$c"<"$n"', the pixel access operators
 \n         '"${c}"i(), i[], j()"$n"' and '"${c}"j[]"$n"' return values of the image being currently modified,
