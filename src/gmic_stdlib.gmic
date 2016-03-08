@@ -20120,6 +20120,7 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : <a href="http://mindprints.org/">Greg FitzPatrick</a>,
 #@gimp : Zsolt Szabo,
 #@gimp : Daniel Hanna,
 #@gimp : Nicola Giaccobe,
