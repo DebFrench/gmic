@@ -501,11 +501,13 @@ _help_usage :
 \n      '"${c}"filename.yuv,width,height[,first_frame[,last_frame[,step]]]"$n"'.
 \n
 \n    . "$g".tiff files:"$n" Only sub-images of multi-pages tiff files can be loaded, using the input
-\n       expression '"${c}"filename.tif,[first_frame,[last_frame,[step]]]"$n"'.
-\n       Output expression '"${c}"filename.tiff,[datatype[,compression[,force_multipage]]"$n"' can be used to
+\n       expression '"${c}"filename.tif,_first_frame,_last_frame,_step"$n"'.
+\n       Output expression '"${c}"filename.tiff,_datatype,_compression,_force_multipage,_use_bigtiff"$n"' can be used to
 \n       specify the output pixel type, as well as the compression method.
 \n       '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
-\n       '"${g}"compression"$n"' can be "$g"{ none | lzw | jpeg }"$n" and '"${g}"force_multipage"$n" can be "$g"{ 0=no | 1=yes }"$n".
+\n       '"${g}"compression"$n"' can be "$g"{ none (default) | lzw | jpeg }"$n".
+\n       '"${g}"force_multipage"$n" can be "$g"{ 0=no (default) | 1=yes }"$n".
+\n       '"${g}"use_bigtiff"$n" can be "$g"{ 0=no | 1=yes (default) }"$n".
 \n
 \n    . "$g".gif files:"$n" Animated gif files can be saved, using the input expression
 \n      '"${c}"filename.gif,fps>0,nb_loops"$n"'.
