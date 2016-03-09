@@ -6494,6 +6494,27 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
   -endl -done
   -v +
 
+#@gmic apply_scales : "command",number_of_scales>0,_min_scale[%],_max_scale[%],_interpolation
+#@gmic : Apply specified command on different scales of selected images.
+#@gmic : 'interpolation' can be { 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic | 6=lanczos }.
+#@gmic : Default value: 'min_scale=25%', 'max_scale=100%' and 'interpolation=3'.
+#@gmic : $ image.jpg -apply_scales "-blur 5 -sharpen 1000",4
+apply_scales : -check "isint($2) && $2>0 && ${3=25%}>0 && ${4=100%}>0 && isint(${5=3}) && $5>=0"
+  -v - s0="no" s1="nearest-neighbor" s2="average" s3="linear" s4="grid" s5="bicubic" s6="lanczos" -v +
+  -e[^-1] "Apply command '$1' on image$? for $2 scales ($3 -> $4) and "${s{min(6,$5)}}" interpolation."
+  -v - -repeat $! -l[$<] nm={0,n}
+    scale0={if(${"-is_percent $3"},$3*max(w,h,d),$3)}
+    scale1={if(${"-is_percent $4"},$4*max(w,h,d),$4)}
+    -repeat $2
+      scale={$scale0+($scale1-$scale0)*$>/max(1,$2-1)}
+      w={0,max(1,round($scale*w/max(w,h,d)))}
+      h={0,max(1,round($scale*h/max(w,h,d)))}
+      d={0,max(1,round($scale*d/max(w,h,d)))}
+      --r[0] $w,$h,$d,100%,$5 -l. $1 -endl
+    -done
+    -rm[0] -nm $nm
+  -endl -done -v +
+
 #@gmic autocrop : value1,value2,... : (no arg) : (+)
 #@gmic : Autocrop selected images by specified vector-valued intensity.
 #@gmic : If no arguments are provided, cropping value is guessed.
