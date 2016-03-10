@@ -6494,12 +6494,12 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
   -endl -done
   -v +
 
-#@gmic apply_scales : "command",number_of_scales>0,_min_scale[%],_max_scale[%],_interpolation
+#@gmic apply_scales : "command",number_of_scales>0,_min_scale[%]>=0,_max_scale[%]>=0,_interpolation
 #@gmic : Apply specified command on different scales of selected images.
 #@gmic : 'interpolation' can be { 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic | 6=lanczos }.
 #@gmic : Default value: 'min_scale=25%', 'max_scale=100%' and 'interpolation=3'.
 #@gmic : $ image.jpg -apply_scales "-blur 5 -sharpen 1000",4
-apply_scales : -check "isint($2) && $2>0 && ${3=25%}>0 && ${4=100%}>0 && isint(${5=3}) && $5>=0"
+apply_scales : -skip "${1=}" -check "isint($2) && $2>0 && ${3=25%}>=0 && ${4=100%}>=0 && isint(${5=3}) && $5>=0"
   -v - s0="no" s1="nearest-neighbor" s2="average" s3="linear" s4="grid" s5="bicubic" s6="lanczos" -v +
   -e[^-1] "Apply command '$1' on image$? for $2 scales ($3 -> $4) and "${s{min(6,$5)}}" interpolation."
   -v - -repeat $! -l[$<] nm={0,n}
@@ -6507,10 +6507,11 @@ apply_scales : -check "isint($2) && $2>0 && ${3=25%}>0 && ${4=100%}>0 && isint($
     scale1={if(${"-is_percent $4"},$4*max(w,h,d),$4)}
     -repeat $2
       scale={$scale0+($scale1-$scale0)*$>/max(1,$2-1)}
-      w={0,max(1,round($scale*w/max(w,h,d)))}
-      h={0,max(1,round($scale*h/max(w,h,d)))}
-      d={0,max(1,round($scale*d/max(w,h,d)))}
-      --r[0] $w,$h,$d,100%,$5 -l. $1 -endl
+      w={0,w==1?1:max(1,round($scale*w/max(w,h,d)))}
+      h={0,h==1?1:max(1,round($scale*h/max(w,h,d)))}
+      d={0,d==1?1:max(1,round($scale*d/max(w,h,d)))}
+      --r[0] $w,$h,$d,100%,$5
+      -if {narg("$1")} -l. $1 -endl -endif
     -done
     -rm[0] -nm $nm
   -endl -done -v +
@@ -19549,9 +19550,16 @@ gimp_layer_mode :
 gimp_layer_opacity :
   -u ${"-_gimp_merge_layers[0] opacity,100"}
 
-# Return positions of a gimp layer.
+# Return (x,y) position of a gimp layer.
 gimp_layer_pos :
   -u ${"-_gimp_merge_layers[0] pos,0,0"}
+
+# Set (x,y) position of a gimp layer.
+gimp_set_layer_pos :
+  -repeat $! -l[$>]
+    name=${-gimp_layer_name} mode=${-gimp_layer_mode} opacity=${-gimp_layer_opacity}
+    -nm "name("$name"),mode("$mode"),opacity("$opacity"),pos("{round($1)},{round($2)}")"
+  -endl -done
 
 # Flatten list of input layers according to their blending modes, opacities and positions,
 # set in each layer name by the GIMP plug-in.
@@ -26350,6 +26358,35 @@ gimp_append_tiles_preview :
 gimp_morph :
   -if ${4=0} -_gimp_revert_layers -endif
   -to_rgb -morph $1,$2,$3
+
+#@gimp Multiscale operator : gimp_apply_multiscale, gimp_apply_multiscale_preview(1)
+#@gimp : Number of scales = int(4,2,16)
+#@gimp : sep = separator()
+#@gimp : Starting scale (%) = float(25,0,400)
+#@gimp : Ending scale (%) = float(100,0,400)
+#@gimp : sep = separator()
+#@gimp : X-centering = float(0.5,0,1)
+#@gimp : Y-centering = float(0.5,0,1)
+#@gimp : sep = separator()
+#@gimp : G'MIC operator = text("")
+#@gimp : Ending upscale = choice("None","Bloc","Linear","Cubic","Lanczos")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/10/2016</i>.</small>")
+gimp_apply_multiscale : -skip "${6=}"
+  -repeat $! -l[$<]
+    -apply_scales "$6",$1,$2%,$3%
+    -if $7 -r ${-max_wh},1,100%,{arg($7,1,3,5,6)} -c 0,255 -endif
+    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$4},{$>,($h-h)*$5} -done
+  -endl -done
+
+gimp_apply_multiscale_preview :
+  -repeat $! -l[$>]
+    -gimp_apply_multiscale $"*"
+    N={int(sqrt($!))} N={round($!/$N,1,1)}
+    -r2dy {100/$N}%
+    -to_rgba -r ${-max_wh},1,100%,0,0,$4,$5
+    -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
+    -frame 1,1,0 -frame 3,3,255 -append_tiles ,
+  -endl -done
 
 #@gimp Pack : gimp_pack, gimp_pack_preview(1)
 #@gimp : Order by = choice(2,"Width","Height","Maximum dimension","Area")
