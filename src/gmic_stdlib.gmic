@@ -26364,6 +26364,7 @@ gimp_morph :
 #@gimp : sep = separator()
 #@gimp : Starting scale (%) = float(25,0,400)
 #@gimp : Ending scale (%) = float(100,0,400)
+#@gimp : Interpolation = choice(3,"Bloc","Linear","Cubic","Lanczsos")
 #@gimp : sep = separator()
 #@gimp : X-centering = float(0.5,0,1)
 #@gimp : Y-centering = float(0.5,0,1)
@@ -26371,11 +26372,11 @@ gimp_morph :
 #@gimp : G'MIC operator = text("")
 #@gimp : Ending upscale = choice("None","Bloc","Linear","Cubic","Lanczos")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/10/2016</i>.</small>")
-gimp_apply_multiscale : -skip "${6=}"
+gimp_apply_multiscale : -skip "${7=}"
   -repeat $! -l[$<]
-    -apply_scales "$6",$1,$2%,$3%
-    -if $7 -r ${-max_wh},1,100%,{arg($7,1,3,5,6)} -c 0,255 -endif
-    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$4},{$>,($h-h)*$5} -done
+    -apply_scales "$7",$1,$2%,$3%,{arg(1+$4,1,3,5,6)}
+    -if $8 -r ${-max_wh},1,100%,{arg($8,1,3,5,6)} -c 0,255 -endif
+    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$5},{$>,($h-h)*$6} -done
   -endl -done
 
 gimp_apply_multiscale_preview :
@@ -26383,7 +26384,7 @@ gimp_apply_multiscale_preview :
     -gimp_apply_multiscale $"*"
     N={int(sqrt($!))} N={round($!/$N,1,1)}
     -r2dy {100/$N}%
-    -to_rgba -r ${-max_wh},1,100%,0,0,$4,$5
+    -to_rgba -r ${-max_wh},1,100%,0,0,$5,$6
     -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
     -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
