@@ -26364,13 +26364,13 @@ gimp_morph :
 #@gimp : sep = separator()
 #@gimp : Starting scale (%) = float(25,0,400)
 #@gimp : Ending scale (%) = float(100,0,400)
-#@gimp : Upscaling = choice(3,"Bloc","Linear","Cubic","Lanczsos")
+#@gimp : Rescaling = choice(3,"Bloc","Linear","Cubic","Lanczsos")
 #@gimp : sep = separator()
 #@gimp : X-centering = float(0.5,0,1)
 #@gimp : Y-centering = float(0.5,0,1)
 #@gimp : sep = separator()
 #@gimp : G'MIC operator = text("")
-#@gimp : End upscaling = choice("None","Bloc","Linear","Cubic","Lanczos")
+#@gimp : Return scaling = choice("None","Bloc","Linear","Cubic","Lanczos")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/10/2016</i>.</small>")
 gimp_apply_multiscale : -skip "${7=}"
   -repeat $! -l[$<]
