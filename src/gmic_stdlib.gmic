@@ -6494,23 +6494,23 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
   -endl -done
   -v +
 
-#@gmic apply_scales : "command",number_of_scales>0,_min_scale[%]>=0,_max_scale[%]>=0,_interpolation
+#@gmic apply_scales : "command",number_of_scales>0,_min_scale[%]>=0,_max_scale[%]>=0,_scale_gamma>0,_interpolation
 #@gmic : Apply specified command on different scales of selected images.
 #@gmic : 'interpolation' can be { 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic | 6=lanczos }.
 #@gmic : Default value: 'min_scale=25%', 'max_scale=100%' and 'interpolation=3'.
 #@gmic : $ image.jpg -apply_scales "-blur 5 -sharpen 1000",4
-apply_scales : -skip "${1=}" -check "isint($2) && $2>0 && ${3=25%}>=0 && ${4=100%}>=0 && isint(${5=3}) && $5>=0"
+apply_scales : -skip "${1=}" -check "isint($2) && $2>0 && ${3=25%}>=0 && ${4=100%}>=0 && ${5=1}>0 && isint(${6=3}) && $6>=0"
   -v - s0="no" s1="nearest-neighbor" s2="average" s3="linear" s4="grid" s5="bicubic" s6="lanczos" -v +
-  -e[^-1] "Apply command '$1' on image$? for $2 scales ($3 -> $4) and "${s{min(6,$5)}}" interpolation."
+  -e[^-1] "Apply command '$1' on image$? for $2 scales ($3 -> $4) and "${s{min(6,$6)}}" interpolation."
   -v - -repeat $! -l[$<] nm={0,n}
     scale0={if(${"-is_percent $3"},$3*max(w,h,d),$3)}
     scale1={if(${"-is_percent $4"},$4*max(w,h,d),$4)}
     -repeat $2
-      scale={$scale0+($scale1-$scale0)*$>/max(1,$2-1)}
+      scale={$scale0+($scale1-$scale0)*($>/max(1,$2-1))^$5}
       w={0,w==1?1:max(1,round($scale*w/max(w,h,d)))}
       h={0,h==1?1:max(1,round($scale*h/max(w,h,d)))}
       d={0,d==1?1:max(1,round($scale*d/max(w,h,d)))}
-      --r[0] $w,$h,$d,100%,$5
+      --r[0] $w,$h,$d,100%,$6
       -if {narg("$1")} -l. $1 -endl -endif
     -done
     -rm[0] -nm $nm
@@ -26365,6 +26365,7 @@ gimp_morph :
 #@gimp : sep = separator()
 #@gimp : Starting scale (%) = float(25,0,400)
 #@gimp : Ending scale (%) = float(100,0,400)
+#@gimp : Non-linearity = float(0,-1,1)
 #@gimp : Rescaling = choice(3,"Bloc","Linear","Cubic","Lanczsos")
 #@gimp : sep = separator()
 #@gimp : X-centering = float(0.5,0,1)
@@ -26374,16 +26375,16 @@ gimp_morph :
 #@gimp : Return scaling = choice("None","Bloc","Linear","Cubic","Lanczos")
 #@gimp : Lock return scaling to source layer = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/10/2016</i>.</small>")
-gimp_apply_multiscale : -skip "${7=}"
+gimp_apply_multiscale : -skip "${8=}"
   -repeat $! -l[$<]
     w0={w} h0={h}
-    -apply_scales "$7",$1,$2%,$3%,{arg(1+$4,1,3,5,6)}
-    -if $8
-      -if $9 siz=$w0,$h0 -else siz=${-max_wh} -endif
-      -r $siz,1,100%,{arg($8,1,3,5,6)}
+    -apply_scales "$8",$1,$2%,$3%,{10^$4},{arg(1+$5,1,3,5,6)}
+    -if $9
+      -if $10 siz=$w0,$h0 -else siz=${-max_wh} -endif
+      -r $siz,1,100%,{arg($9,1,3,5,6)}
       -c 0,255
     -endif
-    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$5},{$>,($h-h)*$6} -done
+    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$6},{$>,($h-h)*$7} -done
   -endl -done
 
 gimp_apply_multiscale_preview :
@@ -26391,7 +26392,7 @@ gimp_apply_multiscale_preview :
     -gimp_apply_multiscale $"*"
     N={int(sqrt($!))} N={round($!/$N,1,1)}
     -r2dy {100/$N}%
-    -to_rgba -r ${-max_wh},1,100%,0,0,$5,$6
+    -to_rgba -r ${-max_wh},1,100%,0,0,$6,$7
     -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
     -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
