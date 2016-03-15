@@ -842,6 +842,7 @@ _help_usage :
 \n          '"${c}"i(), i[], j()"$n"' and '"${c}"j[]"$n"' return values of the image being currently modified,
 \n          in forward ('"$c">"$n"') or backward ('"$c"<"$n"') order. The multi-threading evaluation of the expression is
 \n          also disabled in this case.
+\n       . Function '"$c"single(operands)"$n"' forces the execution of the given operands in a single thread at a time.
 \n
 \n    _ Expressions '"${c}"i(_#ind,x,_y,_z,_c)=value"$n"', '"${c}"j(_#ind,x,_y,_z,_c)=value"$n"', '"${c}"i[_#ind,offset]=value"$n"' and
 \n       '"${c}"j[_#ind,offset]=value"$n"' set a pixel value at a different location than the running one in the
