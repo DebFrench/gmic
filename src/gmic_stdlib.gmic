@@ -787,6 +787,10 @@ _help_usage :
 \n          Cropped region starts from point "${g}"(x,y,z,c)"$n" and has a size of "${g}"dx x dy x dz x dc"$n". Arguments for
 \n          coordinates and sizes can be omitted if they are not ambiguous (e.g. '"${c}"crop(#ind,x,y,dx,dy)"$n"' is a
 \n          valid invokation of this function).
+\n       . '"${c}"draw(_#ind,S,x,y,z,c,dx,_dy,_dz,_dc,_opacity,_M,_max_M)"$n"' draws a sprite "${g}"S"$n" in image "${g}"[ind]"$n"
+\n          (or in default image selected if '"${c}"ind"$n"' is not specified) at specified coordinates "${g}"(x,y,z,c)"$n".
+\n          The size of the sprite "${g}"dx x dy x dz x dc"$n" must be specified. You can also specify a corresponding
+\n          opacity mask "${g}"M"$n" if its size matches "${g}"S"$n".
 \n       . '"${c}"if(condition,expr_then,_expr_else)"$n"': return value of '"${c}"expr_then"$n"' or '"${c}"expr_else"$n"',
 \n          depending on the value of '"${c}"condition"$n"' "${g}"(0=false, other=true)"$n". '"${c}"expr_else"$n"' can be
 \n          omitted in which case "${g}"0"$n" is returned if the condition does not hold. Using the ternary operator
