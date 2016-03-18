@@ -14,7 +14,7 @@ unix {
 
 isEmpty( VERSION ):{
    VERSION = 0.0.0
-   message( Warning: VERSION was not found from include/Common.h. Set to $$VERSION )
+   message( Warning: VERSION was not found in include/Common.h. Set to $$VERSION )
 }
 
 

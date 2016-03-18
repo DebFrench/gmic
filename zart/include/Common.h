@@ -50,12 +50,12 @@
 #include <iostream>
 #include <QDebug>
 
-#define SHOW( V ) qDebug() << " " #V " = " << ( V )
+#define SHOW(V) qDebug() << " " #V " = " << (V)
 
 #define ZART_VERSION 3.2.1
 
-#define ZART_STRINGIFY( X ) #X
-#define ZART_XSTRINGIFY( X ) ZART_STRINGIFY( X )
-#define ZART_VERSION_STRING ZART_XSTRINGIFY( ZART_VERSION )
+#define ZART_STRINGIFY(X) #X
+#define ZART_XSTRINGIFY(X) ZART_STRINGIFY(X)
+#define ZART_VERSION_STRING ZART_XSTRINGIFY(ZART_VERSION)
 
 #endif
