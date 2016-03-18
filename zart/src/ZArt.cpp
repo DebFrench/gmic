@@ -105,6 +105,7 @@ int main( int argc, char *argv[] )
   }
   MainWindow mainWindow;
   mainWindow.show();
+  SHOW( 1 ) ;
   splashScreen.finish(&mainWindow);
   return app.exec();
 }

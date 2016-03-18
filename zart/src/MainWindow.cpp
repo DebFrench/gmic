@@ -634,7 +634,7 @@ void
 MainWindow::toggleFullScreenMode()
 {
   bool running = _filterThread && _filterThread->isRunning();
-  if ( _displayMode == FullScreen ) {   
+  if ( _displayMode == FullScreen ) {
     TreeWidgetPresetItem * item = dynamic_cast<TreeWidgetPresetItem*>(_fullScreenWidget->treeWidget()->currentItem());
     _fullScreenWidget->close();
     _displayMode = InWindow;
@@ -788,7 +788,7 @@ MainWindow::updateWindowTitle()
   switch (_source) {
   case Webcam:
     setWindowTitle( QString("ZArt %1 (Webcam %2x%3)")
-                    .arg((ZART_VERSION))
+                    .arg(ZART_VERSION_STRING)
                     .arg(_currentSource->width())
                     .arg(_currentSource->height()));
     break;
@@ -796,10 +796,10 @@ MainWindow::updateWindowTitle()
     name = QFileInfo(_stillImage.filename()).fileName();
     if ( name.isEmpty() )
       setWindowTitle( QString("ZArt %1 (No input file)")
-                      .arg((ZART_VERSION)) );
+                      .arg(ZART_VERSION_STRING) );
     else
       setWindowTitle( QString("ZArt %1 (%2 %3x%4)")
-                      .arg((ZART_VERSION))
+                      .arg(ZART_VERSION_STRING)
                       .arg(name)
                       .arg(_currentSource->width())
                       .arg(_currentSource->height()) );
@@ -808,10 +808,10 @@ MainWindow::updateWindowTitle()
     name = QFileInfo(_videoFile.filename()).fileName();
     if ( name.isEmpty() )
       setWindowTitle( QString("ZArt %1 (No input file)")
-                      .arg((ZART_VERSION)) );
+                      .arg(ZART_VERSION_STRING) );
     else
       setWindowTitle( QString("ZArt %1 (%2 %3x%4)")
-                      .arg((ZART_VERSION))
+                      .arg(ZART_VERSION_STRING)
                       .arg(name)
                       .arg(_currentSource->width())
                       .arg(_currentSource->height()) );

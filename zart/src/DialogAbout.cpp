@@ -55,6 +55,6 @@ DialogAbout::DialogAbout( QWidget * parent )
   setupUi( this );
   setWindowTitle("About ZArt");
   QString str = _topLabel->text();
-  str.replace( "VERSION", ZART_VERSION );
+  str.replace( "VERSION", ZART_VERSION_STRING );
   _topLabel->setText( str );
 }
