@@ -25213,7 +25213,7 @@ gimp_split_details_alpha_preview :
 
 #@gimp Split details [layers] : gimp_split_details_layers, gimp_split_details_layers_preview(0)
 #@gimp : Number of scales = int(6,3,12)
-#@gimp : Base scale = float(10,0,40)
+#@gimp : Base scale = float(10,0,200)
 #@gimp : Details scale = float(1,0,20)
 #@gimp : Sharpen details in preview = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/22/2015</i>.</small>")
