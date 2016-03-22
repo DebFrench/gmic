@@ -19504,7 +19504,7 @@ gimp_filter_sources :
     is_too_old={(date(1)-date(1,$file_hotchocolate))%12>1}
     -if {!$is_too_old}
       -i raw:$file_hotchocolate,uchar
-      is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>7}
+      is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>14}
       -rm.
     -endif
     -if $is_too_old
@@ -19565,6 +19565,13 @@ gimp_set_layer_pos :
   -repeat $! -l[$>]
     name=${-gimp_layer_name} mode=${-gimp_layer_mode} opacity=${-gimp_layer_opacity}
     -nm "name("$name"),mode("$mode"),opacity("$opacity"),pos("{round($1)},{round($2)}")"
+  -endl -done
+
+# Set (x,y) position of a gimp layer.
+gimp_set_layer_mode :
+  -repeat $! -l[$>]
+    name=${-gimp_layer_name} opacity=${-gimp_layer_opacity} pos=${-gimp_layer_pos}
+    -nm "name("$name"),mode($1),opacity("$opacity"),pos("$pos")"
   -endl -done
 
 # Flatten list of input layers according to their blending modes, opacities and positions,
@@ -20155,6 +20162,8 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : Bernard Desenclos,
+#@gimp : Randy Gordon-Gilmore,
 #@gimp : Eddie Dedrick,
 #@gimp : <a href="http://mindprints.org/">Greg FitzPatrick</a>,
 #@gimp : Zsolt Szabo,
@@ -25204,7 +25213,7 @@ gimp_split_details_alpha_preview :
 
 #@gimp Split details [layers] : gimp_split_details_layers, gimp_split_details_layers_preview(0)
 #@gimp : Number of scales = int(6,3,12)
-#@gimp : Base scale = float(10,0,40)
+#@gimp : Base scale = float(10,0,200)
 #@gimp : Details scale = float(1,0,20)
 #@gimp : Sharpen details in preview = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/22/2015</i>.</small>")
