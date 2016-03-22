@@ -19567,6 +19567,13 @@ gimp_set_layer_pos :
     -nm "name("$name"),mode("$mode"),opacity("$opacity"),pos("{round($1)},{round($2)}")"
   -endl -done
 
+# Set (x,y) position of a gimp layer.
+gimp_set_layer_mode :
+  -repeat $! -l[$>]
+    name=${-gimp_layer_name} opacity=${-gimp_layer_opacity} pos=${-gimp_layer_pos}
+    -nm "name("$name"),mode($1),opacity("$opacity"),pos("$pos")"
+  -endl -done
+
 # Flatten list of input layers according to their blending modes, opacities and positions,
 # set in each layer name by the GIMP plug-in.
 gimp_merge_layers :
