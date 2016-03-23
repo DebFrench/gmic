@@ -25237,6 +25237,33 @@ gimp_split_details_layers_preview :
     -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
 
+#@gimp Split details [wavelets] : gimp_split_details_wavelets, gimp_split_details_wavelets_preview(0)
+#@gimp : Number of scales = int(5,3,12)
+#@gimp : Sharpen details in preview = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/23/2016</i>.</small>")
+gimp_split_details_wavelets :
+  -remove_opacity -repeat $! -l[$>]
+    nm=${-gimp_layer_name}
+    pos=${-gimp_layer_pos}
+    -repeat $1
+      s={$>+1} d1={1<<($s-1)} d2={1<<$s} l={(1<<($s+1))+1} $l -=. 6,$d2 -=. 4,{$d2-$d1} -=. 4,{$d2+$d1} -=. 1 -=. 1,100% -/. 16
+      --convolve.. [-1] -transpose.. -convolve. [-2] -rm..
+      --.. [-1]
+    -done
+    -+[^-1] 128 -c[^-1] 0,255
+    -repeat {$!-1} -nm[$>] "mode(grainmerge), name"($nm" [scale ""#"{1+$>}"]), pos("$pos")" -done
+    -nm[-1] "name"($nm" [residual]), pos("$pos")"
+  -endl -done
+
+gimp_split_details_wavelets_preview :
+  -repeat $! -l[$>]
+    -gimp_split_details_wavelets $*
+    -if $2 -equalize[^-1] 256 -endif
+    -n[^-1] 0,255
+    -repeat $! -l[$>] -text_outline "#"{1+$>},1,1,43,7,1,255 -endl -done
+    -frame 1,1,0 -frame 3,3,255 -append_tiles ,
+  -endl -done
+
 #@gimp Tone mapping : gimp_map_tones, gimp_map_tones_preview(0)
 #@gimp : Threshold = float(0.5,0,1)
 #@gimp : Gamma = float(0.7,0,1)
