@@ -25241,6 +25241,11 @@ gimp_split_details_gaussian_preview :
 #@gimp : Number of scales = int(6,2,12)
 #@gimp : Add alpha channels to detail scale layers = _bool(0)
 #@gimp : sep = separator(), Sharpen details in preview = bool(0)
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b> This filter decomposes an image into several detail scales, using wavelet atrous.
+#@gimp : It should provide similar results to the <a href="http://registry.gimp.org/node/11742">wavelet decompose plug-in</a>
+#@gimp : (by Marco Rossini).
+#@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/23/2016</i>.</small>")
 gimp_split_details_wavelets :
   -remove_opacity -repeat $! -l[$>]
