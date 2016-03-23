@@ -13186,7 +13186,7 @@ houghsketchbw : -check "${1=8}>=0 && ${2=5}>=0 && ${3=80}>=0 && $3<=100 && ${4=0
 #@gmic : Generate ray lights from the edges of selected images.
 #@gmic : Defaults values : 'density=50%', 'center_x=50%', 'center_y=50%', 'ray_length=0.9' and 'ray_attenuation=0.5'.
 #@gmic : $ image.jpg --lightrays , -+ -c 0,255
-lightrays : -check "${1=50}>=0 && $1<=100 && ${4=1} && ${5=1}>=0" -skip ${2=50%},${3=50%}
+lightrays : -check "${1=50}>=0 && $1<=100 && ${4=1}>=0 && ${5=1}>=0" -skip ${2=50%},${3=50%}
   -e[^-1] "Generate ray lights from image$?, with density $1, center point ($2,$3), ray length $4 and attenuation $5."
   -v - -repeat $! -l[$>]
     -gradient_norm -* -1 -< $1% -euclidean2polar $2,$3
