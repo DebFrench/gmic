@@ -25206,62 +25206,64 @@ gimp_split_details_alpha_preview :
   -repeat $! -l[$>]
     -gimp_split_details_alpha ${1-4}
     -if $5 -remove_opacity[^-1] -else -to_rgba. -endif
-    -drgba
-    -repeat $! -l[$>] -text_outline "#"{1+$>},1,1,43,7,1,255 -endl -done
-    -frame 1,1,0 -frame 3,3,255 -append_tiles ,
+    N={int(sqrt($!))} N={round($!/$N,1,1)} -r2dy {100/$N}%
+    -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
+    -to_rgba -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
 
-#@gimp Split details [layers] : gimp_split_details_layers, gimp_split_details_layers_preview(0)
+#@gimp Split details [gaussian] : gimp_split_details_gaussian, gimp_split_details_gaussian_preview(0)
 #@gimp : Number of scales = int(6,3,12)
 #@gimp : Base scale = float(10,0,200)
 #@gimp : Details scale = float(1,0,20)
-#@gimp : Sharpen details in preview = bool(0)
+#@gimp : sep = separator(), Sharpen details in preview = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/22/2015</i>.</small>")
-gimp_split_details_layers :
+gimp_split_details_gaussian :
   -remove_opacity -repeat $! -l[$>]
     nm=${-gimp_layer_name}
     pos=${-gimp_layer_pos}
     -split_details $1,$2,$3
     -+[^0] 128 -c[^0] 0,255 -round
-    -repeat {$!-1} -nm[{1+$>}] "mode(grainmerge), name"($nm" [freq ""#"{1+$>}"]), pos("$pos")" -done
-    -nm[0] "name"($nm" [base]), pos("$pos")"
+    -repeat {$!-1} -nm[{1+$>}] "mode(grainmerge), name"($nm" [scale ""#"{1+$>}"]), pos("$pos")" -done
+    -nm[0] "name"($nm" [residual]), pos("$pos")"
     -rv
   -endl -done
 
-gimp_split_details_layers_preview :
+gimp_split_details_gaussian_preview :
   -repeat $! -l[$>]
-    -gimp_split_details_layers $*
-    -if $4 -equalize[^-1] 256 -endif
-    -n[^-1] 0,255
-    -repeat $! -l[$>] -text_outline "#"{1+$>},1,1,43,7,1,255 -endl -done
-    -frame 1,1,0 -frame 3,3,255 -append_tiles ,
+    -gimp_split_details_gaussian $*
+    -if $4 -equalize[^-1] 256 -endif -n[^-1] 0,255
+    N={int(sqrt($!))} N={round($!/$N,1,1)} -r2dy {100/$N}%
+    -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
+    -to_rgba -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
 
 #@gimp Split details [wavelets] : gimp_split_details_wavelets, gimp_split_details_wavelets_preview(0)
-#@gimp : Number of scales = int(5,3,12)
-#@gimp : Sharpen details in preview = bool(0)
+#@gimp : Number of scales = int(6,2,12)
+#@gimp : Add alpha channels to detail scale layers = _bool(0)
+#@gimp : sep = separator(), Sharpen details in preview = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/23/2016</i>.</small>")
 gimp_split_details_wavelets :
   -remove_opacity -repeat $! -l[$>]
     nm=${-gimp_layer_name}
     pos=${-gimp_layer_pos}
-    -repeat $1
-      s={$>+1} d1={1<<($s-1)} d2={1<<$s} l={(1<<($s+1))+1} $l -=. 6,$d2 -=. 4,{$d2-$d1} -=. 4,{$d2+$d1} -=. 1 -=. 1,100% -/. 16
+    -repeat {$1-1}
+      {2^($>+2)+1} -skip {d=2^$>;i[0]=i[4*d]=1;i[d]=i[3*d]=4;i[2*d]=6} -/. 16
       --convolve.. [-1] -transpose.. -convolve. [-2] -rm..
       --.. [-1]
     -done
     -+[^-1] 128 -c[^-1] 0,255
+    -if $2 -to_a[^-1] -endif
     -repeat {$!-1} -nm[$>] "mode(grainmerge), name"($nm" [scale ""#"{1+$>}"]), pos("$pos")" -done
     -nm[-1] "name"($nm" [residual]), pos("$pos")"
   -endl -done
 
 gimp_split_details_wavelets_preview :
   -repeat $! -l[$>]
-    -gimp_split_details_wavelets $*
-    -if $2 -equalize[^-1] 256 -endif
-    -n[^-1] 0,255
-    -repeat $! -l[$>] -text_outline "#"{1+$>},1,1,43,7,1,255 -endl -done
-    -frame 1,1,0 -frame 3,3,255 -append_tiles ,
+    -gimp_split_details_wavelets $1,0
+    -if $3 -equalize[^-1] 256 -endif -n[^-1] 0,255
+    N={int(sqrt($!))} N={round($!/$N,1,1)} -r2dy {100/$N}%
+    -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
+    -to_rgba -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
 
 #@gimp Tone mapping : gimp_map_tones, gimp_map_tones_preview(0)
@@ -26434,8 +26436,7 @@ gimp_apply_multiscale : -skip "${8=}"
 gimp_apply_multiscale_preview :
   -repeat $! -l[$>]
     -gimp_apply_multiscale $"*"
-    N={int(sqrt($!))} N={round($!/$N,1,1)}
-    -r2dy {100/$N}%
+    N={int(sqrt($!))} N={round($!/$N,1,1)} -r2dy {100/$N}%
     -to_rgba -r ${-max_wh},1,100%,0,0,$6,$7
     -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
     -frame 1,1,0 -frame 3,3,255 -append_tiles ,
