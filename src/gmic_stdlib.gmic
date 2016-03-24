@@ -7735,7 +7735,7 @@ denoise_patchpca : -check "isint(${1=1.8}) && $1>=0 && isint(${2=7}) && $2>0 && 
         )
       );
     0);0"
-    -/[aggreg,weights] -k[aggreg]
+    -max[weights] 0.01 -/[aggreg,weights] -k[aggreg]
   -endl -done -v +
 
 #@gmic deriche : std_variation>=0[%],order={ 0 | 1 | 2 },axis={ x | y | z | c },_boundary : (+)
