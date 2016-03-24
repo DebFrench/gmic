@@ -7650,7 +7650,7 @@ deinterlace : -skip ${1=0}
     -+ -/ 2 -c 0,255 -r $wh
   -endl -done -v +
 
-#@gmic denoise : std_variation_s>=0,_std_variation_p>=0,_patch_size>=0,_lookup_size>=0,_smoothness,_fast_approx={ 0 | 1 } : (+)
+#@gmic denoise : std_variation_s>=0,_std_variation_p>=0,_patch_size>0,_lookup_size>0,_smoothness,_fast_approx={ 0 | 1 } : (+)
 #@gmic : Denoise selected images by non-local patch averaging.
 #@gmic : Default values: 'std_variation_p=10', 'patch_size=5', 'lookup_size=6' and 'smoothness=1'.
 #@gmic : $ image.jpg --denoise 5,5,8
@@ -7681,6 +7681,62 @@ denoise_haar : -check "${1=1.4}>=0 && isint(${2=0}) && $2>=0 && isint(${3=10}) &
     -done
     -rm[0] -/ $3 -r $w,$h,$d,100%,0
   -nm $nm -endl -done -v +
+
+#@gmic denoise_patchpca : _strength>=0,_patch_size>0,_lookup_size>0,_spatial_sampling>0
+#@gmic : Denoise selected images using the patch-pca algorithm.
+#@gmic : Default values: 'patch_size=7', 'lookup_size=11', 'details=1.8' and 'spatial_sampling=5'.
+#@gmic : $ image.jpg --noise 20 -c. 0,255 --denoise_patchpca. ,
+denoise_patchpca : -check "isint(${1=1.8}) && $1>=0 && isint(${2=7}) && $2>0 && isint(${3=11}) && $3>0 && isint(${4=5}) && $4>0"
+  -e[^-1] "Denoise image$? using patch-pca, with strength $1, patch size $2, lookup size $3 and spatial sampling $4."
+  -v - -repeat $! -l[$>]
+    N2={$2*$2} M2={$3*$3} stdnoise=${-std_noise}
+    100%,100%,1,100% -nm. aggreg
+    100%,100% -nm. weights
+    -f[0] "*
+    init(
+      n1 = int($2/2); n2 = $2 - n1 - 1;
+      m1 = int($3/2); m2 = $3 - m1 - 1;
+      patch(x,y) = crop(x-n1,y-n1,0,c,$2,$2,1,1,1);
+      ngauss(x) = exp(-x*x/(2*n1*n1));
+      zero = vector"$N2"(0);
+      mask = vector"$N2"(0);
+      for (l = 0; q = -n1, q<=n2, ++q,
+        for (p = -n1, p<=n2, ++p, mask[l++] = ngauss(p)*ngauss(q)
+        )
+      )
+    );
+
+    if (!(x%$4) && !(y%$4),  # Sub-sampling
+      X = patch(x,y);
+
+      # Build correlation matrix for PCA.
+      M = vector"{$N2*$N2}"(0);
+      for (q = -m1, q<=m2, ++q,
+        for (p = -m1, p<=m2, ++p,
+          Xk = patch(x + p,y + q) - X;
+          M += mul(Xk,Xk,"$N2");
+        )
+      );
+      M/="$M2";
+      eig = eig(M);
+      lambda = sqrt(abs(eig[0,"$N2"-1]));
+
+      # Determine number of lambdas to keep and project neighboring patchs.
+      for (k = 0, k<size(lambda) && lambda[k]>=$1*"$stdnoise", ++k);
+      Qt = eig["$N2",size(eig) - 1];
+      Q = transp(Qt,"$N2");
+      for (q = -m1, q<=m2, ++q,
+        for (p = -m1, p<=m2, ++p,
+          pY = Qt**(patch(x + p,y + q) - X);
+          copy(pY[k],zero[0],size(pY) - k);
+          (Y = Q**pY)+=X;
+          draw(#"$aggreg",Y,x + p - n1,y + q - n1,0,c,$2,$2,1,1,-1,mask);
+          draw(#"$weights",mask,x + p - n1,y + q - n1,0,c,$2,$2,1,1,-1);
+        )
+      );
+    0);0"
+    -/[aggreg,weights] -k[aggreg]
+  -endl -done -v +
 
 #@gmic deriche : std_variation>=0[%],order={ 0 | 1 | 2 },axis={ x | y | z | c },_boundary : (+)
 #@gmic : Apply Deriche recursive filter on selected images, along specified axis and with
@@ -27838,6 +27894,25 @@ gimp_patch_smoothing :
 
 gimp_patch_smoothing_preview :
   -gimp_split_preview "-gimp_patch_smoothing $*",$-1,{if(isval($GMIC_GIMP_TIMEOUT),0$GMIC_GIMP_TIMEOUT,8)}
+
+#@gimp Smooth [patch-pca] : gimp_pca_smoothing, gimp_pca_smoothing_preview(0)
+#@gimp : Strength = float(4,0,16)
+#@gimp : Patch size = int(7,2,21)
+#@gimp : Lookup size = int(11,2,21)
+#@gimp : Spatial sampling = int(10,1,16)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","Linear RGB [all]","Linear RGB [red]","Linear RGB [green]","Linear RGB [blue]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]","YIQ [luma]","YIQ [chromas]")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b> Beware, this filter uses a very computationally intensive algorithm to denoise images. So, do not complain too much if you have less than 8 cores
+#@gimp : available for the computation :)
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>J&#233;rome Boulanger</i>.      Latest update: <i>03/24/2016</i>.</small>")
+gimp_pca_smoothing :
+  -ac "-denoise_patchpca ${1-4} -c 0,255",$5
+
+gimp_pca_smoothing_preview :
+  -if ${"-gimp_check_version 170"}
+    -gimp_split_preview "-gimp_pca_smoothing $*",$-1,{if(isval($GMIC_GIMP_TIMEOUT),0$GMIC_GIMP_TIMEOUT,8)}
+  -endif
 
 #@gimp Smooth [perona-malik] : gimp_peronamalik_smoothing, gimp_peronamalik_smoothing_preview(0)
 #@gimp : K-factor = float(20,0,255)
