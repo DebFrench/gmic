@@ -27899,7 +27899,7 @@ gimp_patch_smoothing_preview :
 #@gimp : Strength = float(4,0,16)
 #@gimp : Patch size = int(7,2,21)
 #@gimp : Lookup size = int(11,2,21)
-#@gimp : Spatial sampling = int(10,1,16)
+#@gimp : Spatial sampling = int(7,1,16)
 #@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","Linear RGB [all]","Linear RGB [red]","Linear RGB [green]","Linear RGB [blue]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]","YIQ [luma]","YIQ [chromas]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b> Beware, this filter uses a very computationally intensive algorithm to denoise images. So, do not complain too much if you have less than 8 cores
