@@ -8706,7 +8706,7 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
         --convolve.. [-1] -transpose.. -convolve. [-2] -rm..
         --.. [-1]
       -done -rv
-    -endl -done
+    -endl -done -v +
   -else
     -e[^-1] "Split image$? using $1 spatial scales with base scale $2 and detail scale $3."
     -v - -repeat $! -l[$<]
@@ -19636,11 +19636,18 @@ gimp_set_layer_pos :
     -nm "name("$name"),mode("$mode"),opacity("$opacity"),pos("{round($1)},{round($2)}")"
   -endl -done
 
-# Set (x,y) position of a gimp layer.
+# Set blending mode of a gimp layer.
 gimp_set_layer_mode :
   -repeat $! -l[$>]
     name=${-gimp_layer_name} opacity=${-gimp_layer_opacity} pos=${-gimp_layer_pos}
     -nm "name("$name"),mode($1),opacity("$opacity"),pos("$pos")"
+  -endl -done
+
+# Set opacity of a gimp layer.
+gimp_set_layer_opacity :
+  -repeat $! -l[$>]
+    name=${-gimp_layer_name} mode=${-gimp_layer_mode} pos=${-gimp_layer_pos}
+    -nm "name("$name"),mode("$mode"),opacity($1),pos("$pos")"
   -endl -done
 
 # Flatten list of input layers according to their blending modes, opacities and positions,
