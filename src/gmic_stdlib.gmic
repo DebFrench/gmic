@@ -25256,7 +25256,7 @@ gimp_split_details_wavelets :
       --convolve.. [-1] -transpose.. -convolve. [-2] -rm..
       --.. [-1]
     -done
-    -+[^-1] 128 -c[^-1] 0,255
+    -+[^-1] 128 -c[^-1] 0,255 -round
     -if $2 -to_a[^-1] -endif
     -repeat {$!-1} -nm[$>] "mode(grainmerge), name"($nm" [scale ""#"{1+$>}"]), pos("$pos")" -done
     -nm[-1] "name"($nm" [residual]), pos("$pos")"
