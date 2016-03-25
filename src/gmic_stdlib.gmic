@@ -8702,8 +8702,19 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
     -e[^-1] "Split image$? using $1 spatial scales and 'a trous' wavelets."
     -v - -repeat $! -l[$<]
       -repeat {$1-1}
-        {2^($>+2)+1} -skip {d=2^$>;i[0]=i[4*d]=1;i[d]=i[3*d]=4;i[2*d]=6} -/. 16
-        --convolve.. [-1] -transpose.. -convolve. [-2] -rm..
+        --f. "init(interpolation=0; boundary=1; d=2^"$>"; d2=d*2);
+              i(x - d2) + i(x + d2) + 4*i(x - d) + 4*i(x + d) + 6*i;"
+        -/. 16
+        -if {h>1}
+          -f. "init(interpolation=0; boundary=1; d=2^"$>"; d2=d*2);
+               i(x,y - d2) + i(x,y + d2) + 4*i(x,y - d) + 4*i(x,y + d) + 6*i;"
+          -/. 16
+        -endif
+        -if {d>1}
+          -f. "init(interpolation=0; boundary=1; d=2^"$>"; d2=d*2);
+               i(x,y,z - d2) + i(x,y,z + d2) + 4*i(x,y,z - d) + 4*i(x,y,z + d) + 6*i;"
+          -/. 16
+        -endif
         --.. [-1]
       -done -rv
     -endl -done -v +
