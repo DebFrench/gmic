@@ -490,7 +490,7 @@ _help_usage :
 \n      '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
 \n
 \n    . "$g".raw binary files:"$n" Image dimensions and input pixel type may be specified when loading
-\n       "$g".raw"$n" files with input expresssion '"${c}"filename.raw[,datatype][,width][,height[,depth[,dim]]]]"$n"'.
+\n       "$g".raw"$n" files with input expresssion '"${c}"filename.raw[,datatype][,width][,height[,depth[,dim[,offset]]]]]"$n"'.
 \n       If no dimensions are specified, the resulting image is a one-column vector with
 \n       maximum possible height. Pixel type can also be specified with the output
 \n       expression '"${c}"filename.raw[,datatype]"$n"'.
