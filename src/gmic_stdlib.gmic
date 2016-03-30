@@ -18957,10 +18957,13 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
       -if {$selected<0} --f[points] 'sqrt((i-$X)^2+(j(1)-$Y)^2)*{*,w}%' -z. 0,0 selected={if(im>8,-1,ym)} -rm. -endif
 
       -if {$x>=0" && "$b&1" && "$selected>=0} # Move an existing point.
+        -if {{*,SHIFTLEFT}||{*,SHIFTRIGHT}} X={points,i(0,$selected)} -endif
+        -if {{*,CTRLLEFT}||{*,CTRLRIGHT}} Y={points,i(1,$selected)} -endif
         -if {points,$selected>0" && "$selected<h-1}
           -=[points] {points,max(min($X,i(0,$selected+1)-0.5),i(0,$selected-1)+0.5)},0,$selected
         -endif
         -=[points] {min(100,max(0,$Y))},1,$selected $1={points,^} -rm[view]
+
       -elif {$b&1" && "$is_inside} # Create new point.
         ($X,$Y) -a[points,-1] y -sort[points] +,y
         --f[points] 'sqrt((i-$X)^2+(j(1)-$Y)^2)*{*,w}%' -z. 0,0 selected={if(im>8,-1,ym)} $1={points,^} -rm[view,-1]
