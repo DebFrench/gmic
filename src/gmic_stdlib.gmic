@@ -18934,7 +18934,7 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
       --j[baseview] [-1],24,24 -rm..
 
       # Draw current coordinates.
-      -if {$X>=0" && "$Y>=0} -t. "X: "{min(255,round(255*$X/100))}" Y: "{min(round(255*$Y/100))},24,6,12,1 -endif
+      -if {$X>=0" && "$Y>=0} -t. "X: "{min(255,round(255*$X/100))}" Y: "{min(255,round(255*$Y/100))},24,6,12,1 -endif
       -nm. view
       -w[view]
     -endif
