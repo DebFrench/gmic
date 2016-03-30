@@ -487,14 +487,14 @@ _help_usage :
 \n      '"${c}"filename.cimg,N0,N1,x0,y0,z0,c0,x1,y1,z1,c1"$n"'.
 \n      Specifying '"${g}"-1"$n"' for one coordinates stands for the maximum possible value.
 \n      Output expression '"${c}"filename.cimg[z][,datatype]"$n"' can be used to force the output pixel type.
-\n      '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
+\n      '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }"$n".
 \n
 \n    . "$g".raw binary files:"$n" Image dimensions and input pixel type may be specified when loading
 \n       "$g".raw"$n" files with input expresssion '"${c}"filename.raw[,datatype][,width][,height[,depth[,dim[,offset]]]]]"$n"'.
 \n       If no dimensions are specified, the resulting image is a one-column vector with
 \n       maximum possible height. Pixel type can also be specified with the output
 \n       expression '"${c}"filename.raw[,datatype]"$n"'.
-\n       '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
+\n       '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }"$n".
 \n
 \n    . "$g".yuv files:"$n" Image dimensions must be specified, and only sub-frames of an image
 \n       sequence may be loaded, using the input expression
@@ -504,7 +504,7 @@ _help_usage :
 \n       expression '"${c}"filename.tif,_first_frame,_last_frame,_step"$n"'.
 \n       Output expression '"${c}"filename.tiff,_datatype,_compression,_force_multipage,_use_bigtiff"$n"' can be used to
 \n       specify the output pixel type, as well as the compression method.
-\n       '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
+\n       '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }"$n".
 \n       '"${g}"compression"$n"' can be "$g"{ none (default) | lzw | jpeg }"$n".
 \n       '"${g}"force_multipage"$n" can be "$g"{ 0=no (default) | 1=yes }"$n".
 \n       '"${g}"use_bigtiff"$n" can be "$g"{ 0=no | 1=yes (default) }"$n".
@@ -521,7 +521,7 @@ _help_usage :
 \n
 \n    . "$g".pan, .cpp, .hpp, .c and .h files:"$n" The output datatype can be selected with output expression
 \n       '"${c}"filename[,datatype]"$n"'.
-\n      '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | ulong | long | float | double }"$n".
+\n      '"${g}"datatype"$n"' can be "$g"{ uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }"$n".
 \n
 \n    . "$g".gmic files:"$n" These filenames are assumed to be "${-GMIC}" custom commands files. Loading
 \n       such a file will add the commands it defines to the interpreter. Debug information can be
@@ -2818,7 +2818,7 @@ roddy :
 
 #@gmic serialize : _datatype,_is_compressed={ 0 | 1 },_store_names={ 0 | 1 } : (+)
 #@gmic : Serialize selected list of images into a single image, optionnally in a compressed form.
-#@gmic : 'datatype' can be { uchar | char | ushort | short | uint | int | ulong | long | float | double }.
+#@gmic : 'datatype' can be { uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }.
 #@gmic : Specify 'datatype' if all selected images have a range of values constrained to a particular datatype, in order to minimize the memory footprint.
 #@gmic : The resulting image has only integers values in [0,255] and can then be saved as a raw image of
 #@gmic : unsigned chars (doing so will output a valid .cimg[z] or .gmz file).
@@ -4988,7 +4988,7 @@ eigen2tensor :
 
 #@gmic endian : _datatype : (+)
 #@gmic : Reverse data endianness of selected images, eventually considering the pixel being of the specified datatype.
-#@gmic : 'datatype' can be { uchar | char | ushort | short | uint | int | ulong | long | float | double }.
+#@gmic : 'datatype' can be { uchar | char | ushort | short | uint | int | uint64 | int64 | float | double }.
 
 #@gmic equalize : _nb_levels>0[%],_value_min[%],_value_max[%] : (+)
 #@gmic : Equalize histograms of selected images.
