@@ -6992,7 +6992,7 @@ _resize3dz : -check "$1>0 && ${2=3}>=0 && $2<=6 && ${3=0}>=0 && $3<=2 && ${4=0}>
 #@gmic : 'interpolation' can be { 0=none | 1=linear | 2=bicubic }.
 #@gmic : 'boundary' can be { 0=dirichlet | 1=neumann | 2=periodic }.
 #@gmic : When rotation center is specified, the size of the image is preserved.
-#@gmic : Default values: 'boundary=0', 'interpolation=1', 'cx=cy=(undefined)' and 'zoom=1'.
+#@gmic : Default values: 'interpolation=1', 'boundary=0', 'center_x=center_y=(undefined)' and 'zoom=1'.
 #@gmic : $ image.jpg --rotate -25,1,2,50%,50%,0.6 -rotate[0] 25
 
 #@gmic rotate_tileable : angle,_max_size_factor>=0
@@ -26507,29 +26507,50 @@ gimp_morph :
 #@gimp : sep = separator()
 #@gimp : X-centering = float(0.5,0,1)
 #@gimp : Y-centering = float(0.5,0,1)
+#@gimp : Angle = float(0,-180,180)
+#@gimp : sep = separator()
+#@gimp : Enable interpolated motion = bool(0)
+#@gimp : Ending x-centering = float(0.5,0,1)
+#@gimp : Ending y-centering = float(0.5,0,1)
+#@gimp : Ending angle = float(0,-180,180)
 #@gimp : sep = separator()
 #@gimp : G'MIC operator = text("")
 #@gimp : Return scaling = choice("None","Bloc","Linear","Cubic","Lanczos")
 #@gimp : Lock return scaling to source layer = bool(0)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/10/2016</i>.</small>")
-gimp_apply_multiscale : -skip "${8=}"
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/30/2016</i>.</small>")
+gimp_apply_multiscale : -skip "${13=}"
   -repeat $! -l[$<]
     w0={w} h0={h}
-    -apply_scales "$8",$1,$2%,$3%,{10^$4},{arg(1+$5,1,3,5,6)}
-    -if $9
-      -if $10 siz=$w0,$h0 -else siz=${-max_wh} -endif
-      -r $siz,1,100%,{arg($9,1,3,5,6)}
+    -apply_scales "$13",$1,$2%,$3%,{10^$4},{arg(1+$5,1,3,5,6)}
+    -if {$8||($9&&$8!=$12)} -to_a N=$! -repeat $!
+      angle={$9?$8+($12-$8)*$>/max($N-1,1):$8}
+      -rotate[$>] $angle
+    -done -endif
+    -if $14
+      -if $15 siz=$w0,$h0 -else siz=${-max_wh} -endif
+      -r $siz,1,100%,{arg($14,1,3,5,6)}
       -c 0,255
     -endif
-    w=${-max_w} h=${-max_h} -repeat $! -gimp_set_layer_pos[$>] {$>,($w-w)*$6},{$>,($h-h)*$7} -done
+    w=${-max_w} h=${-max_h} N=$!
+    -repeat $!
+      cx={$9?$6+($10-$6)*$>/max($N-1,1):$6}
+      cy={$9?$7+($11-$7)*$>/max($N-1,1):$7}
+      -gimp_set_layer_pos[$>] {$>,($w-w)*$cx},{$>,($h-h)*$cy}
+    -done
   -endl -done
 
 gimp_apply_multiscale_preview :
   -repeat $! -l[$>]
     -gimp_apply_multiscale $"*"
     N={int(sqrt($!))} N={round($!/$N,1,1)} -r2dy {100/$N}%
-    -to_rgba -r ${-max_wh},1,100%,0,0,$6,$7
-    -repeat $! -l[$>] 0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0] -endl -done
+    -to_rgba
+    max_wh=${-max_wh}
+    N=$! -repeat $! -l[$>]
+      cx={$9?$6+($10-$6)*$>/max($N-1,1):$6}
+      cy={$9?$7+($11-$7)*$>/max($N-1,1):$7}
+      -r $max_wh,1,100%,0,0,$cx,$cy
+      0 -text. "#"{1+$>}" ",1,1,24,1,255 --dilate. 5 -to_rgba[1] -j[0] [1],2,0,0,0,1,[2],255 -k[0]
+    -endl -done
     -frame 1,1,0 -frame 3,3,255 -append_tiles ,
   -endl -done
 
