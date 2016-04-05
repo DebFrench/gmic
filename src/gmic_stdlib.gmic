@@ -7686,7 +7686,7 @@ denoise_haar : -check "${1=1.4}>=0 && isint(${2=0}) && $2>=0 && isint(${3=10}) &
 #@gmic : Denoise selected images using the patch-pca algorithm.
 #@gmic : Default values: 'patch_size=7', 'lookup_size=11', 'details=1.8' and 'spatial_sampling=5'.
 #@gmic : $ image.jpg --noise 20 -c. 0,255 --denoise_patchpca. ,
-denoise_patchpca : -check "isint(${1=1.8}) && $1>=0 && isint(${2=7}) && $2>0 && isint(${3=11}) && $3>0 && isint(${4=5}) && $4>0"
+denoise_patchpca : -check "${1=1.8} && $1>=0 && isint(${2=7}) && $2>0 && isint(${3=11}) && $3>0 && isint(${4=5}) && $4>0"
   -e[^-1] "Denoise image$? using patch-pca, with strength $1, patch size $2, lookup size $3 and spatial sampling $4."
   -v - -repeat $! -l[$>]
     N2={$2*$2} M2={$3*$3} stdnoise=${-std_noise}
@@ -15462,7 +15462,7 @@ is_windows :
 #@gmic : Return the MAD (Maximum Absolute Deviation) of the last selected image.
 #@gmic : The MAD is defined as MAD = med_i|x_i-med_j(x_j)|
 mad :
-  -v - ---. ${-med.} -abs. -med. -u {1.4826*${}} -rm. -v +
+  -v - -if $! ---. {ic} -abs. -u {1.4826*ic} -rm. -else -u 0 -endif -v +
 
 #@gmic max_w
 #@gmic : Return the maximal width between selected images.
@@ -15516,7 +15516,7 @@ _max_whds :
 #@gmic med
 #@gmic : Return the median value of the last selected image.
 med :
-  -v - --sort. -u {i[whds/2]} -rm. -v +
+  -v - -u {ic} -v +
 
 #@gmic color_med
 #@gmic : Return the median color value of the last selected image.
@@ -15788,11 +15788,7 @@ toc :
 #@gmic std_noise
 #@gmic : Return the estimated noise standard deviation of the last selected image.
 std_noise :
-  -v -
-  -if $! --laplacian. -u {${-mad.}/sqrt(if(d==1,20,42))} -rm.
-  -else -u 0
-  -endif
-  -v +
+  -v - -if $! --laplacian. --. {ic} -abs. -u {1.4826*ic/sqrt(d==1?20:42)} -rm. -else -u 0 -endif -v +
 
 #-------------------------------------
 #
