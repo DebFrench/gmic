@@ -27869,7 +27869,7 @@ gimp_remove_hotpixels_preview :
 #@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
 #@gimp : Smoothness (%) = float(50,0,100)
 #@gimp : Smoothing iterations = int(50,0,400)
-#@gimp : Erosion/dilation = int(0,-50,50)
+#@gimp : Dilation / erosion = int(0,-50,50)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b>
@@ -27879,7 +27879,7 @@ gimp_remove_hotpixels_preview :
 gimp_solidify_td :
   -repeat $! -l[$>]
     -if $3
-      -to_a [-1] -sh. 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm.
+      -to_a [-1] -sh. 100% -if {$3>0} -erode. $3 -else -dilate. {-$3} -endif -rm.
       -solidify. $1%,$2 -rv -blend alpha
     -else
       -solidify $1%,$2
@@ -30228,6 +30228,7 @@ gmicol_bokeh :
 #@gmicol clone("Polygonize [energy]")
 #@gmicol clone("Poster edges")
 #@gmicol clone("Rodilius")
+#@gmicol clone("Smooth abstract")
 #@gmicol clone("Vector painting")
 #@gmicol clone("Warhol")
 #@gmicol clone("Whirl drawing")
