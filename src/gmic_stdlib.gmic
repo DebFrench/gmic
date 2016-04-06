@@ -8349,7 +8349,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
       height={0,max(1,round(h/$scale))}
       depth={0,max(1,round(d/$scale))}
       $width,$height,$depth,{0,s} 100%,100%,100%
-      -f[1] "if(i,i,
+      -f[1] "*if(i,i,
              X = round(x*w#-1/w);
              Y = round(y*h#-1/h);
              Z = round(z*d#-1/d);
