@@ -21860,6 +21860,21 @@ _gimp_shapeism6 : # Star
 _gimp_shapeism7 : # Custom
   -star3d $1,$2 -*3d. {0,min(w,h)/2} -r3d. 0,0,1,$3 -j3d[0] [-1],50%,50%,0,1,2,0 -k[0]
 
+#@gimp Smooth abstract : gimp_smooth_abstract, gimp_smooth_abstract_preview(0)
+#@gimp : Smoothness (%) = float(50,0,100)
+#@gimp : Geometry = float(1,0,5)
+#@gimp : Details = float(10,0,20)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
+gimp_smooth_abstract :
+  -repeat $! -l[$>] -split_opacity -l[0]
+    mM={im},{iM} --b $2 -n. $mM -gradient_norm. -le. {20-$3}
+    -inpaint_td[0] [1],$1% -rm.
+  -endl -a c -endl -done
+
+gimp_smooth_abstract_preview :
+  -gimp_split_preview "-gimp_smooth_abstract $*",$-1
+
 #@gimp Vector painting : gimp_vector_painting, gimp_vector_painting_preview(1)
 #@gimp : Details = float(9,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
@@ -27863,8 +27878,12 @@ gimp_remove_hotpixels_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
 gimp_solidify_td :
   -repeat $! -l[$>]
-    -if $3 -to_a -sh 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm. -endif
-    -solidify $1%,$2
+    -if $3
+      -to_a [-1] -sh. 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm.
+      -solidify. $1%,$2 -rv -blend alpha
+    -else
+      -solidify $1%,$2
+    -endif
   -endl -done
 
 gimp_solidify_td_preview :
