@@ -8333,7 +8333,7 @@ _inpaint_patchmatch :
   -endif
   -k[0]
 
-#@gimp inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
+#@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
 #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
 #@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
 #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
@@ -8775,14 +8775,15 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
 #@gmic : $$
 
-#@gimp solidify : _smoothness[%]>=0,_diffusion_iter>=0
+#@gmic solidify : _smoothness[%]>=0,_diffusion_iter>=0
 #@gmic : Solidify selected transparent images.
 #@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
 #@gmic : $ image.jpg 100%,100% -circle. 50%,50%,25%,1,255 -append c --solidify , -display_rgba
 solidify : -check "${1=50%}>=0 && ${2=50}>=0"
   -e[^-1] "Solidify transparent image$? with smoothness $1 and $2 iterations of diffusion."
   -v - -repeat $! -l[$>] -split_opacity
-    -le. 50% -inpaint_td.. [1],$1,$2 -rm.
+    -le. 128 -inpaint_td.. [1],$1,$2 -rm.
+    -to_a
   -endl -done -v +
 
 #@gmic syntexturize : _width[%]>0,_height[%]>0
@@ -27847,6 +27848,27 @@ gimp_remove_hotpixels :
 
 gimp_remove_hotpixels_preview :
   -gimp_split_preview "-gimp_remove_hotpixels $*",$-1
+
+#@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
+#@gimp : Smoothness (%) = float(50,0,100)
+#@gimp : Smoothing iterations = int(50,0,400)
+#@gimp : Erosion/dilation = int(0,-50,50)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b>
+#@gimp : This filter reconstructs transparent regions of an image using a transport-diffusion algorithm. Useful only for images having an alpha-channel.
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
+gimp_solidify_td :
+  -repeat $! -l[$>] -to_a
+    -if $3
+      -sh 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm.
+    -endif
+    -solidify $1%,$2
+  -endl -done
+
+gimp_solidify_td_preview :
+  -gimp_split_preview "-gimp_solidify_td $*",$-1
 
 #@gimp Smooth [anisotropic] : gimp_anisotropic_smoothing, gimp_anisotropic_smoothing_preview(0)
 #@gimp : Amplitude = float(60,0,1000)
