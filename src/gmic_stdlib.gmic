@@ -8349,13 +8349,15 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
       height={0,max(1,round(h/$scale))}
       depth={0,max(1,round(d/$scale))}
       $width,$height,$depth,{0,s} 100%,100%,100%
-      -f[1] "*if(i,i,
+      -f[1] ">if(i,i,
              X = round(x*w#-1/w);
              Y = round(y*h#-1/h);
              Z = round(z*d#-1/d);
-             I(#-2,X,Y,Z) = I(#0);
-             i(#-1,X,Y,Z) = 1;
+             I(#-2,X,Y,Z) += I(#0,x,y,z);
+             ++i(#-1,X,Y,Z);
              0)"
+      --max. 1 -/[-3,-1] -!=. 0
+
       -if {!$>} # First scale -> Initialize by value propagation
         im={-2,im} --.. {$im-1} -*.. [-1]
         -distance. 1 -*. -1 -watershed.. [-1] -rm.
@@ -27860,10 +27862,8 @@ gimp_remove_hotpixels_preview :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
 gimp_solidify_td :
-  -repeat $! -l[$>] -to_a
-    -if $3
-      -sh 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm.
-    -endif
+  -repeat $! -l[$>]
+    -if $3 -to_a -sh 100% -if {$3>0} -dilate. $3 -else -erode. {-$3} -endif -rm. -endif
     -solidify $1%,$2
   -endl -done
 
