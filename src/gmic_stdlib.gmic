@@ -8335,9 +8335,9 @@ _inpaint_patchmatch :
 
 #@gimp inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
 #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
-#@gmic : Default values: 'smoothness=75%' and 'diffusion_iter=50'.
+#@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
 #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
-inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && ${3=50}>=0"
+inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
   -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $3 iterations of diffusion."
   -v - -repeat $! nm={n} -pass$1 1 -l[$>,-1]
     nb_scalesM={round(log2(max(w,h,d)))}
@@ -8348,7 +8348,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && ${3=50}>=0"
       width={0,max(1,round(w/$scale))}
       height={0,max(1,round(h/$scale))}
       depth={0,max(1,round(d/$scale))}
-      $width,$height,$depth,{0,s} 100%,100%
+      $width,$height,$depth,{0,s} 100%,100%,100%
       -f[1] "if(i,i,
              X = round(x*w#-1/w);
              Y = round(y*h#-1/h);
@@ -8774,6 +8774,16 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
 #@gmic : Default value: 'scheme=1'.
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
 #@gmic : $$
+
+#@gimp solidify : _smoothness[%]>=0,_diffusion_iter>=0
+#@gmic : Solidify selected transparent images.
+#@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
+#@gmic : $ image.jpg 100%,100% -circle. 50%,50%,25%,1,255 -append c --solidify , -display_rgba
+solidify : -check "${1=50%}>=0 && ${2=50}>=0"
+  -e[^-1] "Solidify transparent image$? with smoothness $1 and $2 iterations of diffusion."
+  -v - -repeat $! -l[$>] -split_opacity
+    -le. 50% -inpaint_td.. [1],$1,$2 -rm.
+  -endl -done -v +
 
 #@gmic syntexturize : _width[%]>0,_height[%]>0
 #@gmic : Resynthetize 'width'x'height' versions of selected micro-textures by phase randomization.
