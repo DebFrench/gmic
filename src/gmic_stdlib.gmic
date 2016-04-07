@@ -27919,7 +27919,7 @@ gimp_remove_hotpixels_preview :
   -gimp_split_preview "-gimp_remove_hotpixels $*",$-1
 
 #@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
-#@gimp : Smoothness (%) = float(75,0,100)
+#@gimp : Smoothness (%) = float(100,0,100)
 #@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
 #@gimp : Regularization iterations = int(20,0,100)
 #@gimp : Dilation / erosion = int(0,-50,50)
