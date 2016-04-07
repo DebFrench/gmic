@@ -8370,7 +8370,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4
         im={-2,im} --.. {$im-1} -*.. [-1]
         -distance. 1 -*. -1 -watershed.. [-1] -rm.
         -+. {$im-1}
-      -else # Other scales -> Perform gaussian diffusion
+      -else # Other scales -> Perform isotropic or anisotropic diffusion
         -mv[-3] $! -r. [-3],3
         -j. [-3],0,0,0,0,1,[-2]
         nb_iter={max(5,$4)}
@@ -8423,53 +8423,6 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4
     -done
     -nm. $nm -rv[0,-1] -rm.
   -endl -rm. -done -v +
-
-# #@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
-# #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
-# #@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
-# #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
-# inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
-#   -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $3 iterations of diffusion."
-#   -v - -repeat $! nm={n} -pass$1 1 -l[$>,-1]
-#     nb_scalesM={round(log2(max(w,h,d)))}
-#     nb_scales={round(${"-is_percent $2"}?$nb_scalesM*$2:$2)}
-#     nb_scales={max(1,min($nb_scales,$nb_scalesM))}
-#     -repeat $nb_scales
-#       scale={2^$<}
-#       width={0,max(1,round(w/$scale))}
-#       height={0,max(1,round(h/$scale))}
-#       depth={0,max(1,round(d/$scale))}
-#       $width,$height,$depth,{0,s} 100%,100%,100%
-#       -f[1] "init(
-#                wl1 = w#-1 - 1;
-#                hl1 = h#-1 - 1;
-#                dl1 = d#-1 - 1;
-#                w1 = max(1,w - 1);
-#                h1 = max(1,h - 1);
-#                d1 = max(1,d - 1);
-#              );
-#              if(i,i,
-#                X = round(x*wl1/w1);
-#                Y = round(y*hl1/h1);
-#                Z = round(z*dl1/d1);
-#                I(#-2,X,Y,Z) += I(#0,x,y,z);
-#                ++i(#-1,X,Y,Z);
-#              0)"
-#       --max. 1 -/[-3,-1] -!=. 0
-#       -if {!$>} # First scale -> Initialize by value propagation
-#         im={-2,im} --.. {$im-1} -*.. [-1]
-#         -distance. 1 -*. -1 -watershed.. [-1] -rm.
-#         -+. {$im-1}
-#       -else # Other scales -> Perform gaussian diffusion
-#         -mv[-3] $! -r. [-3],3
-#         nb_iter={max(5,$3/$scale)}
-#         -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
-#         -j. [-3],0,0,0,0,1,[-2]
-#         -rm[-3,-2]
-#       -endif
-#     -done
-#     -nm. $nm -rv[0,-1] -rm.
-#   -endl -rm. -done -v +
 
 #@gmic kuwahara : size>0
 #@gmic : Apply Kuwahara filter of specified size on selected images.
