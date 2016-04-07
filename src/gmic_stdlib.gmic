@@ -715,10 +715,10 @@ _help_usage :
 \n          (roughly in "${g}"[-6,6]"$n").
 \n       . '"${c}"interpolation"$n"': value of the default interpolation mode used when reading pixel values with
 \n           the pixel access operators (i.e. when the interpolation argument is not explicitly specified,
-\n           see below for more details on pixel access operators).
+\n           see below for more details on pixel access operators). Its initial default value is "${g}"0"$n".
 \n       . '"${c}"boundary"$n"': value of the default boundary conditions used when reading pixel values with
 \n           the pixel access operators (i.e. when the boundary condition argument is not explicitly specified,
-\n           see below for more details on pixel access operators).
+\n           see below for more details on pixel access operators). Its initial default value is "${g}"0"$n".
 \n
 \n    _ "${g}"Vector calculus:"$n" Most operators are also able to work with vector-valued elements.
 \n
@@ -8333,13 +8333,14 @@ _inpaint_patchmatch :
   -endif
   -k[0]
 
-#@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
+#@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_type={ 0=isotropic | 1=anisotropic },_diffusion_iter>=0
 #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
-#@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
+#@gmic : Default values: 'smoothness=50%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
-inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
-  -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $3 iterations of diffusion."
-  -v - -repeat $! nm={n} -pass$1 1 -l[$>,-1]
+inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4=20}>=0"
+  -v - s1="isotropic" s0="anisotropic" -v +
+  -v + -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $4 iterations of "${s{!$3}}" diffusion." -v -
+  -repeat $! nm={n} -pass$1 1 -l[$>,-1]
     nb_scalesM={round(log2(max(w,h,d)))}
     nb_scales={round(${"-is_percent $2"}?$nb_scalesM*$2:$2)}
     nb_scales={max(1,min($nb_scales,$nb_scalesM))}
@@ -8349,32 +8350,102 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
       height={0,max(1,round(h/$scale))}
       depth={0,max(1,round(d/$scale))}
       $width,$height,$depth,{0,s} 100%,100%,100%
-      -f[1] ">if(i,i,
-             X = round(x*w#-1/w);
-             Y = round(y*h#-1/h);
-             Z = round(z*d#-1/d);
-             I(#-2,X,Y,Z) += I(#0,x,y,z);
-             ++i(#-1,X,Y,Z);
+      -f[1] "init(
+               wl1 = w#-1 - 1;
+               hl1 = h#-1 - 1;
+               dl1 = d#-1 - 1;
+               w1 = max(1,w - 1);
+               h1 = max(1,h - 1);
+               d1 = max(1,d - 1);
+             );
+             if(i,i,
+               X = round(x*wl1/w1);
+               Y = round(y*hl1/h1);
+               Z = round(z*dl1/d1);
+               I(#-2,X,Y,Z) += I(#0,x,y,z);
+               ++i(#-1,X,Y,Z);
              0)"
       --max. 1 -/[-3,-1] -!=. 0
-
       -if {!$>} # First scale -> Initialize by value propagation
         im={-2,im} --.. {$im-1} -*.. [-1]
         -distance. 1 -*. -1 -watershed.. [-1] -rm.
         -+. {$im-1}
       -else # Other scales -> Perform gaussian diffusion
         -mv[-3] $! -r. [-3],3
-        nb_iter={max(5,$3/$scale)}
-        -repeat $nb_iter
-          -j. [-3],0,0,0,0,1,[-2]
-          -b. 0.5
-        -done
         -j. [-3],0,0,0,0,1,[-2]
-        -rm[-3,-2]
+        nb_iter={max(5,$4)}
+
+        -if $3 # Anisotropic diffusion
+          --distance.. 1 -gradient. xy -a[-2,-1] c -orientation.
+          -repeat {$nb_iter}
+            -f.. "*init(boundary = 1; dt = 1024);
+                   if (i(#-3,x,y,z,0),I,
+                     gx = i(#-1,x,y,z,0);
+                     gy = i(#-1,x,y,z,1);
+                     gx2 = gx*gx;
+                     gy2 = gy*gy;
+                     Ixx = J(1) + J(-1);
+                     Iyy = J(0,1) + J(0,-1);
+                     Ixy = 0.25*(J(1,1) + J(-1,-1) - J(-1,1) - J(1,-1));
+                     (I + dt*(gx2*Ixx + gy2*Iyy + 2*gx*gy*Ixy))/(1 + 2*dt*(gx2 + gy2))
+                   )"
+          -done
+          -rm[-4,-3,-1]
+        -else # Isotropic diffusion
+          -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
+          -j. [-3],0,0,0,0,1,[-2] -rm[-3,-2]
+        -endif
       -endif
     -done
     -nm. $nm -rv[0,-1] -rm.
   -endl -rm. -done -v +
+
+# #@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_iter>=0
+# #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
+# #@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
+# #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
+# inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && ${3=50}>=0"
+#   -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $3 iterations of diffusion."
+#   -v - -repeat $! nm={n} -pass$1 1 -l[$>,-1]
+#     nb_scalesM={round(log2(max(w,h,d)))}
+#     nb_scales={round(${"-is_percent $2"}?$nb_scalesM*$2:$2)}
+#     nb_scales={max(1,min($nb_scales,$nb_scalesM))}
+#     -repeat $nb_scales
+#       scale={2^$<}
+#       width={0,max(1,round(w/$scale))}
+#       height={0,max(1,round(h/$scale))}
+#       depth={0,max(1,round(d/$scale))}
+#       $width,$height,$depth,{0,s} 100%,100%,100%
+#       -f[1] "init(
+#                wl1 = w#-1 - 1;
+#                hl1 = h#-1 - 1;
+#                dl1 = d#-1 - 1;
+#                w1 = max(1,w - 1);
+#                h1 = max(1,h - 1);
+#                d1 = max(1,d - 1);
+#              );
+#              if(i,i,
+#                X = round(x*wl1/w1);
+#                Y = round(y*hl1/h1);
+#                Z = round(z*dl1/d1);
+#                I(#-2,X,Y,Z) += I(#0,x,y,z);
+#                ++i(#-1,X,Y,Z);
+#              0)"
+#       --max. 1 -/[-3,-1] -!=. 0
+#       -if {!$>} # First scale -> Initialize by value propagation
+#         im={-2,im} --.. {$im-1} -*.. [-1]
+#         -distance. 1 -*. -1 -watershed.. [-1] -rm.
+#         -+. {$im-1}
+#       -else # Other scales -> Perform gaussian diffusion
+#         -mv[-3] $! -r. [-3],3
+#         nb_iter={max(5,$3/$scale)}
+#         -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
+#         -j. [-3],0,0,0,0,1,[-2]
+#         -rm[-3,-2]
+#       -endif
+#     -done
+#     -nm. $nm -rv[0,-1] -rm.
+#   -endl -rm. -done -v +
 
 #@gmic kuwahara : size>0
 #@gmic : Apply Kuwahara filter of specified size on selected images.
@@ -8777,15 +8848,15 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
 #@gmic : $$
 
-#@gmic solidify : _smoothness[%]>=0,_diffusion_iter>=0
+#@gmic solidify : _smoothness[%]>=0,_diffusion_type={ 0=isotropic | 1=anisotropic },_diffusion_iter>=0
 #@gmic : Solidify selected transparent images.
-#@gmic : Default values: 'smoothness=50%' and 'diffusion_iter=50'.
+#@gmic : Default values: 'smoothness=75%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -circle. 50%,50%,25%,1,255 -append c --solidify , -display_rgba
-solidify : -check "${1=50%}>=0 && ${2=50}>=0"
-  -e[^-1] "Solidify transparent image$? with smoothness $1 and $2 iterations of diffusion."
-  -v - -repeat $! -l[$>] -split_opacity
-    -le. 128 -inpaint_td.. [1],$1,$2 -rm.
-    -to_a
+solidify : -check "${1=75%}>=0 && isval(${2=1}) && ${3=20}>=0"
+  -v - s1="isotropic" s0="anisotropic"
+  -v + -e[^-1] "Solidify transparent image$? with smoothness $1 and $3 iterations of "${s{!$2}}" diffusion." -v -
+  -repeat $! -l[$>] -split_opacity
+    -if {$!>1} -le. 128 -inpaint_td.. [1],${1-3} -rm. -endif
   -endl -done -v +
 
 #@gmic syntexturize : _width[%]>0,_height[%]>0
@@ -21861,15 +21932,19 @@ _gimp_shapeism7 : # Custom
   -star3d $1,$2 -*3d. {0,min(w,h)/2} -r3d. 0,0,1,$3 -j3d[0] [-1],50%,50%,0,1,2,0 -k[0]
 
 #@gimp Smooth abstract : gimp_smooth_abstract, gimp_smooth_abstract_preview(0)
-#@gimp : Smoothness (%) = float(50,0,100)
+#@gimp : Smoothness (%) = float(75,0,100)
+#@gimp : Regularization = choice(0,"Isotropic","Anisotropic")
+#@gimp : Regularization iterations = int(20,0,100)
 #@gimp : Geometry = float(1,0,5)
-#@gimp : Details = float(10,0,20)
+#@gimp : Details = float(30,0,50)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
 gimp_smooth_abstract :
   -repeat $! -l[$>] -split_opacity -l[0]
-    mM={im},{iM} --b $2 -n. $mM -gradient_norm. -le. {20-$3}
-    -inpaint_td[0] [1],$1% -rm.
+    -srgb2rgb
+    mM={im},{iM} --b $4 -n. $mM -gradient_norm. -le. {50-$5}
+    -inpaint_td[0] [1],$1%,$2,$3 -rm.
+    -nm 0,255 -rgb2srgb
   -endl -a c -endl -done
 
 gimp_smooth_abstract_preview :
@@ -27867,22 +27942,25 @@ gimp_remove_hotpixels_preview :
   -gimp_split_preview "-gimp_remove_hotpixels $*",$-1
 
 #@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
-#@gimp : Smoothness (%) = float(50,0,100)
-#@gimp : Smoothing iterations = int(50,0,400)
+#@gimp : Smoothness (%) = float(75,0,100)
+#@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
+#@gimp : Regularization iterations = int(20,0,100)
 #@gimp : Dilation / erosion = int(0,-50,50)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b>
 #@gimp : This filter reconstructs transparent regions of an image using a transport-diffusion algorithm. Useful only for images having an alpha-channel.
 #@gimp : </small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/06/2016</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/07/2016</i>.</small>")
 gimp_solidify_td :
   -repeat $! -l[$>]
-    -if $3
-      -to_a [-1] -sh. 100% -if {$3>0} -erode. $3 -else -dilate. {-$3} -endif -rm.
-      -solidify. $1%,$2 -rv -blend alpha
+    -to_a -sh 0,{s-2} -srgb2rgb. -rm.
+    -if $4
+      [-1] -sh. 100% -if {$4>0} -erode. $4 -else -dilate. {-$4} -endif -rm.
+      -solidify. $1%,$2,$3
+      -rv -blend alpha -rgb2srgb
     -else
-      -solidify $1%,$2
+      -solidify $1%,$2,$3 -rgb2srgb.
     -endif
   -endl -done
 
