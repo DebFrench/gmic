@@ -8380,7 +8380,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4
           -if {d==1} # 2d version
             -gradient. xy -a[-2,-1] c -orientation.
             -repeat {$nb_iter}
-              -f.. "*init(boundary = 1; dt = 1024);
+              -f.. "*init(boundary = 1; dt = 1);
                      if (i(#-3,x,y,z,0),I,
                        gx = i(#-1,x,y,z,0);
                        gy = i(#-1,x,y,z,1);
@@ -8395,7 +8395,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4
           -else # 3d version
             -gradient. xyz -a[-3--1] c -orientation.
             -repeat {$nb_iter}
-              -f.. "*init(boundary = 1; dt = 1024);
+              -f.. "*init(boundary = 1; dt = 0.1);  # Semi-implicit scheme in 3d seems to be non stable for dt>0.1
                      if (i(#-3,x,y,z,0),I,
                        gx = i(#-1,x,y,z,0);
                        gy = i(#-1,x,y,z,1);
@@ -8412,9 +8412,9 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4
                        (I + dt*(gx2*Ixx + gy2*Iyy + gz2*Izz + 2*gx*gy*Ixy + 2*gx*gy*Ixz + 2*gy*gz*Iyz))/(1 + 2*dt*(gx2 + gy2 + gz2))
                      )"
             -done
-
           -endif
           -rm[-4,-3,-1]
+
         -else # Isotropic diffusion
           -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
           -j. [-3],0,0,0,0,1,[-2] -rm[-3,-2]
@@ -8827,9 +8827,9 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
 
 #@gmic solidify : _smoothness[%]>=0,_diffusion_type={ 0=isotropic | 1=anisotropic },_diffusion_iter>=0
 #@gmic : Solidify selected transparent images.
-#@gmic : Default values: 'smoothness=75%', 'diffusion_type=1' and 'diffusion_iter=20'.
+#@gmic : Default values: 'smoothness=100%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -circle. 50%,50%,25%,1,255 -append c --solidify , -display_rgba
-solidify : -check "${1=75%}>=0 && isval(${2=1}) && ${3=20}>=0"
+solidify : -check "${1=100%}>=0 && isval(${2=1}) && ${3=20}>=0"
   -v - s1="isotropic" s0="anisotropic"
   -v + -e[^-1] "Solidify transparent image$? with smoothness $1 and $3 iterations of "${s{!$2}}" diffusion." -v -
   -repeat $! -l[$>] -split_opacity
