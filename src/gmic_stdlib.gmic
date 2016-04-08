@@ -28978,14 +28978,14 @@ gimp_radial_gradient : -skip ${14=0}
     -_gb_bwd $14
   -endl -done
 
-#@gimp Gradient [random] : gimp_radial_random, gimp_radial_random
+#@gimp Gradient [random] : gimp_random_gradient, gimp_random_gradient
 #@gimp : Density = int(32,1,1024)
 #@gimp : Seed = int(0,0,65535)
 #@gimp : Smoothness = float(0,0,10)
-#@gimp : Prevalent color = color(128,128,128)
+#@gimp : Color balance = color(128,128,128)
 #@gimp : Opacity = float(1,0,1)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/08/2016</i>.</small>")
-gimp_radial_random :
+gimp_random_gradient :
   -repeat $! -l[$>]
     -to_rgba 100%,100% -srand $2
     -skip {"for (n=0, n<$1, ++n,
@@ -28997,6 +28997,7 @@ gimp_radial_random :
               i(#0,x,y,0,2) = round(u(255));
               i(#0,x,y,0,3) = $7*255 + (1-$7)*round(u(255));
            )"}
+    -if {$7!=1} -sh.. 100% -n. 0,255 -rm. -endif
     -eq. 0
     -sh.. 0,2 -srgb2rgb. -rm.
     -inpaint_td.. [1],100%,1 -rm.
