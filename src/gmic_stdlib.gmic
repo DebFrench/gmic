@@ -9404,7 +9404,7 @@ plot2value :
 #@gmic : Default values: 'type=0' and 'max_width=max_height=max_depth=0'.
 #@gmic : $ 3000,2 -rand 0,400 --pointcloud 0 -dilate. 3
 #@gmic : $ 3000,2 -rand 0,400 {w} {w},3 -rand. 0,255 -append y --pointcloud 0 -dilate. 3
-pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
+pointcloud : -check "${1=0}<=2" -skip ${2=0},${3=0},${4=0}
   -e[^-1] "Convert image$? to point clouds, in "${-arg\ 2+($1>=0)*$1-($1<0),{-$1}-opacity,binary,cumulative,labeling}" mode,"\
           "with ($2,$3,$4) as maximal dimensions."
   -v - -repeat $! -l[$>] nm={0,n}
@@ -9417,22 +9417,22 @@ pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
     -sh... 2,2,0,0 -round. dz={round(if($4==0,iM+1,if($4<0,min(iM+1,-$4),$4)))}
     -*. $dy -+.. [-1] -f. 0 -rm[-3--1]
 
-    # Create corresponding 3d object (manage large point clouds).
-    -s x,-1000000
-    -repeat $! -l[$>]
-      nbp={w}
-      -if {h>3} --rows 3,100% -rows.. 0,2 -else 100%,1,1,1,1 -if {$1==2} -f. 1+x -endif -endif
-      spectrum={h} -i.. (-128;1;1;{h}) -r.. {w} -a[-2,-1] y
-      -i... ({'CImg3d'}) -transpose[-3--1] -i... ($nbp;$nbp) # Header
-      -i.. 1,$nbp,1,1,1 -i.. 1,$nbp,1,1,y -a[-3,-2] x      # Vertices and primitives.
-      1,$nbp,1,1,{if($1<0,-$1,if($1==1,-1,1))}                 # Opacities.
-      -y[-4--2] -a y                                           # Merge object attributes.
-    -endl -done
-    -+3d
+    # Draw corresponding 3d volume.
+    -if {h<3} -r 100%,3,1,1,0 -endif
+    -if {h<4} 100%,1,1,1,1 -a[-2,-1] y -endif
+    -r {w},1,1,{h},-1
+    $dx,$dy,$dz,{$1!=2?s-3:1}
+    -if {$1<0}
+      -f.. ">V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) = (1+$1)*I(#-1,P) - $1*C; V"
+    -elif {$1==0}
+      -f.. ">V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) = C; V"
+    -elif {$1==1}
+      -f.. ">V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) += C; V"
+    -else
+      -f.. ">init(l = 0); V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) = ++l; V"
+    -endif
 
-    # Draw corresponding point cloud.
-    $dx,{$dy*$dz},1,$spectrum -j3d. [-2],0,0,0,1,0,0,0 -rm.. -r. $dx,$dy,$dz,100%,-1
-  -nm $nm -endl -done -v +
+  -k. -nm $nm -endl -done -v +
 
 #@gmic psnr : _max_value
 #@gmic : Compute PSNR (Peak Signal-to-Noise Ratio) matrix between selected images.
@@ -20350,6 +20350,7 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : <a href="www.ixaarii.com​">Void lon iXaarii</a>,
 #@gimp : Mark Boadey,
 #@gimp : Laura Haglund,
 #@gimp : Lee Elliott,
@@ -27892,7 +27893,7 @@ gimp_remove_hotpixels :
 gimp_remove_hotpixels_preview :
   -gimp_split_preview "-gimp_remove_hotpixels $*",$-1
 
-#@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
+#@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(1)
 #@gimp : Smoothness (%) = float(75,0,100)
 #@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
 #@gimp : Regularization iterations = int(20,0,100)
