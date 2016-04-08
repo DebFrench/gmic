@@ -8335,9 +8335,9 @@ _inpaint_patchmatch :
 
 #@gmic inpaint_td : [mask],_smoothness[%]>=0,_diffusion_type={ 0=isotropic | 1=anisotropic },_diffusion_iter>=0
 #@gmic : Inpaint selected images by specified mask using a multiscale transport-diffusion algorithm.
-#@gmic : Default values: 'smoothness=50%', 'diffusion_type=1' and 'diffusion_iter=20'.
+#@gmic : Default values: 'smoothness=75%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
-inpaint_td : -check ${-is_image_arg\ $1}" && ${2=50%}>=0 && isval(${3=1}) && ${4=20}>=0"
+inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isval(${3=1}) && ${4=20}>=0"
   -v - s1="isotropic" s0="anisotropic" -v +
   -v + -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $4 iterations of "${s{!$3}}" diffusion." -v -
   -repeat $! nm={n} -pass$1 1 -l[$>,-1]
@@ -8827,9 +8827,9 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=0}>=0 && ${3=0}>=0"
 
 #@gmic solidify : _smoothness[%]>=0,_diffusion_type={ 0=isotropic | 1=anisotropic },_diffusion_iter>=0
 #@gmic : Solidify selected transparent images.
-#@gmic : Default values: 'smoothness=100%', 'diffusion_type=1' and 'diffusion_iter=20'.
+#@gmic : Default values: 'smoothness=75%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -circle. 50%,50%,25%,1,255 -append c --solidify , -display_rgba
-solidify : -check "${1=100%}>=0 && isval(${2=1}) && ${3=20}>=0"
+solidify : -check "${1=75%}>=0 && isval(${2=1}) && ${3=20}>=0"
   -v - s1="isotropic" s0="anisotropic"
   -v + -e[^-1] "Solidify transparent image$? with smoothness $1 and $3 iterations of "${s{!$2}}" diffusion." -v -
   -repeat $! -l[$>] -split_opacity
@@ -27457,20 +27457,6 @@ gimp_plaid_texture :
     -/ $2
   -endl -done
 
-#@gimp Plasma : gimp_plasma, gimp_plasma(0)
-#@gimp : Alpha = float(0.5,0,5)
-#@gimp : Beta = float(0,0,100)
-#@gimp : Scale = int(8,2,10)
-#@gimp : Randomize = bool(0)
-#@gimp : Transparency = bool(0)
-#@gimp : Color balance = color(128,128,128)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/20/2011</i>.</small>")
-gimp_plasma :  -skip ${4=0},${5=0}
-  -if $5 -to_rgba -else -to_rgb -endif
-  -if $4 -rand 0,255 -endif
-  -plasma $1,$2,$3 -n 0,255
-  -balance_gamma ${6-8}
-
 #@gimp Polka dots : gimp_polka_dots, gimp_polka_dots(1)
 #@gimp : Size = float(80,0,100)
 #@gimp : Density = float(20,0.1,100)
@@ -27677,18 +27663,6 @@ gimp_truchet :
     -endif
     -a c -b $3 -n 0,255
   -endl -done
-
-#@gimp Turbulence : gimp_turbulence, gimp_turbulence
-#@gimp : Radius = float(128,1,1024)
-#@gimp : Octaves = int(6,1,12)
-#@gimp : Damping per octave = float(4,1,10)
-#@gimp : Difference mixing = float(0,-10,10)
-#@gimp : Mode = choice("Turbulence","Turbulence 2","Fractal Noise","Fractured Clouds","Stardust","Pea Soup")
-#@gimp : sep = separator(), note = note("<small>Author: <i>Preben Soeberg</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_turbulence :
-  -repeat $! -l[$>] -split_opacity -l[0]
-    -turbulence ${^0}
-  -endl -a c -endl -done
 
 #@gimp Weave : weave, weave(1)
 #@gimp : Density = int(6,1,32)
@@ -27919,7 +27893,7 @@ gimp_remove_hotpixels_preview :
   -gimp_split_preview "-gimp_remove_hotpixels $*",$-1
 
 #@gimp Solidify : gimp_solidify_td, gimp_solidify_td_preview(0)
-#@gimp : Smoothness (%) = float(100,0,100)
+#@gimp : Smoothness (%) = float(75,0,100)
 #@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
 #@gimp : Regularization iterations = int(20,0,100)
 #@gimp : Dilation / erosion = int(0,-50,50)
@@ -29004,6 +28978,32 @@ gimp_radial_gradient : -skip ${14=0}
     -_gb_bwd $14
   -endl -done
 
+#@gimp Gradient [random] : gimp_radial_random, gimp_radial_random
+#@gimp : Density = int(32,1,1024)
+#@gimp : Seed = int(0,0,65535)
+#@gimp : Smoothness = float(0,0,10)
+#@gimp : Prevalent color = color(128,128,128)
+#@gimp : Opacity = float(1,0,1)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/08/2016</i>.</small>")
+gimp_radial_random :
+  -repeat $! -l[$>]
+    -to_rgba 100%,100% -srand $2
+    -skip {"for (n=0, n<$1, ++n,
+              x = round(u(w-1));
+              y = round(u(h-1));
+              i(x,y) = 1;
+              i(#0,x,y,0,0) = round(u(255));
+              i(#0,x,y,0,1) = round(u(255));
+              i(#0,x,y,0,2) = round(u(255));
+              i(#0,x,y,0,3) = $7*255 + (1-$7)*round(u(255));
+           )"}
+    -eq. 0
+    -sh.. 0,2 -srgb2rgb. -rm.
+    -inpaint_td.. [1],100%,1 -rm.
+    -b $3% -n 0,255
+    -sh 0,2 -rgb2srgb. -balance_gamma. ${4-6} -rm.
+  -endl -done
+
 #@gimp Heart : gimp_heart, gimp_heart_preview
 #@gimp : Size = float(75,0,100)
 #@gimp : Smoothness = float(0,0,10)
@@ -29028,7 +29028,7 @@ gimp_heart_preview :
 #@gimp : Smoothness = float(1.5,0,10)
 #@gimp : Balance = float(0.75,0,1)
 #@gimp : Color = color(255,255,255,255)
-#@gimp : Seed = int(0,0,65536)
+#@gimp : Seed = int(0,0,65535)
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Initial streak:</b></small>"}
 #@gimp : X-coordinate (%) = float(50,0,100)
@@ -29209,6 +29209,20 @@ gimp_neon_lightning :
     -a c -c 0,255
   -endl -done
 
+#@gimp Plasma : gimp_plasma, gimp_plasma(0)
+#@gimp : Alpha = float(0.5,0,5)
+#@gimp : Beta = float(0,0,100)
+#@gimp : Scale = int(8,2,10)
+#@gimp : Randomize = bool(0)
+#@gimp : Transparency = bool(0)
+#@gimp : Color balance = color(128,128,128)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/20/2011</i>.</small>")
+gimp_plasma :  -skip ${4=0},${5=0}
+  -if $5 -to_rgba -else -to_rgb -endif
+  -if $4 -rand 0,255 -endif
+  -plasma $1,$2,$3 -n 0,255
+  -balance_gamma ${6-8}
+
 #@gimp Quick copyright : gimp_quick_copyright, gimp_quick_copyright(0)
 #@gimp : Text = text{"\\251 G'MIC"}
 #@gimp : Size = int(27,13,128)
@@ -29358,6 +29372,17 @@ gimp_superformula :
     -sh. 3 -*. $15 -rm.
     -+[-2,-1]
   -endl -done
+
+#@gimp Turbulence : gimp_turbulence, gimp_turbulence
+#@gimp : Radius = float(128,1,1024)
+#@gimp : Octaves = int(6,1,12)
+#@gimp : Damping per octave = float(4,1,10)
+#@gimp : Difference mixing = float(0,-10,10)
+#@gimp : Mode = choice("Turbulence","Turbulence 2","Fractal Noise","Fractured Clouds","Stardust","Pea Soup")
+#@gimp : sep = separator(), note = note("<small>Author: <i>Preben Soeberg</i>.      Latest update: <i>12/29/2010</i>.</small>")
+gimp_turbulence :
+  -remove_opacity -turbulence ${^0}
+
 
 #@gimp _<b>Sequences</b>
 #-----------------------
@@ -30704,7 +30729,7 @@ gmicol_light_leaks_preview :
 #@gmicol clone("Stencil")
 #@gmicol clone("Strip")
 #@gmicol clone("Tetris")
-#@gmicol clone("Turbulence")
+#@gmicol clone("Truchet")
 #@gmicol clone("Weave")
 #@gmicol clone("Whirls")
 
@@ -30727,6 +30752,7 @@ gmicol_light_leaks_preview :
 #@gmicol clone("Gradient [custom shape]")
 #@gmicol clone("Gradient [linear]")
 #@gmicol clone("Gradient [radial]")
+#@gmicol clone("Gradient [random]")
 #@gmicol clone("Heart")
 #@gmicol clone("Lightning")
 #@gmicol clone("Lissajous")
@@ -30760,7 +30786,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol clone("Snowflake")
 #@gmicol clone("Stars")
 #@gmicol clone("Superformula")
-#@gmicol clone("Truchet")
+#@gmicol clone("Turbulence")
 #@gmicol clone("Wiremap")
 
 #@gmicol _<b>Repair</b>
