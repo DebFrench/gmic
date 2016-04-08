@@ -8395,7 +8395,7 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isval(${3=1}) && ${4
           -else # 3d version
             -gradient. xyz -a[-3--1] c -orientation.
             -repeat {$nb_iter}
-              -f.. "*init(boundary = 1; dt = 0.1);  # Semi-implicit scheme in 3d seems to be non stable for dt>0.1
+              -f.. "*init(boundary = 1; dt = 0.01);  # Semi-implicit scheme in 3d seems to be non stable for dt>0.1
                      if (i(#-3,x,y,z,0),I,
                        gx = i(#-1,x,y,z,0);
                        gy = i(#-1,x,y,z,1);
@@ -9419,7 +9419,7 @@ pointcloud : -check "${1=0}<=2" -skip ${2=0},${3=0},${4=0}
     -sh... 2 -round. dz={round(if($4==0,iM+1,if($4<0,min(iM+1,-$4),$4)))}
     -rm[-3--1]
 
-    # Draw corresponding 3d volume.
+    # Draw point cloud.
     $dx,$dy,$dz,{$1!=2?s-3:1}
     -if {$1<0}
       -f.. ">V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) = (1+$1)*I(#-1,P) - $1*C; V"
