@@ -8380,36 +8380,20 @@ inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isval(${3=1}) && ${4
           -if {d==1} # 2d version
             -gradient. xy -a[-2,-1] c -orientation.
             -repeat {$nb_iter}
-              -f.. "*init(boundary = 1; dt = 1);
-                     if (i(#-3,x,y,z,0),I,
+              -f.. "*if (i(#-3,x,y,z,0),I,
                        gx = i(#-1,x,y,z,0);
                        gy = i(#-1,x,y,z,1);
-                       gx2 = gx*gx;
-                       gy2 = gy*gy;
-                       Ixx = J(1) + J(-1);
-                       Iyy = J(0,1) + J(0,-1);
-                       Ixy = 0.25*(J(1,1) + J(-1,-1) - J(-1,1) - J(1,-1));
-                       (I + dt*(gx2*Ixx + gy2*Iyy + 2*gx*gy*Ixy))/(1 + 2*dt*(gx2 + gy2))
+                       (I(x + gx,y + gy,z,1,1) + I(x - gx,y - gy,z,1,1))/2;
                      )"
             -done
           -else # 3d version
             -gradient. xyz -a[-3--1] c -orientation.
             -repeat {$nb_iter}
-              -f.. "*init(boundary = 1; dt = 0.1);  # Semi-implicit scheme in 3d seems to be non stable for dt>0.1
-                     if (i(#-3,x,y,z,0),I,
+              -f.. "*if (i(#-3,x,y,z,0),I,
                        gx = i(#-1,x,y,z,0);
                        gy = i(#-1,x,y,z,1);
                        gz = i(#-1,x,y,z,2);
-                       gx2 = gx*gx;
-                       gy2 = gy*gy;
-                       gz2 = gz*gz;
-                       Ixx = J(1) + J(-1);
-                       Iyy = J(0,1) + J(0,-1);
-                       Izz = J(0,0,1) + J(0,0,-1);
-                       Ixy = 0.25*(J(1,1) + J(-1,-1) - J(-1,1) - J(1,-1));
-                       Ixz = 0.25*(J(1,0,1) + J(-1,0,-1) - J(-1,0,1) - J(1,0,-1));
-                       Iyz = 0.25*(J(0,1,1) + J(0,-1,-1) - J(0,-1,1) - J(0,1,-1));
-                       (I + dt*(gx2*Ixx + gy2*Iyy + gz2*Izz + 2*gx*gy*Ixy + 2*gx*gy*Ixz + 2*gy*gz*Iyz))/(1 + 2*dt*(gx2 + gy2 + gz2))
+                       (I(x + gx,y + gy,z + gz,1,1) + I(x - gx,y - gy,z - gz,1,1))/2;
                      )"
             -done
           -endif
