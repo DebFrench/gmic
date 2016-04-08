@@ -8338,9 +8338,9 @@ _inpaint_patchmatch :
 #@gmic : Default values: 'smoothness=75%', 'diffusion_type=1' and 'diffusion_iter=20'.
 #@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_td[0] [1]
 inpaint_td : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isval(${3=1}) && ${4=20}>=0"
-  -v - s1="isotropic" s0="anisotropic" -v +
+  -v - s1="isotropic" s0="anisotropic"
   -v + -e[^-1] "Inpaint image$? by mask $1, using a multiscale transport-diffusion algorithm, smoothness $2 and $4 iterations of "${s{!$3}}" diffusion." -v -
-  -repeat $! nm={n} -pass$1 1 -l[$>,-1]
+  -repeat $! nm={n} -pass$1 -l[$>,-1]
     nb_scalesM={round(log2(max(w,h,d)))}
     nb_scales={round(${"-is_percent $2"}?$nb_scalesM*$2:$2)}
     nb_scales={max(1,min($nb_scales,$nb_scalesM))}
