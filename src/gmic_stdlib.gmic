@@ -9411,16 +9411,15 @@ pointcloud : -check "${1=0}<=2" -skip ${2=0},${3=0},${4=0}
     -if {"d>1 || s>1"} -error "Command '-pointcloud': Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
 
     # Retrieve coordinates and color info.
-    -rows 0,{max(2,h-1)}
-    -sh. 0,0,0,0 -round. dx={round(if($2==0,iM+1,if($2<0,min(iM+1,-$2),$2)))}
-    -sh.. 1,1,0,0 -round. dy={round(if($3==0,iM+1,if($3<0,min(iM+1,-$3),$3)))}
-    -sh... 2,2,0,0 -round. dz={round(if($4==0,iM+1,if($4<0,min(iM+1,-$4),$4)))}
-    -*. $dy -+.. [-1] -f. 0 -rm[-3--1]
-
-    # Draw corresponding 3d volume.
     -if {h<3} -r 100%,3,1,1,0 -endif
     -if {h<4} 100%,1,1,1,1 -a[-2,-1] y -endif
     -r {w},1,1,{h},-1
+    -sh. 0 -round. dx={round(if($2==0,iM+1,if($2<0,min(iM+1,-$2),$2)))}
+    -sh.. 1 -round. dy={round(if($3==0,iM+1,if($3<0,min(iM+1,-$3),$3)))}
+    -sh... 2 -round. dz={round(if($4==0,iM+1,if($4<0,min(iM+1,-$4),$4)))}
+    -rm[-3--1]
+
+    # Draw corresponding 3d volume.
     $dx,$dy,$dz,{$1!=2?s-3:1}
     -if {$1<0}
       -f.. ">V = I; P = V[0,2]; C = V[3,size(V) - 1]; I(#-1,P) = (1+$1)*I(#-1,P) - $1*C; V"
