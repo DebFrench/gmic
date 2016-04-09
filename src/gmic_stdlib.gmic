@@ -8161,27 +8161,6 @@ inpaint_flow : -check ${-is_image_arg\ $1}" && ${2=10}>=0 && ${3=100}>=0 && ${4=
     -progress 100
   -endl -rm. -done -v +
 
-#@gmic inpaint_gaussian : [mask],_smoothness[%]>=0,_iter_length>0,_iter_smoothness_power>0,_feathering>=0
-#@gmic : Replace transparent regions of a RGBA image by linearly interpolated color.
-#@gmic : Default values: 'smoothness=3', 'iter_length=3', 'iter_smoothness_power=1.25' and 'feathering=10'.
-#@gmic : $ image.jpg 100%,100% -ellipse. 30%,30%,40,30,0,1,255 --inpaint_gaussian[0] [1],0.2%
-inpaint_gaussian : -check ${-is_image_arg\ $1}" && ${2=0.5}>=0 && ${3=2}>0 && ${4=1.1}>0 && ${5=16}>=0"
-  -e[^-1] "Inpaint image$? by mask $1, using gaussian interpolation, smoothness $2, iteration length $3, iteration smoothness power $4 and feathering $5."
-  -v - -repeat $! -pass$1 0 -channels. 0 -eq. 0 -l[$>,-1] nm={0,n}
-    -*.. [1]
-    sigma={max(0.1,if(${"-is_percent $2"},max(w,h)*$2,$2))}
-    is_first_iter=1
-    -do
-      --b[0,1] $sigma -max. {10^-$3} -/.. [-1]
-      -le. {10^-$3}
-      -if {$5" && "!$is_first_iter} -distance... 0 -c... 0,$5 -/... $5 is_first_iter=0 -endif
-      -j.. [0],0,0,0,0,1,[1]
-      -j.. [0],0,0,0,0,1,[-1]
-      -rm[0,1] -==. 0
-      sigma={max(2,$sigma^$4)}
-    -while {!im}
-  -nm[0] $nm -endl -rm. -done -v +
-
 #@gmic inpaint_holes : maximal_area[%]>=0,_tolerance>=0,_is_high_connectivity={ 0 | 1 }
 #@gmic : Inpaint all connected regions having an area less than specified value.
 #@gmic : Default values: 'maximal_area=4', 'tolerance=0' and 'is_high_connectivity=0'.
@@ -8230,7 +8209,7 @@ inpaint_patchmatch : -check ${-is_image_arg\ $1}"&& ${2=0}>=0 && isint(${3=9}) &
     nb_scales={max(1,round(if($2,$2,log2(min(w,h)/16)),1,1))}
     visu_size=${-fitscreen[]" "{0,w},{0,h},1,25%,50%}
     -slices[img] 0 -r[mask] [img],[img],1,1,0 -!=[mask] 0
-    -if {!$7} -inpaint_gaussian[img] [mask],0,6,2 -endif # Quick first estimate.
+    -if {!$7} -inpaint_td[img] [mask],75% -endif # Quick first estimate.
     im={img,im} --[img] $im
 
     first_iter=1 iter=0
@@ -27678,45 +27657,6 @@ gimp_deinterlace :
 gimp_deinterlace_preview :
   -gimp_split_preview "-gimp_deinterlace $*",$-1
 
-#@gimp Inpaint [diffusion] : gimp_inpaint_diffusion, gimp_no_preview
-#@gimp : Global iterations = _int(20,1,100)
-#@gimp : Local iterations = _int(100,1,300)
-#@gimp : Time step = _float(15,5,50)
-#@gimp : Gradient smoothness = _float(1,0,10)
-#@gimp : Tensor smoothness = _float(2,0,10)
-#@gimp : Mask color = _color(255,0,0,255)
-#@gimp : Mask dilation = _int(0,0,32)
-#@gimp : sep = separator(), note = note{"<small><b>Note:</b> It is strongly suggested to apply this filter only on a selection around the region to inpaint, to save computation time!</small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/25/2015</i>.</small>")
-gimp_inpaint_diffusion :
-  -repeat $! -l[$>]
-    R=$6 G=$7 B=$8 A=$9
-    -if {!$A" && "(s==2" || "s==4)} -split_opacity --!=. 0 -*[0,-1] -a c R=0 G=0 B=0 -endif # Purely transparent color.
-    --select_color 0,$R,$G,$B,$A
-    -if $10 -dilate. {1+2*$10} -endif
-    -inpaint_flow.. [1],${1-5} -c 0,255
-    -rm.
-  -endl -done
-
-#@gimp Inpaint [gaussian] : gimp_inpaint_gaussian, gimp_no_preview
-#@gimp : Smoothness = _float(0,0,10)
-#@gimp : Iteration length = _float(3,0,10)
-#@gimp : Iteration smoothness power = _float(1.25,1,5)
-#@gimp : Feathering = _int(8,0,64)
-#@gimp : Mask color = _color(255,0,0,255)
-#@gimp : Mask dilation = _int(0,0,32)
-#@gimp : sep = separator(), note = note{"<small><b>Note:</b> It is strongly suggested to apply this filter only on a selection around the region to inpaint, to save computation time!</small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/25/2015</i>.</small>")
-gimp_inpaint_gaussian :
-  -repeat $! -l[$>]
-    R=$5 G=$6 B=$7 A=$8
-    -if {!$A" && "(s==2" || "s==4)} -split_opacity --!=. 0 -*[0,-1] -a c R=0 G=0 B=0 -endif # Purely transparent color.
-    --select_color 0,$R,$G,$B,$A
-    -if $9 -dilate. {1+2*$9} -endif
-    -inpaint_gaussian.. [1],${1-4}
-    -rm.
-  -endl -done
-
 #@gimp Inpaint [holes] : gimp_inpaint_holes, gimp_inpaint_holes(0)
 #@gimp : Maximal area = float(4,1,512)
 #@gimp : Tolerance = float(20,0,255)
@@ -27725,7 +27665,7 @@ gimp_inpaint_gaussian :
 gimp_inpaint_holes :
   -inpaint_holes {$1^1.5},$2,$3
 
-#@gimp Inpaint [morphological] : gimp_inpaint_morpho, gimp_no_preview
+#@gimp Inpaint [morphological] : gimp_inpaint_morpho, gimp_inpaint_morpho_preview(1)
 #@gimp : Mask color = _color(255,0,0,255)
 #@gimp : Mask dilation = _int(0,0,32)
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b> It is strongly suggested to apply this filter only on a selection around the region to inpaint, to save computation time!</small>"}
@@ -27740,7 +27680,10 @@ gimp_inpaint_morpho :
     -rm.
   -endl -done
 
-#@gimp Inpaint [multi-scale] : gimp_inpaint_patchmatch, gimp_inpaint_patchmatch_preview
+gimp_inpaint_morpho_preview :
+  -gimp_inpaint_morpho ${1-4},{1+$5}
+
+#@gimp Inpaint [multi-scale] : gimp_inpaint_patchmatch, gimp_inpaint_patchmatch_preview(1)
 #@gimp : Number of scales = _int(0,0,16)
 #@gimp : note = note{"<small>(Set <i>Number of scales</i> to <i>0</i> for automatic scale detection)</small>"}
 #@gimp : Patch size = _int(9,1,64)
@@ -27750,6 +27693,7 @@ gimp_inpaint_morpho :
 #@gimp : Mask color = _color(255,0,0,255)
 #@gimp : Mask dilation = _int(0,0,32)
 #@gimp : sep = separator(), Preview progression while running = _bool(0)
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b> Preview and final result may strongly differ.</small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/25/2015</i>.</small>")
 gimp_inpaint_patchmatch :
   -repeat $! -l[$>]
@@ -27765,10 +27709,10 @@ gimp_inpaint_patchmatch :
     -rm.
   -endl -done
 
-gimp_inpaint_patchmatch_preview : -skip $*
-  -if ${"-gimp_check_version 168"} -gimp_no_preview 0 -endif
+gimp_inpaint_patchmatch_preview :
+  -gimp_inpaint_patchmatch ${1-9},{1+$10},0
 
-#@gimp Inpaint [patch-based] : gimp_inpaint_patch, gimp_no_preview
+#@gimp Inpaint [patch-based] : gimp_inpaint_patch, gimp_inpaint_patch_preview
 #@gimp : Patch size = _int(7,1,64)
 #@gimp : Lookup size = _float(16,1,32)
 #@gimp : Lookup factor = _float(0.1,0,1)
@@ -27790,58 +27734,28 @@ gimp_inpaint_patch :
     -rm.
   -endl -done
 
-#@gimp Inpaint [solidify] : gimp_solidify, gimp_solidify_preview(0)
-#@gimp : Interpolation type = choice("Linear","Morphological")
-#@gimp : sep = separator(), note = note("<small><b>For linear method only :</b></small>")
-#@gimp : Smoothness = float(1.5,1,5)
-#@gimp : Smoothness factor = float(1,1,1.2)
-#@gimp : Precision = float(0.5,0,1)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small><b>Note:</b>
-#@gimp : This filter replaces <b>transparent</b> regions by interpolated colors. It may take long to render!
-#@gimp : </small>")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/01/2011</i>.</small>")
-gimp_solidify :
-  -if $1 -_gimp_solidify
-  -else -_gimp_solidify_linear $2,$3,$4
-  -endif
+gimp_inpaint_patch_preview :
+  -gimp_inpaint_patch ${1-12},{1+$13}
 
-gimp_solidify_preview :
-  -gimp_split_preview "-gimp_solidify $*",$-1
-
-_gimp_solidify :
-  -repeat $! -l[$>] nm={0,n} -to_a
-    [-1] -split_opacity.. ->=.. 50% -*. [-2]
-    -replace_color. 0,0,0,0,0,0,-1,-1,-1,-1 -to_rgb.
-    -do
-      --dilate. 3
-      -replace_color.. 0,0,-1,-1,-1,1000,1000,1000
-      -erode.. 3
-      -replace_color.. 0,0,1000,1000,1000,-1,-1,-1
-      -+[-2,-1] -/. 2
-      -j. [-3],0,0,0,0,1,[-2]
-    -while {im<0}
-    -k.
-  -nm $nm -endl -done
-
-_gimp_solidify_linear :
+#@gimp Inpaint [transport-diffusion] : gimp_inpaint_td, gimp_inpaint_td_preview(1)
+#@gimp : Smoothness (%) = float(75,0,100)
+#@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
+#@gimp : Regularization iterations = int(20,0,100)
+#@gimp : Mask color = _color(255,0,0,255)
+#@gimp : Mask dilation = _int(0,0,32)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/10/2016</i>.</small>")
+gimp_inpaint_td :
   -repeat $! -l[$>]
-    -split_opacity
-    -if {$!>1}
-      ->=. 50% -*.. [-1]
-      sigma=$1 -do
-        N={v=round(3*$sigma);min(33,max(3,v+1-(v%2)))}
-        $N,$N -=. 1,50%,50% -distance. 1 -*. {-1/$sigma^2} -exp. -normalize_sum.
-        --convolve[-3,-2] [-1] -rm...
-        -max. 1e-5 -/[-2,-1]
-        --dilate.. {v=round((1/3-$N/6)*$3+$N/2);max(3,v+1-(v%2))}
-        --... [-1] -*.. [-3] -rm...
-        --[-3,-2]
-        sigma*=2
-      -while {!im}
-     -rm.
-   -endif
- -endl -done
+    R=$4 G=$5 B=$6 A=$7
+    -if {!$A" && "(s==2" || "s==4)} -split_opacity --!=. 0 -*[0,-1] -a c R=0 G=0 B=0 -endif # Purely transparent color.
+    --select_color 0,$R,$G,$B,$A
+    -if $8 -dilate. {1+2*$8} -endif
+    -inpaint_td.. [1],$1%,$2,$3
+    -rm.
+  -endl -done
+
+gimp_inpaint_td_preview :
+  -gimp_inpaint_td ${1-7},{1+$8}
 
 #@gimp Red-eye attenuation : red_eye, red_eye
 #@gimp : Threshold = float(75,0,100)
@@ -27864,7 +27778,7 @@ gimp_remove_hotpixels_preview :
 #@gimp : Smoothness (%) = float(75,0,100)
 #@gimp : Regularization = choice(1,"Isotropic","Anisotropic")
 #@gimp : Regularization iterations = int(20,0,100)
-#@gimp : Dilation / erosion = int(0,-50,50)
+#@gimp : Dilation / erosion = int(0,-20,20)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b>
@@ -27875,7 +27789,7 @@ gimp_solidify_td :
   -repeat $! -l[$>]
     -to_a -sh 0,{s-2} -srgb2rgb. -rm.
     -if $4
-      [-1] -sh. 100% -if {$4>0} -erode. $4 -else -dilate. {-$4} -endif -rm.
+      [-1] -sh. 100% -if {$4>0} -erode. {1+2*$4} -else -dilate. {1-2*$4} -endif -rm.
       -solidify. $1%,$2,$3
       -rv -blend alpha -rgb2srgb
     -else
@@ -30763,12 +30677,11 @@ gmicol_rgb_distribution_preview :
 
 #@gmicol clone("Bayer reconstruction")
 #@gmicol clone("Deinterlace")
-#@gmicol clone("Inpaint [diffusion]")
-#@gmicol clone("Inpaint [gaussian]")
 #@gmicol clone("Inpaint [holes]")
 #@gmicol clone("Inpaint [morphological]")
 #@gmicol clone("Inpaint [multi-scale]")
 #@gmicol clone("Inpaint [patch-based]")
+#@gmicol clone("Inpaint [transport-diffusion]")
 #@gmicol clone("Red-eye attenuation")
 #@gmicol clone("Remove hot pixels")
 #@gmicol clone("Smooth [anisotropic]")
