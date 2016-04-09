@@ -30698,6 +30698,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol clone("Smooth [thin brush]")
 #@gmicol clone("Smooth [total variation]")
 #@gmicol clone("Smooth [wavelets]")
+#@gmicol clone("Solidify")
 #@gmicol clone("Unstrip")
 #@gmicol clone("Upscale [diffusion]")
 #@gmicol clone("Upscale [dcci2x]")
