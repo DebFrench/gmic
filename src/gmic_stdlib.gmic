@@ -20296,6 +20296,8 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : Frank McLaughlin,
+#@gimp : Jonas Wagner,
 #@gimp : <a href="www.ixaarii.com​">Void lon iXaarii</a>,
 #@gimp : Mark Boadey,
 #@gimp : Laura Haglund,
