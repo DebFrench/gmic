@@ -12999,6 +12999,74 @@ boxfitting : -check "isint(${1=3}) && $1>=1 && isint(${2=0}) && $2>=0 && ${3=0.1
     -blend shapeaverage0
   -endl -done -v +
 
+#@gmic brushify : [brush],density[%]>=0,nb_orientations>=1,_light_type={ 0=none | 1=flat | 2=darker | 3=lighter | 4=full},-1<=_light_strength<=1,_main_angle,0<=_angle_dispersion<=1,0<=coherence<=1,alpha>=0,sigma>=0,_opacity
+#@gmic : Apply specified brush to create painterly versions of specified images.
+#@gmic : Default values: 'density=20%', 'nb_orientations=16', 'light_type=0', 'light_strength=0.25', 'main_angle=0', 'angle_dispersion=0.2', 'coherence=0.9', 'alpha=1', 'sigma=1' and 'opacity=0.8'.
+#@gmic : $ image.jpg 40,40 -gaussian. 8,2 -spread. 4,0 --brushify[0] [1],20%,16,4
+brushify : -check ${"-is_image_arg $1"}" &&"\      # [brush]
+                    "${2=20%}>=0 &&"\              # density[%]
+                    "isint(${3=16}) && $3>=1 &&"\  # nb_orientations
+                    "isint(${4=0}) && $4>=0 &&"\   # light_type
+                    "isval(${5=0.25}) &&"\         # light_strength
+                    "isval(${6=0}) &&"\            # main_angle
+                    "${7=0.2}>=0 && $7<=1 &&"\     # angle_dispersion
+                    "${8=0.9}>=0 && $8<=1 &&"\     # coherence
+                    "${9=1}>=0 && ${10=1}>=0 &&"\  # alpha and sigma
+                    "isval(${11=0.8})"             # opacity
+  -e[^-1] "Brushify image$?, with brush $1."
+  -v -
+
+  # Generate set of oriented brushes.
+  -pass$1 0 -l.
+    -slices 0 -norm -n 0,1 -threshold 0.1,1 -autocrop.
+    -repeat $3 --rotate[0] {180*$>/$3} -done
+    -rm[0] -n 0,1 -threshold 0.1,1 -autocrop -r ${-max_wh},1,1,0,0,0.5,0.5
+    -a z -nm brush
+    wb={w} hb={h} whb={wh} ls={255*$5}
+    -if {$4==0} --f. 0
+    -elif {$4==1} --n. -$ls,0
+    -elif {$4==2} --g xy -+[-2,-1] -min. 0 -n. -$ls,0
+    -elif {$4==3} --g xy -+[-2,-1] -max. 0 -n. 0,$ls
+    -else --g xy -+[-2,-1] -n. -$ls,$ls
+    -endif
+    -nm. brushlight
+  -endl
+
+  # Generate images with brushes.
+  -repeat {$!-2} -l[$>,brush,brushlight]
+    -to_rgb[0] nm={0,n} -nm[0] img
+
+    # Generate set of random points with orientations.
+    --diffusiontensors[img] 0.1,$8,$9,$10 -nm. geometry
+    1,{img,${"-is_percent $2"}?wh*$2:$2} -rand. 0,{img,w-1} --rand. 0,{img,h-1} -a[-2,-1] c -nm. pts
+    [img],[img],1,4 -nm. res
+
+    # Render filter.
+    -f[pts] "*
+      init(
+        S2 = round(0.5*["$wb","$hb"]);
+        brush_r = brush_g = brush_b = brush_a = vector"$whb"(255);
+        ang = $6*pi/180;
+        cu = [ cos(ang),sin(ang) ];
+        cv = [ -cu[1],cu[0] ];
+        T = mul(cu,cu,2) + $7*mul(cv,cv,2);
+      );
+      P = I;
+      G = I(#"$geometry",P);
+      ang = u(pi);
+      V = [ G[0],G[1],G[1],G[2] ]**(T**[ cos(ang),sin(ang) ]);
+      ang = round(((atan2(V[1],V[0])%pi)*d#"$brush"/pi))%d#"$brush";
+      col = I(#"$img",P);
+      brush = crop(#"$brush",0,0,ang,0,"$wb","$hb",1,1);
+      brushlight = crop(#"$brushlight",0,0,ang,0,"$wb","$hb",1,1);
+      brush_r = cut(col[0] + brushlight,0,255);
+      brush_g = cut(col[1] + brushlight,0,255);
+      brush_b = cut(col[2] + brushlight,0,255);
+      draw(#"$res",[brush_r,brush_g,brush_b,brush_a],P - S2,"$wb","$hb",1,4,$11,brush,1);
+      P"
+    -k[res,brush,brushlight] -mv[res] 0 -nm[0] $nm
+  -endl -done -rm[brush,brushlight] -v +
+
 #@gmic cartoon : _smoothness,_sharpening,_threshold>=0,_thickness>=0,_color>=0,quantization>0
 #@gmic : Apply cartoon effect on selected images.
 #@gmic : Default values: 'smoothness=3', 'sharpening=150', 'threshold=20', 'thickness=0.25', 'color=1.5' and 'quantization=8'.
