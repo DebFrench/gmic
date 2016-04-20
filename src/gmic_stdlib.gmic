@@ -25963,10 +25963,19 @@ gimp_emulate_film_various_preview :
 _gimp_emulate_film :
   -if $1
     -if {narg($_force_redownload)}
-      -i http://gmic.eu/data_film_presets/$2.cimgz -o. ${-path_rc}film_$2.cimgz
+      -l[]
+        -i http://gmic.eu/film_presets.gmz
+        -if {isval($$2)} -k[$2] -else -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done -endif
+        -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
+      -endl
     -else
       -if ${-path_rc}film_$2.cimgz -i ${-path_rc}film_$2.cimgz
-      -else -i http://gmic.eu/data_film_presets/$2.cimgz -o. ${-path_rc}film_$2.cimgz
+      -else
+        -l[]
+          -i http://gmic.eu/film_presets.gmz
+          -if {isval($$2)} -k[$2] -else -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done -endif
+          -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
+        -endl
       -endif
     -endif
 
