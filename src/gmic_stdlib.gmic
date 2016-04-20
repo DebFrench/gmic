@@ -25965,7 +25965,7 @@ _gimp_emulate_film :
     -if {narg($_force_redownload)}
       -l[]
         -i http://gmic.eu/film_presets.gmz
-        -if {isval($$2)} -k[$2] -else -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done -endif
+        -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
         -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
       -endl
     -else
@@ -25973,7 +25973,7 @@ _gimp_emulate_film :
       -else
         -l[]
           -i http://gmic.eu/film_presets.gmz
-          -if {isval($$2)} -k[$2] -else -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done -endif
+          -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
           -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
         -endl
       -endif
