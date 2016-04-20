@@ -5338,6 +5338,16 @@ uncompress_rle :
     -a x -r $whds,-1 -+ $im
   -endl -done -v +
 
+#@gmic uncompress_clut : _width>0,_height>0,_depth>0
+#@gmic : Uncompress color LUT expressed as a list of colored keypoints.
+#@gmic : Default value: 'width=height=depth=64'.
+uncompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
+  -e[^-1] "Uncompress color LUT$? into a $1x$2$x3 volumetric image."
+  -v - -repeat $! -l[$>]
+    -s x -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -a x
+    -transpose 100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -c 0,255
+  -endl -done -v +
+
 #@gmic unrepeat
 #@gmic : Remove repetition of adjacent values in selected images.
 #@gmic : $ (1;1;1;1;1;2;2;2;3;4;4;4;5;5;5) --unrepeat
