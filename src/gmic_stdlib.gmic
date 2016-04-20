@@ -30463,6 +30463,7 @@ gmicol_rotate :
 #@gmicol clone("CMYK tone")
 #@gmicol clone("Colormap")
 #@gmicol clone("Color balance")
+#@gmicol clone("Color blindness")
 #@gmicol clone("Color grading")
 #@gmicol clone("Color temperature")
 #@gmicol clone("Curves")
