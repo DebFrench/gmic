@@ -5564,6 +5564,23 @@ cmyk2rgb :
     -a c -cmy2rgb
   -endl -done -v +
 
+#@gmic colorblind : type={ 0=protanopia | 1=protanomaly | 2=deuteranopia | 3=deuteranomaly | 4=tritanopia | 5=tritanomaly | 6=achromatopsia | 7=achromatomaly }
+#@gmic : Simulate color blindness vision.
+#@gmic : $ image.jpg --colorblind 0
+colorblind : -check "isint($1) && $1>=0 && $1<=7"
+  -v - s0="protanopia" s1="protanomaly" s2="deuteranopia" s3="deuteranomaly" s4="tritanopia" s5="tritanomaly" s6="achromatopsia" s7="achromatomaly" -v +
+  -v + -e[^-1] "Simulate color blindness of type '"${s$1}"' on image$?." -v -
+  type0=(0.567,0.433,0;0.558,0.442,0;0,0.242,0.758)
+  type1=(0.817,0.183,0;0.333,0.667,0;0,0.125,0.875)
+  type2=(0.625,0.375,0;0.7,0.3,0;0,0.3,0.7)
+  type3=(0.8,0.2,0;0.258,0.742,0;0,0.142,0.858)
+  type4=(0.95,0.05,0;0,0.433,0.567;0,0.475,0.525)
+  type5=(0.967,0.033,0;0,0.733,0.267;0,0.183,0.817)
+  type6=(0.299,0.587,0.114;0.299,0.587,0.114;0.299,0.587,0.114)
+  type7=(0.618,0.320,0.062;0.163,0.775,0.062;0.163,0.320,0.516)
+  -repeat $! -l[$>] -split_opacity -l[0] -to_rgb -mix_channels ${type$1} -endl -a c -endl -done
+  -v +
+
 #@gmic colormap : nb_levels>=0,_method={ 0=median-cut | 1=k-means },_sort_vectors={ 0 | 1 }
 #@gmic : Estimate best-fitting colormap with 'nb_colors' entries, to index selected images.
 #@gmic : Set 'nb_levels==0' to extract all existing colors of an image.
@@ -22786,6 +22803,16 @@ gimp_balance_gamma :
 
 gimp_balance_gamma_preview :
   -gimp_split_preview "-gimp_balance_gamma $*",$-1
+
+#@gimp Color blindness : colorblind, gimp_colorblind_preview
+#@gimp : Blindness type = choice("Protanopia","Protanomaly","Deuteranopia","Deuteranomaly","Tritanopia","Tritanomaly","Achromatopsia","Achromatomaly")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b>
+#@gimp : This filter simulates different types of colorblindness vision.
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/20/2016</i>.</small>")
+gimp_colorblind_preview :
+  -gimp_split_preview "-colorblind $*",$-1
 
 #@gimp Colormap : gimp_colormap,gimp_colormap_preview
 #@gimp : Colormap = choice[1,"Adaptive","Custom","Standard (256)","HSV (256)","Lines (256)","Hot (256)","Cool (256)","Jet (256)","Flag (256)","Cube (256)"]
