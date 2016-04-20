@@ -25966,16 +25966,22 @@ _gimp_emulate_film :
       -l[]
         -i http://gmic.eu/film_presets.gmz
         -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
-        -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
+        -uncompress_clut 64
+      -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
       -endl
+      -o. ${-path_rc}film_$2.cimgz
     -else
       -if ${-path_rc}film_$2.cimgz -i ${-path_rc}film_$2.cimgz
       -else
         -l[]
-          -i http://gmic.eu/film_presets.gmz
+          -if ${-path_rc}film_presets.gmz -i ${-path_rc}film_presets.gmz
+          -else -l[] -i http://gmic.eu/film_presets.gmz -o ${-path_rc}film_presets.gmz,uchar -endl
+          -endif
           -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
-          -uncompress_clut 64 -o ${-path_rc}film_$2.cimgz
+          -uncompress_clut 64
+        -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
         -endl
+        -o. ${-path_rc}film_$2.cimgz
       -endif
     -endif
 
