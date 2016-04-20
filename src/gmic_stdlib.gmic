@@ -5343,9 +5343,9 @@ uncompress_rle :
 #@gmic : Default value: 'width=height=depth=64'.
 uncompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
   -e[^-1] "Uncompress color LUT$? into a $1x$2$x3 volumetric image."
-  -v - -repeat $! -l[$>]
-    -s x -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -round[0-2] -a x
-    -transpose 100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -round -c 0,255
+  -v - -transpose -repeat $! -l[$>]
+    -s y -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -round[0-2] -a y
+    100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -round -c 0,255
   -endl -done -v +
 
 #@gmic unrepeat
