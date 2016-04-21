@@ -4928,9 +4928,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
 
     # Insert initialization keypoints.
     0 -nm. keycoords
-    -m "add_keypoint : -skip $""{4=-1}
-          rgb={clut,I($""1,$""2,$""3)}
-          -=[keypoints] 1,$""1,$""2,$""3 ({$""1*255/$_w1},{$""2*255/$_h1},{$""3*255/$_d1},$rgb) -a[keycoords,-1] y"
+    -m "add_keypoint : rgb={clut,I($""1,$""2,$""3)} -=[keypoints] 1,$""1,$""2,$""3 ({$""1*255/$_w1},{$""2*255/$_h1},{$""3*255/$_d1},$rgb) -a[keycoords,-1] y"
     _w1={max(1,$w-1)} _h1={max(1,$h-1)} _d1={max(1,$d-1)}
     -add_keypoint {potential,xM},{potential,yM},{potential,zM}
 
@@ -20326,17 +20324,7 @@ gimp_logo_ca :
 gimp_download_all_data :
 
   # Film emulation.
-  _filenames_film=${-_gimp_emulate_film_bw},\
-                  ${-_gimp_emulate_film_instant_consumer},\
-                  ${-_gimp_emulate_film_instant_pro},\
-                  ${-_gimp_emulate_film_negative_color},\
-                  ${-_gimp_emulate_film_negative_new},\
-                  ${-_gimp_emulate_film_negative_old},\
-                  ${-_gimp_emulate_film_print},\
-                  ${-_gimp_emulate_film_colorslide},\
-                  ${-_gimp_emulate_film_various}
-  _url_film=http://gmic.eu/data_film_presets
-  _prefix_film=film_
+  -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${-path_rc}gmic_film_cluts.gmz,uchar -rm -endl
 
   # Grain.
   _filenames_grain=${-_gimp_emulate_grain}
@@ -26044,28 +26032,26 @@ _gimp_emulate_film :
   -if $1
     -if {narg($_force_redownload)}
       -l[]
-        -i http://gmic.eu/film_presets.gmz
+        -i http://gmic.eu/gmic_film_cluts.gmz
         -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
         -if {$!!=1} -error "" -endif
         -decompress_clut 64,64,64 -round
-      -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
       -endl
-      -o. ${-path_rc}film_$2.cimgz,uchar
+      -o. ${-path_rc}clut_$2.cimgz,uchar
     -else
-      -if ${-path_rc}film_$2.cimgz -i ${-path_rc}film_$2.cimgz
+      -if ${-path_rc}clut_$2.cimgz -i ${-path_rc}clut_$2.cimgz
       -else
         -l[]
           -repeat 2
-            -if {!$>" && "isfile(${-path_rc}film_presets.gmz)} -i ${-path_rc}film_presets.gmz
-            -else -l[] -i http://gmic.eu/film_presets.gmz -o ${-path_rc}film_presets.gmz,uchar -endl
+            -if {!$>" && "isfile(${-path_rc}gmic_film_cluts.gmz)} -i ${-path_rc}gmic_film_cluts.gmz
+            -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${-path_rc}gmic_film_cluts.gmz,uchar -endl
             -endif
             -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
             -if {$!==1} -break -endif # CLUT found!
           -rm -done
           -decompress_clut 64,64,64 -round
-        -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
         -endl
-        -o. ${-path_rc}film_$2.cimgz,uchar
+        -o. ${-path_rc}clut_$2.cimgz,uchar
       -endif
     -endif
 
