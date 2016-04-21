@@ -4913,10 +4913,10 @@ complex2polar :
   -endl -done -v +
 
 #@gmic compress_clut : _max_nbpoints>=1,_max_error>=0,_avg_error>=0
-#@gmic : Compress selected cluts as sequences of colored keypoints.
+#@gmic : Compress selected color LUTs as sequences of colored keypoints.
 #@gmic : Default values: 'max_nb_points=4096', 'max_error=12.5' and 'avg_error=1.25'.
 compress_clut : -check "isint(${1=8192}) && $1>=1 && ${2=12.5}>=0 && ${3=1.25}>=0"
-  -e[^-1] "Compress clut$? as a set of colored keypoints, with $1 max points, maximum error $2 and average error $3."
+  -e[^-1] "Compress color LUT$? as a set of colored keypoints, with $1 max points, maximum error $2 and average error $3."
   -v -
   -repeat $! -l[$>]
     ({'{b}'}) -replace_str. "film_","" nm={t} -rm.
@@ -4950,18 +4950,11 @@ compress_clut : -check "isint(${1=8192}) && $1>=1 && ${2=12.5}>=0 && ${3=1.25}>=
         --distance[keypoints] 1,[potential],0 X={xM} Y={yM} Z={zM} -rm.
       -else # Using location of maximal reconstruction error
         --decompress_clut[keycoords] $w,$h,$d
-        -if {*0} -w. 400,400,0,"Reconstructed CLUT" -endif
+        -if {*0} -w. 400,400,0,"Reconstructed CLUT (step 1)" -endif
         --. [clut] -abs. max_error={iM} avg_error={ia} X={xM} Y={yM} Z={zM} -rm.
         -if {$max_error<=$2" && "$avg_error<=$3} -break -endif # Found a good-enough solution
-        ($max_error^{10*$avg_error}) -a[error,-1] x
+        ($max_error^{10*$avg_error}) -a[error,-1] x -_compress_clut_draw_error
         iter=0
-
-        # Draw evolution of the reconstruction error.
-        -if {error,w>=2}
-          --dg[error] 640,480,1,0,0,{keycoords,h},0,{error,[0]},"Number of keypoints","Maximum reconstruction error"
-          -if {*1} -w1. 100%,100%,0,"Evolution of the reconstruction error" -endif
-          -o. error.bmp
-        -rm. -endif
       -endif
       -v + -e[] "\r    - Insert keypoint "{keycoords,h}": Max error = "{_$max_error}" ( avg = "{_$avg_error}" )        " -v -
       -add_keypoint $X,$Y,$Z
@@ -4970,22 +4963,23 @@ compress_clut : -check "isint(${1=8192}) && $1>=1 && ${2=12.5}>=0 && ${3=1.25}>=
     -done
 
     -rows[keycoords] 0,{keycoords,min($1-1,h-1)}
-    -k[clut,keycoords]
 
     # Step 2 : Remove keypoints iteratively while preserving quality constraints.
     #-----------------------------------------------------------------------------
     -v + -e[] "" -v -
     nb_attempts=1
-    nb_max_attempts={keycoords,round(h*33%)}
     -do
+      nb_max_attempts={keycoords,round(h*25%)}
       -v + -e[] "\r    - Remove attempt \#"$nb_attempts/$nb_max_attempts" : Keypoints "{keycoords,h}", Max error = "{_$max_error}" ( avg = "{_$avg_error}" )        " -v -
       k={keycoords,round(u(h-1))} --l[keycoords] -s y -rm[$k] -a y -nm new_keycoords -endl  # Remove random keypoint
       --decompress_clut[new_keycoords] $w,$h,$d
+      -if {*0} -w. 400,400,0,"Reconstructed CLUT (step 2)" -endif
       --. [clut] -abs. new_max_error={iM} new_avg_error={ia} -rm.
       -if {$new_max_error<=$2" && "$new_avg_error<=$3}
         max_error=$new_max_error
         avg_error=$new_avg_error
         -rm[keycoords] -nm[new_keycoords] keycoords
+        ($max_error^{10*$avg_error}) -a[error,-1] x -_compress_clut_draw_error
         nb_attempts=0
       -else -rm[new_keycoords] nb_attempts+=1
       -endif
@@ -4995,6 +4989,13 @@ compress_clut : -check "isint(${1=8192}) && $1>=1 && ${2=12.5}>=0 && ${3=1.25}>=
     -o ${-path_rc}comp_{b}.gmz,uchar
 
   -endl -done -v +
+
+  # Draw evolution of the reconstruction error.
+_compress_clut_draw_error :
+  -if {error,w>=2}
+    --dg[error] 640,480,1,0,0,{keycoords,h},0,{error,[0]},"Number of keypoints","Maximum reconstruction error"
+    -if {*1} -w1. 100%,100%,0,"Evolution of the reconstruction error" -endif
+  -rm. -endif
 
 #@gmic compress_rle : _is_binary_data={ 0 | 1 },_maximum_sequence_length>=0
 #@gmic : Compress selected images as 2xN data matrices, using RLE algorithm.
