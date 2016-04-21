@@ -15875,7 +15875,7 @@ path_tmp :
     -elif {narg({'${TMPDIR}'})} _path_tmp=${TMPDIR}
     -elif {narg({'${HOME}'})} _path_tmp="/tmp"
     -endif
-    -if ${-is_windows} _path_tmp=$_path_tmp\\ -else _path_tmp=$_path_tmp/ -endif
+    -if ${-is_windows} _path_tmp=$_path_tmp{`92`} -else _path_tmp=$_path_tmp/ -endif
   -endif
   -u $_path_tmp
   -v +
