@@ -2908,7 +2908,7 @@ shape_cupid : -check "${1=512}>=0"
          "     ;r         9p         7p         6n         5n         4n         5n         4m         3l         2k         1j         0i         .g         -f         -f         ,e         ,e         ,f      "\
          "   -f         ,e         ,f         -g         .g         .h         .g         .h         -f         -f         +c         \47`         \#Y                                                               "\
          "                                            2"'})
-      --. {47+32} -a x -y -uncompress_rle -r $ir,$ir,1,1,5 -if {$ir>480} -b. 0.2% -endif ->= 40%
+      --. {47+32} -a x -y -decompress_rle -r $ir,$ir,1,1,5 -if {$ir>480} -b. 0.2% -endif ->= 40%
     -endl
   -endif
   -nm "[2d cupid shape]"
@@ -4916,7 +4916,7 @@ complex2polar :
 #@gmic : Compress selected images as 2xN data matrices, using RLE algorithm.
 #@gmic : Set 'maximum_sequence_length=0' to disable maximum length constraint.
 #@gmic : Default values: 'is_binary_data=0' and 'maximum_sequence_length=0'.
-#@gmic : $ image.jpg -resize2dy 100 -quantize 4 -round --compress_rle , --uncompress_rle.
+#@gmic : $ image.jpg -resize2dy 100 -quantize 4 -round --compress_rle , --decompress_rle.
 compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
   -v - s0=" for binary data" s1=""
   -if $2 s=", with maximal sequence length "$2 -else s="" -endif
@@ -5305,10 +5305,10 @@ roundify : -check $1>=0
 #@gmic : $ image.jpg --threshold[0] 50% --threshold[0] 50%,1
 #@gmic : $$
 
-#@gmic uncompress_rle
-#@gmic : Uncompress selected 2xN data matrices, using RLE algorithm.
-uncompress_rle :
-  -e[^-1] "Uncompress data vector$?, using RLE algorithm."
+#@gmic decompress_rle
+#@gmic : Decompress selected 2xN data matrices, using RLE algorithm.
+decompress_rle :
+  -e[^-1] "Decompress data vector$?, using RLE algorithm."
   -v - -repeat $! -l[$>]
 
     # Retrieve original data dimension and min value.
@@ -5324,7 +5324,7 @@ uncompress_rle :
       -r 2,{h/2},1,1,-1
     -endif
 
-    # Uncompress, using 3d objects.
+    # Decompress, using 3d objects.
     -s y,-256
     -repeat $! -l[$>]
       -i[0] ({'CImg3d'}) -+[0] 0.5
@@ -5338,11 +5338,11 @@ uncompress_rle :
     -a x -r $whds,-1 -+ $im
   -endl -done -v +
 
-#@gmic uncompress_clut : _width>0,_height>0,_depth>0
-#@gmic : Uncompress color LUT expressed as a list of colored keypoints.
+#@gmic decompress_clut : _width>0,_height>0,_depth>0
+#@gmic : Decompress color LUT expressed as a list of colored keypoints.
 #@gmic : Default value: 'width=height=depth=64'.
-uncompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
-  -e[^-1] "Uncompress color LUT$? into a $1x$2$x3 volumetric image."
+decompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
+  -e[^-1] "Decompress color LUT$? into a $1x$2$x3 volumetric image."
   -v - -transpose -repeat $! -l[$>]
     -s y -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -round[0-2] -a y
     100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -round -c 0,255
@@ -18145,28 +18145,28 @@ _pacman_pacgum_gfx :
 _pacman_cherry_gfx :
   (12,12,1,1,0,0,-10,-2,1,-8,-4,1,-6,-2,1,0,1,-7,0,1,-3,0,1,-3,-4,2,-3,0,1,-3,-6,2,0,1,-4,-5,2,0,-4,2,-2,\
    0,2,3,-2,2,0,-6,2,0,-2,2,3,2,0,-6,2,-2,-3,2,0,2,3,-4,2,-6,-2,2,3,-3,2,-7,-4,2,-2,0)
-  -uncompress_rle. (0,0,255,255^0,173,0,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
+  -decompress_rle. (0,0,255,255^0,173,0,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
 
 _pacman_strawberry_gfx :
   (11,12,1,1,0,0,-5,0,3,-7,-3,1,3,-3,1,-3,-2,2,-5,1,-2,2,0,-4,2,-3,1,-2,2,3,-2,2,3,-5,2,3,-6,2,3,\
    2,3,-13,2,3,-2,2,0,2,3,-2,2,3,-4,2,-2,-9,2,-3,-2,2,3,-2,2,3,-6,-5,2,-8,0,2,-5,0)
-  -uncompress_rle. (0,0,255,255^0,173,0,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
+  -decompress_rle. (0,0,255,255^0,173,0,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
 
 _pacman_orange_gfx :
   (12,13,1,1,0,0,-5,0,1,0,-2,1,-8,-6,1,-6,0,1,3,-3,1,-4,-3,2,1,-4,2,-3,-10,2,0,-60,2,0,-10,2,-2,-10,2,-4,-6,2,-3,0)
-  -uncompress_rle. (0,0,255,255^0,173,173,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
+  -decompress_rle. (0,0,255,255^0,173,173,255^0,0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
 
 _pacman_banana_gfx :
   (9,12,1,1,0,0,-7,0,1,-7,-2,1,-7,-3,1,-5,0,1,0,-2,1,-5,0,1,0,-2,1,-4,0,1,0,-3,1,-4,0,1,0,-3,\
    1,-3,0,1,0,1,2,1,-3,0,1,0,1,2,-2,1,-2,0,1,0,1,2,-2,1,-2,-6,1,-3,-4,1,-5,0)
-  -uncompress_rle. (0,255,255^0,173,255^0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
+  -decompress_rle. (0,255,255^0,173,255^0,0,255) -map.. [-1] -rm. -r2dy. 14 -r. 16,16,1,3,0,0,0.5,0.5
 
 _pacman_map_level1 :
   (11,28,1,1,0,0,-12,1,-5,2,1,-4,2,1,3,-3,1,2,1,2,-4,1,2,-3,1,2,1,2,-4,1,-10,2,-3,1,2,1,2,-3,1,2,1,-2,0,1,2,1,2,-3,1,2,-4,1,\
    2,1,2,-3,1,2,1,-3,0,2,1,-5,2,-4,1,2,-3,1,0,-3,1,-2,0,1,2,-3,1,0,-3,1,-2,0,1,2,-9,0,1,2,-3,1,0,-2,1,-3,0,1,2,1,-3,0,1,-4,\
    0,1,2,1,0,1,0,1,-2,-3,1,2,1,0,1,0,-3,1,-3,0,2,-2,0,1,-4,-3,1,2,-5,1,0,1,-2,0,1,-5,2,-2,0,1,-2,0,1,2,-3,1,2,-6,1,2,-3,1,2,\
    -4,1,-9,2,0,1,2,-3,1,2,-3,1,2,-2,1,2,-3,1,2,1,-3,2,-2,1,3,-3,1,2,1,2,-4,1,2,-3,1,2,1,2,-4,1,-10,2,-11,1)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=33 _glevel=33 _blevel=255
 
 _pacman_map_level2 :
@@ -18174,7 +18174,7 @@ _pacman_map_level2 :
    2,-2,1,-5,2,1,-3,2,-4,1,2,-5,1,0,1,-2,0,1,2,-5,1,0,1,-2,0,1,2,-5,1,0,1,-2,0,1,-3,2,1,-4,-3,1,0,1,2,1,0,-2,1,-5,0,1,2,1,0,1,\
    -2,-5,1,2,-2,0,1,-2,-5,1,2,1,0,-3,1,-4,0,1,2,1,-4,-3,1,-3,2,-3,1,0,1,-2,0,1,2,1,-3,2,-2,0,1,-2,0,1,2,-3,1,2,1,0,-4,1,2,-3,1,\
    2,1,0,-2,1,-7,2,1,-2,0,1,2,-3,1,2,1,2,-4,1,2,1,-3,2,1,-4,2,1,3,1,2,-5,1,2,-2,1,2,1,2,-5,1,2,-2,1,-9,2,-12,1)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=33 _blevel=33
 
 _pacman_map_level3 :
@@ -18182,7 +18182,7 @@ _pacman_map_level3 :
    1,2,-3,1,0,1,2,-2,1,-5,2,1,0,1,-2,2,-5,1,2,1,0,-4,1,-5,2,1,-4,0,1,2,-3,1,2,1,0,-2,1,0,1,2,-3,1,2,1,0,1,-2,0,1,-3,2,1,2,-2,0,1,\
    -2,-3,1,2,1,2,1,0,-3,1,-2,0,1,2,1,2,1,-6,0,1,2,1,2,-2,1,0,-2,1,-2,0,1,2,1,2,-2,1,0,-2,1,-2,0,1,-6,2,-5,1,2,-4,1,2,-2,1,-3,-3,2,\
    1,-3,2,0,-3,1,2,1,2,1,2,-4,1,3,-2,2,1,-5,2,-2,1,2,-3,1,2,-3,1,2,-2,1,2,-3,1,2,-3,1,2,-2,1,-10,2,-11,1)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=33 _glevel=200 _blevel=255
 
 _pacman_map_level4 :
@@ -18190,7 +18190,7 @@ _pacman_map_level4 :
    -2,1,2,-2,1,2,-2,1,2,1,-7,2,-2,1,2,1,2,-2,1,2,-2,1,-4,2,1,2,-2,1,2,-2,1,2,-2,1,2,1,-7,2,-2,1,2,-3,1,-10,0,1,-5,-2,1,0,-3,1,-5,0,1,\
    -10,0,1,-2,-3,1,-5,-6,1,-8,0,1,2,-9,0,1,2,-2,1,2,-2,1,2,-2,1,2,1,2,-2,1,2,-2,1,2,-2,1,2,1,-10,2,1,2,-2,1,2,-2,1,2,-3,0,1,2,-2,1,2,\
    -2,1,2,0,-3,1,-3,2,3,-4,2,1,0,1,2,-2,1,2,-2,1,2,-2,1,0,1,2,-2,1,2,-2,1,2,1,-2,0,1,-7,2,1,-2,-9,1,-2,0)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=200 _blevel=33
 
 _pacman_map_level5 :
@@ -18198,7 +18198,7 @@ _pacman_map_level5 :
    -3,1,2,1,-4,0,1,-6,2,1,2,1,0,-3,1,0,-4,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-3,1,0,1,0,-2,1,0,1,2,-3,1,0,1,0,1,-2,0,1,2,-4,0,1,0,1,-2,\
    0,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-3,1,0,-3,1,0,-2,1,-5,2,1,-3,2,-4,1,2,1,2,1,2,-6,1,2,1,2,1,2,-4,1,3,-2,2,1,-5,2,0,1,2,-3,1,2,-3,\
    1,2,-2,1,-5,2,1,-3,2,-2,1,2,-3,1,2,1,2,-4,1,2,-3,1,2,1,2,-4,1,-5,2,1,-4,2,-11,1)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=255 _blevel=33
 
 _pacman_map_level6 :
@@ -18206,7 +18206,7 @@ _pacman_map_level6 :
    -2,0,1,2,-2,1,0,-3,1,2,1,-2,0,2,1,-4,0,1,2,1,0,1,2,-2,-2,1,0,1,2,1,0,1,2,1,0,1,-2,0,1,2,1,0,1,2,1,0,1,-2,0,1,2,1,0,1,2,-2,-4,1,2,\
    1,-2,0,2,1,-4,0,1,2,-2,0,1,2,-2,1,0,-2,1,0,2,1,0,1,-6,2,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-4,1,0,-3,1,0,1,-10,2,-5,1,2,-6,1,3,-9,\
    2,1,2,-2,1,2,-7,1,-10,2,-11,1)
-  -uncompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
+  -decompress_rle. --mirror. x -z. 1,100% -a[-2,-1] x
   _rlevel=255 _glevel=130 _blevel=233
 
 #@gmic x_paint
@@ -25967,7 +25967,7 @@ _gimp_emulate_film :
         -i http://gmic.eu/film_presets.gmz
         -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
         -if {$!!=1} -error "" -endif
-        -uncompress_clut 64
+        -decompress_clut 64
       -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
       -endl
       -o. ${-path_rc}film_$2.cimgz,uchar
@@ -25982,7 +25982,7 @@ _gimp_emulate_film :
             -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
             -if {$!==1} -break -endif # CLUT found!
           -rm -done
-          -uncompress_clut 64
+          -decompress_clut 64
         -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
         -endl
         -o. ${-path_rc}film_$2.cimgz,uchar
