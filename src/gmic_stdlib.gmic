@@ -4912,6 +4912,90 @@ complex2polar :
     -r[1] [0],3 --atan2[1] [0] -nm. {1,n} -sqr[-3,-2] -+[-3,-2] -sqrt..
   -endl -done -v +
 
+#@gmic compress_clut : _max_nbpoints>=1,_max_error>=0,_avg_error>=0
+#@gmic : Compress selected cluts as sequences of colored keypoints.
+#@gmic : Default values: 'max_nb_points=4096', 'max_error=12.5' and 'avg_error=1.25'.
+compress_clut : -check "isint(${1=8192}) && $1>=1 && ${2=12.5}>=0 && ${3=1.25}>=0"
+  -e[^-1] "Compress clut$? as a set of colored keypoints, with $1 max points, maximum error $2 and average error $3."
+  -v -
+  -repeat $! -l[$>]
+    ({'{b}'}) -replace_str. "film_","" nm={t} -rm.
+    w={w} h={h} d={d}
+    -v + -e[] "  > Process clut '"$nm"' ("$wx$hx$d")." -v -
+    -nm clut
+    100%,100%,100% -nm. keypoints
+    --laplacian[0] -norm. -pow. 0.5 -nm. potential
+
+    # Insert initialization keypoints.
+    0 -nm. keycoords
+    -m "add_keypoint : -skip $""{4=-1}
+          rgb=${-at[clut]\" \"$""1,$""2,$""3}
+          -=[keypoints] 1,$""1,$""2,$""3 ({$""1*255/$_w1},{$""2*255/$_h1},{$""3*255/$_d1},$rgb) -a[keycoords,-1] y
+       "
+    _w1={$w-1} _h1={$h-1} _d1={$d-1}
+    -add_keypoint {potential,xM},{potential,yM},{potential,zM}
+
+    0 -nm. error
+    max_error=inf avg_error=inf
+
+    # Step 1 : Add new keypoints iteratively until quality constraints are reached.
+    #-------------------------------------------------------------------------------
+    -v + -e[] "" -v -
+    iter=0
+    -repeat inf
+      -if {keycoords,h>=$1} -break -endif
+
+      # Find new keypoint.
+      -if {$iter<2} # Using farthest point sampling
+        --distance[keypoints] 1,[potential],0 X={xM} Y={yM} Z={zM} -rm.
+      -else # Using location of maximal reconstruction error
+        --decompress_clut[keycoords] $w,$h,$d
+        -if {*0} -w. 400,400,0,"Reconstructed CLUT" -endif
+        --. [clut] -abs. max_error={iM} avg_error={ia} X={xM} Y={yM} Z={zM} -rm.
+        -if {$max_error<=$2" && "$avg_error<=$3} -break -endif # Found a good-enough solution
+        ($max_error^{10*$avg_error}) -a[error,-1] x
+        iter=0
+
+        # Draw evolution of the reconstruction error.
+        -if {error,w>=2}
+          --dg[error] 640,480,1,0,0,{keycoords,h},0,{error,[0]},"Number of keypoints","Maximum reconstruction error"
+          -if {*1} -w1. 100%,100%,0,"Evolution of the reconstruction error" -endif
+          -o. error.bmp
+        -rm. -endif
+      -endif
+      -v + -e[] "\r    - Insert keypoint "{keycoords,h}": Max error = "{_$max_error}" ( avg = "{_$avg_error}" )        " -v -
+      -add_keypoint $X,$Y,$Z
+
+      iter+=1
+    -done
+
+    -rows[keycoords] 0,{keycoords,min($1-1,h-1)}
+    -k[clut,keycoords]
+
+    # Step 2 : Remove keypoints iteratively while preserving quality constraints.
+    #-----------------------------------------------------------------------------
+    -v + -e[] "" -v -
+    nb_attempts=1
+    nb_max_attempts={keycoords,round(h*33%)}
+    -do
+      -v + -e[] "\r    - Remove attempt \#"$nb_attempts/$nb_max_attempts" : Keypoints "{keycoords,h}", Max error = "{_$max_error}" ( avg = "{_$avg_error}" )        " -v -
+      k={keycoords,round(u(h-1))} --l[keycoords] -s y -rm[$k] -a y -nm new_keycoords -endl  # Remove random keypoint
+      --decompress_clut[new_keycoords] $w,$h,$d
+      --. [clut] -abs. new_max_error={iM} new_avg_error={ia} -rm.
+      -if {$new_max_error<=$2" && "$new_avg_error<=$3}
+        max_error=$new_max_error
+        avg_error=$new_avg_error
+        -rm[keycoords] -nm[new_keycoords] keycoords
+        nb_attempts=0
+      -else -rm[new_keycoords] nb_attempts+=1
+      -endif
+    -while {$nb_attempts<=$nb_max_attempts}
+
+    -k[keycoords] -nm $nm
+    -o ${-path_rc}comp_{b}.gmz,uchar
+
+  -endl -done -v +
+
 #@gmic compress_rle : _is_binary_data={ 0 | 1 },_maximum_sequence_length>=0
 #@gmic : Compress selected images as 2xN data matrices, using RLE algorithm.
 #@gmic : Set 'maximum_sequence_length=0' to disable maximum length constraint.
@@ -4951,6 +5035,49 @@ compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
 #@gmic : In this case, the chosen cut values are returned in the status.
 #@gmic : $ image.jpg --add 30% -cut. 0,255
 #@gmic : $ image.jpg --cut 25%,75%
+
+#@gmic decompress_clut : _width>0,_height>0,_depth>0
+#@gmic : Decompress color LUT expressed as a list of colored keypoints.
+#@gmic : Default value: 'width=height=depth=64'.
+decompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
+  -e[^-1] "Decompress color LUT$? into a $1x$2$x3 volumetric image."
+  -v - -transpose -repeat $! -l[$>]
+    -s y -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -round[0-2] -a y
+    100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -c 0,255
+  -endl -done -v +
+
+#@gmic decompress_rle
+#@gmic : Decompress selected 2xN data matrices, using RLE algorithm.
+decompress_rle :
+  -e[^-1] "Decompress data vector$?, using RLE algorithm."
+  -v - -repeat $! -l[$>]
+
+    # Retrieve original data dimension and min value.
+    -y whds={0,[0-3]} im={0,[4]} is_binary_data={0,[5]} -rows 6,100%
+
+    # Transform RLE data to list of pairs {nb_occurences,value}.
+    -if $is_binary_data  # Decode for binary data.
+      -->= 0 -abs[0] -a x
+    -else # Decode for arbitrary data
+      --<. 0 (0;1;1) -erode.. [-1],0 -rm. --. 1 -a x -discard -1  # Get back compressed '0' (minimum) values.
+      --< 0 (1;1;0) -dilate.. [-1] -rm. -*. -2 -+. 1              # Get back singletons.
+      -rv -abs. -a x -discard -1
+      -r 2,{h/2},1,1,-1
+    -endif
+
+    # Decompress, using 3d objects.
+    -s y,-256
+    -repeat $! -l[$>]
+      -i[0] ({'CImg3d'}) -+[0] 0.5
+      -i[1] ({2*h};{h})
+      -s. x,2 -cumulate.. siz={-2,[-1]}
+      --shift.. 0,1 --... 1 -rv[-3,-1] -z[-3,-1] 0,2 -a[-3,-1] x
+      -i[3] (2,0,1;2,{2*h-2},{2*h-1}) -r[3] 3,{h},1,1,3 -round[3]
+      -r[4] 3 1,100%,1,1,1 -y -a y
+      $siz -j3d. [-2],0,0,0,1,2,0,0 -rm..
+    -endl -done
+    -a x -r $whds,-1 -+ $im
+  -endl -done -v +
 
 #@gmic discard : _value1,_value2,... : { x | y | z | c}..{ x | y | z | c},_value1,_value2,... : (no args) : (+)
 #@gmic : Discard specified values in selected images or discard neighboring duplicate values,
@@ -5304,49 +5431,6 @@ roundify : -check $1>=0
 #@gmic : Default value: 'is_soft=0'.
 #@gmic : $ image.jpg --threshold[0] 50% --threshold[0] 50%,1
 #@gmic : $$
-
-#@gmic decompress_rle
-#@gmic : Decompress selected 2xN data matrices, using RLE algorithm.
-decompress_rle :
-  -e[^-1] "Decompress data vector$?, using RLE algorithm."
-  -v - -repeat $! -l[$>]
-
-    # Retrieve original data dimension and min value.
-    -y whds={0,[0-3]} im={0,[4]} is_binary_data={0,[5]} -rows 6,100%
-
-    # Transform RLE data to list of pairs {nb_occurences,value}.
-    -if $is_binary_data  # Decode for binary data.
-      -->= 0 -abs[0] -a x
-    -else # Decode for arbitrary data
-      --<. 0 (0;1;1) -erode.. [-1],0 -rm. --. 1 -a x -discard -1  # Get back compressed '0' (minimum) values.
-      --< 0 (1;1;0) -dilate.. [-1] -rm. -*. -2 -+. 1              # Get back singletons.
-      -rv -abs. -a x -discard -1
-      -r 2,{h/2},1,1,-1
-    -endif
-
-    # Decompress, using 3d objects.
-    -s y,-256
-    -repeat $! -l[$>]
-      -i[0] ({'CImg3d'}) -+[0] 0.5
-      -i[1] ({2*h};{h})
-      -s. x,2 -cumulate.. siz={-2,[-1]}
-      --shift.. 0,1 --... 1 -rv[-3,-1] -z[-3,-1] 0,2 -a[-3,-1] x
-      -i[3] (2,0,1;2,{2*h-2},{2*h-1}) -r[3] 3,{h},1,1,3 -round[3]
-      -r[4] 3 1,100%,1,1,1 -y -a y
-      $siz -j3d. [-2],0,0,0,1,2,0,0 -rm..
-    -endl -done
-    -a x -r $whds,-1 -+ $im
-  -endl -done -v +
-
-#@gmic decompress_clut : _width>0,_height>0,_depth>0
-#@gmic : Decompress color LUT expressed as a list of colored keypoints.
-#@gmic : Default value: 'width=height=depth=64'.
-decompress_clut : -check "isint(${1=64}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=$2}) && $3>0"
-  -e[^-1] "Decompress color LUT$? into a $1x$2$x3 volumetric image."
-  -v - -transpose -repeat $! -l[$>]
-    -s y -*[0] {($1-1)/255} -*[1] {($2-1)/255} -*[2] {($3-1)/255} -round[0-2] -a y
-    100%,1,1,1,255 -a y -pointcloud 0,$1,$2,$3 -solidify 100%,1,15 -round -c 0,255
-  -endl -done -v +
 
 #@gmic unrepeat
 #@gmic : Remove repetition of adjacent values in selected images.
@@ -20404,6 +20488,7 @@ _gimp_manage_filter_sources :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : Jost Jakob Schaper,
 #@gimp : Dominik Wefers,
 #@gimp : Frank McLaughlin,
 #@gimp : <a href="https://29a.ch/">Jonas Wagner</a>,
@@ -25967,7 +26052,7 @@ _gimp_emulate_film :
         -i http://gmic.eu/film_presets.gmz
         -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
         -if {$!!=1} -error "" -endif
-        -decompress_clut 64
+        -decompress_clut 64 -round
       -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
       -endl
       -o. ${-path_rc}film_$2.cimgz,uchar
@@ -25982,7 +26067,7 @@ _gimp_emulate_film :
             -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
             -if {$!==1} -break -endif # CLUT found!
           -rm -done
-          -decompress_clut 64
+          -decompress_clut 64 -round
         -onfail -i http://gmic.eu/data_film_presets/$2.cimgz
         -endl
         -o. ${-path_rc}film_$2.cimgz,uchar
