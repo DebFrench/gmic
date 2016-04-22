@@ -13109,28 +13109,28 @@ boxfitting : -check "isint(${1=3}) && $1>=1 && isint(${2=0}) && $2>=0 && ${3=0.1
     -blend shapeaverage0
   -endl -done -v +
 
-#@gmic brushify : [brush],_brush_nb_sizes>=1,0<=_brush_min_size_factor<=1,_brush_nb_orientations>=1,_brush_light_type,0<=_brush_light_strength<=1,_brush_opacity,_drawing_density[%]>=0,0<=_drawing_contours_coherence<=1,0<=_drawing_orientation_coherence<=1,_drawing_coherence_alpha[%]>=0,_drawing_coherence_sigma[%]>=0,_drawing_primary_angle,0<=_drawing_angle_dispersion<=1
+#@gmic brushify : [brush],_brush_nb_sizes>=1,0<=_brush_min_size_factor<=1,_brush_nb_orientations>=1,_brush_light_type,0<=_brush_light_strength<=1,_brush_opacity,_painting_density[%]>=0,0<=_painting_contours_coherence<=1,0<=_painting_orientation_coherence<=1,_painting_coherence_alpha[%]>=0,_painting_coherence_sigma[%]>=0,_painting_primary_angle,0<=_painting_angle_dispersion<=1
 #@gmic : Apply specified brush to create painterly versions of specified images.
 #@gmic : 'brush_light_type' can be { 0=none | 1=flat | 2=darken | 3=lighten | 4=full }.
-#@gmic : Default values: 'brush_nb_sizes=3', 'brush_min_size_factor=0.66', 'brush_nb_orientations=12', 'brush_light_type=0', 'brush_light_strength=0.25', 'brush_opacity=0.8', 'drawing_density=20%', 'drawing_contours_coherence=0.9', 'drawing_orientation_coherence=0.9', 'drawing_coherence_alpha=1', 'drawing_coherence_sigma=1', 'drawing_primary_angle=0', 'drawing_angle_dispersion=0.2'
+#@gmic : Default values: 'brush_nb_sizes=3', 'brush_min_size_factor=0.66', 'brush_nb_orientations=12', 'brush_light_type=0', 'brush_light_strength=0.25', 'brush_opacity=0.8', 'painting_density=20%', 'painting_contours_coherence=0.9', 'painting_orientation_coherence=0.9', 'painting_coherence_alpha=1', 'painting_coherence_sigma=1', 'painting_primary_angle=0', 'painting_angle_dispersion=0.2'
 #@gmic : $ image.jpg 40,40 -gaussian. 8,2 -spread. 4,0 --brushify[0] [1]
 brushify : -check ${"-is_image_arg $1"}" &&"\         # $1: [brush]
-                    "isint(${2=3}) && $2>=1 &&"\      # $2: brush_nb_sizes
-                    "${3=0.50}>=0 && $3<=1 &&"\       # $3: brush_min_size_factor
+                    "isint(${2=4}) && $2>=1 &&"\      # $2: brush_nb_sizes
+                    "${3=0.25}>=0 && $3<=1 &&"\       # $3: brush_min_size_factor
                     "isint(${4=12}) && $4>=1 &&"\     # $4: brush_nb_orientations
                     "isint(${5=4}) && $5>=0 &&"\      # $5: brush_light_type
-                    "${6=0.005}>=0 && $6<=1 &&"\      # $6: brush_light_strength
-                    "isval(${7=0.9}) &&"\             # $7: brush_opacity
-                    "${8=20%}>=0 && $8>=0 &&"\        # $8: drawing_density[%]
-                    "${9=0.7}>=0 && $9<=1 &&"\        # $9: drawing_contours_coherence
-                    "${10=1}>=0 && $10<=1 &&"\        # $10: drawing_orientation_coherence
-                    "${11=1}>=0 && ${12=0.5%}>=0 &&"\ # $11 and $12: drawing_coherence_alpha and drawing_coherence_sigma
-                    "isval(${13=45}) &&"\             # $13: drawing_primary_angle
-                    "${14=0.2}>=0 && $14<=1"          # $14: drawing_angle_dispersion
+                    "${6=0.07}>=0 && $6<=1 &&"\       # $6: brush_light_strength
+                    "isval(${7=0.75}) &&"\            # $7: brush_opacity
+                    "${8=40%}>=0 && $8>=0 &&"\        # $8: painting_density[%]
+                    "${9=0.7}>=0 && $9<=1 &&"\        # $9: painting_contours_coherence
+                    "${10=1}>=0 && $10<=1 &&"\        # $10: painting_orientation_coherence
+                    "${11=1}>=0 && ${12=0.5%}>=0 &&"\ # $11 and $12: painting_coherence_alpha and painting_coherence_sigma
+                    "isval(${13=45}) &&"\             # $13: painting_primary_angle
+                    "${14=0.2}>=0 && $14<=1"          # $14: painting_angle_dispersion
   -e[^-1] "Brushify image$?, with brush $1."
   -v -
 
-  # Precompute the set of oriented/resized/ brushes.
+  # Precompute the set of oriented/resized brushes.
   -pass$1 0 -l.
     -slices 0 -norm -n 0,1 -threshold 0.1,1 -autocrop.
     -repeat $4 --rotate[0] {360*$>/$4} -done
@@ -13155,12 +13155,13 @@ brushify : -check ${"-is_image_arg $1"}" &&"\         # $1: [brush]
 
   # Generate images with brushes.
   -repeat {$!-2} -l[$>,brush,brushlight]
-    -to_rgb[0] nm={0,n} -nm[0] img
+    s={0,s} nm={0,n} -to_rgb[0] -nm[0] img
 
     # Generate set of random points with orientations.
     --diffusiontensors[img] $9,$10,$11,$12 -nm. geometry
-    1,{img,${"-is_percent $8"}?wh*$8:$8} -rand. 0,{img,w-1} --rand. 0,{img,h-1} -a[-2,-1] c -nm. pts
-    [img],[img],1,4 -nm. res
+    --channels[geometry] 0 -sh[geometry] 2 -+[-2,-1] -pow. 0.3 -quantize. $2,0 -*. -1 -+. $2 --. 1 -nm. contours
+    1,{img,max(1,${"-is_percent $8"}?wh*$8:$8)} -rand. 0,{img,w-1} --rand. 0,{img,h-1} -a[-2,-1] c -nm. pts
+    --to_rgba[img] -nm. res
 
     # Render filter.
     -f[pts] "*
@@ -13176,17 +13177,18 @@ brushify : -check ${"-is_image_arg $1"}" &&"\         # $1: [brush]
       G = I(#"$geometry",P);
       ang = u(pi);
       V = [ G[0],G[1],G[1],G[2] ]**(T**[ cos(ang),sin(ang) ]);
-      amp = cut($2-round(5*$2*sqrt(G[0] + G[2])),0,$2-1);
+      amp = i(#"$contours",P); #cut($2-round(5*$2*sqrt(G[0] + G[2])),0,$2-1);
       ang = round(((atan2(V[1],V[0])%(2*pi))*$4/(2*pi)))%$4;
       col = I(#"$img",P);
-      brush = crop(#"$brush",0,0,amp*$4 + ang,0,"$wb","$hb",1,1);
-      brushlight = crop(#"$brushlight",0,0,ang,0,"$wb","$hb",1,1);
+      ind = amp*$4 + ang;
+      brush = crop(#"$brush",0,0,ind,0,"$wb","$hb",1,1);
+      brushlight = crop(#"$brushlight",0,0,ind,0,"$wb","$hb",1,1);
       brush_r = cut(col[0] + brushlight,0,255);
       brush_g = cut(col[1] + brushlight,0,255);
       brush_b = cut(col[2] + brushlight,0,255);
       draw(#"$res",[brush_r,brush_g,brush_b,brush_a],P - S2,"$wb","$hb",1,4,$7,brush,1);
       P"
-    -k[res,brush,brushlight] -mv[res] 0 -nm[0] $nm
+    -k[res,brush,brushlight] -mv[res] 0 -nm[0] $nm -to_colormode[0] {$s+($s%2)}
   -endl -done -rm[brush,brushlight] -v +
 
 #@gmic cartoon : _smoothness,_sharpening,_threshold>=0,_thickness>=0,_color>=0,quantization>0
@@ -21653,6 +21655,70 @@ _gimp_bokeh :
     -a[-4--2] x -c.. 0,255 -y -a y
   -endl
   -j3d[0] [1],0,0,0,{$9/255},1,0,0 -rm[1]
+
+#@gimp Brushify : gimp_brushify, gimp_brushify_preview(0)
+#@gimp : note = note("<small><b>Brush parameters:</b></small>")
+#@gimp : Shape = choice(7,"Bottom layer","Top layer","Rectangle","Diamond","Pentagon","Hexagon","Octogon","Ellipse","Gaussian","Star","Heart")
+#@gimp : Ratio = float(0.25,0,1)
+#@gimp : Number of sizes = int(4,1,16)
+#@gimp : Maximal size = int(64,1,128)
+#@gimp : Minimal size (%)= float(25,0,100)
+#@gimp : Number of orientations = int(12,1,24)
+#@gimp : Fuzzyness = float(0,0,10)
+#@gimp : Smoothness = float(2,0,10)
+#@gimp : Light type = choice(4,"None","Flat","Darken","Lighten","Full")
+#@gimp : Light strength = float(0.2,0,1)
+#@gimp : Opacity = float(0.5,0,1)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Painting parameters:</b></small>")
+#@gimp : Density (%) = float(30,0,100)
+#@gimp : Contour coherence = float(1,0,1)
+#@gimp : Orientation coherence = float(1,0,1)
+#@gimp : Gradient smoothness = float(1,0,10)
+#@gimp : Structure smoothness = float(5,0,10)
+#@gimp : Primary angle = float(0,-180,180)
+#@gimp : Angle dispersion = float(0.2,0,1)
+#@gimp : sep = separator()
+#@gimp : Preview brush = bool(1)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/22/2016</i>.</small>")
+gimp_brushify :
+  -_gimp_brushify $*
+  s0=0--3 s1=1--2 s2=0--2
+  -l[${s{$1==0?0:$1==1?1:2}},-1] -brushify[^-1] [-1],$3,{$5%},$6,$9,$10,$11,$12%,$13,$14,$15,$16,$17,$18 -rm. -endl
+
+_gimp_brushify : # Insert brush at the end of the list
+  N={0.9*$4}
+  -if {$1==0} --autocrop. -i.. 100%,100%,1,3,1 -blend[-2,-1] alpha -rr2d. $N,$N,0,3
+  -elif {$1==1} --autocrop[0] -i.. 100%,100%,1,3,1 -blend[-2,-1] alpha -rr2d. $N,$N,0,3
+  -elif {$1==2} $4,$4 -rectangle. 10%,10%,90%,90%,1,1
+  -elif {$1==3} -shape_diamond. $N
+  -elif {$1==4} -shape_polygon $N,5
+  -elif {$1==5} -shape_polygon $N,6
+  -elif {$1==6} -shape_polygon $N,8
+  -elif {$1==7} -shape_circle. $N
+  -elif {$1==8} $4,$4 -gaussian. 30%,30%,0
+  -elif {$1==9} -shape_star $N
+  -elif {$1==10} -shape_heart $N
+  -endif
+  -norm. -r. 100%,{max(0.01,100*$2)}%,1,1,2 -r. $4,$4,1,1,0,0,0.5,0.5
+  -spread. $7 -b. $8% -n. 0,1
+
+gimp_brushify_preview :
+  -if {$1<2" && "$!<2}
+    -gimp_error_preview "When a custom brush (bottom or top layer) is specified, at least two layers are required for this filter to work.In this case, don't forget to set the 'Input layers' option!"
+    -return
+  -endif
+  -gimp_brushify $*
+  -if $19
+    -_gimp_brushify $*
+    -if {$1==0} -rm.. -elif {$1==1} -rm[0] -endif
+    -rr2d. {0,w/5},{0,h/5},0,2 -n. 0,255
+    -frame. 3,3,0 -frame. 1,1,255 -frame. 1,1,0
+    -to_rgb. -text_outline. "Brush",4,2,13,2,1,255,255,0 -to_a.
+    -j[^-1] [-1],2,2 -rm.
+  -else
+    -if {$1==0} -rm. -elif {$1==1} -rm[0] -endif
+  -endif
 
 #@gimp Cartoon : cartoon, gimp_cartoon_preview(0)
 #@gimp : Smoothness = float(3,0,10)
@@ -30380,6 +30446,7 @@ gmicol_logo_en :
 gmicol_bokeh :
   -repeat $! -l[$>] -gimp_bokeh $* -gimp_merge_layers -endl -done
 
+#@gmicol clone("Brushify")
 #@gmicol clone("Cartoon")
 #@gmicol clone("Circle abstraction")
 #@gmicol clone("Cubism")
