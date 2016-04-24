@@ -8455,32 +8455,33 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
                ++i(#-1,X,Y,Z);
              0)"
       --max. 1 -/[-3,-1] -!=. 0
-      -if {!$>} # First scale -> Initialize by value propagation
-        im={-2,im} --.. {$im-1} -*.. [-1]
-        -distance. 1 -*. -1 -watershed.. [-1] -rm.
-        -+. {$im-1}
-      -else # Other scales -> Perform isotropic or anisotropic diffusion
-        -mv[-3] $! -r. [-3],3
-        nb_iter={max(5,$4)}
-
-        -if {$3==0} # Isotropic diffusion
-          -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
-        -elif {$3==1} # Delaunay-oriented
-          --distance.. 1 -g. -a[-{d==1?2:3}--1] c -orientation.
-          -repeat {$nb_iter}
-            -j.. [-4],0,0,0,0,1,[-3]
-            --warp.. [-1],1,2,1 -*.. -1 -warp... [-2],1,2,1 -+[-3,-1] -/.. 2
-          -done -rm.
-        -else # Edge-oriented
-          --diffusiontensors. 0,1,0.5,0.5
-          -repeat {$nb_iter}
-            -j.. [-4],0,0,0,0,1,[-3]
-            -smooth.. [-1],10,2,0
-          -done -rm.
-        -endif
-        -j. [-3],0,0,0,0,1,[-2] -rm[-3,-2]
-
+      -if {!$>} # First scale: Initialize by value propagation
+        im={-2,im} ---.. {$im-1} -*. [-2]
+        --distance.. 1 -*. -1 -watershed.. [-1] -rm.
+        -+. {$im-1} -mv. -3
       -endif
+
+      # Apply diffusion iterations.
+      -mv[-3] $! -r. [-3],3
+      nb_iter={max(5,$4)}
+
+      -if {$3==0} # Isotropic diffusion
+        -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
+      -elif {$3==1} # Delaunay-oriented
+        --distance.. 1 -g. -a[-{d==1?2:3}--1] c -orientation.
+        -repeat {$nb_iter}
+          -j.. [-4],0,0,0,0,1,[-3]
+          --warp.. [-1],1,2,1 -*.. -1 -warp... [-2],1,2,1 -+[-3,-1] -/.. 2
+        -done -rm.
+      -else # Edge-oriented
+        --diffusiontensors. 0,1,0.5,0.5
+        -repeat {$nb_iter}
+          -j.. [-4],0,0,0,0,1,[-3]
+          -smooth.. [-1],10,2,0
+        -done -rm.
+      -endif
+      -j. [-3],0,0,0,0,1,[-2] -rm[-3,-2]
+
     -done
     -nm. $nm -rv[0,-1] -rm.
   -endl -rm. -done -v +
