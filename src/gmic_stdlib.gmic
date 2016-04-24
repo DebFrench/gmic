@@ -19819,32 +19819,32 @@ gimp_filter_sources :
   file_hotchocolate=${_path_rc}hotchocolate.gmic
   -_u $file_hotchocolate _file_hotchocolate=${}
   -if $file_hotchocolate
-    is_too_old={(date(1)-date(1,$file_hotchocolate))%12>1}
-    -if {!$is_too_old}
-      -i raw:$file_hotchocolate,uchar
+    -i raw:$file_hotchocolate,uchar
+    -if {i!=32" && "i!=10} # Already displayed once, remove it.
+      (10) -o. raw:$_file_hotchocolate,uchar -rm.
+    -else
       is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>14}
-      -rm.
+      is_too_old|={i==10" && "(date(1)-date(1,$file_hotchocolate))%12>1}
+      -if $is_too_old
+        ({'"\#@gimp <span color=\"red\">&#x2764; <b>One-click chocolate !</b></span> : _none_, gimp_friends"\n\
+           "\#@gimp : note = note{\"Want to send a <b>free hot chocolate</b> to the <b>hard-working</b> developers who provide G\47MIC <b>for free</b> ?\\n"\n\
+           "\#@gimp : Just follow the link below (or copy/paste into your browser) and click <b>on the sponsored link</b> that is shown. It\47s as simple as that and"\n\
+           "\#@gimp : we\47ll drink to you :)\"}"\n\
+           "\#@gimp : link = link{\"Send a free hot chocolate to the G\47MIC developers\",\"http://gmic.eu/freechocolate.shtml\"}"\n\
+           "\#@gimp : link = link{\"http://gmic.eu/freechocolate.shtml\"}"\n\
+           "\#@gimp : sep = separator()"\n\
+           "\#@gimp : note = note{\"If you\47d like to send <b>more</b> than a single hot chocolate for our efforts, please visit the following page where you can contribute"\n\
+           "\#@gimp : extra to help keep us motivated (via <b>Paypal</b>):\"}"\n\
+           "\#@gimp : link = link{\"Offer even more hot chocolate to the G\47MIC developers\",\"http://gmic.eu/morechocolate.shtml\"}"\n\
+           "\#@gimp : link = link{\"http://gmic.eu/morechocolate.shtml\"}"\n\
+           "\#@gimp : sep = separator()"\n\
+           "\#@gimp : note = note{\"<small><b>Note:</b> This filter won\47t appear anymore after you re-run the plug-in. So, don\47t miss the occasion!</small>\"}"\n\
+           "\#@gimp : sep = separator(), note = note(\"<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/30/2015</i>.</small>\")"\n\
+        '})
+        -o. raw:$file_hotchocolate,uchar -rm.
+      -endif
     -endif
-    -if $is_too_old
-      ({'"\#@gimp <span color=\"red\">&#x2764; <b>One-click chocolate !</b></span> : gimp_hotchocolate, gimp_hotchocolate_preview"\n\
-         "\#@gimp : note = note{\"Want to send a <b>free hot chocolate</b> to the <b>hard-working</b> developers who provide G\47MIC <b>for free</b> ?\\n"\n\
-         "\#@gimp : Just follow the link below (or copy/paste into your browser) and click <b>on the sponsored link</b> that is shown. It\47s as simple as that and"\n\
-         "\#@gimp : we\47ll drink to you :)\"}"\n\
-         "\#@gimp : link = link{\"Send a free hot chocolate to the G\47MIC developers\",\"http://gmic.eu/freechocolate.shtml\"}"\n\
-         "\#@gimp : link = link{\"http://gmic.eu/freechocolate.shtml\"}"\n\
-         "\#@gimp : sep = separator()"\n\
-         "\#@gimp : note = note{\"If you\47d like to send <b>more</b> than a single hot chocolate for our efforts, please visit the following page where you can contribute"\n\
-         "\#@gimp : extra to help keep us motivated (via <b>Paypal</b>):\"}"\n\
-         "\#@gimp : link = link{\"Offer even more hot chocolate to the G\47MIC developers\",\"http://gmic.eu/morechocolate.shtml\"}"\n\
-         "\#@gimp : link = link{\"http://gmic.eu/morechocolate.shtml\"}"\n\
-         "\#@gimp : sep = separator()"\n\
-         "\#@gimp : note = note{\"<small><b>Note:</b> This filter won\47t appear anymore after you re-run the plug-in. So, don\47t miss the occasion!</small>\"}"\n\
-         "\#@gimp : sep = separator(), note = note(\"<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/30/2015</i>.</small>\")"\n\
-         "gimp_hotchocolate : (10) -o. raw:"$_file_hotchocolate",uchar -rm. "\n\
-         "gimp_hotchocolate_preview : -gimp_hotchocolate -gimp_friends"\
-      '})
-      -o. raw:$file_hotchocolate,uchar -rm.
-    -endif
+    -rm.
   -else
     (32) -o. raw:$file_hotchocolate,uchar -rm.
   -endif
