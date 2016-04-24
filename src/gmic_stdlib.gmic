@@ -20349,9 +20349,8 @@ gimp_download_all_data :
 
   # Manage downloads.
   _n=0
-  _N={narg($_filenames_film,$_filenames_grain,$_filenames_lightleak,$_filename_logo)}
+  _N={narg($_filenames_grain,$_filenames_lightleak,$_filename_logo)}
   -progress 0
-  -_gimp_download_all_data[] film,$1
   -_gimp_download_all_data[] grain,$1
   -_gimp_download_all_data[] lightleak,$1
   -_gimp_download_all_data[] logo,$1
