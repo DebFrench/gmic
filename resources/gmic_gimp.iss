@@ -32,6 +32,7 @@ OutputBaseFilename=gmic_gimp_XXX_win64
 
 [Files]
 Source: gmic-gimp-build\gmic_gimp.exe; DestDir: {app}
+Source: gmic-gimp-build\gmic_film_cluts.gmz; DestDir: {app}
 Source: gmic-gimp-build\libcurl-4.dll; DestDir: {app}
 Source: gmic-gimp-build\libeay32.dll; DestDir: {app}
 Source: gmic-gimp-build\libeay32__.dll; DestDir: {app}

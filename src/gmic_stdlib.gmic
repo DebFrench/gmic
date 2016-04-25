@@ -26110,9 +26110,9 @@ _gimp_emulate_film :
     -else
       -l[]
         -repeat 2
-          -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "isfile(${-path_gimp}gmic_film_cluts.gmz))}
+          -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz))}
             -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
-            -else -i ${-path_gimp}gmic_film_cluts.gmz
+            -else -i ${-path_gimp}plug-ins/gmic_film_cluts.gmz
             -endif
           -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
           -endif

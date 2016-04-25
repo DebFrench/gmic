@@ -52,6 +52,8 @@ if [ "$OSTYPE" == "msys" ]; then
         # Input sources.
         rm -rf gmic-src &&
         cp -rf /e/work/src/gmic/src gmic-src
+        cp -rf /e/work/src/gmic/resources/gmic_film_cluts.gmz gmic-build
+        cp -rf /e/work/src/gmic/resources/gmic_film_cluts.gmz gmic-gimp-build
 
     # Get version number.
     cd gmic-src &&
@@ -140,7 +142,7 @@ if [ "$OSTYPE" == "msys" ]; then
         cp -f ${OUTZIP2} /e/work/src/ &&
 
         # Construct Inno Setup installer.
-        sed s\/XXX\/${VERSION}${SUFFIX}\/g gmic_gimp.iss > tmp.iss &&
+        sed s\/XXX\/${VERSION}${SUFFIX}\/g /e/work/src/gmic/resources/gmic_gimp.iss > tmp.iss &&
         /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe tmp.iss
     touch ${OUTINST} &&
         sleep 3 &&
@@ -292,7 +294,7 @@ cd ..
 #-----------------
 echo " - Upload G'MIC web page."
 cd html
-lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "mirror -RL . /www/gmic/ ; quit"
+#lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "mirror -RL . /www/gmic/ ; quit"
 rm -f gmic_stdlib.gmic gmic_stdlib.$SVERSION
 cd ..
 
@@ -316,6 +318,7 @@ cd resources
 \gmic cimgz:http://gmic.eu/gimp_update$SVERSION.gmic -o raw:$DIR/resources/gimp_update$SVERSION.gmic,uchar
 \gmic cimgz:http://gmic.eu/cli_update$SVERSION.gmic -o raw:$DIR/resources/cli_update$SVERSION.gmic,uchar
 cp -Lrf gmic_bashcompletion.sh $DIR/resources
+cp -Lrf gmic_film_cluts.gmz $DIR/resources
 cp -Lrf debian $DIR
 cd ..
 cd zart
@@ -372,10 +375,10 @@ tar chvf ${TARFILE} `basename $DIR`
 gzip ${TARFILE}
 cp -f ${TARFILE}.gz ${HOME}/work/src/
 if [ "$1" == "final" ]; then
-    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz; quit";
-    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit";
+#    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz; quit";
+#    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit";
 fi
-lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/prerelease ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
+# lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/prerelease ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
 
 # Create debian packages for debian/ubuntu 64 bits.
 #--------------------------------------------------
@@ -400,7 +403,7 @@ mv ../gmic_${VERSION}_amd64.deb ../$PAK &&
 echo " - Waiting for all packages.".
 
 cd ${HOME}/work/src/
-gmic -_update_server_binaries ${VERSION}${SUFFIX}
+#gmic -_update_server_binaries ${VERSION}${SUFFIX}
 
 #
 # End of file.
