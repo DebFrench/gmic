@@ -2540,7 +2540,7 @@ gmicky :
 gmicky_deevad :
   -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky', by David Revoy."
   -v -
-  filename=${-path_rc}/gmicky_large_deevad.cimgz
+  filename=${_path_rc}gmicky_large_deevad.cimgz
   -if $filename $filename
   -else http://gmic.eu/img/gmicky_large_deevad.cimgz -o. $filename -+. 0
   -endif
@@ -2553,7 +2553,7 @@ gmicky_deevad :
 gmicky_mahvin :
   -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky', by Mahvin."
   -v -
-  filename=${-path_rc}/gmicky_large_mahvin.cimgz
+  filename=${_path_rc}gmicky_large_mahvin.cimgz
   -if $filename $filename
   -else http://gmic.eu/img/gmicky_large_mahvin.cimgz -o. $filename -+. 0
   -endif
@@ -2566,7 +2566,7 @@ gmicky_mahvin :
 gmicky_wilber :
   -e[^-1] "Insert image of the G\47MIC mascot 'Gmicky' together with GIMP mascot 'Wilber', by Mahvin."
   -v -
-  filename=${-path_rc}/gmicky_wilber_large.cimgz
+  filename=${_path_rc}gmicky_wilber_large.cimgz
   -if $filename $filename
   -else http://gmic.eu/img/gmicky_wilber_large.cimgz -o. $filename -+. 0
   -endif
@@ -2801,7 +2801,7 @@ rainbow_lut :
 roddy :
   -e[^-1] "Load image of the G\47MIC Rodilius mascot 'Roddy'."
   -v -
-  filename=${-path_rc}/roddy_large.cimgz
+  filename=${_path_rc}roddy_large.cimgz
   -if $filename $filename
   -else http://gmic.eu/img/roddy_large.cimgz -o. $filename -+. 0
   -endif
@@ -3034,7 +3034,7 @@ update :
 _update :
   -e[0--3] "Update commands from the latest definition file on the G\47MIC server."
   -v -
-  out=${-path_rc}cli_update$_version.gmic
+  out=${_path_rc}cli_update$_version.gmic
   -l[] cimgz:http://gmic.eu/cli_update$_version.gmic
     -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}} -o raw:$out,char -endif
     -rm
@@ -3111,7 +3111,7 @@ update_film_emulation_html :
 
     -repeat {narg($presets)}
       preset=${-arg\ {1+$>},$presets}
-      filename=${-path_rc}film_$preset.cimgz
+      filename=${_path_rc}film_$preset.cimgz
       -v + -e[] "    - "$preset -v -
 
       -i $filename -to_rgb. s={sqrt(w*h*d)}
@@ -3861,8 +3861,8 @@ update_server : -skip ${1=$_version},${2=1}
     -y -a[6-8] y -a[3-5] y -a[0-2] y
 
     # Upload filter files on G'MIC server.
-    -o[1] raw:${-path_rc}/cli_update$1.gmic,uchar
-    -o[2] raw:${-path_rc}/gimp_update$1.gmic,uchar
+    -o[1] raw:${_path_rc}cli_update$1.gmic,uchar
+    -o[2] raw:${_path_rc}gimp_update$1.gmic,uchar
 
     -o[0] raw:/tmp/update$1.gmic,uchar
     -o[1] cimgz:/tmp/cli_update$1.gmic,uchar
@@ -4985,7 +4985,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
     -endif
 
     -k[keycoords] -nm $nm
-    -o ${-path_rc}comp_$nm.gmz,uchar
+    -o ${_path_rc}comp_$nm.gmz,uchar
   -endl -done -v +
 
   # Draw evolution of the reconstruction error.
@@ -15886,32 +15886,6 @@ path_tmp :
   -u $_path_tmp
   -v +
 
-#@gmic path_rc
-#@gmic : Return a path to store persistent resources for one user (whose value is OS-dependent).
-path_rc :
-  -v -
-  -if {!narg($_path_rc)}
-    _path_rc=""
-    -if {!narg($_path_rc)} _path_rc=${GMIC_PATH} -endif
-    -if {!narg($_path_rc)} _path_rc=${GMIC_GIMP_PATH} -endif
-    -if {!narg($_path_rc)}
-      -if ${-is_windows} _path_rc=${APPDATA}
-      -else _path_rc=${HOME}
-      -endif
-    -endif
-    -if {!narg($_path_rc)} _path_rc=${TMP} -endif
-    -if {!narg($_path_rc)} _path_rc=${TEMP} -endif
-    -if {!narg($_path_rc)} _path_rc=${TMPDIR} -endif
-    -if ${-is_windows} _path_rc=$_path_rc\\
-    -else _path_rc=$_path_rc/
-    -endif
-    -if ${-is_windows} _path_rc=${_path_rc}gmicrc\\
-    -else _path_rc=${_path_rc}.gmicrc/
-    -endif
-  -endif
-  -u $_path_rc
-  -v +
-
 #@gmic quote : string
 #@gmic : Return a "quotified" version of the string.
 quote :
@@ -19860,7 +19834,7 @@ gimp_filter_sources :
   ({'$_file_hotchocolate'})
 
   # Include own users external sources.
-  -l[] -i cimgz:${-path_rc}gimp_filter_sources -onfail -endl
+  -l[] -i cimgz:${_path_rc}gimp_filter_sources -onfail -endl
 
 # Function used for filters based on parallelization with spatial splitting.
 gimp_parallel_overlap :
@@ -20339,7 +20313,7 @@ gimp_logo_ca :
 gimp_download_all_data :
 
   # Film emulation.
-  -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${-path_rc}gmic_film_cluts.gmz,uchar -rm -endl
+  -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -rm -endl
 
   # Grain.
   _filenames_grain=${-_gimp_emulate_grain}
@@ -20369,7 +20343,7 @@ _gimp_download_all_data :
    -repeat {narg(${_filenames_$1})}
      filename=${-arg\ 1+$>,${_filenames_$1}}.cimgz
      -v + -e[] "Download "$filename -v -
-     -if {$2" || "!isfile(${-path_rc}${_prefix_$1}$filename)} -l[] ${_url_$1}/$filename -o ${-path_rc}${_prefix_$1}$filename -rm -onfail -endl -endif
+     -if {$2" || "!isfile(${_path_rc}${_prefix_$1}$filename)} -l[] ${_url_$1}/$filename -o ${_path_rc}${_prefix_$1}$filename -rm -onfail -endl -endif
      -progress {100*$_n/$_N}
      _n+=1
    -done
@@ -20397,7 +20371,7 @@ gimp_manage_filter_sources :
     -_gimp_manage_filter_sources
 #    -if $1 ({'$_url_jayprich'}) -endif
 #    -if $2 ({'$_url_zonderr'}) -endif
-    -o cimgz:${-path_rc}gimp_filter_sources,uchar
+    -o cimgz:${_path_rc}gimp_filter_sources,uchar
     -rm
   -endl
 
@@ -20415,7 +20389,7 @@ gimp_manage_filter_sources_preview :
     -else # Read local sources file and set parameters according to its content.
       -repeat 32 b$>=0 -done
       -l[]
-        -i cimgz:${-path_rc}gimp_filter_sources
+        -i cimgz:${_path_rc}gimp_filter_sources
         -repeat $! -l[$>]
           -if {{0,t}'=='$_url_jayprich} b0=1 -endif
           -if {{0,t}'=='$_url_zonderr} b1=1 -endif
@@ -20432,7 +20406,7 @@ gimp_manage_filter_sources_preview :
     -if $! -repeat $!
       -if {${-head[$>]\ 4}'=='{'http'}} -basename {$>,t} msg=$msg"\n["$i"] "${} i+=1
       -else
-        -if ${-path_rc}{$>,t} msg=$msg"\n["$i"] "{$>,t}" (local user file)" i+=1 -endif
+        -if ${_path_rc}{$>,t} msg=$msg"\n["$i"] "{$>,t}" (local user file)" i+=1 -endif
       -endif
     -done -else msg="[None]" -endif
   -rm -endl
@@ -20664,16 +20638,16 @@ gimp_gmicky :
 gimp_gmicky_preview :
   w={w} h={h} -rm
   -if {$1==0}
-    filename=${-path_rc}gmicky_small_deevad.cimgz
+    filename=${_path_rc}gmicky_small_deevad.cimgz
     url=http://gmic.eu/img/gmicky_small_deevad.cimgz
   -elif {$1==1}
-    filename=${-path_rc}gmicky_small_mahvin.cimgz
+    filename=${_path_rc}gmicky_small_mahvin.cimgz
     url=http://gmic.eu/img/gmicky_small_mahvin.cimgz
   -elif {$1==2}
-    filename=${-path_rc}gmicky_wilber_small.cimgz
+    filename=${_path_rc}gmicky_wilber_small.cimgz
     url=http://gmic.eu/img/gmicky_wilber_small.cimgz
   -else
-    filename=${-path_rc}roddy_small.cimgz
+    filename=${_path_rc}roddy_small.cimgz
     url=http://gmic.eu/img/roddy_small.cimgz
   -endif
   -if $filename $filename -else $url -o $filename -endif
@@ -20723,7 +20697,7 @@ gimp_search_filters : -skip "${1=}"
 
     # Retrieve filter file.
     date_current={date(2)+31*(date(1)+12*date(0))}
-    file_filters=${-path_rc}gimp_filters
+    file_filters=${_path_rc}gimp_filters
     date_filters={date(2,$file_filters)+31*(date(1,$file_filters)+12*date(0,$file_filters))} # Date of filter file.
     -if {$date_filters<0" || "$date_current-$date_filters>0} # Filter file needs to be refreshed.
       -l[] -i raw:http://gmic.eu/gimp_filters.txt,uchar -o raw:$file_filters,uchar -onfail -endl -rm
@@ -25750,10 +25724,10 @@ _gimp_emulate_grain_preview :
 __gimp_emulate_grain :
   bm0=alpha bm1=grainmerge bm2=hardlight bm3=overlay bm4=softlight bm5=alpha
   -if {narg($_force_redownload)}
-    -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${-path_rc}$1.cimgz
+    -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${_path_rc}$1.cimgz
   -else
-    -if ${-path_rc}$1.cimgz -i ${-path_rc}$1.cimgz
-    -else -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${-path_rc}$1.cimgz
+    -if ${_path_rc}$1.cimgz -i ${_path_rc}$1.cimgz
+    -else -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${_path_rc}$1.cimgz
     -endif
   -endif
 
@@ -26116,21 +26090,21 @@ _gimp_emulate_film :
         -if {$!!=1} -error "" -endif
         -decompress_clut 64,64,64 -round
       -endl
-      -o. ${-path_rc}clut_$2.cimgz,uchar
+      -o. ${_path_rc}clut_$2.cimgz,uchar
     -else
-      -if ${-path_rc}clut_$2.cimgz -i ${-path_rc}clut_$2.cimgz
+      -if ${_path_rc}clut_$2.cimgz -i ${_path_rc}clut_$2.cimgz
       -else
         -l[]
           -repeat 2
-            -if {!$>" && "isfile(${-path_rc}gmic_film_cluts.gmz)} -i ${-path_rc}gmic_film_cluts.gmz
-            -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${-path_rc}gmic_film_cluts.gmz,uchar -endl
+            -if {!$>" && "isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
+            -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
             -endif
             -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
             -if {$!==1} -break -endif # CLUT found!
           -rm -done
           -decompress_clut 64,64,64 -round
         -endl
-        -o. ${-path_rc}clut_$2.cimgz,uchar
+        -o. ${_path_rc}clut_$2.cimgz,uchar
       -endif
     -endif
 
@@ -27178,8 +27152,8 @@ gimp_lightglow_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/01/2015</i>.</small>")
 gimp_light_leaks :
   filename=lightleak_${"-padint $1",6}.cimgz
-  -if ${-path_rc}$filename -i ${-path_rc}$filename
-  -else -i http://gmic.eu/data_lightleaks/$filename -o. ${-path_rc}$filename
+  -if ${_path_rc}$filename -i ${_path_rc}$filename
+  -else -i http://gmic.eu/data_lightleaks/$filename -o. ${_path_rc}$filename
   -endif
   mode=${-arg\ 1+$7,normal,lighten,screen,dodge,add,darken,multiply,burn,overlay,softlight,hardlight,difference,subtract,grainextract,grainmerge,divide,hue,saturation,value}
   -mv. 0
