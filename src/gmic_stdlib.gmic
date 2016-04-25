@@ -15324,9 +15324,12 @@ arg : -check "isint($1) && ($1)>0"
 #@gmic : For each i in [1..N], set 'variable_name$i=argument_i'.
 #@gmic : The variable name should be global to make this command useful (i.e. starts by an underscore).
 arg2var :
-  $=arg
-  -u {$#-1}
-  -repeat ${} $1{1+$>}=${arg{2+$>}} -done
+  -v - $=arg -u {$#-1} -repeat ${} $1{1+$>}=${arg{2+$>}} -done -v -
+
+#@gmic argname : "name"
+#@gmic : Return all indices of the images having specified name.
+argname :
+  -v - -u "" c="" -repeat $! -if {{$>,n}'=='"$1"} -u ${}$c$> c="," -endif -done -v +
 
 #@gmic autocrop_coords : value1,value2,... | auto
 #@gmic : Return coordinates (x0,y0,z0,x1,y1,z1) of the autocrop that could be performed on the latest of the selected images.
