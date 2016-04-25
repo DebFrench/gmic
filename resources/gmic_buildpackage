@@ -294,7 +294,7 @@ cd ..
 #-----------------
 echo " - Upload G'MIC web page."
 cd html
-#lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "mirror -RL . /www/gmic/ ; quit"
+lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "mirror -RL . /www/gmic/ ; quit"
 rm -f gmic_stdlib.gmic gmic_stdlib.$SVERSION
 cd ..
 
@@ -374,11 +374,11 @@ rm -rf `basename $DIR`/debian
 tar chvf ${TARFILE} `basename $DIR`
 gzip ${TARFILE}
 cp -f ${TARFILE}.gz ${HOME}/work/src/
-#if [ "$1" == "final" ]; then
-#    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz; quit";
-#    lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit";
-#fi
-# lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/prerelease ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
+if [ "$1" == "final" ]; then
+   lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz; quit";
+   lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/source/ ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit";
+fi
+lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "put -O /www/gmic/files/prerelease ${HOME}/work/src/${TARFILE}.gz -o gmic_source.tar.gz; quit"
 
 # Create debian packages for debian/ubuntu 64 bits.
 #--------------------------------------------------
@@ -403,7 +403,7 @@ mv ../gmic_${VERSION}_amd64.deb ../$PAK &&
 echo " - Waiting for all packages.".
 
 cd ${HOME}/work/src/
-#gmic -_update_server_binaries ${VERSION}${SUFFIX}
+gmic -_update_server_binaries ${VERSION}${SUFFIX}
 
 #
 # End of file.
