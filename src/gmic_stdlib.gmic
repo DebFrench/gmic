@@ -8455,6 +8455,7 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
                ++i(#-1,X,Y,Z);
              0)"
       --max. 1 -/[-3,-1] -!=. 0
+
       -if {!$>} # First scale: Initialize by value propagation
         im={-2,im} ---.. {$im-1} -*. [-2]
         --distance.. 1 -*. -1 -watershed.. [-1] -rm.
@@ -8462,29 +8463,30 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
       -endif
 
       -if {$>>0" || "$nb_scales==1}
+
         # Apply diffusion iterations.
-        -mv[-3] $! -r. [-3],3
+        -r... [-2],3
         nb_iter={max(5,$4)}
 
         -if {$3==0} # Isotropic diffusion
-          -repeat $nb_iter -j. [-3],0,0,0,0,1,[-2] -b. 0.5 -done
+          -repeat $nb_iter -j... [-2],0,0,0,0,1,[-1] -b... 0.5 -done
         -elif {$3==1} # Delaunay-oriented
-          --distance.. 1 -g. -a[-{d==1?2:3}--1] c -orientation.
+          --distance. 1 -g. -a[-{d==1?2:3}--1] c -orientation.
           -repeat {$nb_iter}
-            -j.. [-4],0,0,0,0,1,[-3]
-            --warp.. [-1],1,2,1 -*.. -1 -warp... [-2],1,2,1 -+[-3,-1] -/.. 2
+            -j[-4] [-3],0,0,0,0,1,[-2]
+            --warp[-4] [-1],1,2,1 -*.. -1 -warp[-5] [-2],1,2,1 -+[-5,-1] -/[-4] 2
           -done -rm.
         -else # Edge-oriented
-          --diffusiontensors. 0,1,0.5,0.5
+          --diffusiontensors.. 0,1,1.5,0.5
           -repeat {$nb_iter}
             -j.. [-4],0,0,0,0,1,[-3]
             -smooth.. [-1],10,2,0
           -done -rm.
         -endif
-        -j. [-3],0,0,0,0,1,[-2]
-      -endif
-      -rm[-3,-2]
 
+        -j[-3] [-2],0,0,0,0,1,[-1]
+      -endif
+      -rm[-2,-1]
     -done
     -nm. $nm -rv[0,-1] -rm.
   -endl -rm. -done -v +
@@ -26509,6 +26511,18 @@ gimp_frame_round :
   -frame_round ${1-8}
   -if $9 -frame_blur $1,{min(99,$1+$9)},$3,$10,$11% -endif
 
+#@gimp Frame [smooth] : gimp_frame_smooth, gimp_frame_smooth(1)
+#@gimp : Width (%) = int(10,0,100)
+#@gimp : Height (%) = int(10,0,100)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/25/2016</i>.</small>")
+gimp_frame_smooth :
+  -repeat $! -l[$>]
+     sx={$1%*max(w,h)} sy={$2%*max(w,h)}
+     100%,100%,1,1,-1 -frame $sx,$sy,0
+     -+. 1 -inpaint_diffusion[0] [1],50%,2,15
+     -rm.
+  -endl -done
+
 #@gimp Old photograph : gimp_old_photo, gimp_old_photo(1)
 #@gimp : Vignette strength = float(200,0,255)
 #@gimp : Vignette min radius = float(50,0,100)
@@ -30829,6 +30843,7 @@ gmicol_rotate :
 #@gmicol clone("Frame [pattern]")
 #@gmicol clone("Frame [regular]")
 #@gmicol clone("Frame [round]")
+#@gmicol clone("Frame [smooth]")
 #@gmicol clone("Old photograph")
 #@gmicol clone("Polaroid")
 #@gmicol clone("Tunnel")
