@@ -8433,6 +8433,8 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
     nb_scalesM={round(log2(max(w,h,d)))}
     nb_scales={round(${"-is_percent $2"}?$nb_scalesM*$2:$2)}
     nb_scales={max(1,min($nb_scales,$nb_scalesM))}
+    nb_iter={max(5,$4)}
+
     -repeat $nb_scales
       scale={2^$<}
       width={0,max(1,round(w/$scale))}
@@ -8466,8 +8468,6 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
 
         # Apply diffusion iterations.
         -r... [-2],3
-        nb_iter={max(5,$4)}
-
         -if {$3==0} # Isotropic diffusion
           -repeat $nb_iter -j... [-2],0,0,0,0,1,[-1] -b... 0.5 -done
         -elif {$3==1} # Delaunay-oriented
@@ -8477,11 +8477,11 @@ inpaint_diffusion : -check ${-is_image_arg\ $1}" && ${2=75%}>=0 && isint(${3=1})
             --warp[-4] [-1],1,2,1 -*.. -1 -warp[-5] [-2],1,2,1 -+[-5,-1] -/[-4] 2
           -done -rm.
         -else # Edge-oriented
-          --diffusiontensors... 0,1,1.5,0.5
-          -repeat {$nb_iter}
+          -repeat $nb_iter
+            --diffusiontensors... 0,1,1.5,0.5
             -j[-4] [-3],0,0,0,0,1,[-2]
-            -smooth[-4] [-1],10,2,0
-          -done -rm.
+            -smooth[-4] [-1],1,10,0 -rm.
+          -done
         -endif
 
         -j[-3] [-2],0,0,0,0,1,[-1]
