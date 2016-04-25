@@ -20335,7 +20335,12 @@ gimp_logo_ca :
 gimp_download_all_data :
 
   # Film emulation.
-  -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -rm -endl
+  -l[]
+    -i http://gmic.eu/gmic_film_cluts.gmz
+    -o ${_path_rc}gmic_film_cluts.gmz,uchar
+    -rm
+  -onfail -rm
+  -endl
 
   # Grain.
   _filenames_grain=${-_gimp_emulate_grain}
@@ -25745,12 +25750,8 @@ _gimp_emulate_grain_preview :
 
 __gimp_emulate_grain :
   bm0=alpha bm1=grainmerge bm2=hardlight bm3=overlay bm4=softlight bm5=alpha
-  -if {narg($_force_redownload)}
-    -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${_path_rc}$1.cimgz
-  -else
-    -if ${_path_rc}$1.cimgz -i ${_path_rc}$1.cimgz
-    -else -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${_path_rc}$1.cimgz
-    -endif
+  -if ${_path_rc}$1.cimgz -i ${_path_rc}$1.cimgz
+  -else -i http://gmic.eu/data_film_presets/$1.cimgz -o. ${_path_rc}$1.cimgz
   -endif
 
   -repeat {$!-1} -l[$>,-1] -split_opacity[0]
@@ -26105,29 +26106,23 @@ gimp_emulate_film_various_preview :
 
 _gimp_emulate_film :
   -if $1
-    -if {narg($_force_redownload)}
+    -if ${_path_rc}clut_$2.cimgz -i ${_path_rc}clut_$2.cimgz
+    -else
       -l[]
-        -i http://gmic.eu/gmic_film_cluts.gmz
-        -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
-        -if {$!!=1} -error "" -endif
+        -repeat 2
+          -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "isfile(${-path_gimp}gmic_film_cluts.gmz))}
+            -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
+            -else -i ${-path_gimp}gmic_film_cluts.gmz
+            -endif
+          -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
+          -endif
+          -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
+          -if {$!==1} -break -endif # CLUT found!
+          -rm
+        -done
         -decompress_clut 64,64,64 -round
       -endl
       -o. ${_path_rc}clut_$2.cimgz,uchar
-    -else
-      -if ${_path_rc}clut_$2.cimgz -i ${_path_rc}clut_$2.cimgz
-      -else
-        -l[]
-          -repeat 2
-            -if {!$>" && "isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
-            -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
-            -endif
-            -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
-            -if {$!==1} -break -endif # CLUT found!
-          -rm -done
-          -decompress_clut 64,64,64 -round
-        -endl
-        -o. ${_path_rc}clut_$2.cimgz,uchar
-      -endif
     -endif
 
     -repeat {$!-1}
@@ -26136,8 +26131,8 @@ _gimp_emulate_film :
       -endif
     -done
     -rm.
-
   -endif
+
   -repeat $! -l[$>] -split_opacity
     -apply_gamma[0] {10^$4}                            # Gamma correction
     --[0] 128 -*[0] $5 -+[0] 128 -+[0] $6 -c[0] 0,255  # B&W contrast and brightness.
