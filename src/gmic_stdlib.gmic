@@ -19816,7 +19816,7 @@ __help_end : #  <-- don't remove me, used as a end marker for command '-help' !
 
 # Function that returns the list of external sources to be included in the GIMP plug-in.
 # This command can be superseded on the user '.gmic' file to add sources for the plug-in.
-gimp_filter_sources :
+gimp_filter_sources : -skip ${1=0}
   ({'${"-_u "$_path_user}'})
   ({'http://gmic.eu/gimp_update$_version.gmic'},1) # Override default filters.
 
@@ -19826,7 +19826,7 @@ gimp_filter_sources :
   -if $file_hotchocolate
     -i raw:$file_hotchocolate,uchar
     -if {i!=32" && "i!=10} # Already displayed once, remove it.
-      (10) -o. raw:$_file_hotchocolate,uchar -rm.
+      -if {!$1} (10) -o. raw:$_file_hotchocolate,uchar -rm. -endif
     -else
       is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>14}
       is_too_old|={i==10" && "(date(1)-date(1,$file_hotchocolate))%12>1}
