@@ -9617,22 +9617,6 @@ variance_patch : -check "isint(${1=16}) && $1>=1"
 #
 #---------------------------------
 
-#@gmic arrow : x0,y0,x1,y1,_thickness>=0,_opacity,_pattern,_color1,...
-#@gmic : Draw an arrow on selected images.
-#@gmic : 'pattern' is an hexadecimal number starting with '0x' which can be omitted
-#@gmic : even if a color is specified.
-#@gmic : Default values: 'opacity=1', 'pattern=(undefined)' and 'color1=0'.
-arrow : -check "isval(${4=1}) && isval(${5=0}) && isval(${6=0})"
-  -v - ({'"$6"'},0) is_pattern={{[0,1]}'=='{'0x'}} -rm.
-  -if $is_pattern
-    -v + -e[0--3] "Draw arrow on image$?, from ($1,$2) to ($3,$4) with opacity $5, pattern $6 and color (${7--1})." -v -
-    pattern=$6 color=${7--1}
-  -else
-    -v + -e[0--3] "Draw arrow on image$?, from ($1,$2) to ($3,$4) with opacity $5 and color (${6--1})." -v -
-    pattern=0xffffffff color=${6--1}
-  -endif
-  -if {!$4} -v + -return -endif
-
 #@gmic axes : x0,x1,y0,y1,_font_height>=0,_opacity,_pattern,_color1,...
 #@gmic : Draw xy-axes on selected images.
 #@gmic : 'pattern' is an hexadecimal number starting with '0x' which can be omitted
