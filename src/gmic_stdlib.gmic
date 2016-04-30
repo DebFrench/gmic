@@ -9634,7 +9634,7 @@ arrow : -check "${5=1%}>=0 && ${6=10%}>=0 && ${7=3%}" -skip ${8=1}
       y1 = "${"-is_percent $4"}"?(h-1)*$4:$4;
       p0 = [x0,y0];
       dp = [x1,y1]-=p0;
-      l = norm2(dp);     # arrow length
+      l = norm2(dp);                       # arrow length
       t = "${"-is_percent $5"}"?l*$5:$5;   # thickness
       hl = "${"-is_percent $6"}"?l*$6:$6;  # head length
       ht = "${"-is_percent $7"}"?l*$7:$7;  # head thickness
