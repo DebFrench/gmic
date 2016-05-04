@@ -15083,7 +15083,7 @@ output_pink3d :
 #@gmic : $ image.jpg --blur 2 -pink maxima,4
 pink : -v -
   -if {$#>1} ({"'${2--1}'"}) -replace. {','},{"' '"} p={t} -rm. -else p=" " -endif
-  -v + -e[^-1] "Call pink package with cmd: \"$1$? "$p"$?\"." -v -
+  -v + -e[^-1] "Call pink package on image$? with cmd: \"$1 [img] "$p" [img]\"." -v -
   -repeat $! -l[$>] -_xpinks $1,$p -endl -done -v +
 
 #@gmic pink_grayskel : _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
