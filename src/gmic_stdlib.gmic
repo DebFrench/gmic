@@ -19855,8 +19855,12 @@ gimp_filter_sources : -skip ${1=0}
     -if {i!=32" && "i!=10} # Already displayed once, remove it.
       -if {!$1} (10) -o. raw:$_file_hotchocolate,uchar -rm. -endif
     -else
-      is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>14}
-      is_too_old|={i==10" && "(date(1)-date(1,$file_hotchocolate))%12>1}
+#      is_too_old={i==32" && "(date(2)-date(2,$file_hotchocolate))%31>14}
+#      is_too_old|={i==10" && "(date(1)-date(1,$file_hotchocolate))%12>1}
+      is_too_old={"Y = date(0); M = date(1); D = date(2); date_current = Y*365 + M*31 + D;
+                   Y = date(0,"$file_hotchocolate"); M = date(1,"$file_hotchocolate"); D = date(2,"$file_hotchocolate"); date_file = Y*365 + M*31 + D;
+                   delta = date_current - date_file;
+                   (i==32 && delta>10) || (i==10 && delta>45)"}
       -if $is_too_old
         ({'"\#@gimp <span color=\"red\">&#x2764; <b>One-click chocolate !</b></span> : _none_, gimp_friends"\n\
            "\#@gimp : note = note{\"Want to send a <b>free hot chocolate</b> to the <b>hard-working</b> developers who provide G\47MIC <b>for free</b> ?\\n"\n\
