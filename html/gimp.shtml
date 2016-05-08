@@ -54,7 +54,7 @@
     function hop() {
       var delay = 6; // In seconds
       var ad = document.querySelector("ins.adsbygoogle");
-      if ( Math.random() < 0.40 || (ad && ad.innerHTML.replace(/\s/g, "").length == 0) ) {
+      if ( Math.random() < 0.20 || (ad && ad.innerHTML.replace(/\s/g, "").length == 0) ) {
         document.getElementById('nopub').style.display='';
       } else {
         document.getElementById('pub').style.display='';
