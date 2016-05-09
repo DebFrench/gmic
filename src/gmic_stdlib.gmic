@@ -560,7 +560,7 @@ _help_usage :
 \n       . '"$c"$_vt100"$n"': Set to "${g}"1"$n" (default value) if colored text output is allowed on the console.
 \n       . '"$c"$_path_rc"$n"': The path to the "${-GMIC}" folder used to store resources and configuration files
 \n         (its value is OS-dependent).
-\n       . '"$c"$_path_user"$n"': The path to the "${-GMIC}" user file .gmic (its value is OS-dependent).
+\n       . '"$c"$_path_user"$n"': The path to the "${-GMIC}" user file "${g}".gmic"$n" or "${g}"user.gmic"$n" (its value is OS-dependent).
 \n
 \n  - '"$c"${\"command line\"}"$n"' is substituted by the "${g}"status value"$n" set by the execution of the
 \n     specified command line (see command '"$c"-status"$n"' to learn more about status).
@@ -580,6 +580,11 @@ _help_usage :
 \n  - '"$c"{string1'!='string2}"$n"' is substituted by "${c}"0"$n" or "${c}"a non-null integer"$n", whether the two strings
 \n     beside the operator are different or not (test is case-sensitive). For instance,
 \n     item '"$c"{foo'!='foo}"$n"' is substituted by '"${c}"0"$n"' and '"$c"{foo'!='FOO}"$n"' by '"${c}"32"$n"'.
+\n
+\n  - '"$c"{string1'=~'string2}"$n"' and '"$c"{string1'!~'string2}"$n"' do the same, but for case-insensitive comparisons.
+\n
+\n  - Adding a positive integer '"${g}"N"$n"' at the end of these comparison operators (before the last quote,
+\n     e.g. '"$c"{string1'=~N'string2}"$n"') restricts the comparison only to the '"${g}"N"$n"' first characters.
 \n
 \n  - '"$c"{image,feature}"$n"' is substituted by a specific feature of the image "$c"[image]"$n".
 \n     '"${g}"image"$n"' can be either an image number or an image name. It can be also eluded.
