@@ -581,11 +581,6 @@ _help_usage :
 \n     beside the operator are different or not (test is case-sensitive). For instance,
 \n     item '"$c"{foo'!='foo}"$n"' is substituted by '"${c}"0"$n"' and '"$c"{foo'!='FOO}"$n"' by '"${c}"32"$n"'.
 \n
-\n  - '"$c"{string1'=~'string2}"$n"' and '"$c"{string1'!~'string2}"$n"' do the same, but for case-insensitive comparisons.
-\n
-\n  - Adding a positive integer '"${g}"N"$n"' at the end of these comparison operators (before the last quote,
-\n     e.g. '"$c"{string1'=~N'string2}"$n"') restricts the comparison only to the '"${g}"N"$n"' first characters.
-\n
 \n  - '"$c"{image,feature}"$n"' is substituted by a specific feature of the image "$c"[image]"$n".
 \n     '"${g}"image"$n"' can be either an image number or an image name. It can be also eluded.
 \n     In which case, the last image '"$c"[-1]"$n"' of the list is considered for the requested feature.
@@ -3879,7 +3874,7 @@ update_server : -skip ${1=$_version},${2=1}
     -_update_server_upload[] /tmp/gimp_update$1.gmic
     -_update_server_upload[] /tmp/update$1.gmic,update.gmic
 
-    -if {$1>=172} (172)
+    -if {$1>=170} (170,171,172)
     -else 0
     -endif
     -repeat {w}
@@ -9658,12 +9653,13 @@ arrow : -check "${5=1%}>=0 && ${6=10%}>=0 && ${7=3%}" -skip ${8=1}
 #@gmic : Default values: 'font_height=14', 'opacity=1', 'pattern=(undefined)' and 'color1=0'.
 #@gmic : $ 400,400,1,3,255 -axes -1,1,1,-1
 axes : -check "isint(${5=14}) && $5>=0 && ${6=1}>=0" -skip ${7=0},${8=0}
-  -if {"$7"'==2'0x}
-    -e[0--3] "Draw xy-axes on image$?, with x-range ($1,$2), y-range ($3,$4), font height $5, opacity $6, pattern $7 and color (${8--1})."
-    -v - pattern=$7 color=${8--1}
+  -v - ({'"$7"'},0) is_pattern={{[0,1]}'=='{'0x'}} -rm.
+  -if $is_pattern
+    -v + -e[0--3] "Draw xy-axes on image$?, with x-range ($1,$2), y-range ($3,$4), font height $5, opacity $6, pattern $7 and color (${8--1})." -v -
+    pattern=$7 color=${8--1}
   -else
-    -e[0--3] "Draw xy-axes on image$?, with x-range ($1,$2), y-range ($3,$4), font height $5, opacity $6 and color (${7--1})."
-    -v - pattern=0xffffffff color=${7--1}
+    -v + -e[0--3] "Draw xy-axes on image$?, with x-range ($1,$2), y-range ($3,$4), font height $5, opacity $6 and color (${7--1})." -v -
+    pattern=0xffffffff color=${7--1}
   -endif
   -if {!$5" || "!$6} -v + -return -endif
   mx={min($1,$2)} Mx={max($1,$2)}
@@ -9832,7 +9828,8 @@ cie1931 :
 #@gmic : Default values: 'opacity=1', 'pattern=(undefined)' and 'color1=0'.
 #@gmic : $ image.jpg -repeat 300 -circle {u(100)}%,{u(100)}%,{u(30)},0.3,${-RGB} -done -circle 50%,50%,100,0.7,255
 circle : -skip ${4=1},${5=0}
-  -if {"$5"'==2'0x}
+  -v - ({'"$5"'},0) is_pattern={{[0,1]}'=='{'0x'}} -rm. -v +
+  -if $is_pattern
     -e[0--3] "Draw outlined circle at ($1,$2) with radius $3 on image$?, with opacity $4 and color (${6--1})."
   -else
     -e[0--3] "Draw filled circle at ($1,$2) with radius $3 on image$?, with opacity $4 and color (${5--1})."
@@ -9895,7 +9892,8 @@ gaussian : -skip ${1=3},${2=$1},${3=0}
 #@gmic : $ image.jpg -grid 10%,10%,0,0,0.5,255
 #@gmic : $ 400,400,1,3,255 -grid 10%,10%,0,0,0.3,0xCCCCCCCC,128,32,16
 grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0}
-  -if {"$6"'==2'0x}
+  -v - ({'"$6"'},0) is_pattern={{[0,1]}'=='{'0x'}} -rm. -v +
+  -if $is_pattern
     -e[0--3] "Draw xy-grid on image$?, with sizes ($1,$2), offsets ($3,$4), opacity $5, pattern $6 and color (${7--1})."
     -v - pattern=$6 color=${7--1}
   -else
@@ -10261,7 +10259,8 @@ polka_dots : -check $1>=0 -skip ${2=20},${3=50},${4=50},${5=0},${6=10},${7=1},${
 #@gmic : Default values: 'opacity=1', 'pattern=(undefined)' and 'color1=0'.
 #@gmic : $ image.jpg -repeat 30 -rectangle {u(100)}%,{u(100)}%,{u(100)}%,{u(100)}%,0.3,${-RGB} -done
 rectangle : -skip ${5=1},${6=0}
-  -if {"$5"'==2'0x}
+  -v - ({'"$5"'},0) is_pattern={{[0,1]}'=='{'0x'}} -rm. -v +
+  -if $is_pattern
     -e[0--3] "Draw outlined rectangle from ($1,$2) to ($3,$4) on image$?, with opacity $5 and color (${7--1})."
   -else
     -e[0--3] "Draw filled rectangle from ($1,$2) to ($3,$4) on image$?, with opacity $5 and color (${6--1})."
@@ -16000,17 +15999,8 @@ strcat :
   -v - $=s res="$1" -repeat {$#-1} res=$res${s{$>+2}} -done
   -u $res -v +
 
-#@gmic strcasemp : "string1","string2",_nb_characters>=0
-#@gmic : Return '1' if the two specified strings are equals, '0' otherwise (test is case insensitive).
-#@gmic : If 'nb_characters' is specified, the comparison is done only for the 'nb_characters' first characters.
-strcasecmp : -skip "${1=}","${2=}","${3=}"
-  -v -
-  -struncase "$1" str1=${}
-  -struncase "$2" str2=${}
-  -strcmp $str1,$str2 -v +
-
 #@gmic strcmp : "string1","string2",_nb_characters>=0
-#@gmic : Return '1' if the two specified strings are equals, '0' otherwise (test is case sensitive).
+#@gmic : Return '1' if the two specified strings are equals, '0' otherwise.
 #@gmic : If 'nb_characters' is specified, the comparison is done only for the 'nb_characters' first characters.
 strcmp : -skip "${1=}","${2=}","${3=}"
   -v - -if {isval($3)} -u {$3>0?!norm2(vector$3(0.{'"$1"'},0)-=vector$3(0.{'"$2"'},0)):1}
