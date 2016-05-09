@@ -15999,11 +15999,6 @@ strcat :
   -v - $=s res="$1" -repeat {$#-1} res=$res${s{$>+2}} -done
   -u $res -v +
 
-#@gmic strcmp : string1,string2
-#@gmic : Return 1 if the two strings are equal, 0 otherwise.
-strcmp :
-  -v - (0,{'"$1"'}) ({w},{'"$2"'}) -=.. {w} --[-2,-1] -abs. -u {!{is}} -rm. -v +
-
 #@gmic strcontains : string1,string2
 #@gmic : Return 1 if the first string contains the second one.
 strcontains :
