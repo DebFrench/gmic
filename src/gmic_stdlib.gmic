@@ -3874,7 +3874,7 @@ update_server : -skip ${1=$_version},${2=1}
     -_update_server_upload[] /tmp/gimp_update$1.gmic
     -_update_server_upload[] /tmp/update$1.gmic,update.gmic
 
-    -if {$1>=170} (170,171,172)
+    -if {$1>=172} (172)
     -else 0
     -endif
     -repeat {w}
@@ -15999,8 +15999,17 @@ strcat :
   -v - $=s res="$1" -repeat {$#-1} res=$res${s{$>+2}} -done
   -u $res -v +
 
+#@gmic strcasemp : "string1","string2",_nb_characters>=0
+#@gmic : Return '1' if the two specified strings are equals, '0' otherwise (test is case insensitive).
+#@gmic : If 'nb_characters' is specified, the comparison is done only for the 'nb_characters' first characters.
+strcasecmp : -skip "${1=}","${2=}","${3=}"
+  -v -
+  -struncase "$1" str1=${}
+  -struncase "$2" str2=${}
+  -strcmp $str1,$str2 -v +
+
 #@gmic strcmp : "string1","string2",_nb_characters>=0
-#@gmic : Return '1' if the two specified strings are equals, '0' otherwise.
+#@gmic : Return '1' if the two specified strings are equals, '0' otherwise (test is case sensitive).
 #@gmic : If 'nb_characters' is specified, the comparison is done only for the 'nb_characters' first characters.
 strcmp : -skip "${1=}","${2=}","${3=}"
   -v - -if {isval($3)} -u {$3>0?!norm2(vector$3(0.{'"$1"'},0)-=vector$3(0.{'"$2"'},0)):1}
