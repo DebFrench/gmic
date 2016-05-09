@@ -15993,11 +15993,19 @@ stresc :
   -f.. 'if(i==32||i==34||i==36||i==44||i==64||i==92||i==123||i==125,92,-1)' -a[-2,-1] x
   -discard. -1 -u {t} -rm. -v +
 
-#@gmic strcat : string1,string2,...
+#@gmic strcat : "string1","string2",...
 #@gmic : Return the concatenation of all strings passed as arguments.
 strcat :
   -v - $=s res="$1" -repeat {$#-1} res=$res${s{$>+2}} -done
   -u $res -v +
+
+#@gmic strcmp : "string1","string2",_nb_characters>=0
+#@gmic : Return '1' if the two specified strings are equals, '0' otherwise.
+#@gmic : If 'nb_characters' is specified, the comparison is done only for the 'nb_characters' first characters.
+strcmp : -skip "${1=}","${2=}","${3=}"
+  -v - -if {isval($3)} -u {$3>0?!norm2(vector$3(0.{'"$1"'},0)-=vector$3(0.{'"$2"'},0)):1}
+  -else -u {A=vector(0.{'"$1"'});B=vector(0.{'"$2"'});size(A)==size(B)?!norm2(A-=B):0}
+  -endif -v +
 
 #@gmic strcontains : string1,string2
 #@gmic : Return 1 if the first string contains the second one.
