@@ -581,10 +581,10 @@ _help_usage :
 \n     beside the operator are different or not (test is case-sensitive). For instance,
 \n     item '"$c"{foo'!='foo}"$n"' is substituted by '"${c}"0"$n"' and '"$c"{foo'!='FOO}"$n"' by '"${c}"32"$n"'.
 \n
-\n  - '"$c"{string1'=~'string2}"$n"' and '"$c"{string1'!~'string2}"$n"' do the same, but for case-insensitive string comparisons.
+\n  - '"$c"{string1'=~'string2}"$n"' and '"$c"{string1'!~'string2}"$n"' do the same, but for case-insensitive comparisons.
 \n
-\n  - Adding a positive integer '"${g}"N"$c"' at the end of these string comparison operators (e.g. '"$c"{string1'=~N'string2}"$n"')
-\n     restricts the comparison only for the N first characters.
+\n  - Adding a positive integer '"${g}"N"$n"' at the end of these comparison operators (before the last quote,
+\n     e.g. '"$c"{string1'=~N'string2}"$n"') restricts the comparison only to the '"${g}"N"$n"' first characters.
 \n
 \n  - '"$c"{image,feature}"$n"' is substituted by a specific feature of the image "$c"[image]"$n".
 \n     '"${g}"image"$n"' can be either an image number or an image name. It can be also eluded.
