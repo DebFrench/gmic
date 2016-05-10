@@ -570,10 +570,6 @@ _help_usage :
 \n     the specified string, separated by commas '"$g","$n"'. For instance, item '"$c"{'foo'}"$n"' is substituted
 \n     by '"${c}"102,111,111"$n"'.
 \n
-\n  - '"$c"{`value1,...,valueN`}"$n"' (backquotes) is substituted by the string whose ascii sequence
-\n    corresponds to the list of values specified between the backquotes.
-\n    For instance, item '"$c"{`102,111,111`}"$n"' is substituted by '"${c}"foo"$n"'.
-\n
 \n  - '"$c"{string1'=='string2}"$n"' is substituted by "${c}"0"$n" or "${c}"1"$n", whether the two specified strings coincide
 \n      or not (test is case-sensitive).
 \n
@@ -608,6 +604,10 @@ _help_usage :
 \n          If a mathematical expression starts with an underscore '"${g}"_"$n"', the resulting value is
 \n          truncated to a readable format. For instance, item '"$c"{_pi}"$n"' is substituted by '"${g}"3.14159"$n"'
 \n          (while '"$c"{pi}"$n"' is '"${g}"3.141592653589793"$n"').
+\n       . A '"${c}"feature"$n"' delimited by backquotes is replaced by a string whose ascii codes correspond
+\n          to the list of values resulting from the evaluation of the specified mathematical expression.
+\n          For instance, item '"$c"{`[102,111,111]`}"$n"' is substituted by '"${c}"foo"$n"' and
+\n          item '"$c"{`vector8(65)`}"$n"' by '"${c}"AAAAAAAA"$n"'
 \n
 \n  - '"$c"{*}"$n"' is substituted by the "${g}"visibility state"$n" of the instant display window "$c"[0]"$n"
 \n     (can be "$g"{ 0=closed | 1=visible }"$n").
@@ -3676,7 +3676,7 @@ update_server : -skip ${1=$_version},${2=1}
     ind={$>-$offset}
     -if {{{$ind-1},[-1]}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,[6]}==32" || "{$ind,[6]}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
-      -if {i[6]=={'_'}} locale=_{`{i[7]}`}{`{i[8]}`}  # Retrieve locale if any specified
+      -if {i[6]=={'_'}} locale=_{`[i[7],i[8]]`}  # Retrieve locale if any specified
       -else locale=
       -endif
 
@@ -3883,7 +3883,7 @@ update_server : -skip ${1=$_version},${2=1}
     -_update_server_upload[] /tmp/gimp_update$1.gmic
     -_update_server_upload[] /tmp/update$1.gmic,update.gmic
 
-    -if {$1>=170} (170,171,172)
+    -if {$1>=172} (172)
     -else 0
     -endif
     -repeat {w}
@@ -15478,7 +15478,7 @@ dec :
 #@gmic dec2str : decimal_int1,...
 #@gmic : Convert specifial decimal integers into its string representation.
 dec2str :
-  -v - -u {`${^0}`} -v +
+  -v - -u {`[${^0}]`} -v +
 
 #@gmic dec2bin : decimal_int1,...
 #@gmic : Convert specified decimal integers into their binary representations.
