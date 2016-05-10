@@ -732,8 +732,9 @@ _help_usage :
 \n       . In both expressions, the "${g}"ak"$n" can be vectors themselves, to be concatenated into a single vector.
 \n       . The scalar element "${g}"ak"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[k]"$n".
 \n       . The sub-vector "${g}"[ ap..aq ]"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[p,q]"$n".
-\n       . Function '"${c}"resize(A,size,_interpolation)"$n"' returns a resized version of the vector '"${g}"A"$n"'
+\n       . Function '"${c}"resize(A,size,_interpolation)"$n"' returns a resized version of vector '"${g}"A"$n"'
 \n          with specified interpolation mode.
+\n         'interpolation' can be { -1=none (memory content) | 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic | 6=lanczos }.
 \n       . Some vector-specific functions can be used on vector values:
 \n         '"${c}"cross(X,Y)"$n"' (cross product), '"${c}"dot(X,Y)"$n"' (dot product), '"${c}"size(X)"$n"' (vector dimension)
 \n         and '"${c}"sort(X,_is_increasing,_chunk_size)"$n"' (sorting values),
