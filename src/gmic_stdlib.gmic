@@ -168,7 +168,7 @@ _help : -skip ${1=""}
   -v -1 -use_vt100
   -if {!narg("$1")} _is_example=0 -__help ascii -v + -e[] "" -v - -rm -u "" -return -endif # Global help.
   -_u "$1" ({'${}'}) -autocrop. {'-'}
-  -if {{[100%]}=={']'}" && "i!={'['}} -l. -s -,{'['} -k[0] -endl -endif
+  -if {{@100%}=={']'}" && "i!={'['}} -l. -s -,{'['} -k[0] -endl -endif
   command={t} -rm.
 
   # Help requested for a specific command.
@@ -1550,7 +1550,7 @@ _display_graph : -check "${1=640}>32 && ${2=480}>32" -skip ${3=1},${4=0},${5=0},
     -endif
 
     # Draw plot for each channel.
-    -repeat {-3,s} -sh... $> -graph... [-1],$3,$4,$ymax,$ymin,1,{-2,[0-2]} -rm. -shift. 0,-1 -done
+    -repeat {-3,s} -sh... $> -graph... [-1],$3,$4,$ymax,$ymin,1,{-2,@0-2} -rm. -shift. 0,-1 -done
     -rm[-3,-1]
     -line. 0,0,100%,0,1,110 -line. 100%,0,100%,100%,1,110
     -line. 100%,100%,0,100%,1,255 -line. 0,100%,0,0,1,255
@@ -3672,7 +3672,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   -repeat $!
     ind={$>-$offset}
-    -if {{{$ind-1},[-1]}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,[6]}==32" || "{$ind,[6]}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
+    -if {{{$ind-1},@-1}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,@6}==32" || "{$ind,@6}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
       -if {i[6]=={'_'}} locale=_{`[i[7],i[8]]`}  # Retrieve locale if any specified
       -else locale=
@@ -3680,12 +3680,12 @@ update_server : -skip ${1=$_version},${2=1}
 
       is_folder=0
       -s +,10
-      -if {{0,[6]}=={'_'}} --rows[0] 9,100% -rows[0] 0,8  # Treat a localized filter as a regular filter.
+      -if {{0,@6}=={'_'}} --rows[0] 9,100% -rows[0] 0,8  # Treat a localized filter as a regular filter.
       -else --rows[0] 6,100% -rows[0] 0,5
       -endif
       -autocrop. 32 -mv. 1
 
-      -if {{1,[0]}!={':'}} # Found a new filter or folder definition.
+      -if {{1,@0}!={':'}} # Found a new filter or folder definition.
         -l[1]
 
           # Format string by removing special character sequences.
@@ -3731,7 +3731,7 @@ update_server : -skip ${1=$_version},${2=1}
 
         -if {$!>=3} -l[1]
           -s +,{'='}
-          -if {$!>=3} -if {{1,[0]}=={'='}}
+          -if {$!>=3} -if {{1,@0}=={'='}}
             -rows[0] 1,100% -calibrate_name[0]
             -i[0] ({':'};32) -i[2] (32)
           -endif -endif
@@ -4906,7 +4906,7 @@ balance_gamma : -skip ${1=128}
   -e[^-1] "Apply gamma-corrected color balance of image$?, with reference color ("${^0}")."
   -v - -repeat $! -l[$>]
     (${^0}) -r. {-2,s},1,1,1,0,1 -s.. c -/. 255
-    -repeat {$!-1} -/[$>] 255 -^[$>] {log({[$>]})/log({$>,ia})} -*[$>] 255 -done
+    -repeat {$!-1} -/[$>] 255 -^[$>] {log({@$>})/log({$>,ia})} -*[$>] 255 -done
     -rm. -a c -c 0,255
   -endl -done -v +
 
@@ -4999,7 +4999,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
   # Draw evolution of the reconstruction error.
 _compress_clut_draw_error :
   -if {error,w>=2}
-    --dg[error] 640,480,1,0,0,{keycoords,h},0,{error,[0]},"Number of keypoints","Maximum reconstruction error"
+    --dg[error] 640,480,1,0,0,{keycoords,h},0,{error,@0},"Number of keypoints","Maximum reconstruction error"
     -if {*1} -w1. 100%,100%,0,"Evolution of the reconstruction error" -endif
   -rm. -endif
 
@@ -5013,7 +5013,7 @@ compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
   -if $2 s=", with maximal sequence length "$2 -else s="" -endif
   -v + -e[^-1] "Compress image$? using RLE algorithm"${s{!$1}}$s"." -v -
   -repeat $! -l[$>] nm={0,n} im={im} header={w};{h};{d};{s};$im;{$1!=0}
-    -- $im -y x ({{0,[-1]}+1}) -a x -r 100%,3
+    -- $im -y x ({{0,@-1}+1}) -a x -r 100%,3
     -f '>if(y==0,i,if(y==1,if(i(x,0)==i(x+1,0),-1,x),if(i(x-1,1)==-1,i(x-1,2)+1,1)))'
     -if $2 # Constrain maximum sequence length.
       -transpose -mirror x
@@ -5060,7 +5060,7 @@ decompress_rle :
   -v - -repeat $! -l[$>]
 
     # Retrieve original data dimension and min value.
-    -y whds={0,[0-3]} im={0,[4]} is_binary_data={0,[5]} -rows 6,100%
+    -y whds={0,@0-3} im={0,@4} is_binary_data={0,@5} -rows 6,100%
 
     # Transform RLE data to list of pairs {nb_occurences,value}.
     -if $is_binary_data  # Decode for binary data.
@@ -5077,7 +5077,7 @@ decompress_rle :
     -repeat $! -l[$>]
       -i[0] ({'CImg3d'}) -+[0] 0.5
       -i[1] ({2*h};{h})
-      -s. x,2 -cumulate.. siz={-2,[-1]}
+      -s. x,2 -cumulate.. siz={-2,@-1}
       --shift.. 0,1 --... 1 -rv[-3,-1] -z[-3,-1] 0,2 -a[-3,-1] x
       -i[3] (2,0,1;2,{2*h-2},{2*h-1}) -r[3] 3,{h},1,1,3 -round[3]
       -r[4] 3 1,100%,1,1,1 -y -a y
@@ -5318,11 +5318,11 @@ otsu : -check "isint(${1=256}) && $1>0"
     --*. 'x' sum={is} -rm.
     sumB=0 wB=0 wF=0 varMax=0 threshold=0
     -repeat $1
-      wB+={[$>]}
+      wB+={@$>}
       -if {$wB==0} -continue -endif
       wF={$total-$wB}
       -if {$wF==0} -break -endif
-      sumB+={$>*{[$>]}}
+      sumB+={$>*{@$>}}
       mB={$sumB/$wB}
       mF={($sum-$sumB)/$wF}
       varBetween={$wB*$wF*($mB-$mF)^2}
@@ -5447,7 +5447,7 @@ roundify : -check $1>=0
 unrepeat :
   -e[^-1] "Remove repetition of adjacent values in image$?."
   -v - -repeat $! -l[$>] nm={0,n}
-    -y x ({{0,[-1]}+1}) -a x -r 100%,2
+    -y x ({{0,@-1}+1}) -a x -r 100%,2
     -f. '>if(y==0,i,if(i(x,0)==i(x+1,0),-1,x))'
     -z 0,{w-2} -s y,2 -discard[1] -1 -map[1] [0]
     -rm[0] -nm $nm
@@ -6611,7 +6611,7 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
     # Resize to best match for each column and row.
     $MN,1,1,2 -repeat $MN -point. $>,0,0,1,{$>,w},{$>,h} -done -r. $M,$N,1,2,-1
     -s. c -l.. -s y -max -endl -l. -s x -max -endl
-    i=0 -repeat $N y=$> -repeat $M -r[$i] {-2,[$>]},{[$y]},100%,100%,0,0,$3,$4 i+=1 -done -done
+    i=0 -repeat $N y=$> -repeat $M -r[$i] {-2,@$>},{@$y},100%,100%,0,0,$3,$4 i+=1 -done -done
     -rm[-2,-1]
 
     # Append images together.
@@ -6873,11 +6873,11 @@ _montage :
   -elif {$c==-4} # Mirror.
     _p+=1 l=${-_montage} -f[$l] 'a=i(5,y)%2;if((x==7&&a)||(x==6&&!a),!i,if(x==1,i(3,0)-i(3,y)-i,i))' -u $l
   -elif {$c==-3} # Rotation.
-    _p+=1 l=${-_montage} -l[$l] -s x -+[2] [4] -rv[1,2] -*[1] -1 -+[1] {4,[0]} -rv[3,4] -+[5] 1 -a x -endl -u $l
+    _p+=1 l=${-_montage} -l[$l] -s x -+[2] [4] -rv[1,2] -*[1] -1 -+[1] {4,@0} -rv[3,4] -+[5] 1 -a x -endl -u $l
   -else # Merge.
     _p+=1
-    l=${-_montage} lw={$l,[3]} lh={$l,[4]}
-    r=${-_montage} rw={$r,[3]} rh={$r,[4]}
+    l=${-_montage} lw={$l,@3} lh={$l,@4}
+    r=${-_montage} rw={$r,@3} rh={$r,@4}
 
     -if {$c==-1} # Horizontal merge.
       -if {$_mode<2}
@@ -7132,7 +7132,7 @@ rotate_tileable : -check ${2=8}>=0
   (0,1;1,8;1,7;1,6;1,5;1,4;1,5;1,3;2,5;1,2;2,5;3,5;2,3;3,4;4,5;1,1;5,4;7,5;3,2;8,5;9,5;2,1;3,1;4,1;5,1;6,1;7,1;8,1) # List of known fractions.
   -s. x,2 --/[-2,-1] -atan. -*. {180/pi}   # Compute corresponding angles.
   ($angle) -index. [-2] -rm..
-  p={-3,[{^}]} q={-2,[{^}]} -rm[-3--1]              # Find nearest fraction p/q to atan(angle).
+  p={-3,^} q={-2,^} -rm[-3--1]             # Find nearest fraction p/q to atan(angle).
   -if {!$p||!$q} -return -endif
 
   -repeat $! -l[$>]
@@ -9167,7 +9167,7 @@ at_line : -check ${7=100%}>=0
 
 #@gmic barycenter
 #@gmic : Compute the barycenter vector of pixel values.
-#@gmic : $ 256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse.. {[0,1]},5,5,0,10
+#@gmic : $ 256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse.. {@0,1},5,5,0,10
 barycenter :
   -e[^-1] "Compute the barycenter vector of pixel values of image$?."
   -v - -norm -repeat $! -l[$>] nm={0,b}
@@ -9993,8 +9993,8 @@ _generate_maze :
 
   # Start opening walls.
   -do
-    x={-2,[-2]} y={-2,[-1]} # Coords of the current cell.
-    -=. 1,$x,$y,0,1         # Mark current cell as visited.
+    x={-2,@-2} y={-2,@-1} # Coords of the current cell.
+    -=. 1,$x,$y,0,1       # Mark current cell as visited.
 
     # Check for neighboring cells that are candidate for opening wall, and select one random.
     is_candidate=0
@@ -10008,10 +10008,10 @@ _generate_maze :
 
     # Remove wall between the current and chosen neighboring cells.
     -if $is_candidate
-      -if {{-2,[-1]}==8}   -=. {i($x,$y)&7},$x,$y -=. {i($x,$y-1)&11},$x,{$y-1}   # Remove up wall.
-      -elif {{-2,[-1]}==4} -=. {i($x,$y)&11},$x,$y -=. {i($x,$y+1)&7},$x,{$y+1}   # Remove down wall.
-      -elif {{-2,[-1]}==2} -=. {i($x,$y)&13},$x,$y -=. {i($x-1,$y)&14},{$x-1},$y  # Remove left wall.
-      -else                -=. {i($x,$y)&14},$x,$y -=. {i($x+1,$y)&13},{$x+1},$y  # Remove right wall.
+      -if {{-2,@-1}==8}   -=. {i($x,$y)&7},$x,$y -=. {i($x,$y-1)&11},$x,{$y-1}   # Remove up wall.
+      -elif {{-2,@-1}==4} -=. {i($x,$y)&11},$x,$y -=. {i($x,$y+1)&7},$x,{$y+1}   # Remove down wall.
+      -elif {{-2,@-1}==2} -=. {i($x,$y)&13},$x,$y -=. {i($x-1,$y)&14},{$x-1},$y  # Remove left wall.
+      -else               -=. {i($x,$y)&14},$x,$y -=. {i($x+1,$y)&13},{$x+1},$y  # Remove right wall.
       -endif
       -z.. 0,1 -a[-3,-2] y  # Add neighboring cell to stack of cells to explore.
     -else # No candidate : remove current cell from cells to explore.
@@ -10118,14 +10118,14 @@ pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(
 
       # Subdivide point cloud if multiple sprites.
       -if {$N>1} -l.
-        -s3d -/[1] $N -round[1] -max[1] 1 n={1,[0]}
+        -s3d -/[1] $N -round[1] -max[1] 1 n={1,@0}
         -r[2] 3,{{2,h}/3},1,1,-1
         -i[2] 1,{2,h} -rand[2] 0,1 -a[2,3] x -sort[2] +,y -z[2] 1,3 -r[2] 3,$n,1,1 -y[2]
         -r[3] 1,{2*$n},1,1,0 -r[4] 1,{3*$n},1,1,0 -r[5] 1,$n,1,1,0 -a y
       -endl -endif
 
       # Create 3d cloud of sprites.
-      n={[7]}
+      n={@7}
       -if $n
         -s3d. -rm[-2,-1]
         -if {$3==0} # No rotation allowed.
@@ -10797,9 +10797,9 @@ circle3d : -skip ${1=0},${2=0},${3=0},${4=1}
 circles3d : -check ${1=1}>=0 -skip ${2=1}
   -e[^-1] "Convert 3d object$? to sets of 3d "${-arg\ 1+$2,wireframe,filled}" circles with radius $1."
   -v - -p3d 0 -repeat $! -l[$>]
-    nbv={[6]} nbp={[7]}
+    nbv={@6} nbp={@7}
     -if {$nbv&&$nbp}
-      --3d {$1/2},0,0 --+3d $1,0,0 -+3d nbp2={[7]}
+      --3d {$1/2},0,0 --+3d $1,0,0 -+3d nbp2={@7}
       -s3d -=[1] $nbp,0,1
       -r[3] 2,$nbp2,1,1,-1 -columns[3] 1,1 -s[3] y,2 -i[3] 1,$nbp,1,1,5
       -i[6] 1,$nbp,1,1,{!$2} -a[3-6] x -columns[3] 0,5
@@ -10882,7 +10882,7 @@ cone3d : -check ${3=24}>0 -skip ${1=1},${2=1}
 cubes3d : -check ${1=1}>=0
   -e[^-1] "Convert 3d object$? to sets of 3d cubes with size $1."
   -v - -p3d 0 -repeat $! -l[$>]
-    nbv={[6]} nbp={[7]}
+    nbv={@6} nbp={@7}
     -if {$nbv&&$nbp}
       -s3d
       -l[1] -= {8*i[0]} -= {6*i[1]},0,1 -endl  # Header.
@@ -11346,7 +11346,7 @@ label_points3d : -check ${1=13}>0 -skip ${2=0.8}
   -e[^-1] "Label vertices of 3d object$?."
   -v - -repeat $!
     --p3d[$>] 0 -l. -s3d -rm[-3--1]
-    nbp={-2,[0]} -=.. $nbp,0,1                              # Set correct number of primitives
+    nbp={-2,@0} -=.. $nbp,0,1                               # Set correct number of primitives
     (1,0;1,{$nbp-1}) -r. 2,$nbp,1,1,3 -r. 1,{2*h},1,1,-1    # Create new primitive data
     -repeat $nbp                                            # Create texture labels as primitive colors.
       0 -t. $>,0,0,$1,1,255,255,255 -autocrop. 0
@@ -11422,7 +11422,7 @@ lissajous3d : -check ${1=1024}>1 -skip ${2=2},${3=0},${4=1},${5=0},${6=0},${7=0}
 #@gmic : 'mode' can be { -1=bounding-box | 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.");
 #@gmic : Bounding-box mode ('mode==-1') is active only for the interactive 3d viewer.
 #@gmic : Default value: 'mode=4'.
-#@gmic : $ (0,1,2,3,4,5) -double3d 0 -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -mode3d {0,[$>]} -snapshot3d. 300 -done -remove[0]
+#@gmic : $ (0,1,2,3,4,5) -double3d 0 -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -mode3d {0,@$>} -snapshot3d. 300 -done -remove[0]
 
 #@gmic md3d : eq. to '-moded3d'. : (+)
 
@@ -11792,7 +11792,7 @@ skeleton3d : -check "isint(${1=2}) && $1>=0 && $1<=2 && isint(${2=3}) && $2>=0 &
 
     # Construct bones from skeleton.
     -if $4 -l[0] -s3d 1
-      n={1,[0]}
+      n={1,@0}
       -if $n
         -r[2] 3,$n,1,1,-1 -r[3] 2,$n,1,1,-1 -r[4] 3,$n,1,1,-1
 
@@ -11853,7 +11853,7 @@ snapshot3d : -check "${2=1}>=0" -skip ${1=512},${3=""}
 #@gmic : Set lightness of 3d specular light.
 #@gmic : (eq. to '-sl3d').
 #@gmic : Default value: 'value=0.15'.
-#@gmic : $ (0,0.3,0.6,0.9,1.2) -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -color3d. 255,0,0 -specl3d {0,[$>]} -snapshot3d. 400 -done -remove[0]
+#@gmic : $ (0,0.3,0.6,0.9,1.2) -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -color3d. 255,0,0 -specl3d {0,@$>} -snapshot3d. 400 -done -remove[0]
 
 #@gmic ss3d : eq. to '-specs3d'. : (+)
 
@@ -11861,7 +11861,7 @@ snapshot3d : -check "${2=1}>=0" -skip ${1=512},${3=""}
 #@gmic : Set shininess of 3d specular light.
 #@gmic : (eq. to '-ss3d').
 #@gmic : Default value: 'value=0.8'.
-#@gmic : $ (0,0.3,0.6,0.9,1.2) -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -color3d. 255,0,0 -specs3d {0,[$>]} -snapshot3d. 400 -done -remove[0]
+#@gmic : $ (0,0.3,0.6,0.9,1.2) -repeat {w} -torus3d 100,30 -rotate3d. 1,1,0,60 -color3d. 255,0,0 -specs3d {0,@$>} -snapshot3d. 400 -done -remove[0]
 
 #@gmic sphere3d : radius,_nb_recursions>=0 : (+)
 #@gmic : Input 3d sphere at (0,0,0), with specified geometry.
@@ -11962,7 +11962,7 @@ sprites3d : -check ${-is_image_arg\ $1} -skip ${2=0}
     -pass$1 0
     -if {!w} -empty3d -rv[$>,-1] -nm[$>] {n} -rm. -continue -endif
     -l[$>,-1]
-    -s3d[0] N={1,[0]} -=[1] $N,0,1
+    -s3d[0] N={1,@0} -=[1] $N,0,1
     -rm[3-5] -i[3] (1,0;1,{$N-1}) -r[3] 2,$N,1,1,3 -round[3]
     -if $2 # With alpha-channel.
       -if {s==1} # Only alpha-channel.
@@ -12421,7 +12421,7 @@ rprogress : -skip ${2=""}
     -v + -e[0--3] "Call command '$1' with progress bounds ["$nm,$nM"]." -v -
     -progress $m _progress_bounds=$_progress_bounds,{$m+$nm*($M-$m)/100},{$m+$nM*($M-$m)/100}  # Push new bounds.
     -_rprogress "$1"
-    -progress $M ($_progress_bounds) _progress_bounds={[0--3]} -rm. # Pop bounds.
+    -progress $M ($_progress_bounds) _progress_bounds={@0--3} -rm. # Pop bounds.
   -else -error[0--3] "Command '-rprogress': Invalid argument '$*'."
   -endif
   -v +
@@ -12735,7 +12735,7 @@ img2ascii : -skip "${1= !\042#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQR
   # Generate dictionnaries for image analysis and synthesis.
   -l[]
     ({'"$1"'}) -repeat {w}
-      C={`92`}${-dec2oct\ {0,[$>]}}
+      C={`92`}${-dec2oct\ {0,@$>}}
       0 -t. $C,0,0,$2,1,1
       0 -t. $C,0,0,$4,1,1
     -done -rm[0]
@@ -12886,7 +12886,7 @@ linearize_tiles : -check "$1>0 && ${2=$1}>0"
     -repeat $! -l[$>]
       wh={w},{h}
       --f x --f. y --f. 1 -y -a[^0] x -solve.. [-1] -rm.
-      $wh,1,1,{[0]}"*x + "{[1]}"*y + "{[2]} -rm..
+      $wh,1,1,{@0}"*x + "{@1}"*y + "{@2} -rm..
     -endl -done
     -repeat {int($!/$s)} -a[-$s--1] c -mv. 0 -done -append_tiles $1,$2
   -nm $nm -endl -done -v +
@@ -13048,7 +13048,7 @@ quadratize_tiles : -check "$1>0 && ${2=$1}>0"
       wh={w},{h}
       --f x^2 --f. y^2 --f. x*y --f. x --f. y --f. 1 -y -a[^0] x
       -solve.. [-1] -rm.
-      $wh,1,1,{[0]}"*x^2 + "{[1]}"*y^2 + "{[2]}"*x*y +"{[3]}"*x + "{[4]}"*y + "{[5]} -rm..
+      $wh,1,1,{@0}"*x^2 + "{@1}"*y^2 + "{@2}"*x*y +"{@3}"*x + "{@4}"*y + "{@5} -rm..
     -endl -done
     -repeat {int($!/$s)} -a[-$s--1] c -mv. 0 -done -append_tiles $1,$2
   -nm $nm -endl -done -v +
@@ -14760,7 +14760,7 @@ animate : -skip ${1=30},${2=0},${3=""},${4=10},${5=1},"${6=}"
     -repeat {$!-1},u
       -v + -e[] " > Animate image ["$>"]" -v -
       -repeat $4 --l[0,1]
-        -$1. {0,[{$>*{0,w}}-{($>+1)*{0,w}-1}]} -rm[0]
+        -$1. {0,@{$>*{0,w}}-{($>+1)*{0,w}-1}} -rm[0]
         -if {narg("$6")} -o ${-filename\ "$6",$u,$>} -endif
         -if {!$5} -rm -endif
         -rprogress {100*($>+1)/$4}
@@ -14966,7 +14966,7 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
     $2,$3,1,1,'$6'
     -a[-3--1] z
     -permute. zxyc -r. 3,{$2*$3},1,1,-1
-    -repeat {h} rot$>={[0-2]} -shift. 0,-1,0,0 -done
+    -repeat {h} rot$>={@0-2} -shift. 0,-1,0,0 -done
     -rm.
 
     # Create 3d tiles.
@@ -15438,7 +15438,7 @@ compress_gmic :
 
 _compress_gmic :
   -if {i=={'#'}}
-    head={[0-{min(5,h-1)}]}
+    head={@0-{min(5,h-1)}}
     -if {{$head'!='$_head_std}" || "(i[6]!={'" "'}" && "i[6]!={':'})} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
@@ -15458,7 +15458,7 @@ compress_gmic_gimp :
 
 _compress_gmic_gimp :
   -if {i=={'#'}}
-    head={[0-{min(5,h-1)}]}
+    head={@0-{min(5,h-1)}}
     -if {$head'!='$_head_std} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
@@ -15638,7 +15638,7 @@ _gcd :
 #@gmic head : length>=0
 #@gmic : Return the first 'length' values of the last image, or all its values if image size is less than 'length'.
 head : -check "isint($1) && $1>=0"
-  -v - -if {$1>0" && "w} -u {[0-{min(whds-1,$1-1)}]} -else -u "" -endif -v +
+  -v - -if {$1>0" && "w} -u {@0-{min(whds-1,$1-1)}} -else -u "" -endif -v +
 
 #@gmic hex : hexadecimal_int1,...
 #@gmic : Print specified hexadecimal integers into their binary, octal, decimal and string representations.
@@ -16227,7 +16227,7 @@ x_2048 :
       -repeat 6 -j3d[1] [-1],{78+$x*121},{190+$y*121},{10*$<},{(1+$>)/6} -w[1] -wait 20 -done
       -rm."
   -m "_x_2048_object3d : --f[0] 'if(i,i*16+4*y+x,-1)' -discard. -1
-      N={h} -repeat {h} v={-{1+$>},[$>]} --+3d[{2+($v>>4)}] {$v&3},{($v>>2)&3} -done
+      N={h} -repeat {h} v={-{1+$>},@$>} --+3d[{2+($v>>4)}] {$v&3},{($v>>2)&3} -done
       -+3d[-$N--1] -rm.."
   -i[0] 4,4
 
@@ -16332,7 +16332,7 @@ x_2048 :
             -discard. -1
             -rv[0,-2] -_x_2048_object3d -rv[0,-3] -vshift2048. -*3d. 121 # Only tiles that do not move in this step.
             -j[1] [2],18,130 -j3d[1] [-1],78,190 -rm[-3,-1]
-            N={h} -repeat {h} v={-{1+$>},[$>]} --+3d[{2+($v>>4)}] {$v&3},{($v>>2)&3} -done # Only tiles that move.
+            N={h} -repeat {h} v={-{1+$>},@$>} --+3d[{2+($v>>4)}] {$v&3},{($v>>2)&3} -done # Only tiles that move.
             -+3d[-$N--1] -rm..
             0 -t. +$dscore,0,0,33,1,1 100%,100%,1,3 -fc. $c0
             -repeat 6  # Render animation for fusion.
@@ -16385,9 +16385,9 @@ x_blobs :
     -if {$!>1}
       {0,w},{0,h},1,2
       -repeat {1,h}
-        r={{1,[2]}*(1+{1,[3]}*cos({1,[4]}+{1,[5]}*$|*1000))}
-        -ellipse. {1,[0,1]},$r,$r,0,1,{1,[6-7]}
-        d={sqrt(($x-{1,[0]})^2+($y-{1,[1]})^2)}
+        r={{1,@2}*(1+{1,@3}*cos({1,@4}+{1,@5}*$|*1000))}
+        -ellipse. {1,@0,1},$r,$r,0,1,{1,@6-7}
+        d={sqrt(($x-{1,@0})^2+($y-{1,@1})^2)}
         -if {$d<$r} nearest=$> -endif
       -shift[1] 0,-1,0,0,2 -done
       -b. 15
@@ -17035,17 +17035,17 @@ x_fireworks :
     i=0
     -repeat {$!-2}
       to_be_removed=0
-      radius={if({$i,[4]}>0,{$i,[5]}/3,{$i,[5]}*(1+2*({$i,[4]}+2)/120))}
-      -ellipse. {$i,[0]},{$i,[1]},{$i,[5]},{max(0.5,$radius)},{atan2({$i,[3]},{$i,[2]})*180/pi},0.6,{$i,[6-8]}  # Draw rocket.
-      ({$i,[2]},{$i,[3]},0,0.09,-1,0,0,0,0) -+[$i,-1] # Compute new position of the rocket.
-      -if {{$i,[0]}<0\ ||\ {$i,[0]}>=w\ ||\ {$i,[1]}>=h\ ||\ $radius<0} to_be_removed=1 -endif # Discard if rocket disappear.
-      -if {{$i,[4]}<0\ &&\ {$i,[4]}>=-1} # In case of explosion -> Split current rocket into several colorful rockets.
+      radius={if({$i,@4}>0,{$i,@5}/3,{$i,@5}*(1+2*({$i,@4}+2)/120))}
+      -ellipse. {$i,@0},{$i,@1},{$i,@5},{max(0.5,$radius)},{atan2({$i,@3},{$i,@2})*180/pi},0.6,{$i,@6-8}  # Draw rocket.
+      ({$i,@2},{$i,@3},0,0.09,-1,0,0,0,0) -+[$i,-1] # Compute new position of the rocket.
+      -if {{$i,@0}<0\ ||\ {$i,@0}>=w\ ||\ {$i,@1}>=h\ ||\ $radius<0} to_be_removed=1 -endif # Discard if rocket disappear.
+      -if {{$i,@4}<0\ &&\ {$i,@4}>=-1} # In case of explosion -> Split current rocket into several colorful rockets.
         color={min(255,80+u(200))},{min(255,80+u(200))},{min(255,80+u(200))}
         radius={u(10)}
         N={5+u(10)}
         -repeat $N
           angle={$>*2*pi/$N}
-          -i... ({$i,[0,1]},{2*cos($angle)+{$i,[2]}/1.5},{2*sin($angle)+{$i,[3]}/1.5},-2,$radius,$color)
+          -i... ({$i,@0,1},{2*cos($angle)+{$i,@2}/1.5},{2*sin($angle)+{$i,@3}/1.5},-2,$radius,$color)
         -done
         to_be_removed=1
       -endif
@@ -17788,24 +17788,24 @@ x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
   -do
     siz={min({*,w},{*,h})}                                                                       # Desired window dimension.
     $siz,$siz -mandelbrot. {0,^},256,$1,{if($1,$2,0)},{if($1,$3,0)} -map. [1]                    # Render fractal.
-    -if $1 -w. $siz,$siz,0,"[G"{`39`}"MIC] Julia set c=("{0,[0-1]}")-("{0,[2-3]}"), c0=($2,$3)"  # Display on window.
-    -else -w. $siz,$siz,0,"[G"{`39`}"MIC] Mandelbrot set c=("{0,[0-1]}")-("{0,[2-3]}")" -endif
+    -if $1 -w. $siz,$siz,0,"[G"{`39`}"MIC] Julia set c=("{0,@0-1}")-("{0,@2-3}"), c0=($2,$3)"   # Display on window.
+    -else -w. $siz,$siz,0,"[G"{`39`}"MIC] Mandelbrot set c=("{0,@0-1}")-("{0,@2-3}")" -endif
     w={w} h={h} -round. -select. 2                                                               # Get the user selection.
 
     -if {i[0]>0}                                                                                 # If valid selection found.
       M={max(i[3]-i[0],i[4]-i[1])}                                                               # Compute max dimension of selected rectangle.
       -if {$M<5} -_x_mandelbrot_coords $1 -rm[1] -_x_mandelbrot_palette -mv. 1                   # If selection too small, reset the view,
-      -else ({{0,[0]}+{[0]}*({0,[2]}-{0,[0]})/$w};\                                              # Else compute new fractal coordinates.
-             {{0,[1]}+{[1]}*({0,[3]}-{0,[1]})/$h};\
-             {{0,[0]}+({[0]}+$M)*({0,[2]}-{0,[0]})/$w};\
-             {{0,[1]}+({[1]}+$M)*({0,[3]}-{0,[1]})/$h})
+      -else ({{0,@0}+{@0}*({0,@2}-{0,@0})/$w};\                                                  # Else compute new fractal coordinates.
+             {{0,@1}+{@1}*({0,@3}-{0,@1})/$h};\
+             {{0,@0}+({@0}+$M)*({0,@2}-{0,@0})/$w};\
+             {{0,@1}+({@1}+$M)*({0,@3}-{0,@1})/$h})
       -endif
       -rm[0] -mv. 0                                                          # Validate new coordinates.
     -endif
     -rm.                                                                     # Delete latest rendering.
     -if {{*,C}}                                                                # If 'C' key has been pressed.
-      -if $1 -v + -e[0--4] "Julia set, at c = ("{0,[0-1]}")-("{0,[2-3]}"), with c0 = ($2,$3)." -v -
-      -else -v + -e[0--4] "Mandelbrot set, at c = ("{0,[0-1]}")-("{0,[2-3]}")." -v -
+      -if $1 -v + -e[0--4] "Julia set, at c = ("{0,@0-1}")-("{0,@2-3}"), with c0 = ($2,$3)." -v -
+      -else -v + -e[0--4] "Mandelbrot set, at c = ("{0,@0-1}")-("{0,@2-3}")." -v -
       -endif
     -endif
     -if {!{*}" || "{*,ESC}" || "{*,Q}} -rm -w 0 -v + -return -endif
@@ -17993,8 +17993,8 @@ x_minimal_path :
 
     --gradient_norm -b. 1 -f. exp(-i/10)
     -to_rgb[0] --select[0] 0 P0={^}
-    -ellipse[0] {[0,1]},3,3,0,1,255,0,255
-    -ellipse[0] {[0,1]},3,3,0,1,0xFFFFFFFF,255,255,255
+    -ellipse[0] {@0,1},3,3,0,1,255,0,255
+    -ellipse[0] {@0,1},3,3,0,1,0xFFFFFFFF,255,255,255
     -rm.
     -if {min($P0)>=0}
       p=1
@@ -18008,8 +18008,8 @@ x_minimal_path :
           -wait -1
         -else
           P1={^}
-          -ellipse[0] {[0,1]},3,3,0,1,255,0,255
-          -ellipse[0] {[0,1]},3,3,0,1,0xFFFFFFFF,255,255,255
+          -ellipse[0] {@0,1},3,3,0,1,255,0,255
+          -ellipse[0] {@0,1},3,3,0,1,0xFFFFFFFF,255,255,255
           -rm.
           -if {min($P1)>=0}
             --text_outline[0] "Processing...",5,5,13,1,1,255,255,255 -w. -rm.
@@ -19457,15 +19457,15 @@ x_spline :
     --r[0] {*,w},{*,h},1,3
     -if {$visuflags&4} -polygon. {2,h},{2,^},0.3,128,200,255 -endif
     -repeat {1,h}
-      -line. {2,[0-3]},0.3,255,255,0
-      -if {$visuflags&1} -spline. {2,[0-1]},{3,[0-1]},{2,[2-3]},{3,[2-3]},32,1,255 -endif
-      -if {$visuflags&8} -line. {{2,[0]}-{4,[0]}*20},{{2,[1]}-{4,[1]}*20},{{2,[0]}+{4,[0]}*20},{{2,[1]}+{4,[1]}*20},1,0,255,0 -endif
-      -if {$visuflags&16} -t. $>,{{2,[0]}-3},{{2,[1]}-18},13,1,255,255,0 -endif
-      -if {$visuflags&32} -t. "("{round({1,[0]})}","{round({1,[1]})}")",{{2,[0]}-16},{{2,[1]}+10},13,1,100,200,255 -endif
+      -line. {2,@0-3},0.3,255,255,0
+      -if {$visuflags&1} -spline. {2,@0-1},{3,@0-1},{2,@2-3},{3,@2-3},32,1,255 -endif
+      -if {$visuflags&8} -line. {{2,@0}-{4,@0}*20},{{2,@1}-{4,@1}*20},{{2,@0}+{4,@0}*20},{{2,@1}+{4,@1}*20},1,0,255,0 -endif
+      -if {$visuflags&16} -t. $>,{{2,@0}-3},{{2,@1}-18},13,1,255,255,0 -endif
+      -if {$visuflags&32} -t. "("{round({1,@0})}","{round({1,@1})}")",{{2,@0}-16},{{2,@1}+10},13,1,100,200,255 -endif
       -shift[1-4] 0,-1,0,0,2
     -done
     -if {$visuflags"&2"} -repeat {1,h}
-      -ellipse. {2,[0-1]},4,4,0,1,0,0,0 -ellipse. {2,[0-1]},2,2,0,1,255,100,155 -shift[2] 0,1,0,0,2
+      -ellipse. {2,@0-1},4,4,0,1,0,0,0 -ellipse. {2,@0-1},2,2,0,1,255,100,155 -shift[2] 0,1,0,0,2
     -done -endif
     -w. -rm[3,4,-1] -wait
 
@@ -19488,7 +19488,7 @@ x_spline :
     -if {{*,b}==0} active=-1                             # Unset active point if mouse button is released.
     -elif {{*,x}>=0" && "{*,b}" && "$active==-1}         # Find new active point.
       [2] ({*,x},{*,y}) --[-2,-1] -sqr. -s. x -+[-2,-1]  # Compute distance vector to points.
-      ({c}) nearest={[1]} -rm.                           # Set nearest point.
+      ({c}) nearest={@1} -rm.                            # Set nearest point.
       -if {im<64} active=$nearest -endif                 # Set it as active point, if near enough.
       -rm.
     -endif
@@ -19508,7 +19508,7 @@ x_spline :
       xy=({{*,x}*{0,w}/{*,w}},{{*,y}*{0,h}/{*,h}})    # Point coordinates in the image basis.
       --shift[1] 0,-1,0,0,2 -+. [1] -/. 2             # Compute center of segments.
       $xy --[-2,-1] -sqr. -s. x -+[-2,-1]             # Compute distance vector to segments.
-      ({c}) ns={[1]} -rm[-2,-1]                       # Get nearest segment.
+      ({c}) ns={@1} -rm[-2,-1]                        # Get nearest segment.
       -l[1] -s y -i[{$ns+1}] $xy -a y -endl           # Insert new point at right position.
       active={$ns+1}                                  # Set new active point as newly inserted.
     -endif
@@ -19518,7 +19518,7 @@ x_spline :
   # Render spline as a tertiary mask for output.
   --shift[1] 0,-1,0,0,2 --shift[1] 0,1,0,0,2 --[-2,-1] -*. $roundness
   [0],[0],1,1,2 -rm[0]
-  -repeat {1,h} -spline. {0,[0-1]},{1,[0-1]},{0,[2-3]},{1,[2-3]},128,1,1 -shift[0] 0,-1,0,0,2 -shift[1] 0,-1,0,0,2 -done
+  -repeat {1,h} -spline. {0,@0-1},{1,@0-1},{0,@2-3},{1,@2-3},128,1,1 -shift[0] 0,-1,0,0,2 -shift[1] 0,-1,0,0,2 -done
   -flood. 0,0,0,0,0,1,0
 
   # Exit properly.
@@ -19563,7 +19563,7 @@ x_tetris :
   -i[colors] 3,$N,1,1,'u(16,224)' -r. 3,400% -i[mask] (0,-1,0;1,0,-1;0,1,0) -*. 120
   -repeat $N
     --r[m$>] 500%,500%,1,3 --correlate. [mask],0 -r. 200%,200%,1,1,3 -r.. [-1] -*[-2,-1] -c. 30%,100%
-    --r[m$>] [-1],[-1],1,3 --replace_color. 0,0,1,1,1,{colors,[{3*$>}-{3*$>+2}]} -rv[-3,-1] -+[-3,-1] -c.. 0,255
+    --r[m$>] [-1],[-1],1,3 --replace_color. 0,0,1,1,1,{colors,@{3*$>}-{3*$>+2}} -rv[-3,-1] -+[-3,-1] -c.. 0,255
     -channels. 0 -*. 255 -a[-2,-1] c -nm. s$>
   -done
   -rm[colors,mask]
@@ -19695,7 +19695,7 @@ x_tictactoe :
      0,1,2,0,0,0,0,0;\                                                        # Corresponding Y coords for the stroke.
      3,3,3,4,4,4,5,6)                                                         # Corresponding indice of the stroke sprite.
     -repeat {w}                                                               # Start to check configurations.
-      tmp1={[$>]}                                                             # Save the current configuration code (used several times).
+      tmp1={@$>}                                                              # Save the current configuration code (used several times).
       -if {($state&$tmp1)==$tmp1||($state&(2*$tmp1))==2*$tmp1}                # If a winner has been found.
         -_x_tictactoe{i($>,3)}                                                # Generate the stroke symbol and his mask.
         -j[-4] [-2],{130*{-3,i($>,1)}+u(-5,5)},\                              # And display it on the board at its position.
@@ -19808,7 +19808,7 @@ x_waves :
     -if {{*,b}&1||($|-$time0)>1} ({u*$w};{u*$w};70;0) -a[5,-1] x time0={$|-u} -endif # Insert new ball.
     -if {5,h} -l[5,-1] # Manage ball motion and collision.
       -sh[0] 2,2,0,0 -sh[0] 3,3,0,0 --.. [-1] -+. 0.2 -rm[-2,-1]
-      -s[0] x -repeat {$!-1} coords={$<,[0-1]} -if {{$<,[2]}<i($coords)} -=. {80+{i($coords)}},$coords -rm[$<] -endif -done
+      -s[0] x -repeat {$!-1} coords={$<,@0-1} -if {{$<,@2}<i($coords)} -=. {80+{i($coords)}},$coords -rm[$<] -endif -done
       -if {$!==1} -i[0] 0 -else -a[0--2] x -endif
       -endl
     -endif
@@ -20883,7 +20883,7 @@ survey :
   N=0 -repeat $! -l[$>]
     ({'${-hex2str\ {t}}'})
     --replace. {'" "'},{'~'} -z. 0,32 -z.. 34,100%
-    -if {{[100%]}=={'0'}" || "{[100%]}=={'1'}}
+    -if {{@100%}=={'0'}" || "{@100%}=={'1'}}
       -v + -e[] "["{1+$N}"] "{-2,t} -v -
       -__survey {t} N+=1
     -endif
@@ -21802,7 +21802,7 @@ gimp_circle_abstraction :
       -rprogress {$>*100/$1}
       --==[0] $>
       -skeleton3d. 2,2,0,1,0
-      -if {[7]} # Process only non empty objects.
+      -if {@7} # Process only non empty objects.
         -s3d. -l[-6--1]
           -r[2] 3,{2,h/3},1,1,-1
           1,{2,h/2*$2%},1,1,1 -r. 1,{2,h/2},1,1,4 -r. 3,200% -*[2,-1] -y
@@ -23241,9 +23241,9 @@ gimp_apply_RGBcurve : -skip $1
   -gimp_apply_RGBcurve_configfile
   -repeat {$!-1} -l[$>,-1]
     -to_colormode[0] {max(3,s)}
-    -sh[0] 0 -_gimp_apply_RGBcurve. {-2,[0-12]} -rm.
-    -sh[0] 1 -_gimp_apply_RGBcurve. {-2,[13-25]} -rm.
-    -sh[0] 2 -_gimp_apply_RGBcurve. {-2,[26-38]} -rm.
+    -sh[0] 0 -_gimp_apply_RGBcurve. {-2,@0-12} -rm.
+    -sh[0] 1 -_gimp_apply_RGBcurve. {-2,@13-25} -rm.
+    -sh[0] 2 -_gimp_apply_RGBcurve. {-2,@26-38} -rm.
   -endl -done
   -rm.
 
@@ -23417,9 +23417,9 @@ gimp_apply_YCbCrcurve : -skip $1
   -gimp_apply_YCbCrcurve_configfile
   -repeat {$!-1} -l[$>,-1]
     -to_colormode[0] {max(3,s)} -sh[0] 0,2 -rgb2ycbcr. -rm.
-    -sh[0] 0 -_gimp_apply_YCbCrcurve. {-2,[0-12]} -rm.
-    -sh[0] 1 -_gimp_apply_YCbCrcurve. {-2,[13-25]} -rm.
-    -sh[0] 2 -_gimp_apply_YCbCrcurve. {-2,[26-38]} -rm.
+    -sh[0] 0 -_gimp_apply_YCbCrcurve. {-2,@0-12} -rm.
+    -sh[0] 1 -_gimp_apply_YCbCrcurve. {-2,@13-25} -rm.
+    -sh[0] 2 -_gimp_apply_YCbCrcurve. {-2,@26-38} -rm.
     -sh[0] 0,2 -ycbcr2rgb. -rm.
   -endl -done
   -rm.
@@ -23595,9 +23595,9 @@ gimp_apply_Labcurve : -skip $1
   -gimp_apply_Labcurve_configfile
   -repeat {$!-1} -l[$>,-1]
     -to_colormode[0] {max(3,s)} -sh[0] 0,2 -rgb2lab. -rm.
-    -sh[0] 0 -*. 2.55 -_gimp_apply_Labcurve. {-2,[0-12]} -/. 2.55 -rm.
-    -sh[0] 1 -+. 86 -*. 1.38587 -_gimp_apply_Labcurve. {-2,[13-25]} -/. 1.38587 --. 86 -rm.
-    -sh[0] 2 -+. 108 -*. 1.25616 -_gimp_apply_Labcurve. {-2,[26-38]} -/. 1.25616 --. 108 -rm.
+    -sh[0] 0 -*. 2.55 -_gimp_apply_Labcurve. {-2,@0-12} -/. 2.55 -rm.
+    -sh[0] 1 -+. 86 -*. 1.38587 -_gimp_apply_Labcurve. {-2,@13-25} -/. 1.38587 --. 86 -rm.
+    -sh[0] 2 -+. 108 -*. 1.25616 -_gimp_apply_Labcurve. {-2,@26-38} -/. 1.25616 --. 108 -rm.
     -sh[0] 0,2 -lab2rgb. -rm.
   -endl -done
   -rm.
@@ -28836,9 +28836,9 @@ gimp_random3d :
   -repeat $! -l[$>]
     f3d={0.5*max(w,h)/tan($5*pi/360)} -f3d $f3d -l3d {$6*$f3d},{$7*$f3d},{$8*$f3d} -sl3d $9 -ss3d $10
     -to_rgb ({w},{h},{d},{s}) -/. 2 -repeat $2
-    ({1,[0]}) -+. {1,[1]} -*. $3 -/. 100 -_gimp_random3d$1 {^} -rm..
+    ({1,@0}) -+. {1,@1} -*. $3 -/. 100 -_gimp_random3d$1 {^} -rm..
     -r3d. 1,1,0,{u(0,360)}
-    ({u(-1,1)}) -*. {1,[0]} ({u(-1,1)}) -*. {1,[1]}
+    ({u(-1,1)}) -*. {1,@0} ({u(-1,1)}) -*. {1,@1}
     -+3d... {-2,^},{^},{u(-$4,$4)} -rm[-2,-1]
     -col3d. {u(255)},{u(255)},{u(255)} -done -+3d[2--1] -j3d[0] [-1],50%,50%,0,$12,$11,0,1
     -k[0]
@@ -29276,8 +29276,8 @@ gimp_lightning :
         new_angle=$14
       -else
         i={round(u(1,max(1,($!-1)*$6)))}
-        level={$i,[-2]}
-        angle={$i,[-1]}
+        level={$i,@-2}
+        angle={$i,@-1}
         nb_points={$i,i[6]}
         p={round(($nb_points-2)*u($17%,$18%))}
         new_level={$level+1}
