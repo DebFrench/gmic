@@ -593,7 +593,7 @@ _help_usage :
 \n       . '"${c}"t"$n"': The text string from the image values regarded as ascii codes.
 \n       . '"${c}"x"$n"': The image extension (i.e last characters after the last '.' in the image name).
 \n       . '"${c}"^"$n" : The sequence of all image values, separated by commas ','.
-\n       . '"${c}"[subset]"$n"': The sequence of image values corresponding to the specified subset,
+\n       . '"${c}"@subset"$n"': The sequence of image values corresponding to the specified subset,
 \n          and separated by commas ','.
 \n       . Any other '"${c}"feature"$n"' is considered as a "${g}"mathematical expression"$n" associated to
 \n          the image "$c"[image]"$n" and is substituted by the result of its evaluation (float value).
