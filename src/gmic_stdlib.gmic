@@ -1035,7 +1035,7 @@ _help_header_ascii :
 
 __help_header_ascii :
   -if {narg($_prerelease)} strprerelease=" (pre-release ""#"$_prerelease")" -else strprerelease="" -endif
-  str="  "${_gmic_b}"gmic: GREYC's Magic for Image Computing."$_gmic_n"
+  str="  "${_gmic_b}"gmic: GREYC\'s Magic for Image Computing."$_gmic_n"
 \n
 \n        "$_gmic_r${_gmic_b}"Version "${-strver}$strprerelease$_gmic_n", Copyright (c) 2008-2016, David Tschumperle.
 \n        "$_gmic_r"(http://gmic.eu)"$_gmic_n
@@ -1125,7 +1125,7 @@ _help_header_html :
 \n<li><a href=\"#section13\">Examples of use</a></li>
 \n</ul>
 \n<a id=\"section0\"><h2>Version</h2></a>
-\n<pre><font color=\"blue\"><b>gmic:</b> GREYC's Magic for Image Computing.</font>
+\n<pre><font color=\"blue\"><b>gmic:</b> GREYC\'s Magic for Image Computing.</font>
 \n
 \n       Version <font color=\"brown\"><b>"${-strver}$strprerelease"</b></font>, Copyright (c) 2008-2016, David Tschumperle
 \n       (<a href=\"http://gmic.eu\">http://gmic.eu</a>)
@@ -1227,7 +1227,7 @@ _help_header_latex :
 \n\\Cc{G\47MIC} has been designed with portability in mind and runs on different platforms (Windows, Unix, MacOSX). It is distributed under the CeCILL license (GPL-compatible). Since 2008, it is developed in the Image Team of the GREYC laboratory, in Caen/France, by permanent researchers working in the field of image processing on a daily basis.
 \n\\section*{Version}
 \n
-\n \\Ca{\\textbf{gmic:} GREYC's Magic for Image Computing.}\\\\
+\n \\Ca{\\textbf{gmic:} GREYC\'s Magic for Image Computing.}\\\\
 \n
 \n        \\Cb{Version \\textbf{"$strver$strprerelease"}, Copyright (c) 2008-2016, David Tschumperl\\'e}\\\\
 \n        \\Cb{(\\url{http://gmic.eu})}
