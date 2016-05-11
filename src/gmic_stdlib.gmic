@@ -588,8 +588,6 @@ _help_usage :
 \n     Specified '"${g}"feature"$n"' can be one of:
 \n
 \n       . '"${c}"b"$n"': The image basename (i.e. filename without the folder path nor extension).
-\n       . '"${c}"c"$n"': The (x,y,z,c) coordinates of the minimum value, separated by commas ','.
-\n       . '"${c}"C"$n"': The (x,y,z,c) coordinates of the maximum value, separated by commas ','.
 \n       . '"${c}"f"$n"': The image folder name.
 \n       . '"${c}"n"$n"': The image name or filename (if the image has been read from a file).
 \n       . '"${c}"t"$n"': The text string from the image values regarded as ascii codes.
@@ -6217,7 +6215,7 @@ split_colors : -check "${1=0}>=0 && isint(${2=256}) && $2>0 && ${3=8}>=1"
 
     # Loop over biggest color regions.
     -repeat {$2-1}
-      coordsM={1,C}
+      coordsM={[xM,yM,zM,cM]}
       -if {1,i($coordsM)<$3} -break -endif
       color={0,I($coordsM)}
       --select_color[0] $1,$color
