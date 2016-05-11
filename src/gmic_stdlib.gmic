@@ -5734,7 +5734,7 @@ _colormap : # Implementation of the median-cut algorithm.
     $!,{s} -repeat {$!-1} # Compute box variances along all axes and find highest one (without a single element).
       n=$> -repeat {$n,s} -sh[$n] $> -=.. {if(w>1,iv,-1)},$n,$> -rm. -done
     -done
-    c={C}
+    c={[xM,yM]}
     b=${-arg\ 1,$c}  # Indice of the box with highest variance.
     a=${-arg\ 2,$c}  # Indice of the axis with highest variance inside box 'b'.
     -rm. -shift[$b] 0,0,0,{-$a},2 -sort[$b] +,x -shift[$b] 0,0,0,$a,2 -s[$b] x,2 # Split selected box along its median axis.
@@ -7132,7 +7132,7 @@ rotate_tileable : -check ${2=8}>=0
   (0,1;1,8;1,7;1,6;1,5;1,4;1,5;1,3;2,5;1,2;2,5;3,5;2,3;3,4;4,5;1,1;5,4;7,5;3,2;8,5;9,5;2,1;3,1;4,1;5,1;6,1;7,1;8,1) # List of known fractions.
   -s. x,2 --/[-2,-1] -atan. -*. {180/pi}   # Compute corresponding angles.
   ($angle) -index. [-2] -rm..
-  p={-3,^} q={-2,^} -rm[-3--1]             # Find nearest fraction p/q to atan(angle).
+  p={-3,@{^}} q={-2,@{^}} -rm[-3--1]             # Find nearest fraction p/q to atan(angle).
   -if {!$p||!$q} -return -endif
 
   -repeat $! -l[$>]
@@ -8707,7 +8707,7 @@ phase_correlation : -check ${-is_image_arg\ $1}
   -v - -repeat $! -pass$1
     -normalized_cross_correlation[$>] [-1] -rm.
     -l[$>]
-      ({C}) -*. 2 -s. x -rm.
+      ({[xM,yM,zM,cM]}) -*. 2 -s. x -rm.
       -if {{-3,^}>{-4,w}} --... {-4,w} --... {-4,w} -endif
       -if {{-2,^}>{-4,h}} --.. {-4,h} --.. {-4,h} -endif
       -if {{^}>{-4,d}} --. {-4,d} --. {-4,d} -endif
@@ -9898,7 +9898,7 @@ gaussian : -skip ${1=3},${2=$1},${3=0}
 #@gmic : Default values: 'offset_x=offset_y=0', 'opacity=1', 'pattern=(undefined)' and 'color1=0'.
 #@gmic : $ image.jpg -grid 10%,10%,0,0,0.5,255
 #@gmic : $ 400,400,1,3,255 -grid 10%,10%,0,0,0.3,0xCCCCCCCC,128,32,16
-grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0}
+grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0},${7=0}
   -if {same('"$6"','0x',2)}
     -e[0--3] "Draw xy-grid on image$?, with sizes ($1,$2), offsets ($3,$4), opacity $5, pattern $6 and color (${7--1})."
     -v - pattern=$6 color=${7--1}
