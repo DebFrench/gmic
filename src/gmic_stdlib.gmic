@@ -3898,7 +3898,7 @@ update_server : -skip ${1=$_version},${2=1}
     -v + -e[] "> Output list of filters in stdout.\n" -v -
     -x "date +%Y,%m,%d,%H >"${-path_tmp}date.dlm
     ${-path_tmp}date.dlm
-    -echo_stdout "*** List of filters in the G\47MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}" "{i[3]}:00") ***\n"
+    -echo_stdout "*** List of filters in the G\'MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}" "{i[3]}:00") ***\n"
     -rm.
     -echo_stdout "* List of filters, sorted by path:\n"
     -repeat $! -l[$>]
@@ -3908,8 +3908,8 @@ update_server : -skip ${1=$_version},${2=1}
         -replace_str. "&#233;","e"
         -replace_str. "/","~/~"
         -replace. {'~'},32
-        -if {narg(${command_name$>})} -_u "  "{t}" (command \'-"${command_name$>}"\')" -echo_stdout[] ${}
-        -else -echo_stdout[] "  "{t}
+        -if {narg(${command_name$>})} -_u "  "{t}" (command '-"${command_name$>}"')" -echo_stdout[] ${}
+        -else -_u "  "{t} -echo_stdout[] ${}
         -endif
       -endif -rm.
     -endl -done
@@ -3919,7 +3919,7 @@ update_server : -skip ${1=$_version},${2=1}
     -repeat $!
       name={$>,b}
       path={$>,f}
-      -nm[$>] $name"~(in~\'"$path"\')"
+      -nm[$>] $name"~(in~'"$path"')"
     -done
 
     -_update_server_sort 0,{$!-1}
@@ -3928,7 +3928,7 @@ update_server : -skip ${1=$_version},${2=1}
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
         -replace. {'~'},32
-        -echo_stdout[] "  "{t}
+        -_u "  "{t} -echo_stdout[] ${}
       -endif -rm.
     -endl -done
     -echo_stdout "\n*** End of list ***\n"
