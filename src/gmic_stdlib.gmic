@@ -582,6 +582,7 @@ _help_usage :
 \n       . '"${c}"n"$n"': The image name or filename (if the image has been read from a file).
 \n       . '"${c}"t"$n"': The text string from the image values regarded as ascii codes.
 \n       . '"${c}"x"$n"': The image extension (i.e last characters after the last '.' in the image name).
+\n       . '"${c}"^"$n" : The sequence of all image values, separated by commas ','.
 \n       . '"${c}"@subset"$n"': The sequence of image values corresponding to the specified subset,
 \n          and separated by commas ','.
 \n       . Any other '"${c}"feature"$n"' is considered as a "${g}"mathematical expression"$n" associated to
@@ -15394,7 +15395,6 @@ _bin2dec :
 # by removing empty lines, and useless comments (non starting with '#@gmic').
 compress_gmic :
   -v -
-  _head_std={'"#@gmic"'}
   -s -,10 N=$!
   -ap -_compress_gmic
   -s -,10 -i[1--2] (10) -a y
@@ -15402,7 +15402,7 @@ compress_gmic :
 
 _compress_gmic :
   -if {i=={'#'}}
-    -if {!same([{^}],['$_head_std'],6)" || (i[6]!=' ' && i[6]!=':')"} -rm. (10) -endif
+    -if {!same([{^}],['#@gmic'],6)" || (i[6]!=' ' && i[6]!=':')"} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
     -autocrop. 32 -if {!w} -rm. (10) -endif
@@ -15413,7 +15413,6 @@ _compress_gmic :
 # by removing empty lines, and useless comments (non starting with '#@gimp').
 compress_gmic_gimp :
   -v -
-  _head_std={'"#@gimp"'}
   -s -,10 N=$!
   -ap -_compress_gmic_gimp
   -s -,10 -i[1--2] (10) -a y
@@ -15421,7 +15420,7 @@ compress_gmic_gimp :
 
 _compress_gmic_gimp :
   -if {i=={'#'}}
-    -if {!same([{^}],['$_head_std'],6)} -rm. (10) -endif
+    -if {!same([{^}],['#@gimp'],6)} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
     -autocrop. 32 -if {!w} -rm. (10) -endif
@@ -19926,17 +19925,14 @@ _gimp_merge_layers :
   res=""
   ({'{0,n}'})
   -l.
-    ({'"$1("'}) l={w} str={^} -rm.
-    -s +,$str
-    -if {$!>1}
-      -repeat $!
-        -if {$>!=$!-1" && "[{^}]==['$str']}
-          -l[{$>+1}] -s +,{')'} -if {$!>1} res={0,t} -endif -a y -endl
-        -endif
-        -if {narg({'$res'})} -break -endif
-      -done
-    -endif
-    -rm
+    str="$1(" l={size(['$str'])}
+    -s +,{'$str'}
+    -if {$!>1} -repeat $!
+      -if {$>!=$!-1" && "same([{$>,^}],['$str'],$l)}
+        -l[{$>+1}] -s +,{')'} -if {$!>1} res={0,t} -endif -a y -endl
+      -endif
+      -if {narg({'$res'})} -break -endif
+    -done -endif -rm
   -endl
   -if {narg({'$res'})} -u $res -else -u "${2--1}" -endif
 
@@ -21581,11 +21577,9 @@ _gimp_bokeh :
   -random3d $1 -*3d. {-2,w},{-2,h},0
   -_gimp_bokeh$_shape $radius1
   -if {$radius2>=1} -_gimp_bokeh$_shape $radius2 -r. [-2],0,0,0.5,0.5 -*. {max(0,min(1,1-$4))} --[-2,-1] -endif
-
   sigma={-3,$5%*w}
   -r. {w+5*$sigma},{h+5*$sigma},1,1,0,0,0.5,0.5
   -b. $sigma,0 -n. 0,255
-
   -sprites3d[1] [2],1 -rm[2]
   -l.
     -s3d -r.. 3,{-2,h/3},1,1,-1 -s.. x
