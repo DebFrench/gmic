@@ -3542,7 +3542,7 @@ __update_gallery_html :
 # output (stdout), the list of available filters.
 # $1 = update version number.
 # $2 = enable/disable filters list output on stdout.
-update_server : -skip ${1=$_version},${2=1}
+update_server2 : -skip ${1=$_version},${2=1}
   -v -
 
   # Create substitution list to force filters having a particular location.
@@ -3589,15 +3589,15 @@ update_server : -skip ${1=$_version},${2=1}
   -_update_server_move[] "/Finger~paint","/Artistic"
 
   # Define useful sub-commands.
-  -m "parent : -l[] ({'{/\"$""1\"}'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path
-  -m "_max : ({'{/\"$""1\"}'}) ({'{/\"$""2\"}'}) -f[-2,-1] 'if(i>=97&&i<=122,i-32,i)' -r[-2,-1] {max(w,{-2,w})},1,1,1,0 --[-2,-1] -autocrop. 0 "\
+  -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path
+  -m "_max : ({'\"$""1\"'}) ({'\"$""2\"'}) -f[-2,-1] 'if(i>=97&&i<=122,i-32,i)' -r[-2,-1] {max(w,{-2,w})},1,1,1,0 --[-2,-1] -autocrop. 0 "\
      "-u {i>0} -rm." # Command to compare two strings (eq. to strcasecmp)
-  -m "varname : ({'{/\"$""1\"}'}) -f. if((i>=48&&i<=57)||(i>=65&&i<=90)||(i>=97&&i<=122),i,95) -u {t} -rm." # Convert string to a valid variable name
+  -m "varname : ({'\"$""1\"'}) -f. if((i>=48&&i<=57)||(i>=65&&i<=90)||(i>=97&&i<=122),i,95) -u {t} -rm." # Convert string to a valid variable name
   -m "load_gmic : "\
      "_nb_sources+=1 filename=${\"-basename $""1\"} "\
      "-v + -e[] \"  \"$_nb_sources\". \"$filename\"  \" -v - "\
      "-l[] "\
-     "  -i raw:$""1,char -nm {0,b} -v + -e[] \"      [retrieved from source \'$""1\']\" -v - "\
+     "  -i raw:$""1,char -nm {0,b} -v + -e[] \"      [retrieved from source '$""1']\" -v - "\
      "  -l "\
      "    -o raw:/tmp/$filename,char "\
      "    -_update_server_upload /tmp/$filename,include/$filename "\
@@ -3605,7 +3605,7 @@ update_server : -skip ${1=$_version},${2=1}
      "  -onfail -v + -e[] \"      [could not be archived!]\n\" -v - -endl "\
      "-onfail -l[] "\
      "  source=http://gmic.eu/include/$filename "\
-     "  -i raw:$source,char -v + -e[] \"      [retrieved from archive \'\"$source\"\']\n\" -v - "\
+     "  -i raw:$source,char -v + -e[] \"      [retrieved from archive '\"$source\"']\n\" -v - "\
      "  -onfail -v + -e[] \"      [error, not reachable!]\n\" -v -"\
      "  -endl -endl"
   -m "calibrate_name : "\
@@ -3778,7 +3778,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   # Rebuild folder structure.
   -v + -e[] "\n> Rebuild folder structure." -v -
-  -m "nb_levels : -l[] ({'{/\"$""1\"}'}) -s -,{'/'} -u $! -rm -endl"  # Command to count number of folders in a given path.
+  -m "nb_levels : -l[] ({'$""1'}) -s -,{'/'} -u $! -rm -endl"  # Command to count number of folders in a given path.
 
   path=/
   -repeat $! -l[$>]
@@ -3805,7 +3805,7 @@ update_server : -skip ${1=$_version},${2=1}
       command=
       -if $nb_up 1,$nb_up,1,1,{'_'} command="#@gimp "{t}"\n" -rm. -endif
       -if $nb_down -l[]
-        ({'{/$npath}'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
+        ({'$npath'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
         level={${"-nb_levels "$path}-$nb_up}
         balise=${"-if "{$level<=0" && "{$npath'!='/About/}}" -u b -else -u i -endif"}
         -repeat $!
@@ -3814,7 +3814,7 @@ update_server : -skip ${1=$_version},${2=1}
           balise="i"
         -done -rm
       -endl -endif
-      -if {narg(${})} nm={0,n} -i[0] ({'{/$command}'}) -y[0] -a y -nm $nm
+      -if {narg($command)} nm={0,n} -i[0] ({'$command'}) -y[0] -a y -nm $nm
       -endif
 
       path=$npath
@@ -3897,11 +3897,11 @@ update_server : -skip ${1=$_version},${2=1}
     -v + -e[] "> Output list of filters in stdout.\n" -v -
     -x "date +%Y,%m,%d,%H >"${-path_tmp}date.dlm
     ${-path_tmp}date.dlm
-    -echo_stdout "*** List of filters in the G\'MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}" "{i[3]}:00") ***\n"
+    -echo_stdout "*** List of filters in the G\47MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}" "{i[3]}:00") ***\n"
     -rm.
     -echo_stdout "* List of filters, sorted by path:\n"
     -repeat $! -l[$>]
-      ({'{/{0,n}}'}) -if {i!={'!'}}
+      ({'{0,n}'}) -if {i!={'!'}}
         -r. {w-1},1,1,1,0,0,1
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
@@ -3923,7 +3923,7 @@ update_server : -skip ${1=$_version},${2=1}
 
     -_update_server_sort 0,{$!-1}
     -repeat $! -l[$>]
-      ({'{/{0,n}}'}) -if {i!={'!'}}
+      ({'{0,n}'}) -if {i!={'!'}}
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
         -replace. {'~'},32
