@@ -190,11 +190,11 @@ _help : -skip ${1=""}
   stopflag=0
   _is_example=0
   -_document_gmic_header_ascii[] 0
-  -repeat $! -l[$>] -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}}
+  -repeat $! -l[$>] -if {"h>7 && same(["{@^}"],['#@gmic'],6)}"}  # -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}}
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
     -if {i!={':'}} # Command declaration.
       -s -,{'": "'} -autocrop {'" "'} -autocrop {':'} -autocrop {'" "'}
-      -if {{0,t}'=='$command}
+      -if {same(['{0,t}'],['$command'])}
         -_document_gmic_declaration_ascii
         -if $_shortcut  # Found shortcut command.
           -v + -e[] "\n    "$_gmic_m$_gmic_b"-"$command":"$_gmic_n$_gmic_m" Equivalent to '"$_gmic_b$_shortcutlink0$_gmic_n"'." -v -
@@ -1840,7 +1840,8 @@ document_gmic : -skip ${1="ascii"},${2=""},${3=1}
   ks0="0" ks1="-k[0]"
 
   # Parse lines of the commands file.
-  -repeat $! -l[$>] -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}" && "(i[6]=={'" "'}" || "i[6]=={':'})} # Process only lines starting with '#@gmic'.
+  -repeat $! -l[$>] -if {"h>7 && same(["{@^}"],['#@gmic'],6) && (i[6]==' ' || i[6]==':')"} # Process only lines starting with '#@gmic'.
+    # -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}" && "(i[6]=={'" "'}" || "i[6]=={':'})} # Process only lines starting with '#@gmic'.
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
     _is_example=0
     -if {i!={':'}}
@@ -1891,8 +1892,10 @@ _document_gmic_subsection_ascii :
   -v -
 
 _document_gmic_declaration_ascii :
-  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
-  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
+  -if {same([{@^}],['(+)'])} qualifier=" "{t} -rm. -else qualifier="" -endif
+#  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
+  -if {$!>1" && same(["{@^}"],['eq. to '],7)"} # Declaration of a shortcut command.
+#  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut={t}
@@ -1915,7 +1918,8 @@ _document_gmic_declaration_ascii :
 _document_gmic_description_ascii :
   s="        " bs0="\n" bs1="\\\\\n         "
   -y x -if {!narg($_is_tutorial)} -_document_gmic_split_ascii 96 -endif
-  -if {$!==1" && "0$_vt100>0" && "{${-head[0]\ 8}'=='{'"(eq. to "'}}} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
+  -if {$!==1" && "0$_vt100>0" && same(["{@^}"],['(eq. to '],8)"} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
+#  -if {$!==1" && "0$_vt100>0" && "{${-head[0]\ 8}'=='{'"(eq. to "'}}} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
   -repeat {$!-1} ({'${bs$_is_example}$s"  "'}) -a[$>,-1] x -done -a x
   -if {0$_vt100>0}
     -replace_str "Default values:","\n"$s${_gmic_b}"Default values:"$_gmic_n
@@ -1980,11 +1984,19 @@ _document_gmic_declaration_bash :
   _coms$_nbcoms={0,t}
   _nbcoms+=1
 
-  -if {{{0,t}'=='"input"}" || "{{0,t}'=='"i"}" || "\ # Manage special commands (remove arguments).
-       {{0,t}'=='"output"}" || "{{0,t}'=='"o"}" || "\
-       {{0,t}'=='"command"}" || "{{0,t}'=='"m"}} -return -endif
-  -repeat $! -if {{$<,t}'=='"(+)"} -rm[$<] -endif -done # Discard '(+)' qualifier.
-  -if {$!==2" && "{${-head\ 7}'=='{'"eq. to "'}}} # Command is a shortcut.
+  -if {"str=["{@^}"]; "\
+       "same(str,['input']) || same(str,['i']) || "\ # Manage special commands (remove arguments).
+       "same(str,['output']) || same(str,['o']) || "\
+       "same(str,['command']) || same(str,['m'])"} -return -endif
+
+#  -if {{{0,t}'=='"input"}" || "{{0,t}'=='"i"}" || "\ # Manage special commands (remove arguments).
+#       {{0,t}'=='"output"}" || "{{0,t}'=='"o"}" || "\
+#       {{0,t}'=='"command"}" || "{{0,t}'=='"m"}} -return -endif
+
+  -repeat $! -if {same([{@^}],['(+)'])} -rm[$<] -endif -done # Discard '(+)' qualifier.
+#  -repeat $! -if {{$<,t}'=='"(+)"} -rm[$<] -endif -done # Discard '(+)' qualifier.
+  -if {$!==2" && same(["{@^}"],['eq. to '],7)"} # Command is a shortcut.
+#  -if {$!==2" && "{${-head\ 7}'=='{'"eq. to "'}}} # Command is a shortcut.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39 -autocrop. {'-'}
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut=${-str2hex\ {1,t}}
@@ -1992,7 +2004,8 @@ _document_gmic_declaration_bash :
     _shortcut+=1
   -elif {$!>1} # Command is regular and has arguments.
     _command$_argcommand={0,t}
-    -if {{0,t}'=='"help"} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
+    -if {same([{@^}],['help'])} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
+#    -if {{0,t}'=='"help"} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
     -else
       -if {$!==2} ({'>'}) -endif # Add shadow parameter when single argument.
       -discard[^0] {'" "'} -i[2--2] ({'" "'}) -a[^0] y
@@ -2098,7 +2111,8 @@ _document_gmic_subsection_html :
   -v -
 
 _document_gmic_declaration_html :
-  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
+  -if {same([{@^}],['(+)'])} qualifier=" "{t} -rm. -else qualifier="" -endif
+#  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
   s1="\n" s0=" |<br/>"
   -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
