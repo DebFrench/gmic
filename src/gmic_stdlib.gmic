@@ -16542,7 +16542,7 @@ _x_color_curves :
     need_refresh={$need_refresh||$oviewmode!=$viewmode}
 
     # Update result.
-    -repeat {s} -if {['${oC$>}']!=['${__C$>}']} # Channel must be updated.
+    -repeat {s} -if {['_${oC$>}']!=['_${__C$>}']} # Channel must be updated.
       -function1d[] 1,${__C$>} -*. {255%} -r. 256,1,1,1,5 -c. 0,255
       --channels[0] $> -map. [-2] -j[1] [-1],0,0,0,$> -rm[-2,-1]
       need_refresh=1 oC$>=${__C$>}
