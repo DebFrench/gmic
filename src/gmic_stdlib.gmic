@@ -168,7 +168,7 @@ _help : -skip ${1=""}
   -v -1 -use_vt100
   -if {!narg("$1")} _is_example=0 -__help ascii -v + -e[] "" -v - -rm -u "" -return -endif # Global help.
   ({'{/"$1"}'}) -autocrop. {'-'}
-  -if {{@100%}=={']'}" && "i!={'['}} -l. -s -,{'['} -k[0] -endl -endif
+  -if {{@100%}==']'" && "i!='['} -l. -s -,{'['} -k[0] -endl -endif
   command={t} -rm.
 
   # Help requested for a specific command.
@@ -192,7 +192,7 @@ _help : -skip ${1=""}
   -_document_gmic_header_ascii[] 0
   -repeat $! -l[$>] -if {h>7" && "same([{^}],['#@gmic'],6)}
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
-    -if {i!={':'}} # Command declaration.
+    -if {i!=':'} # Command declaration.
       -s -,{'": "'} -autocrop {'" "'} -autocrop {':'} -autocrop {'" "'}
       -if {['{0,t}']==['$command']}
         -_document_gmic_declaration_ascii
@@ -204,15 +204,15 @@ _help : -skip ${1=""}
       -endif
     -else
       -rows 1,100% # Discard ':' char.
-      -if {i=={':'}} stopflag=1 # Subsection
+      -if {i==':'} stopflag=1 # Subsection
       -else
         _is_tutorial=
         -autocrop {'" "'}
-        -if {i=={'$'}} # Example of use.
+        -if {i=='$'} # Example of use.
           -rows 1,100% -autocrop {'" "'} # Discard '$' character.
-          -if {i=={'$'}} # Tutorial page.
+          -if {i=='$'} # Tutorial page.
              -v + -e[] "" -v -
-             -if {h==1&&i=={'$'}} tuturl=http://gmic.eu/tutorial/_$command.shtml
+             -if {h==1" && "i=='$'} tuturl=http://gmic.eu/tutorial/_$command.shtml
              -else -autocrop {'$'} -autocrop {'" "'} tuturl=http://gmic.eu/tutorial/{0,t}.shtml
              -endif
              -rm ({'$_gmic_c${_gmic_b}"Tutorial:"$_gmic_n$_gmic_c" "$tuturl'}) -y
@@ -1844,7 +1844,7 @@ document_gmic : -skip ${1="ascii"},${2=""},${3=1}
   -repeat $! -l[$>] -if {h>7" && "same([{^}],['#@gmic'],6)" && (i[6]==' ' || i[6]==':')"} # Process only lines starting with '#@gmic'.
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
     _is_example=0
-    -if {i!={':'}}
+    -if {i!=':'}
 
       # Reached line as '#@gmic Command : Arguments_line1 : Arguments_line2 : (qualifier)'.
       _command+=1
@@ -1853,7 +1853,7 @@ document_gmic : -skip ${1="ascii"},${2=""},${3=1}
 
     -else
       -rows 1,100% # Discard ':' char.
-      -if {i=={':'}}
+      -if {i==':'}
 
         # Reached line as '#@gmic :: Subsection name'.
         _subsection+=1
@@ -1862,12 +1862,12 @@ document_gmic : -skip ${1="ascii"},${2=""},${3=1}
 
       -else
         -autocrop {'" "'}
-        -if {i=={'$'}}
+        -if {i=='$'}
 
           # Reached line as '#@gmic : $ Example of use'.
           -rows 1,100% -autocrop {'" "'} # Discard '$' character.
           _is_example=1
-          -if {i!={'$'}} _example+=1 -endif # Reached '#@gmic : $$' for announcing available tutorial page.
+          -if {i!='$'} _example+=1 -endif # Reached '#@gmic : $$' for announcing available tutorial page.
           _filename=$_path$_name$_example.jpg
           -_document_gmic_example_$1
 
@@ -2135,15 +2135,15 @@ _document_gmic_description_html :
     -v + -e[] ${-don}"<i><font color=\"blue\">"{t}"</font></i>" -v -
 
   -else                                    # Reached line as '#@gmic : description'.
-    -if {(i<{'A'}" || "i>{'Z'})" && "i!=40" && "i!=39} -v + -e[] ${-don}"&nbsp;"{t} -v -
+    -if {(i<'A'" || "i>'Z')" && "i!=40" && "i!=39} -v + -e[] ${-don}"&nbsp;"{t} -v -
     -else -v + -e[] ${-don}{t} -v -
     -endif
 
   -endif
 
 _document_gmic_example_html :
-  -if {i=={'$'}} # Link to a tutorial page.
-    -if {h==1&&i=={'$'}} tuturl=http://gmic.eu/tutorial/_$_command_name.shtml
+  -if {i=='$'} # Link to a tutorial page.
+    -if {h==1&&i=='$'} tuturl=http://gmic.eu/tutorial/_$_command_name.shtml
     -else -autocrop {'$'} -autocrop {'" "'} tuturl=http://gmic.eu/tutorial/{0,t}.shtml
     -endif
     -v +
@@ -2193,7 +2193,7 @@ _document_gmic_declaration_images : _command_name={0,t}
 _document_gmic_description_images :
 
 _document_gmic_example_images :
-  -if {i=={'$'}} -return -endif
+  -if {i=='$'} -return -endif
   -v +
   -e[] "    ["$_example"] Command '-"$_command_name"': $ "{t}
   -v -
@@ -2315,15 +2315,15 @@ _document_gmic_description_latex :
     -rows. 8,100% -autocrop. {'.'} -autocrop. {')'} -autocrop. {'" "'}
     -v + -e[] ${-eoff}$s"(\\emph{eq. to} {\\small \\texttt{"{t}"}})." -v -
   -else                                    # Reached line as '#@gmic : description'.
-    -if {(i<{'A'}" || "i>{'Z'})" && "i!=40" && "i!=39} -v + -e[] ${-eoff}{t} -v -
+    -if {(i<'A'" || "i>'Z')" && "i!=40" && "i!=39} -v + -e[] ${-eoff}{t} -v -
     -else -v + -e[] ${-eoff}$s{t} -v -
     -endif
   -endif
   _is_desc=1
 
 _document_gmic_example_latex :
-  -if {i=={'$'}} # Link to a tutorial page.
-    -if {h==1&&i=={'$'}} tuturl=http://gmic.eu/tutorial/\\_$_command_name.shtml
+  -if {i=='$'} # Link to a tutorial page.
+    -if {h==1" && "i=='$'} tuturl=http://gmic.eu/tutorial/\\_$_command_name.shtml
     -else -autocrop {'$'} -autocrop {'" "'} tuturl=http://gmic.eu/tutorial/{0,t}.shtml
     -endif
     -l[] ({'$tuturl'}) -replace_str "_","\\_"
@@ -2627,7 +2627,7 @@ output_ggr : -skip "${2=}"
  -v - N=$!
   -repeat $N --l[$>] -r 1,{w*h*d},1,100%,-1 -to_rgba -/ 255
     -if {narg("$2")} name="$2"
-    -else -l[] 1 -nm. "$1" ({'{b}'}) -f "if(x==0&&i>="{'a'}"&&i<="{'z'}",i-"{'a'}"+"{'A'}",i)" name={t} -rm -endl
+    -else -l[] 1 -nm. "$1" ({'{b}'}) -f "if(x==0 && i>='a' && i<='z',i-'a'+'A',i)" name={t} -rm -endl
     -endif
     ({'"GIMP Gradient\nName: "$name\n{0,h}\n'})
     -repeat {0,h}
@@ -3052,7 +3052,7 @@ update_film_emulation_html :
   categories=bw,instant_consumer,instant_pro,negative_color,negative_new,negative_old,print,colorslide,various
   category_names="Black and White","Instant [consumer]","Instant [pro]","Negative [color]","Negative [new]","Negative [old]","Print films","Slide [color]","Various"
   -m "_thumb : -frame 3%,3%,255 -to_rgba -drop_shadow 2,2,3 -repeat $! -l[$>] -i[0] 100%,100%,1,3,245 -blend alpha -endl -done"
-  -m "_title : ({'\"$""*\"'}) -replace. {'_'},32 -f. if((x==0||j(-1)==32)&&i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i) -u {t} -rm."
+  -m "_title : ({'\"$""*\"'}) -replace. {'_'},32 -f. if((x==0||j(-1)==32)&&i>='a'&&i<='z',i+'A'-'a',i) -u {t} -rm."
 
   nb_presets=0
   -repeat {narg($categories)}
@@ -3661,20 +3661,20 @@ update_server : -skip ${1=$_version},${2=1}
 
   -repeat $!
     ind={$>-$offset}
-    -if {{{$ind-1},@-1}==10" && "same([{^}],['#@gimp'],6)" && "({$ind,@6}==32" || "{$ind,@6}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
+    -if {{{$ind-1},@-1}==10" && "same([{^}],['#@gimp'],6)" && "({$ind,@6}==32" || "{$ind,@6}=='_')} -l[$ind] # Line starts by '#@gimp[_] '
 
-      -if {i[6]=={'_'}} locale=_{`[i[7],i[8]]`}  # Retrieve locale if any specified
+      -if {i[6]=='_'} locale=_{`[i[7],i[8]]`}  # Retrieve locale if any specified
       -else locale=
       -endif
 
       is_folder=0
       -s +,10
-      -if {{0,@6}=={'_'}} --rows[0] 9,100% -rows[0] 0,8  # Treat a localized filter as a regular filter.
+      -if {{0,@6}=='_'} --rows[0] 9,100% -rows[0] 0,8  # Treat a localized filter as a regular filter.
       -else --rows[0] 6,100% -rows[0] 0,5
       -endif
       -autocrop. 32 -mv. 1
 
-      -if {{1,@0}!={':'}} # Found a new filter or folder definition.
+      -if {{1,@0}!=':'} # Found a new filter or folder definition.
         -l[1]
 
           # Format string by removing special character sequences.
@@ -3697,8 +3697,8 @@ update_server : -skip ${1=$_version},${2=1}
 
           -else # Found new folder (opt. parent(s)).
 
-            -if {i=={'_'}} # Folder has parents before creating it.
-              -do path=${"-parent[] "$path} -shift 0,-1,0,0 -while {i=={'_'}}
+            -if {i=='_'} # Folder has parents before creating it.
+              -do path=${"-parent[] "$path} -shift 0,-1,0,0 -while {i=='_'}
               -autocrop 0
             -endif
             -autocrop 32
@@ -3720,14 +3720,14 @@ update_server : -skip ${1=$_version},${2=1}
 
         -if {$!>=3} -l[1]
           -s +,{'='}
-          -if {$!>=3} -if {{1,@0}=={'='}}
+          -if {$!>=3} -if {{1,@0}=='='}
             -rows[0] 1,100% -calibrate_name[0]
             -i[0] ({':'};32) -i[2] (32)
           -endif -endif
         -endl -endif
         -i[1] (32)
 
-      -endif # -if {i!={':'}}
+      -endif # -if {i!=':'}
       -a y
 
     -endl -endif
@@ -3808,7 +3808,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   # Remove useless comments and line breaks.
   -repeat $! -l[$>] -s -,10 -repeat $! -l[$<]
-    -if {i[0]=={'#'}" && "i[1]!={'@'}} -rm -endif
+    -if {i[0]=='#'" && "i[1]!='@'} -rm -endif
   -endl -done -i[^0] ({'\n'}) -a y -endl -done
 
   # Retrieve G'MIC command name for each filter.
@@ -3879,7 +3879,7 @@ update_server : -skip ${1=$_version},${2=1}
     -rm.
     -echo_stdout "* List of filters, sorted by path:\n"
     -repeat $! -l[$>]
-      ({'{0,n}'}) -if {i!={'!'}}
+      ({'{0,n}'}) -if {i!='!'}
         -r. {w-1},1,1,1,0,0,1
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
@@ -3901,7 +3901,7 @@ update_server : -skip ${1=$_version},${2=1}
 
     -_update_server_sort 0,{$!-1}
     -repeat $! -l[$>]
-      ({'{0,n}'}) -if {i!={'!'}}
+      ({'{0,n}'}) -if {i!='!'}
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
         -replace. {'~'},32
@@ -4180,10 +4180,10 @@ __update_tutorial_html : -skip ${3=""},${4=""},${5=""}
   ({'"$1"'}) -s -,{'/'}
   output_base=""
   -if $! output_base={t} -endif
-  -if {$!>2" && "i[0]!={'-'}} output_base={-2,t}_{t} -endif
+  -if {$!>2" && "i[0]!='-'} output_base={-2,t}_{t} -endif
   -rm
   -if {narg($output_base)}
-    ({'$output_base'}) -if {i=={'-'}} -=. {'_'} output_base={t} -endif -rm. # Replace first '-' by underscore if necessary.
+    ({'$output_base'}) -if {i=='-'} -=. {'_'} output_base={t} -endif -rm. # Replace first '-' by underscore if necessary.
   -endif
   -if {narg("$3")} _output_shtml$_N="$3".shtml _output_html$_N="$3".html _img_prefix$_N="$3"
   -else _output_shtml$_N=$output_base.shtml _output_html$_N=$output_base.html _img_prefix$_N=$output_base
@@ -4258,14 +4258,14 @@ _update_tutorial_html :
         -l[] anchor="" ({'$link'}) -s +,{"'#'"} -if {$!>1} anchor=#{t} link={0,t} -endif -rm -endl
         ({'$link'}) -autocrop. {'/'}
         -l. -s -,{'/'} -if {com=['command-guide'];$!>6" && "[{-2,^}]!=com" && "[{-3,^}]!=com} relink={-2,t}_{t}.shtml -else relink={t}.shtml -endif -rm -endl
-        ({'$relink'}) -if {i=={'-'}} -=. {'_'} relink={t} -endif -rm. # Replace first '-' by underscore if necessary.
+        ({'$relink'}) -if {i=='-'} -=. {'_'} relink={t} -endif -rm. # Replace first '-' by underscore if necessary.
 
         -if $relink # If the relinked page exists.
           relink=$relink$anchor
           -v + -e[] "    > Local link '"$link$anchor"' relinked to '"$relink"'." -v -
           -rm[0] -i[0] ({'$relink'}) -y[0]
         -else # Else try to relink to reference page if link to a command.
-          ({'$relink'}) -if {i=={'_'}}
+          ({'$relink'}) -if {i=='_'}
             -l. -z 1,100% -s -,{'.'} command=${-basename\ {0,t}} -k[0] -endl
             relink="http://gmic.eu/reference.shtml#"$command
             -v + -e[] "    > Local link '"$link$anchor"' relinked to '"$relink"' "${_gmic_g}"(reference command)."${_gmic_n} -v -
@@ -7630,14 +7630,14 @@ curvature :
 #@gmic : $$ _dct-and-idct
 dct : -skip ${1=0}
   -v - ({'"$1"'})
-  is_axes={im>={'x'}" && "iM<={'z'}}
+  is_axes={im>='x'" && "iM<='z'}
   -if $is_axes
     -v + -e[0--3] "Compute discrete cosine transform of image$? along axes '$1'." -v -
     -repeat {w}
       axis={i[$>]}
-      -if {$axis=={'x'}} -repeat {$!-1} -l[$>] -if {w>1} -_dct -endif -endl -done
-      -elif {$axis=={'y'}} -repeat {$!-1} -l[$>] -if {h>1} -permute yxzc -_dct -permute yxzc -endif -endl -done
-      -elif {$axis=={'z'}} -repeat {$!-1} -l[$>] -if {d>1} -permute zxyc -_dct -permute yzxc -endif -endl -done
+      -if {$axis=='x'} -repeat {$!-1} -l[$>] -if {w>1} -_dct -endif -endl -done
+      -elif {$axis=='y'} -repeat {$!-1} -l[$>] -if {h>1} -permute yxzc -_dct -permute yxzc -endif -endl -done
+      -elif {$axis=='z'} -repeat {$!-1} -l[$>] -if {d>1} -permute zxyc -_dct -permute yzxc -endif -endl -done
       -endif
     -done
   -else
@@ -8117,14 +8117,14 @@ heat_flow : -skip ${1=10},${2=30},${3=0}
 #@gmic : $$ _dct-and-idct
 idct : -skip ${1=0}
   -v - ({'"$1"'})
-  is_axes={im>={'x'}&&iM<={'z'}}
+  is_axes={im>='x'" && "iM<='z'}
   -if $is_axes
     -v + -e[0--3] "Compute inverse discrete cosine transform of image$? along axes '$1'." -v -
     -repeat {w}
       axis={i[$>]}
-      -if {$axis=={'x'}} -repeat {$!-1} -l[$>] -if {w>1} -_idct -endif -endl -done
-      -elif {$axis=={'y'}} -repeat {$!-1} -l[$>] -if {h>1} -permute yxzc -_idct -permute yxzc -endif -endl -done
-      -elif {$axis=={'z'}} -repeat {$!-1} -l[$>] -if {d>1} -permute zxyc -_idct -permute yzxc -endif -endl -done
+      -if {$axis=='x'} -repeat {$!-1} -l[$>] -if {w>1} -_idct -endif -endl -done
+      -elif {$axis=='y'} -repeat {$!-1} -l[$>] -if {h>1} -permute yxzc -_idct -permute yxzc -endif -endl -done
+      -elif {$axis=='z'} -repeat {$!-1} -l[$>] -if {d>1} -permute zxyc -_idct -permute yzxc -endif -endl -done
       -endif
     -done
   -else
@@ -14364,7 +14364,7 @@ watermark_visible : -skip "${1=\251\ G\47MIC}" -check "${2=0.3}>0 && $2<1 && ${3
 #@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline. Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor
 blend : -skip ${1=alpha},${2=1},${3=1},${4=0}
   -v -
-  -if {arg(1,{'$1'})=={'['}}
+  -if {arg(1,{'$1'})=='['}
     n={narg($*)} mode=${-arg\ 1+($n>=2),alpha,$2}
     -v + -e[^-1] "Blend image$? with "${-arg\ 1+$4,base,top}" layer $1, using '"$mode"' mode and opacity $3." -v -
     -repeat $! -pass$1 -l[$>,-1] -if $4 -rv -endif -blend $mode,$3 -endl -done -v + -return
@@ -15401,7 +15401,7 @@ compress_gmic :
   -v +
 
 _compress_gmic :
-  -if {i=={'#'}}
+  -if {i=='#'}
     -if {!same([{^}],['#@gmic'],6)" || (i[6]!=' ' && i[6]!=':')"} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
@@ -15419,7 +15419,7 @@ compress_gmic_gimp :
   -v +
 
 _compress_gmic_gimp :
-  -if {i=={'#'}}
+  -if {i=='#'}
     -if {!same([{^}],['#@gimp'],6)} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
@@ -15596,11 +15596,6 @@ gcd : -check "isint($1) && isint($2) && $1*$2!=0"
 _gcd :
   r={$1%$2} -if $r -u ${-_gcd\ $2,$r} -else -u $2 -endif
 
-#@gmic head : length>=0
-#@gmic : Return the first 'length' values of the last image, or all its values if image size is less than 'length'.
-head : -check "isint($1) && $1>=0"
-  -v - -if {$1>0" && "w} -u {@0-{min(whds-1,$1-1)}} -else -u "" -endif -v +
-
 #@gmic hex : hexadecimal_int1,...
 #@gmic : Print specified hexadecimal integers into their binary, octal, decimal and string representations.
 hex :
@@ -15709,7 +15704,7 @@ _is_3d :
 #@gmic is_image_arg : string
 #@gmic : Return 1 if specified string looks like '[ind]'.
 is_image_arg :
-  -v - asc={'"$1"'} -u {arg(1,$asc)=={'['}&&arg(-1,$asc)=={']'}&&min($asc)>=45&&max($asc)<=122} -v +
+  -v - asc={'"$1"'} -u {arg(1,$asc)=={'['}" && "arg(-1,$asc)=={']'}" && "min($asc)>=45" && "max($asc)<=122} -v +
 
 #@gmic is_percent : string
 #@gmic : Return 1 if specified string ends with a '%', 0 otherwise.
@@ -18968,7 +18963,7 @@ x_select_color : -skip ${1=xsc_variable}
   rgba_mode={$n>=4} R={arg(1,$$1)} G={arg(2,$$1)} B={arg(3,$$1)} A={if($rgba_mode,arg(4,$$1),255)}
   -v + -e[^-1] "Open "${-arg\ 1+$rgba_mode,RGB,RGBA}" color selector widget, with variable '$1' and starting color "($$1)"." -v -
   -if {!{*}} -w[] {400+24*$rgba_mode},400,0,"Select a color" -endif
-  update_view=1 is_sv=0 is_h=0 is_a=0 colordb=0 is_thread_variable={arg(1,{'$1'})=={'_'}" && "arg(2,{'$1'})=={'_'}}
+  update_view=1 is_sv=0 is_h=0 is_a=0 colordb=0 is_thread_variable={arg(1,{'$1'})=='_'" && "arg(2,{'$1'})=='_'}
 
   # Manage color presets.
   -m "add_preset : -if {!narg($_xsc_preset$""1)} _xsc_preset$""1=$""2,$""3,$""4 -endif"
@@ -19034,7 +19029,7 @@ x_select_color : -skip ${1=xsc_variable}
       -else -t. "RGB ("$R","$G","$B")",{$x0+115},{$y1+8},14,1,0
       -endif
       ({'${-dec2hex\ {$R*65536+$G*256+$B}}'}) --. {'0'} -r. 6,1,1,1,0,0,1,0 -+. {'0'}
-      -f. if(i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i)
+      -f. if(i>='a'" && "i<='z',i+'A'-'a',i)
       -t.. "HTML ""#"{t},{$x0+115},{$y1+40},14,1,0 -rm.
       -w. 100%,100%,0 -rm.
       -if $rgba_mode $1=$R,$G,$B,$A -else $1=$R,$G,$B -endif
@@ -19118,7 +19113,7 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
   reset_w={*,w} reset_h={*,h}
   -if {!narg($$1)} $1=0,0,100,100 -endif
   -i[points] ($$1) -y. x -r. 2,{w/2},1,1,-1
-  is_thread_variable={arg(1,{'$1'})=={'_'}" && "arg(2,{'$1'})=={'_'}} selected=-1 X=-1 Y=-1
+  is_thread_variable={arg(1,{'$1'})=='_'" && "arg(2,{'$1'})=='_'} selected=-1 X=-1 Y=-1
   -do
 
     # Update base view.
@@ -19288,14 +19283,14 @@ x_select_palette : -skip ${1=xsp_variable},${2=0}
         ($R^$G^$B) -rgb2hsv. H={round(i[0])} S={round(i[1]*255)} V={round(i[2]*255)} -rm.
         -t.. "HSV ("$H","$S","$V")",8,{$wh-31},14,1,0
         ({'${-dec2hex\ {$R*65536+$G*256+$B}}'}) --. {'0'} -r. 6,1,1,1,0,0,1,0 -+. {'0'}
-        -f. if(i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i)
+        -f. if(i>='a'" && "i<='z',i+'A'-'a',i)
         -t... "HTML ""#"{t},8,{$wh-17},14,1,0 -rm.
       -endif
       -sh[baseview] 3 -j... [-2],8,8,0,0,1,[-1] -rm[-2,-1]
       -nm. view -w[view]
     -endif
 
-    -if {arg(1,{'$1'})=={'_'}" && "arg(2,{'$1'})=={'_'}} -wait 50 -else -wait -endif
+    -if {arg(1,{'$1'})=='_'" && "arg(2,{'$1'})=='_'} -wait 50 -else -wait -endif
 
     # Manage window size.
     is_ctrl={{*,CTRLLEFT}||{*,CTRLRIGHT}}
@@ -20769,7 +20764,7 @@ survey :
   N=0 -repeat $! -l[$>]
     ({'${-hex2str\ {t}}'})
     --replace. {'" "'},{'~'} -z. 0,32 -z.. 34,100%
-    -if {{@100%}=={'0'}" || "{@100%}=={'1'}}
+    -if {{@100%}=='0'" || "{@100%}=='1'}
       -v + -e[] "["{1+$N}"] "{-2,t} -v -
       -__survey {t} N+=1
     -endif
@@ -26192,7 +26187,7 @@ _gimp_emulate_film_collage :
     preset=${arg{$>+1}}
     --l[0]
       -_gimp_emulate_film[0] 1,$preset,1,0,1,0,0,0,0,0
-      ({'$preset'}) -replace. {'_'},32 -f. if(x==0&&i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i) title={t} -rm.
+      ({'$preset'}) -replace. {'_'},32 -f. if(x==0" && "i>='a'" && "i<='z',i+'A'-'a',i) title={t} -rm.
       -text_outline. $title,2,2,$_label_size,2,1,255
     -endl
     -progress {(1+$>)*100/$#}
@@ -30149,7 +30144,7 @@ gimp_intarsia :
       color={1,I($>)}
       R={arg(1,$color)} G={arg(2,$color)} B={arg(3,$color)}
       ({'${-dec2hex\ {$R*65536+$G*256+$B}}'}) --. {'0'} -r. 6,1,1,1,0,0,1,0 -+. {'0'}
-      -f. if(i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i)
+      -f. if(i>='a'" && "i<='z',i+'A'-'a',i)
       hcolor={t} -rm.
       48,32,1,4 -fc. $color,255 -frame. 1,1,0,0,0,255 -o. "$1/"${image_name}_$>.png -rm.
       ({'"<tr><td><b>Colour "$>"</b></td><td><img src=\""${image_name}_$>.png"\" /></td><td>#"$hcolor"</td></tr>\n"'})
