@@ -16126,7 +16126,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   y0=59
   -j.. [-1],20,$y0,0,0 -rm.
   -rectangle. 0,16,100%,44,1,120,120,32
-  0 -t. "G\47MIC "${-strver}" demos",2,2,28,1,1,1,1
+  0 -t. "G\'MIC "${-strver}" demos",2,2,28,1,1,1,1
   -if {narg($_prerelease)} 0 -t. "Pre-release :\n ""#"$_prerelease,30,2,13,1,1,1,1 -a[-2,-1] x -endif
   -b. 0.5 -n. 0,1
 
@@ -16146,7 +16146,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={$|-4} selected=-1 -f3d 400
 
   # Start main loop.
-  -w[0] -1,-1,0,0,50%,50%,"[G\'MIC] Demo menu"
+  -w[0] -1,-1,0,0,50%,50%,"[G'MIC] Demo menu"
   -do
 
     # Set 3d coordinates for object.
