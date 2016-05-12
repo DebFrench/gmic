@@ -19922,8 +19922,7 @@ gimp_merge_layers :
   -r $wh0,1,100%,0
 
 _gimp_merge_layers :
-  res=""
-  ({'{0,n}'})
+  res="" ({'{0,n}'})
   -l.
     str="$1(" l={size(['$str'])}
     -s +,{'$str'}
