@@ -167,7 +167,7 @@ help : -skip ${1=""},${2=1}
 _help : -skip ${1=""}
   -v -1 -use_vt100
   -if {!narg("$1")} _is_example=0 -__help ascii -v + -e[] "" -v - -rm -u "" -return -endif # Global help.
-  -_u "$1" ({'${}'}) -autocrop. {'-'}
+  ({'{/"$1"}'}) -autocrop. {'-'}
   -if {{@100%}=={']'}" && "i!={'['}} -l. -s -,{'['} -k[0] -endl -endif
   command={t} -rm.
 
@@ -570,7 +570,7 @@ _help_usage :
 \n     the specified string, separated by commas '"$g","$n"'. For instance, item '"$c"{'foo'}"$n"' is substituted
 \n     by '"${c}"102,111,111"$n"'.
 \n
-\n  - '"$c"{\\\\string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
+\n  - '"$c"{/string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
 \n
 \n  - '"$c"{string1'=='string2}"$n"' is substituted by "${c}"0"$n" or "${c}"1"$n", whether the two specified strings coincide
 \n      or not (test is case-sensitive).
@@ -3589,10 +3589,10 @@ update_server : -skip ${1=$_version},${2=1}
   -_update_server_move[] "/Finger~paint","/Artistic"
 
   # Define useful sub-commands.
-  -m "parent : -l[] -_u \"$""1\" ({'${}'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path
-  -m "_max : -_u \"$""1\" ({'${}'}) -_u \"$""2\" ({'${}'}) -f[-2,-1] 'if(i>=97&&i<=122,i-32,i)' -r[-2,-1] {max(w,{-2,w})},1,1,1,0 --[-2,-1] -autocrop. 0 "\
+  -m "parent : -l[] ({'{/\"$""1\"}'}) -s -,{'/'} -if $! -rm. -endif -i[0--1] (47) -a y -u {0,t} -rm -endl" # Command to return parent of a path
+  -m "_max : ({'{/\"$""1\"}'}) ({'{/\"$""2\"}'}) -f[-2,-1] 'if(i>=97&&i<=122,i-32,i)' -r[-2,-1] {max(w,{-2,w})},1,1,1,0 --[-2,-1] -autocrop. 0 "\
      "-u {i>0} -rm." # Command to compare two strings (eq. to strcasecmp)
-  -m "varname : -_u \"$""1\" ({'${}'}) -f. if((i>=48&&i<=57)||(i>=65&&i<=90)||(i>=97&&i<=122),i,95) -u {t} -rm." # Convert string to a valid variable name
+  -m "varname : ({'{/\"$""1\"}'}) -f. if((i>=48&&i<=57)||(i>=65&&i<=90)||(i>=97&&i<=122),i,95) -u {t} -rm." # Convert string to a valid variable name
   -m "load_gmic : "\
      "_nb_sources+=1 filename=${\"-basename $""1\"} "\
      "-v + -e[] \"  \"$_nb_sources\". \"$filename\"  \" -v - "\
@@ -3778,7 +3778,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   # Rebuild folder structure.
   -v + -e[] "\n> Rebuild folder structure." -v -
-  -m "nb_levels : -l[] -_u \"$""1\" ({'${}'}) -s -,{'/'} -u $! -rm -endl"  # Command to count number of folders in a given path.
+  -m "nb_levels : -l[] ({'{/\"$""1\"}'}) -s -,{'/'} -u $! -rm -endl"  # Command to count number of folders in a given path.
 
   path=/
   -repeat $! -l[$>]
@@ -3805,7 +3805,7 @@ update_server : -skip ${1=$_version},${2=1}
       command=
       -if $nb_up 1,$nb_up,1,1,{'_'} command="#@gimp "{t}"\n" -rm. -endif
       -if $nb_down -l[]
-        -_u $npath ({'${}'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
+        ({'{/$npath}'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
         level={${"-nb_levels "$path}-$nb_up}
         balise=${"-if "{$level<=0" && "{$npath'!='/About/}}" -u b -else -u i -endif"}
         -repeat $!
@@ -3814,7 +3814,7 @@ update_server : -skip ${1=$_version},${2=1}
           balise="i"
         -done -rm
       -endl -endif
-      -_u $command -if {narg(${})} nm={0,n} -i[0] ({'${}'}) -y[0] -a y -nm $nm
+      -if {narg(${})} nm={0,n} -i[0] ({'{/$command}'}) -y[0] -a y -nm $nm
       -endif
 
       path=$npath
@@ -3901,14 +3901,14 @@ update_server : -skip ${1=$_version},${2=1}
     -rm.
     -echo_stdout "* List of filters, sorted by path:\n"
     -repeat $! -l[$>]
-      -_u {0,n} ({'${}'}) -if {i!={'!'}}
+      ({'{/{0,n}}'}) -if {i!={'!'}}
         -r. {w-1},1,1,1,0,0,1
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
         -replace_str. "/","~/~"
         -replace. {'~'},32
-        -if {narg(${command_name$>})} -_u "  "{t}" (command '-"${command_name$>}"')" -echo_stdout[] ${}
-        -else -_u "  "{t} -echo_stdout[] ${}
+        -if {narg(${command_name$>})} -echo_stdout[] "  "{t}" (command '-"${command_name$>}"')"
+        -else -echo_stdout[] "  "{t}
         -endif
       -endif -rm.
     -endl -done
@@ -3923,11 +3923,11 @@ update_server : -skip ${1=$_version},${2=1}
 
     -_update_server_sort 0,{$!-1}
     -repeat $! -l[$>]
-      -_u {0,n} ({'${}'}) -if {i!={'!'}}
+      ({'{/{0,n}}'}) -if {i!={'!'}}
         -replace_str. "&amp;","&"
         -replace_str. "&#233;","e"
         -replace. {'~'},32
-        -_u "  "{t} -echo_stdout[] ${}
+        -echo_stdout[] "  "{t}
       -endif -rm.
     -endl -done
     -echo_stdout "\n*** End of list ***\n"
@@ -15031,7 +15031,7 @@ _wrbytepnk :
 _xpink :
   na={-1,n}
   filename=${-file_rand}
-  -_u $filename x_filename=${}
+  x_filename={/$filename}
   prefix=pink.
   -if {!${-is_windows}}
     -x "which "${prefix}${1}" >/dev/null 2>&1"
@@ -19847,12 +19847,12 @@ __help_end : #  <-- don't remove me, used as a end marker for command '-help' !
 # Function that returns the list of external sources to be included in the GIMP plug-in.
 # This command can be superseded on the user '.gmic' file to add sources for the plug-in.
 gimp_filter_sources : -skip ${1=0}
-  ({'${"-_u "$_path_user}'})
+  ({'{/$_path_user}'})
   ({'http://gmic.eu/gimp_update$_version.gmic'},1) # Override default filters.
 
   # Include 'hot chocolate' filter.
   file_hotchocolate=${_path_rc}hotchocolate.gmic
-  -_u $file_hotchocolate _file_hotchocolate=${}
+  _file_hotchocolate={/$file_hotchocolate}
   -if $file_hotchocolate
     -i raw:$file_hotchocolate,uchar
     -if {i!=32" && "i!=10} # Already displayed once, remove it.
