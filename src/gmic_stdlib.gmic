@@ -572,18 +572,6 @@ _help_usage :
 \n
 \n  - '"$c"{/string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
 \n
-\n  - '"$c"{string1'=='string2}"$n"' is substituted by "${c}"0"$n" or "${c}"1"$n", whether the two specified strings coincide
-\n      or not (test is case-sensitive).
-\n
-\n  - '"$c"{string1'!='string2}"$n"' is substituted by "${c}"0"$n" or "${c}"a non-null integer"$n", whether the two strings
-\n     beside the operator are different or not (test is case-sensitive). For instance,
-\n     item '"$c"{foo'!='foo}"$n"' is substituted by '"${c}"0"$n"' and '"$c"{foo'!='FOO}"$n"' by '"${c}"32"$n"'.
-\n
-\n  - '"$c"{string1'=~'string2}"$n"' and '"$c"{string1'!~'string2}"$n"' do the same, but for case-insensitive comparisons.
-\n
-\n  - Adding a positive integer '"${g}"N"$n"' at the end of these comparison operators (before the last quote,
-\n     e.g. '"$c"{string1'=~N'string2}"$n"') restricts the comparison only to the '"${g}"N"$n"' first characters.
-\n
 \n  - '"$c"{image,feature}"$n"' is substituted by a specific feature of the image "$c"[image]"$n".
 \n     '"${g}"image"$n"' can be either an image number or an image name. It can be also eluded.
 \n     In which case, the last image '"$c"[-1]"$n"' of the list is considered for the requested feature.
@@ -3784,7 +3772,7 @@ update_server : -skip ${1=$_version},${2=1}
   -repeat $! -l[$>]
     npath=${"-parent "{0,n}}
 
-    -if {_$path'!='_$npath} # Need to change the path.
+    -if {!same(['$path'],['$npath'])} # Need to change the path.
       nc=${"-nb_levels[] "$path}
       nn=${"-nb_levels[] "$npath}
 
@@ -3797,9 +3785,9 @@ update_server : -skip ${1=$_version},${2=1}
         nn=${"-nb_levels[] "$nbasis}
         -if {$nc>$nn} basis=${"-parent[] "$basis} nb_up+=1
         -elif {$nn>$nc} nbasis=${"-parent[] "$nbasis} nb_down+=1
-        -elif {_$nbasis'!='_$basis} basis=${"-parent[] "$basis} nb_up+=1 nbasis=${"-parent[] "$nbasis} nb_down+=1
+        -elif {!same(['$nbasis'],['$basis'])} basis=${"-parent[] "$basis} nb_up+=1 nbasis=${"-parent[] "$nbasis} nb_down+=1
         -endif
-      -while {_$nbasis'!='_$basis}
+      -while {!same(['$nbasis'],['$basis'])}
 
       # Deduce the G'MIC command to apply.
       command=
@@ -3807,7 +3795,7 @@ update_server : -skip ${1=$_version},${2=1}
       -if $nb_down -l[]
         ({'$npath'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
         level={${"-nb_levels "$path}-$nb_up}
-        balise=${"-if "{$level<=0" && "{_$npath'!='_/About/}}" -u b -else -u i -endif"}
+        balise=${"-if "{$level<=0" && "!same(['$npath'],['/About/'])}" -u b -else -u i -endif"}
         -repeat $!
           -varname {$>,t} locale=${locale_${}} # Retrieve locale of folder name
           command=$command"#@gimp"$locale" <"$balise">"{$>,t}"</"$balise">\n"
@@ -3830,7 +3818,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   # Remove useless comments and line breaks.
   -repeat $! -l[$>] -s -,10 -repeat $! -l[$<]
-    -if {i[0]=={'#'}" && "i[1]!={'"@"'}} -rm -endif
+    -if {i[0]=={'#'}" && "i[1]!={'@'}} -rm -endif
   -endl -done -i[^0] ({'\n'}) -a y -endl -done
 
   # Retrieve G'MIC command name for each filter.
