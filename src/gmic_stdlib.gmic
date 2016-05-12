@@ -19852,11 +19852,10 @@ gimp_filter_sources : -skip ${1=0}
 
   # Include 'hot chocolate' filter.
   file_hotchocolate=${_path_rc}hotchocolate.gmic
-  _file_hotchocolate={/$file_hotchocolate}
   -if $file_hotchocolate
     -i raw:$file_hotchocolate,uchar
     -if {i!=32" && "i!=10} # Already displayed once, remove it.
-      -if {!$1} (10) -o. raw:$_file_hotchocolate,uchar -rm. -endif
+      -if {!$1} (10) -o. raw:{/$file_hotchocolate},uchar -rm. -endif
     -else
       is_too_old={"Y = date(0); M = date(1); D = date(2); date_current = Y*365 + M*31 + D;
                    Y = date(0,"$file_hotchocolate"); M = date(1,"$file_hotchocolate"); D = date(2,"$file_hotchocolate"); date_file = Y*365 + M*31 + D;
@@ -19885,7 +19884,7 @@ gimp_filter_sources : -skip ${1=0}
   -else
     (32) -o. raw:$file_hotchocolate,uchar -rm.
   -endif
-  ({'$_file_hotchocolate'})
+  ({'{/$file_hotchocolate}'})
 
   # Include own users external sources.
   -l[] -i cimgz:${_path_rc}gimp_filter_sources -onfail -endl
