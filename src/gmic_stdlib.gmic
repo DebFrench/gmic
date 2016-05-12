@@ -19485,7 +19485,7 @@ x_spline :
     -if {{*,b}==0} active=-1                             # Unset active point if mouse button is released.
     -elif {{*,x}>=0" && "{*,b}" && "$active==-1}         # Find new active point.
       [2] ({*,x},{*,y}) --[-2,-1] -sqr. -s. x -+[-2,-1]  # Compute distance vector to points.
-      ({c}) nearest={@1} -rm.                            # Set nearest point.
+      nearest={ym}                                       # Set nearest point.
       -if {im<64} active=$nearest -endif                 # Set it as active point, if near enough.
       -rm.
     -endif
@@ -19505,7 +19505,7 @@ x_spline :
       xy=({{*,x}*{0,w}/{*,w}},{{*,y}*{0,h}/{*,h}})    # Point coordinates in the image basis.
       --shift[1] 0,-1,0,0,2 -+. [1] -/. 2             # Compute center of segments.
       $xy --[-2,-1] -sqr. -s. x -+[-2,-1]             # Compute distance vector to segments.
-      ({c}) ns={@1} -rm[-2,-1]                        # Get nearest segment.
+      ns={ym} -rm.                                    # Get nearest segment.
       -l[1] -s y -i[{$ns+1}] $xy -a y -endl           # Insert new point at right position.
       active={$ns+1}                                  # Set new active point as newly inserted.
     -endif
