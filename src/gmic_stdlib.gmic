@@ -12439,12 +12439,6 @@ _rprogress : $*
 #@gmic : (eq. to '-u').
 #@gmic : $ image.jpg -command "foo : u0=Dark u1=Bright -status ${u{ia>=128}}" -text_outline ${-foo},2,2,23,2,1,255
 
-#@gmic _u : eq. to '-_status'. : (+)
-
-#@gmic _status : status_string : (+)
-#@gmic : Set the current status to the specified string with escaped backslash.
-#@gmic : (eq. to '-_u').
-
 #@gmic while : boolean : filename : (+)
 #@gmic : End a 'do..while' block and go back to associated '-do'
 #@gmic : if specified boolean is true or if specified filename exists.
