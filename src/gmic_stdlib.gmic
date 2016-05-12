@@ -3542,7 +3542,7 @@ __update_gallery_html :
 # output (stdout), the list of available filters.
 # $1 = update version number.
 # $2 = enable/disable filters list output on stdout.
-update_server2 : -skip ${1=$_version},${2=1}
+update_server : -skip ${1=$_version},${2=1}
   -v -
 
   # Create substitution list to force filters having a particular location.
@@ -3784,7 +3784,7 @@ update_server2 : -skip ${1=$_version},${2=1}
   -repeat $! -l[$>]
     npath=${"-parent "{0,n}}
 
-    -if {$path'!='$npath} # Need to change the path.
+    -if {_$path'!='_$npath} # Need to change the path.
       nc=${"-nb_levels[] "$path}
       nn=${"-nb_levels[] "$npath}
 
@@ -3797,9 +3797,9 @@ update_server2 : -skip ${1=$_version},${2=1}
         nn=${"-nb_levels[] "$nbasis}
         -if {$nc>$nn} basis=${"-parent[] "$basis} nb_up+=1
         -elif {$nn>$nc} nbasis=${"-parent[] "$nbasis} nb_down+=1
-        -elif {$nbasis'!='$basis} basis=${"-parent[] "$basis} nb_up+=1 nbasis=${"-parent[] "$nbasis} nb_down+=1
+        -elif {_$nbasis'!='_$basis} basis=${"-parent[] "$basis} nb_up+=1 nbasis=${"-parent[] "$nbasis} nb_down+=1
         -endif
-      -while {$nbasis'!='$basis}
+      -while {_$nbasis'!='_$basis}
 
       # Deduce the G'MIC command to apply.
       command=
@@ -3807,7 +3807,7 @@ update_server2 : -skip ${1=$_version},${2=1}
       -if $nb_down -l[]
         ({'$npath'}) -s -,{'/'} -k[-$nb_down--1] -replace {'~'},32
         level={${"-nb_levels "$path}-$nb_up}
-        balise=${"-if "{$level<=0" && "{$npath'!='/About/}}" -u b -else -u i -endif"}
+        balise=${"-if "{$level<=0" && "{_$npath'!='_/About/}}" -u b -else -u i -endif"}
         -repeat $!
           -varname {$>,t} locale=${locale_${}} # Retrieve locale of folder name
           command=$command"#@gimp"$locale" <"$balise">"{$>,t}"</"$balise">\n"
