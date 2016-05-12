@@ -190,7 +190,7 @@ _help : -skip ${1=""}
   stopflag=0
   _is_example=0
   -_document_gmic_header_ascii[] 0
-  -repeat $! -l[$>] -if {"h>7 && same(["{@^}"],['#@gmic'],6)}"}  # -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}}
+  -repeat $! -l[$>] -if {h>7" && "same([{@^}],['#@gmic'],6)}
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
     -if {i!={':'}} # Command declaration.
       -s -,{'": "'} -autocrop {'" "'} -autocrop {':'} -autocrop {'" "'}
@@ -1840,8 +1840,7 @@ document_gmic : -skip ${1="ascii"},${2=""},${3=1}
   ks0="0" ks1="-k[0]"
 
   # Parse lines of the commands file.
-  -repeat $! -l[$>] -if {"h>7 && same(["{@^}"],['#@gmic'],6) && (i[6]==' ' || i[6]==':')"} # Process only lines starting with '#@gmic'.
-    # -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}" && "(i[6]=={'" "'}" || "i[6]=={':'})} # Process only lines starting with '#@gmic'.
+  -repeat $! -l[$>] -if {h>7" && "same([{@^}],['#@gmic'],6)" && (i[6]==' ' || i[6]==':')"} # Process only lines starting with '#@gmic'.
     -rows 7,100% -autocrop {'" "'}  # Discard '#@gmic'.
     _is_example=0
     -if {i!={':'}}
@@ -1892,10 +1891,8 @@ _document_gmic_subsection_ascii :
   -v -
 
 _document_gmic_declaration_ascii :
-  -if {same([{@^}],['(+)'])} qualifier=" "{t} -rm. -else qualifier="" -endif
-#  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
+  -if {[{@^}]==['(+)']} qualifier=" "{t} -rm. -else qualifier="" -endif
   -if {$!>1" && same(["{@^}"],['eq. to '],7)"} # Declaration of a shortcut command.
-#  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut={t}
@@ -1918,8 +1915,7 @@ _document_gmic_declaration_ascii :
 _document_gmic_description_ascii :
   s="        " bs0="\n" bs1="\\\\\n         "
   -y x -if {!narg($_is_tutorial)} -_document_gmic_split_ascii 96 -endif
-  -if {$!==1" && "0$_vt100>0" && same(["{@^}"],['(eq. to '],8)"} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
-#  -if {$!==1" && "0$_vt100>0" && "{${-head[0]\ 8}'=='{'"(eq. to "'}}} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
+  -if {$!==1" && "0$_vt100>0" && "same([{@^}],["'(eq. to '"],8)} -i[0] ({'$_gmic_b'}) ({'$_gmic_n\n'}) -a x -endif
   -repeat {$!-1} ({'${bs$_is_example}$s"  "'}) -a[$>,-1] x -done -a x
   -if {0$_vt100>0}
     -replace_str "Default values:","\n"$s${_gmic_b}"Default values:"$_gmic_n
@@ -1984,19 +1980,10 @@ _document_gmic_declaration_bash :
   _coms$_nbcoms={0,t}
   _nbcoms+=1
 
-  -if {"str=["{@^}"]; "\
-       "same(str,['input']) || same(str,['i']) || "\ # Manage special commands (remove arguments).
-       "same(str,['output']) || same(str,['o']) || "\
-       "same(str,['command']) || same(str,['m'])"} -return -endif
+  -if {"s = ["{@^}"]; s==['input'] || s==['i'] || s==['output'] || s==['o'] || s==['command'] || s==['m']"} -return -endif # Manage special commands (remove arguments).
 
-#  -if {{{0,t}'=='"input"}" || "{{0,t}'=='"i"}" || "\ # Manage special commands (remove arguments).
-#       {{0,t}'=='"output"}" || "{{0,t}'=='"o"}" || "\
-#       {{0,t}'=='"command"}" || "{{0,t}'=='"m"}} -return -endif
-
-  -repeat $! -if {same([{@^}],['(+)'])} -rm[$<] -endif -done # Discard '(+)' qualifier.
-#  -repeat $! -if {{$<,t}'=='"(+)"} -rm[$<] -endif -done # Discard '(+)' qualifier.
+  -repeat $! -if {[{@^}]==['(+)']} -rm[$<] -endif -done # Discard '(+)' qualifier.
   -if {$!==2" && same(["{@^}"],['eq. to '],7)"} # Command is a shortcut.
-#  -if {$!==2" && "{${-head\ 7}'=='{'"eq. to "'}}} # Command is a shortcut.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39 -autocrop. {'-'}
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut=${-str2hex\ {1,t}}
@@ -2004,8 +1991,7 @@ _document_gmic_declaration_bash :
     _shortcut+=1
   -elif {$!>1} # Command is regular and has arguments.
     _command$_argcommand={0,t}
-    -if {same([{@^}],['help'])} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
-#    -if {{0,t}'=='"help"} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
+    -if {[{@^}]==['help']} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
     -else
       -if {$!==2} ({'>'}) -endif # Add shadow parameter when single argument.
       -discard[^0] {'" "'} -i[2--2] ({'" "'}) -a[^0] y
@@ -2111,10 +2097,9 @@ _document_gmic_subsection_html :
   -v -
 
 _document_gmic_declaration_html :
-  -if {same([{@^}],['(+)'])} qualifier=" "{t} -rm. -else qualifier="" -endif
-#  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
+  -if {[{@^}]==['(+)']} qualifier=" "{t} -rm. -else qualifier="" -endif
   s1="\n" s0=" |<br/>"
-  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
+  -if {$!>1" && "[{@^}]==['"eq. to "']}  # Declaration of a shortcut command.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut={t}
@@ -2137,7 +2122,7 @@ _document_gmic_declaration_html :
   -endif
 
 _document_gmic_description_html :
-  -if {${-head\ 13}'=='{'"Default value"'}}  # Reached line as '#@gmic : Default value(s) : ... '.
+  -if {same([{@^}],['"Default value"'],13)}  # Reached line as '#@gmic : Default value(s) : ... '.
     -s +,{':'} -l[^0] -a y -endl -autocrop {':'} -autocrop {'" "'}
     -v +
     -if {$!>1} -e[] ${-don}"<br/><b>"{0,t}"</b>: "{t}
@@ -2145,7 +2130,7 @@ _document_gmic_description_html :
     -endif
     -v -
 
-  -elif {${-head\ 8}'=='{'"(eq. to "'}}      # Reached line as '#@gmic : (eq. to -shortcut)'.
+  -elif {same([{@^}],['"(eq. to "'],8)}      # Reached line as '#@gmic : (eq. to -shortcut)'.
     -v + -e[] ${-don}"<i><font color=\"blue\">"{t}"</font></i>" -v -
 
   -else                                    # Reached line as '#@gmic : description'.
@@ -2291,9 +2276,9 @@ _document_gmic_subsection_latex :
 
 _document_gmic_declaration_latex :
   _is_desc=0
-  -if {{t}'=='"(+)"} qualifier={t} -rm. -else qualifier="" -endif
+  -if {[{@^}]==['(+)']} qualifier={t} -rm. -else qualifier="" -endif
   e1="\\end{flushleft}" e0="~~~\\\\"
-  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
+  -if {$!>1" && "same([{@^}],['"eq. to "'],7)}  # Declaration of a shortcut command.
     -_document_gmic_replace_latex
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
     _shortcut$_shortcut={0,t}
@@ -2318,14 +2303,14 @@ _document_gmic_declaration_latex :
 _document_gmic_description_latex :
   s0="" s1="~\\\\" s=${s$_is_desc}
   -_document_gmic_replace_latex
-  -if {${-head\ 13}'=='{'"Default value"'}}  # Reached line as '#@gmic : Default value(s) : ... '.
+  -if {same([{@^}],['"Default value"'],13)}  # Reached line as '#@gmic : Default value(s) : ... '.
     -s +,{':'} -l[^0] -a y -endl -autocrop {':'} -autocrop {'" "'}
     -if {$!>1}
       -replace_str[1] " and ","} and \\\\texttt{"
       -v + -e[] ${-eoff}"\\begin{flushleft}\\Cc{\\textbf{"{0,t}"}:\\\\~\\\\\\hspace*{0.5cm}{\\small $\\bullet$~~\\texttt{"{t}"}}}\\end{flushleft}" -v -
     -else -v + -e[] ${-eoff}$s"~\\\\"{0,t} -v -
     -endif
-  -elif {${-head\ 8}'=='{'"(eq. to "'}}      # Reached line as '#@gmic : (eq. to '-shortcut').'.
+  -elif {same([{@^}],['"(eq. to "'],8)}      # Reached line as '#@gmic : (eq. to '-shortcut').'.
     -rows. 8,100% -autocrop. {'.'} -autocrop. {')'} -autocrop. {'" "'}
     -v + -e[] ${-eoff}$s"(\\emph{eq. to} {\\small \\texttt{"{t}"}})." -v -
   -else                                    # Reached line as '#@gmic : description'.
@@ -2406,8 +2391,8 @@ _document_gmic_subsection_man :
   -v -
 
 _document_gmic_declaration_man :
-  -if {{t}'=='"(+)"} qualifier=" "{t} -rm. -else qualifier="" -endif
-  -if {$!>1" && "{${-head\ 7}'=='{'"eq. to "'}}}  # Declaration of a shortcut command.
+  -if {[{@^}]==['(+)']} qualifier=" "{t} -rm. -else qualifier="" -endif
+  -if {$!>1" && "same([{@^}],['"eq. to "'],7)}  # Declaration of a shortcut command.
     -rows. 7,100% -autocrop. {'.'} -autocrop. {'" "'} -autocrop. 39
     _shortcut$_shortcut={0,t}
     _shortcutlink$_shortcut={t}
@@ -3046,7 +3031,7 @@ _update :
   -v -
   out=${_path_rc}cli_update$_version.gmic
   -l[] cimgz:http://gmic.eu/cli_update$_version.gmic
-    -if {h>7" && "{${-head\ 6}'=='{'"#@gmic"'}}} -o raw:$out,char -endif
+    -if {h>7" && "same([{@^}],['#@gmic'],6)} -o raw:$out,char -endif
     -rm
   -onfail -error[0--3] "Command '-update' : Unreachable update file."
   -endl
@@ -3201,7 +3186,7 @@ with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
         _category=${-arg\ {1+$>},$categories}
         -arg {1+$>},$category_names
         _category_name=${}
-        -if {$_category'=='$category}
+        -if {['$_category']==['$category']}
           ({'"
 <li><font color=\"#CC7700\"><b>"$_category_name"</b></font></li>\n
 "'})
@@ -3219,7 +3204,7 @@ with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
 "'})
       -repeat {$nb_samples}
         _basename=${basename$>}
-        -if {$_basename'=='$basename}
+        -if {['$_basename']==['$basename']}
           ({'"
 <a href=\""${category}_$_basename.shtml"#browse\"><img alt=\"\" style=\"border-color:#CC7700;\" border=\"3\" src=\""original/minithumb_$_basename.jpg"\"/></a>\n
 "'})
@@ -3675,7 +3660,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   -repeat $!
     ind={$>-$offset}
-    -if {{{$ind-1},@-1}==10" && "{${-head[$ind]\ 6}'=='{'#@gimp'}}" && "({$ind,@6}==32" || "{$ind,@6}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
+    -if {{{$ind-1},@-1}==10" && "same([{@^}],['#@gimp'],6)" && "({$ind,@6}==32" || "{$ind,@6}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
       -if {i[6]=={'_'}} locale=_{`[i[7],i[8]]`}  # Retrieve locale if any specified
       -else locale=
@@ -3759,7 +3744,7 @@ update_server : -skip ${1=$_version},${2=1}
 
   # Force filters to move if necessary.
   -v + -e[] "\n> Force filters to move, if necessary." -v -
-  -repeat $! ind=$> -repeat $_nbm -if {{$ind,n}'=='${_to_move$>}}
+  -repeat $! ind=$> -repeat $_nbm -if {['{$ind,n}']==['${_to_move$>}']}
     -v + -e[] "  "$ind". Move '"{$ind,n}"' to '"${_move_to$>}"'." -v -
     -nm[$ind] ${_move_to$>}/{$ind,b}
   -endif -done -done
@@ -3767,16 +3752,6 @@ update_server : -skip ${1=$_version},${2=1}
   # Sort filter code by lexicographical order.
   -v + -e[] "\n> Sort filters by lexicographic order." -v -
   -_update_server_sort 0,{$!-1}
-
-  # Remove duplicate filters.
-  # -v + -e[] "\n> Remove duplicate filters." -v -
-  # pname={n}
-  # -repeat {$!-1} cname={$<,n}
-  #   -if {$cname'=='$pname}
-  #     -v + -e[] "  "$<". Remove duplicate '"$cname"'." -v -
-  #     -rm[$<]
-  #   -else pname=$cname -endif
-  # -done
 
   # Rebuild folder structure.
   -v + -e[] "\n> Rebuild folder structure." -v -
@@ -3838,7 +3813,7 @@ update_server : -skip ${1=$_version},${2=1}
   # Retrieve G'MIC command name for each filter.
   -repeat $! --l[$>] command_name$>=""
     --rows 0,6 head={t} -rm.
-    -if {$head'=='"#@gimp "} -s -,{':'}
+    -if {['$head']==['"#@gimp "']} -s -,{':'}
       -if {$!>=1} -l[1] -s -,{','}
         -if $! -autocrop[0] 32 command_name$>={0,t} -endif
       -endl -endif
@@ -4270,18 +4245,18 @@ _update_tutorial_html :
 
   # Search and replace links to 'internal' pages.
   -s +,{'"<a "'}
-  -repeat $! -if {$>>0" && "{{{$>-1},t}'=='"<a "}} -l[$>] -s +,{'href=\"'} -l.
+  -repeat $! -if {$>>0" && "[{{$>-1},@^}]==['"<a "']} -l[$>] -s +,{'href=\"'} -l.
     -s +,{'\"'}
     -if {$!>0}
       link={0,t}
       ({'$link'}) -z. 0,48 baselink={t} -rm.
 
-      -if {$baselink'=='"http://www.particularart.com/tools-and-toys/gmic/"}  # Check for a 'local' link.
+      -if {['$baselink']==['http://www.particularart.com/tools-and-toys/gmic/']}  # Check for a 'local' link.
 
         # Retrieve anchor if any.
         -l[] anchor="" ({'$link'}) -s +,{"'#'"} -if {$!>1} anchor=#{t} link={0,t} -endif -rm -endl
         ({'$link'}) -autocrop. {'/'}
-        -l. -s -,{'/'} -if {$!>6" && "{{-2,t}'!='command-guide}" && "{{-3,t}'!='command-guide}} relink={-2,t}_{t}.shtml -else relink={t}.shtml -endif -rm -endl
+        -l. -s -,{'/'} -if {com=['command-guide'];$!>6" && "[{-2,@^}]!=com" && "[{-3,@^}]!=com} relink={-2,t}_{t}.shtml -else relink={t}.shtml -endif -rm -endl
         ({'$relink'}) -if {i=={'-'}} -=. {'_'} relink={t} -endif -rm. # Replace first '-' by underscore if necessary.
 
         -if $relink # If the relinked page exists.
@@ -4301,13 +4276,10 @@ _update_tutorial_html :
           -endif
           -rm.
         -endif
-#      -elif {$baselink'=='"http://www.particularart.com/static/media/uploads"}
-#         relink=$link
-#         -v + -e[] "    > Local (media) link '"$link"' found." -v -
        -else -l # External link.
          0 -nm. $link ext={x} -rm.
          -if {narg($ext)} ext=${-struncase\ $ext} -endif
-         -if {{$ext'=='png}||{$ext'=='jpg}||{$ext'=='jpeg}}  # Check for an image link.
+         -if {s=['$ext'];s==['png']||s==['jpg']||s==['jpeg']}  # Check for an image link.
            -basename $link relink=img/$5_${} 0 -nm. $relink relink={f}{b}.jpg -rm.
            -if $relink -v + -e[] "    > External image link '"$link"' relinked to '"$relink"'." -v -
            -else
@@ -4334,7 +4306,7 @@ _update_tutorial_html :
 
   # Manage embedded images.
   -s +,{'"<img"'}
-  -repeat $! -if {$>>0" && "{{{$>-1},t}'=='"<img"}}
+  -repeat $! -if {$>>0" && "[{{$>-1},@^}]==['"<img "']}
     -l[$>]
       -s +,{'"src=\""'}
       -l[2]
@@ -4518,8 +4490,8 @@ remove_empty :
 #@gmic : Default values: 'ordering=+', 'criterion=i'.
 #@gmic : $ (1;4;7;3;9;2;4;7;6;3;9;1;0;3;3;2) -split y -sort_list + -append y
 sort_list : -skip ${1=+},${2=i}
-  -e[^-1] "Sort list of image$? in "${-arg\ 1+{$1'=='+},descending,ascending}" order, "\
-          "according to the image criterion '$2'."
+  -v - s0="descending" s1="ascending" -v +
+  -e[^-1] "Sort list of image$? in "${s{;'$1'=='+'}}" order, according to the image criterion '$2'."
   -v - -if $!
     i=$! -repeat $! ({$>,$2}) -done -a[$i--1] y --f. 'y' -a[-2,-1] x -sort. $1,y -z. 1,1
     -repeat {h} nm$>={$>,n} -nm[$>] sortlist$> -done
@@ -6805,7 +6777,7 @@ montage : -check "isval(${2=2}) && $2>=0 && $2<=3" -skip "${1=X}",${3=0},"${4=}"
   -v -
 
   # Manage automatic layout.
-  -if {{"$1"'=='X}||{"$1"'=='x}} --l
+  -if {lowercase(['"$1"'])==['x']} --l
     -repeat $! -nm[$>] $> -done
     -repeat {$!-1}
       -if {{-2,w>h}" && "w>h} mode=V      # Both landscape.
@@ -6827,12 +6799,12 @@ montage : -check "isval(${2=2}) && $2>=0 && $2<=3" -skip "${1=X}",${3=0},"${4=}"
     # Format and check validity of layout code.
     N=$!
     -l[] _scode="$1" _mode=$2
-      -if {{"$1"'=='H}||{"$1"'=='h}} -if {$N>1} {$N-1},1,1,1,-1 $N,1,1,1,x -a x -y -else -v + -return -endif # Simple horizontal montage.
-      -elif {{"$1"'=='V}||{"$1"'=='v}} -if {$N>1} {$N-1},1,1,1,-2 $N,1,1,1,x -a x -y -else -v + -return -endif # Simple vertical montage.
-      -elif {{"$1"'=='A}||{"$1"'=='a}||{"$1"'=='B}||{"$1"'=='b}} # Montage as an array.
+      -if {lowercase(['"$1"'])==['h']} -if {$N>1} {$N-1},1,1,1,-1 $N,1,1,1,x -a x -y -else -v + -return -endif # Simple horizontal montage.
+      -elif {lowercase(['"$1"'])==['v']} -if {$N>1} {$N-1},1,1,1,-2 $N,1,1,1,x -a x -y -else -v + -return -endif # Simple vertical montage.
+      -elif {s=lowercase(['"$1"']);s==['a']||s==['b']} # Montage as an array.
         -if {$N<2} -v + -return -endif
         nr={round(sqrt($N))} nc={round($N/$nr,1,1)}              # Horizontal array.
-        -if {{"$1"'=='B}||{"$1"'=='b}} n=$nr nr=$nc nc=$n -endif # Vertical array.
+        -if {lowercase(['"$1"'])==['b']} n=$nr nr=$nc nc=$n -endif # Vertical array.
         $N,1,1,1,x -s x,-{round(w/$nr,1,1)} -repeat $! -l[$>] -if {w>1} -i[0] {w-1},1,1,1,-1 -a x -endif -endl -done -a x
         -if {$nr>1} -i[0] {$nr-1},1,1,1,-2 -a x -endif -y
       -else # Other complex montage.
@@ -14405,7 +14377,7 @@ blend : -skip ${1=alpha},${2=1},${3=1},${4=0}
     -if {{0,s}==2||{0,s}==4} # Target has alpha.
       -if {s==2||s==4} # Mask has alpha.
         -sh[0,1] 0,{s-2} -_blend_$1[2,3] -rm[2,3]
-        -if {$1'=='alpha} # Special blending code for alpha-mode.
+        -if {['"$1"']==['alpha']} # Special blending code for alpha-mode.
           -sh[0,1] 0,{{0,s}-2} -sh[0,1] 100% -*[2,4] -*[3,4] -rm[2,3]
           --channels[1] 100% -sh[1] 100% -f[3] 255 -rm[3]
           -j[0] [1],0,0,0,0,{max(0,min(1,$2))},[2],255 -rm[1,2]
@@ -14571,7 +14543,7 @@ blend_seamless : -check "${2=0}>=0 && ${3=100%}>=0" -skip ${1=0}
   -v + -e[^-1] "Blend image$? using seamless mode (Poisson-based), in "${s{$1!=0}}" mode with inner fading $2 and outer fading $3." -v -
   -to_a[^0] -r {0,w+32},{0,h+32},1,100%,0,0,0.5,0.5 # Avoid periodic boundaries problems.
 
-  -if {$3'!='100%} # With outer fading.
+  -if {['$3']!=['100%']} # With outer fading.
     -repeat {$!-1} -l[0,1]
       --blend_seamless $1,$2,100% -channels.. 100% -!=.. 0 -distance.. 1
       iM={-2,iM} ic={if(${-is_percent\ $3},2*$3*$iM,1+$3)}
@@ -15047,7 +15019,7 @@ _xpink :
   -endif
   status=${}
   -file_rm ${x_filename}.pnk
-  -if {$status!=0\ &&\ {$1'!='seuilauto}} -error "Exec status is "${status}"." -return
+  -if {$status!=0" && "['"$1"']!=['seuilauto']} -error "Exec status is "${status}"." -return
   -elif ${filename}_o.pnk -i ${filename}_o.pnk -file_rm ${x_filename}_o.pnk -k. -nm. $na
   -else -error "Exec error!!"
   -endif
@@ -15357,17 +15329,12 @@ arg : -check "isint($1) && ($1)>0"
 arg2var :
   -v - $=arg -u {$#-1} -repeat ${} $1{1+$>}=${arg{2+$>}} -done -v -
 
-#@gmic argname : "name"
-#@gmic : Return all indices of the images having specified name.
-argname :
-  -v - -u "" c="" -repeat $! -if {{$>,n}'=='"$1"} -u ${}$c$> c="," -endif -done -v +
-
 #@gmic autocrop_coords : value1,value2,... | auto
 #@gmic : Return coordinates (x0,y0,z0,x1,y1,z1) of the autocrop that could be performed on the latest of the selected images.
 #@gmic : Default value: 'auto'
 autocrop_coords : -skip ${1=auto}
   -v -
-  is_auto={$1'=='auto}
+  is_auto={['"$1"']==['auto']}
   w={w} h={h} d={d}
   value={i(w-1,h-1,d-1)} --=. {1+$value},100%,100%,100% -_autocrop$is_auto. ${1--1} -=. $value,100%,100%,100%
   x0={$w-w} y0={$h-h} z0={$d-d} -rm.
@@ -15435,8 +15402,7 @@ compress_gmic :
 
 _compress_gmic :
   -if {i=={'#'}}
-    head={@0-{min(5,h-1)}}
-    -if {{$head'!='$_head_std}" || "(i[6]!={'" "'}" && "i[6]!={':'})} -rm. (10) -endif
+    -if {!same([{@^}],['$_head_std'],6)" || (i[6]!=' ' && i[6]!=':')"} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
     -autocrop. 32 -if {!w} -rm. (10) -endif
@@ -15455,8 +15421,7 @@ compress_gmic_gimp :
 
 _compress_gmic_gimp :
   -if {i=={'#'}}
-    head={@0-{min(5,h-1)}}
-    -if {$head'!='$_head_std} -rm. (10) -endif
+    -if {!same([{@^}],['$_head_std'],6)} -rm. (10) -endif
   -else
     -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
     -autocrop. 32 -if {!w} -rm. (10) -endif
@@ -16027,7 +15992,7 @@ strreplace : -skip "${3=}"
     ls=${-strlen\ "$2"}
     lr={${-strlen\ "$3"}-1}
     -l[] ({'"$1"'}) -s +,{'"$2"'} -s y,-$ls
-    -repeat $! -if {{$>,t}'=='"$2"} -rows[$>] 0,$lr -f[$>] {'"$3"'} -endif -done
+    -repeat $! -if {[{$>,@^}]==['"$2"']} -rows[$>] 0,$lr -f[$>] {'"$3"'} -endif -done
     -a y -u {t} -rm -endl
   -else
     -l[] ({'"$1"'}) -s -,{'"$2"'} -a y -u {t} -rm -endl
@@ -16489,7 +16454,7 @@ x_bouncing :
 x_color_curves : -skip ${1=rgb}
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
   -e[^-1] "Apply color curves of image$?, in the '$1' colorspace."
-  -if {$1'=='last} -v -
+  -if {['"$1"']==['last']} -v -
     -if {!narg($_xcc_colorbase)} -v + -return -endif
     -__x_color_curves[] $_xcc_colorbase
   -else
@@ -16511,7 +16476,7 @@ x_color_curves : -skip ${1=rgb}
 
   -repeat $! -l[$>]
 
-    -if {$1'!='last} # Open interactive windows to set color curves.
+    -if {['"$1"']!=['last']} # Open interactive windows to set color curves.
       --r[0] ${-fitscreen[]\ {0,w},{0,h},1,128,70%},1,100%,3
       --l. -xcc_goto -s c -histogram 256,0,255 -xcc_info -endl # Compute additional info for each image channel (histogram and color axis).
       __C0= __C1= __C2= __C3= __C4=
@@ -16577,7 +16542,7 @@ _x_color_curves :
     need_refresh={$need_refresh||$oviewmode!=$viewmode}
 
     # Update result.
-    -repeat {s} -if {${oC$>}'!='${__C$>}} # Channel must be updated.
+    -repeat {s} -if {['${oC$>}']!=['${__C$>}']} # Channel must be updated.
       -function1d[] 1,${__C$>} -*. {255%} -r. 256,1,1,1,5 -c. 0,255
       --channels[0] $> -map. [-2] -j[1] [-1],0,0,0,$> -rm[-2,-1]
       need_refresh=1 oC$>=${__C$>}
@@ -16602,47 +16567,47 @@ _x_color_curves :
 
 # Define colorspace conversion functions.
 __x_color_curves :
-  -if {$1'=='rgb}
+  -if {['"$1"']==['rgb']}
     _color0="255,180,180" _color1="180,255,180" _color2="180,180,255" _color3="220,220,220" _title0=Red _title1=Green _title2=Blue _title3=Alpha
     -m "xcc_goto:" -m "xcc_backto:"
     -m "xcc_info: (0,255;0,0;0,0) (0,0;0,255;0,0) (0,0;0,0;0,255) -r[-3--1] 256,3,1,1,3 "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='cmy}
+  -elif {['"$1"']==['cmy']}
     _color0="180,255,255" _color1="255,180,255" _color2="255,255,100" _color3="220,220,220" _title0=Cyan _title1=Magenta _title2=Yellow _title3=Alpha
     -m "xcc_goto: -s c,-3 -rgb2cmy[0] -a c" -m "xcc_backto: -s c,-3 -cmy2rgb[0] -a c"
     -m "xcc_info: (255,0;255,255;255,255) (255,255;255,0;255,255) (255,255;255,255;255,0) -r[-3--1] 256,3,1,1,3 "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='cmyk}
+  -elif {['"$1"']==['cmyk']}
     _color0="180,255,255" _color1="255,180,255" _color2="255,255,100" _color3="180,180,180" _color4="220,220,220" _title0=Cyan _title1=Magenta _title2=Yellow _title3=Key _title4=Alpha
     -m "xcc_goto: -s c,-3 -rgb2cmyk[0] -a c" -m "xcc_backto: -s c,-4 -cmyk2rgb[0] -a c"
     -m "xcc_info: (255,0;255,255;255,255) (255,255;255,0;255,255) (255,255;255,255;255,0) (255,0) -r[-4--1] 256,3,1,1,3 "\
        "-a[0,-4] y -a[1,-3] y -a[2,-2] y -a[3,-1] y"
-  -elif {$1'=='hsi}
+  -elif {['"$1"']==['hsi']}
     _color0="255,220,220" _color1="220,220,220" _color2="180,180,180" _color3="220,220,220" _title0=Hue _title1=Saturation _title2=Intensity _title3=Alpha
     -m "xcc_goto: -s c,-3 -rgb2hsi8[0] -a c" -m "xcc_backto: -s c,-3 -hsi82rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,0,if(c==1,x,128)) 256,1,1,3,if(!c,0,if(c==1,0,x)) -hsi82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='hsl}
+  -elif {['"$1"']==['hsl']}
     _color0="255,220,220" _color1="220,220,220" _color2="180,180,180" _color3="220,220,220" _title0=Hue _title1=Saturation _title2=Lightness _title3=Alpha
     -m "xcc_goto: -s c,-3 -rgb2hsl8[0] -a c" -m "xcc_backto: -s c,-3 -hsl82rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,0,if(c==1,x,128)) 256,1,1,3,if(!c,0,if(c==1,0,x)) -hsl82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='hsv}
+  -elif {['"$1"']==['hsv']}
     _color0="255,220,220" _color1="220,220,220" _color2="180,180,180" _color3="220,220,220" _title0=Hue _title1=Saturation _title2=Value _title3=Alpha
     -m "xcc_goto: -s c,-3 -rgb2hsv8[0] -a c" -m "xcc_backto: -s c,-3 -hsv82rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,255) 256,1,1,3,if(!c,0,if(c==1,x,128)) 256,1,1,3,if(!c,0,if(c==1,0,x)) -hsv82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='lab}
+  -elif {['"$1"']==['lab']}
     _color0="180,180,180" _color1="220,180,220" _color2="220,220,180" _color3="220,220,220" _title0=Lightness _title1=Chroma-A _title2=Chroma-B _title3=Alpha
     -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apo[0] -rgb2lab8,0,4 -a c" -m "xcc_backto: -s c,-3 -apo[0] -lab82rgb,0,4 -rgb2srgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,240,if(c==1,x,128)) 256,1,1,3,if(!c,240,if(c==1,128,x)) -lab82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='lch}
+  -elif {['"$1"']==['lch']}
     _color0="180,180,180" _color1="220,180,220" _color2="255,220,220" _color3="220,220,220" _title0=Lightness _title1=Chroma _title2=Hue _title3=Alpha
     -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apo -rgb2lch8[0],0,4 -a c" -m "xcc_backto: -s c,-3 -apo -lch82rgb[0],0,4 -rgb2srgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,0) 256,1,1,3,if(!c,255,if(c==1,x,128)) 256,1,1,3,if(!c,220,if(c==1,128,x)) -lch82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -elif {$1'=='ycbcr}
+  -elif {['"$1"']==['ycbcr']}
     _color0="180,180,180" _color1="220,220,255" _color2="255,220,220" _color3="220,220,220" _title0=Luma _title1=Blue\ chroma _title2=Red\ chroma _title3=Alpha
     -m "xcc_goto: -s c,-3 -rgb2ycbcr[0] -a c" -m "xcc_backto: -s c,-3 -ycbcr2rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,128,if(c==1,x,128)) 256,1,1,3,if(!c,128,if(c==1,128,x)) -ycbcr2rgb[-3--1] -permute[-3--1] xcyz "\
@@ -16861,7 +16826,7 @@ _x_colorize :
     # Manage replace color mode.
     -if {!narg($replace_color)" && "narg($points_replaced)}
       -rm[points,colors,view] -nm[colors_replaced] colors -nm[points_replaced] points current_replace_color=
-    -elif {narg($replace_color)" && "{$__color'!='$current_replace_color}}
+    -elif {narg($replace_color)" && "['$__color']!=['$current_replace_color']}
       -if {narg($colors_replaced)} -rm[colors_replaced,points_replaced] -endif
       current_replace_color=$__color
       -if {points,w}
@@ -19124,8 +19089,8 @@ x_select_color : -skip ${1=xsc_variable}
     -endif
 
     # Check RGB variable modification from another thread.
-    -if {$$1'=='-1} -break -endif  # Close request.
-    -if {(($rgba_mode" && "{$$1'!='$R,$G,$B,$A})" || "(!$rgba_mode" && "{$$1'!='$R,$G,$B}))" && "$x<0" && "$y<0" && "!$is_sv" && "!$is_h" && "!$is_a}
+    -if {['$$1']==['-1']} -break -endif  # Close request.
+    -if {(($rgba_mode" && "['$$1']!=['$R,$G,$B,$A'])" || "(!$rgba_mode" && "['$$1']!=['$R,$G,$B']))" && "$x<0" && "$y<0" && "!$is_sv" && "!$is_h" && "!$is_a}
       ($$1) -y. c --. 255 -r. 1,1,1,4,0 -+. 255 -sh. 0,2 -rgb2hsv. -rm.
       H={i[0]} S={i[1]} V={i[2]} A={i[3]} -rm
     -endif
@@ -19251,8 +19216,8 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
     -if {$oww!=$ww" || "$owh!=$wh} -w[] $ww,$wh -rm[baseview,view] -endif
 
     # Check points variable modification from another thread.
-    -if {$$1'=='-1} -break -endif # Close request.
-    -if {$$1'!='{points,@^}} -rm[points] -i[points] ($$1) -y. x -r. 2,{w/2},1,1,-1 -l -rm[view] -onfail -endl -endif # Keypoints changed.
+    -if {['$$1']==['-1']} -break -endif  # Close request.
+    -if {['$$1']!=['{points,@^}']} -rm[points] -i[points] ($$1) -y. x -r. 2,{w/2},1,1,-1 -l -rm[view] -onfail -endl -endif # Keypoints changed.
 
   -while {{*}" && "!{*,ESC}" && "!{*,Q}}
   -w[] 0 -u {points,@^}
@@ -19286,7 +19251,7 @@ x_select_palette : -skip ${1=xsp_variable},${2=0}
     -endif
 
     # Check close request from external thread.
-    -if {$$1'=='-1} -break -endif
+    -if {['$$1']==['-1']} -break -endif
 
     # Create base view.
     -if {!narg($baseview)} -l[palette]
@@ -19943,7 +19908,7 @@ gimp_merge_layers :
   mode0=${"-_gimp_merge_layers. mode,alpha"}
   opacity0=${"-_gimp_merge_layers. opacity,100"}
   pos0=${"-_gimp_merge_layers. pos,0,0"}
-  -if {$opacity0<100" || "{$pos0'!='0,0}} 100%,100%,1,4 -endif
+  -if {$opacity0<100" || "['$pos0']!=['0,0']} 100%,100%,1,4 -endif
   wh0={w},{h}
   wh=${-max_wh} -r. $wh,1,100%,0
   -repeat {$!-1} -l[-2,-1] -rv
@@ -19965,7 +19930,7 @@ _gimp_merge_layers :
     -s +,$str
     -if {$!>1}
       -repeat $!
-        -if {$>!=$!-1" && "{${-head[$>]\ $l}'=='$str}}
+        -if {$>!=$!-1" && "same([{@^}],['$str'])}
           -l[{$>+1}] -s +,{')'} -if {$!>1} res={0,t} -endif -a y -endl
         -endif
         -if {narg({'$res'})} -break -endif
@@ -20407,76 +20372,6 @@ _gimp_download_all_data :
      -progress {100*$_n/$_N}
      _n+=1
    -done
-
-# #@gimp Filter sources : gimp_manage_filter_sources, gimp_manage_filter_sources_preview
-# #@gimp : note = note{"<small>Here, you can enable some external filter sources, adding then new filters to your <b>G'MIC</b> plug-in.
-# #@gimp : Once you have made your selection, click on the <b>Apply</b> or <b>OK</b> buttons below to validate it.
-# #@gimp : Click then on the <b>Update</b> button to download and make these new filters appear in the filter tree.
-# #@gimp : </small>"}
-# #@gimp : note = note{"\n<small><b><span color=\"red\">        Use those additional filters at your own risk!</span></b></small>\n"}
-# #@gimp : note = note{"<small>These filters have been done by various contributors and are hosted in their own server.
-# #@gimp : The G'MIC team <b>cannot be held responsible for any damage</b> due to the use of these external filters.
-# #@gimp : Of course, as far as we know, there shouldn't be any issues in using them.
-# #@gimp : </small>"}
-# #@gimp : sep = separator()
-# #@gimp : note = note{"Enable filters from:"}
-# #@gimp : note = note{"<b>No external sources to activate yet</b>"}
-# ##@gimp : Jayprich = _bool(0)
-# ##@gimp : Zonderr = _bool(0)
-# #@gimp : sep = separator()
-# #@gimp : Select/unselect all = button()
-# #@gimp : first_time = const(0)
-gimp_manage_filter_sources :
-  -l[]
-    -_gimp_manage_filter_sources
-#    -if $1 ({'$_url_jayprich'}) -endif
-#    -if $2 ({'$_url_zonderr'}) -endif
-    -o cimgz:${_path_rc}gimp_filter_sources,uchar
-    -rm
-  -endl
-
-gimp_manage_filter_sources_preview :
-  -l[] status=
-    -_gimp_manage_filter_sources
-    -if $-1  # Local file already read once -> parameters already reflect the current enabled sources.
-      -if $-2
-        (${1--3})
-        -if {im==1} status="{0}{0}{0}{1}"
-        -else status="{1}{1}{0}{1}"
-        -endif
-        -rm.
-      -endif
-    -else # Read local sources file and set parameters according to its content.
-      -repeat 32 b$>=0 -done
-      -l[]
-        -i cimgz:${_path_rc}gimp_filter_sources
-        -repeat $! -l[$>]
-          -if {{0,t}'=='$_url_jayprich} b0=1 -endif
-          -if {{0,t}'=='$_url_zonderr} b1=1 -endif
-        -endl -done
-      -onfail
-      -endl
-      status="{"$b0"}{"$b1"}{0}{1}"
-    -endif
-    -rm
-
-    # Display sources in preview.
-    -gimp_filter_sources
-    msg= i=1 -rm[0,1]
-    -if $! -repeat $!
-      -if {${-head[$>]\ 4}'=='{'http'}} -basename {$>,t} msg=$msg"\n["$i"] "${} i+=1
-      -else
-        -if ${_path_rc}{$>,t} msg=$msg"\n["$i"] "{$>,t}" (local user file)" i+=1 -endif
-      -endif
-    -done -else msg="[None]" -endif
-  -rm -endl
-  -gimp_print_preview "External filters enabled:",32,$msg,15,140
-  -u $status
-
-# Define not-certified filters sources.
-_gimp_manage_filter_sources :
-  _url_jayprich=http://jaypri.ch/GMIC/jayprich.gmic
-  _url_zonderr=http://docgmic.tuxfamily.org/zonderr.gmic
 
 #@gimp Filter design : _none_, _none_
 #@gimp : note = note{"
@@ -22433,8 +22328,8 @@ gimp_colorize_interactive :
   resolution={arg(1+$3,512,1024,2048,0)}
   -nm "[G"{`39`}"MIC] Colorize"
   -if {$8==-1" || "$7!=w" || "$8!=h} _gimp_control_points= -else _gimp_control_points=${9--1} -endif
-  -l[] 0 -nm. "$4" ext={x} -rm -if {$ext'=='gpl} -input_gpl "$4" -endif -onfail -rm -endl
-  -l[] 0 -nm. "$5" ext={x} -rm -if {$ext'=='gpl} -input_gpl "$5" -endif -onfail -rm -endl
+  -l[] 0 -nm. "$4" ext={x} -rm -if {same(['$ext'],['gpl'],-1,0)} -input_gpl "$4" -endif -onfail -rm -endl
+  -l[] 0 -nm. "$5" ext={x} -rm -if {same(['$ext'],['gpl'],-1,0)} -input_gpl "$5" -endif -onfail -rm -endl
   -if {$!==$N+2} # Two additional palettes.
     -repeat {$!-2} status=${-x_colorize[$>]\ $1,$resolution,$2,[-2],[-1]} -done
     -rm[-2,-1]
@@ -26153,7 +26048,7 @@ _gimp_emulate_film :
             -endif
           -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
           -endif
-          -repeat $! -if {{$>,n}'=='"$2"} -k[$>] -break -endif -done
+          -repeat $! -if {['{$>,n}']==['"$2"']} -k[$>] -break -endif -done
           -if {$!==1} -break -endif # CLUT found!
           -rm
         -done
