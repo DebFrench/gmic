@@ -2595,6 +2595,34 @@ gmicky_wilber :
 ig :
   -input_glob $*
 
+#@gmic input_clut : "clut_name",_resolution>0
+#@gmic : Insert one of the pre-defined HaldCLUT at the end of the image list.
+input_clut : -check "isval(${2=64}) && $2>0"
+  -e[^-1] "Input Hald-CLUT with name '$1' and resolution $2."
+  -v - -l[]
+    -if ${_path_rc}clut_"$1".cimgz -i ${_path_rc}clut_"$1".cimgz -endif
+    -if {"!"$!" || w!=$2 || h!=$2 || d!=$2"}
+      g_path_unix=/usr/lib/gimp/2.0/plug-ins/
+      -rm -repeat 2
+        -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "\
+                       isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)" || "\
+                       isfile(${g_path_unix}gmic_film_cluts.gmz))}
+          -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
+          -elif {isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)} -i ${-path_gimp}plug-ins/gmic_film_cluts.gmz
+          -elif {isfile(${g_path_unix}gmic_film_cluts.gmz)} -i ${g_path_unix}gmic_film_cluts.gmz
+          -endif
+        -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
+        -endif
+        -repeat $! -if {['{$>,n}']==['"$1"']} -k[$>] -break -endif -done
+        -if {$!==1} -break -endif # Hald-CLUT found!
+        -rm
+      -done
+      -if {!$!} -v + -error[0--4] "Command '-input_clut': Unknown CLUT name '$1'." -endif
+      -decompress_clut $2,$2,$2 -round
+      -o. ${_path_rc}clut_$1.cimgz,uchar
+    -endif
+  -endl -v +
+
 #@gmic input_glob : pattern
 #@gmic : Insert new images from several filenames that match the specified glob pattern.
 input_glob :
@@ -3115,7 +3143,7 @@ update_film_emulation_html :
     -if $category -else -x "mkdir "$category -endif
     -if $category/clut -else -x "mkdir "$category/clut -endif
 
-    -repeat {narg($presets)}
+    -repeat {narg({/$presets})}
       preset=${-arg\ {1+$>},$presets}
       -v + -e[] "    - "$preset -v -
       -input_clut $preset -to_rgb. s={sqrt(w*h*d)}
@@ -5014,34 +5042,6 @@ compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
 #@gmic cumulate : { x | y | z | c }..{ x | y | z | c } : (no arg) : (+)
 #@gmic : Compute the cumulative function of specified image data, optionally along the specified axes.
 #@gmic : $ image.jpg --histogram --cumulate. -display_graph[-2,-1] 400,300,3
-
-#@gmic input_clut : "clut_name",_resolution>0
-#@gmic : Insert one of the pre-defined HaldCLUT at the end of the image list.
-input_clut : -check "isval(${2=64}) && $2>0"
-  -e[^-1] "Input Hald-CLUT with name '$1' and resolution $2."
-  -v - -l[]
-    -if ${_path_rc}clut_"$1".cimgz -i ${_path_rc}clut_"$1".cimgz -endif
-    -if {"!"$!" || w!=$2 || h!=$2 || d!=$2"}
-      g_path_unix=/usr/lib/gimp/2.0/plug-ins/
-      -rm -repeat 2
-        -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "\
-                       isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)" || "\
-                       isfile(${g_path_unix}gmic_film_cluts.gmz))}
-          -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
-          -elif {isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)} -i ${-path_gimp}plug-ins/gmic_film_cluts.gmz
-          -elif {isfile(${g_path_unix}gmic_film_cluts.gmz)} -i ${g_path_unix}gmic_film_cluts.gmz
-          -endif
-        -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
-        -endif
-        -repeat $! -if {['{$>,n}']==['"$1"']} -k[$>] -break -endif -done
-        -if {$!==1} -break -endif # Hald-CLUT found!
-        -rm
-      -done
-      -if {!$!} -v + -error[0--4] "Command '-input_clut': Unknown CLUT name '$1'." -endif
-      -decompress_clut $2,$2,$2 -round
-      -o. ${_path_rc}clut_$1.cimgz,uchar
-    -endif
-  -endl -v +
 
 #@gmic c : eq. to '-cut'. : (+)
 
