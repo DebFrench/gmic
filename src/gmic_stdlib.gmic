@@ -168,7 +168,7 @@ _help : -skip ${1=""}
   -v -1 -use_vt100
   -if {!narg("$1")} _is_example=0 -__help ascii -v + -e[] "" -v - -rm -u "" -return -endif # Global help.
   ({'"$1"'}) -autocrop. {'-'}
-  -if {{@100%}==']'" && "i!='['} -l. -s -,{'['} -k[0] -endl -endif
+  -if {{@100%}=={']'}" && "i!={'['}} -l. -s -,{'['} -k[0] -endl -endif
   command={t} -rm.
 
   # Help requested for a specific command.
