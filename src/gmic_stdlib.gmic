@@ -3258,7 +3258,7 @@ with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
 "'})
 
       ({'"\n
-<div id=\"bloc_option\"><div id=\"top_bleu\"><div id=\"text_top\">Presets ("{narg($presets)}")</div></div>\n
+<div id=\"bloc_option\"><div id=\"top_bleu\"><div id=\"text_top\">Presets ("{narg({/$presets})}")</div></div>\n
 <div id=\"center\"><div id=\"text_centre_intro\">\n
 <center><table>\n
 <tr><td>\n
@@ -3267,7 +3267,7 @@ with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
 </td></tr>\n
 <tr><td align=\"center\"><b>Refence Image</b></td></tr>\n\n
 "'})
-      -repeat {narg($presets)}
+      -repeat {narg({/$presets})}
         preset=${-arg\ {1+$>},$presets}
 
         ({'$preset'}) -replace_seq. 39,"92,92,39" preset_esc={t} -rm.
