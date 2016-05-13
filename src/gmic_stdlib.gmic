@@ -167,7 +167,7 @@ help : -skip ${1=""},${2=1}
 _help : -skip ${1=""}
   -v -1 -use_vt100
   -if {!narg("$1")} _is_example=0 -__help ascii -v + -e[] "" -v - -rm -u "" -return -endif # Global help.
-  ({'{/"$1"}'}) -autocrop. {'-'}
+  ({'"$1"'}) -autocrop. {'-'}
   -if {{@100%}==']'" && "i!='['} -l. -s -,{'['} -k[0] -endl -endif
   command={t} -rm.
 
@@ -594,8 +594,8 @@ _help_usage :
 \n          (while '"$c"{pi}"$n"' is '"${g}"3.141592653589793"$n"').
 \n       . A '"${c}"feature"$n"' delimited by backquotes is replaced by a string whose ascii codes correspond
 \n          to the list of values resulting from the evaluation of the specified mathematical expression.
-\n          For instance, item '"$c"{`[102,111,111]`}"$n"' is substituted by '"${c}"foo"$n"' and
-\n          item '"$c"{`vector8(65)`}"$n"' by '"${c}"AAAAAAAA"$n"'
+\n          For instance, item '"$c"{`[102,111,111]`}"$n"' is substituted by '"${c}"foo"$n"' and item '"$c"{`vector8(65)`}"$n"'
+\n          by '"${c}"AAAAAAAA"$n"'
 \n
 \n  - '"$c"{*}"$n"' is substituted by the "${g}"visibility state"$n" of the instant display window "$c"[0]"$n"
 \n     (can be "$g"{ 0=closed | 1=visible }"$n").
@@ -653,7 +653,7 @@ _help_usage :
 \n       cbrt(), cos(), cosh(), cut(), exp(), gauss(), hypoth(), int(), isval(), isnan(), isinf(),
 \n       isint(), isbool(), isfile(), isdir(), isin(), kth(), log(), log2(), log10(), max(), mean(),
 \n       med(), min(), narg(), prod(), rol()"$n" (left bit rotation), "${c}"ror()"$n" (right bit rotation)"${c}",
-\n       round(), sign(), sin(), sinc(), sinh(), sqrt(), std(), sum(), tan(), tanh(), var()"$n".
+\n       round(), sign(), sin(), sinc(), sinh(), sqrt(), std(), sum(), tan(), tanh(), variance()"$n".
 \n
 \n       . '"${c}"atan2(x,y)"$n"' is the version of '"${c}"atan()"$n"' with two arguments '"${g}"y"$n"' and '"${g}"x"$n"' (as in C/C++).
 \n       . '"${c}"hypoth(x,y)"$n"' computes the square root of the sum of the squares of x and y.
@@ -668,7 +668,7 @@ _help_usage :
 \n       . '"${c}"isin(v,a_1,...,a_n)"$n"' returns "${g}"0 (false)"$n" or "${g}"1 (true)"$n" whether the first value '"${g}"v"$n"' appears
 \n          in the set of other values 'a_i'.
 \n       . '"${c}"argmin()"$n"', '"${c}"argmax()"$n"', '"${c}"kth()"$n"', '"${c}"max()"$n"', '"${c}"mean()"$n"', '"${c}"med()"$n"', '"${c}"min()"$n"', '"${c}"std()"$n"', '"${c}"sum()"$n"'
-\n          and '"${c}"var()"$n"' can be called with an arbitrary number of scalar/vector arguments.
+\n          and '"${c}"variance()"$n"' can be called with an arbitrary number of scalar/vector arguments.
 \n       . '"${c}"round(value,rounding_value,direction)"$n"' returns a rounded value.
 \n          '"${g}"direction"$n"' can be "${g}"{ -1=to-lowest | 0=to-nearest | 1=to-highest }"$n".
 \n
@@ -720,13 +720,15 @@ _help_usage :
 \n       . In both expressions, the "${g}"ak"$n" can be vectors themselves, to be concatenated into a single vector.
 \n       . The scalar element "${g}"ak"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[k]"$n".
 \n       . The sub-vector "${g}"[ ap..aq ]"$n" of a vector "${g}"X"$n" is retrieved by "${c}"X[p,q]"$n".
+\n       . Equality/inequality comparisons between two vectors is possible with the operators '"${c}"=="$n"' and '"${c}"!="$n"'.
+\n       . Some vector-specific functions can be used on vector values:
+\n         '"${c}"cross(X,Y)"$n"' (cross product), '"${c}"dot(X,Y)"$n"' (dot product), '"${c}"size(X)"$n"' (vector dimension),
+\n         '"${c}"sort(X,_is_increasing,_chunk_size)"$n"' (sorting values), '"${c}"reverse(A)"$n"' (reverse order of components)
+\n         and '"${c}"same(A,B,_nb_vals,_is_case_sensitive)"$n"' (vector equality test).
 \n       . Function '"${c}"resize(A,size,_interpolation)"$n"' returns a resized version of vector '"${g}"A"$n"'
 \n          with specified interpolation mode. '"${g}"interpolation'"$n"  can be
 \n          "$g"{ -1=none (memory content) | 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic |
 \n            6=lanczos }"$n".
-\n       . Some vector-specific functions can be used on vector values:
-\n         '"${c}"cross(X,Y)"$n"' (cross product), '"${c}"dot(X,Y)"$n"' (dot product), '"${c}"size(X)"$n"' (vector dimension)
-\n         and '"${c}"sort(X,_is_increasing,_chunk_size)"$n"' (sorting values), '"${c}"same(A,B,_nb_vals,_is_case_sensitive)"$n"' (vector equality test).
 \n       . A "${g}"2"$n"-dimensional vector may be seen as a complex number and used in those particular functions/operators:
 \n         '"${c}"**"$n"' (complex multiplication), '"${c}"//"$n"' (complex division), '"${c}"^^"$n"' (complex exponentiation),
 \n         '"${c}"**="$n"' (complex self-multiplication), '"${c}"//="$n"' (complex self-division), '"${c}"^^="$n"' (complex self-exponentiation),
@@ -742,6 +744,14 @@ _help_usage :
 \n       . Specifying a vector-valued math expression as an argument of a command that operates on image values
 \n          (e.g. '"$c"-fill"$n"') modifies the whole spectrum range of the processed image(s), for each spatial
 \n          coordinates "$g"(x,y,z)"$n". The command does not loop over the "${g}"C"$n"-axis in this case.
+\n
+\n    _ "${g}"String manipulation:"$n" Character strings are defined and managed as vectors objects.
+\n       Dedicated functions and initializers to manage strings are
+\n
+\n       . '"${c}"[ 'string' ]"$n"' defines a vector whose values are the ascii codes of the specified "${g}"character string"$n".
+\n       . '"${c}"'string'"$n"' does the same, only for strings with a length greater than "${g}"2"$n" and that do not contains single quotes.
+\n          For a single character, it results in a scalar value instead (e.g. "${c}"'A'"$n" is equal to "${g}"65"$n").
+\n       . Functions '"${c}"lowercase()"$n"' and '"${c}"uppercase()"$n"' return string with all string characters lowercased or uppercased.
 \n
 \n    _ "${g}"Special operators"$n" can be used:
 \n

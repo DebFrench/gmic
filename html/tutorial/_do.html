@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-do&nbsp;&hellip; -while</h1>
-<div id="Frame1" style="float: left; width: 320px; height: 380px; border: none; padding: 0in;"><img src="img/_do_do_00.jpg" title="do_00.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" />
+<div id="Frame1" style="float: left; width: 320px; height: 380px; border: none; padding: 0in;"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_00.png" title="do_00.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" />
 <p style="font-size: 10pt; line-height: 100%;"><i>Figure 1: Caution: Electrified 1911 Goudy Bookletter Ampersand. Please do not stand in any water puddles or other conductive liquids while following this tutorial. Thank you.</i></p>
 </div>
 <p>A <tt>-do&nbsp;&hellip;&nbsp;-while</tt> block repeatly executes until the <em>condition</em> given as an argument to <tt>-while</tt> becomes false. Execution then continues with the commands following <tt>-while</tt>.</p>
@@ -43,14 +43,14 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic -srand 9717 \<br />-input 1024,1024,1,1 \<br />-turbulence[-1] 512,12,3,0,0 \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_01.jpg" title="do_00.png: Turbulence" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_01.png" title="do_00.png: Turbulence" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>The genesis of the frontpiece illustration is mode 0 <tt><a target="_parent" href="_turbulence.shtml">-turbulence</a>.</tt> We base the height, cost and potential map on this underlying rendering.<br /> As noted in the <a target="_parent" href="_plasma.shtml"><tt>-plasma</tt></a> tutorial, it is our wont to set a particular seed in G'MIC's random number generator (via <a target="_parent" href="http://gmic.eu/reference.shtml#srand"><tt>-srand</tt></a>) so that we can reproduce a particular pattern; what we have here may as well be called "Turbulence Pattern 9717".<br /> Mode 0 turbulence employs the <a target="_parent" href="http://gmic.eu/reference.shtml#abs"><tt>-abs</tt></a> command as a mixer; at each stage of its development, any zero-crossings are folded back into the positive region, generating numerous discontinuities &ndash; creases &ndash; both large and small. These emulate rilles and waterways, somewhat. Being local minima, the rilles have low intensities; when we derive a cost map from this turbulence, rivers or lightning bolts will tend to follow these rilles. We revisit this idea downstream from here.<br /> We render the turbulence so that it exhibits large-scale features, develop the pattern through 12 octaves and set a modest decay factor of three between each octave. While large-scale features are present, low-magnitude, small-scale features persist.</td>
 </tr>
 <tr>
 <td colspan="2"><tt>-input http://particularart.com/static/media/uploads/command_reference/repeat/ampersand_goudybl1911.svg \<br /> -resize[-1] [-2],[-2],[-2],[-2],5,0 \<br /> -blur[-1] 11,1,0 \<br /> -normalize[-1] 0.4,1 \<br /> -mul[-2,-1] \<br /> -sharpen 50 \<br /> --sqr[-1] \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_02.jpg" title="do_02.png: Final Cost Map" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_02.png" title="do_02.png: Final Cost Map" height="300" width="300" /></td>
 <td>
 <p>From this point forward, we modify the turbulence patterns in various ways to make our height, cost and potential maps.<br /> The first modification is impressing a Goudy 1911 Bookletter ampersand on the turbulence field, mainly because we are obsessed with this ampersand (but you knew that), and secondarily, we'd like to steer our lightning bolts so that they roughly trace parts of the ampersand's shape. Since we will trace the lightning bolts by the Watershed Game, we go about making a general depression in the turbulence in the shape of the ampersand; we blur the ampersand slightly to avoid abrupt drops into the basin.</p>
 <p>We anticipate that as lightning bolts trace along minimal paths, those will thread through the lower elevation ampersand on the way to the isovalue. Once we have blurred and scaled the ampersand, we multiply it with the original turbulence, giving us the final form of our <em>height map</em>. Our <em>cost map</em> follows directly from sharpening and squaring operations. Sharpening tends to magnify fine detail, alternately, increasing or decreasing the values of out-of-bound pixels, driving them from the mean value of the image and towards its extremes. Squaring makes expensive (light colored) pixels even more expensive. In the larger scheme of things, we are making a cost map where minimal paths will meander a great deal, as we are creating pits and rises and other obstacles that mitigate against the straightforward progression of minimal paths to the isovalue.</p>
@@ -60,7 +60,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>-input 100%,100%,100%,100% \<br /> -set[-1] 1,'{-3,c}' \<br /> -distance[-1] 1,[-2],4 \<br /> -output[-1] potmap.cimg,uchar \<br /> -output[0] height.png \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_03.jpg" title="do_03.png: Final Height Map" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_03.png" title="do_03.png: Final Height Map" height="300" width="300" /></td>
 <td>
 <p>&nbsp;We harness the <tt><a target="_parent" href="_distance.shtml">-distance</a></tt> command to make a <em><a target="_parent" href="#PotentialMaps">potential map</a></em>.</p>
 <p>To that end, we require an image in which we can measure distances. We don't have one, but one is pretty easy to make. We <a target="_parent" href="conjuring-images.shtml">conjure a black field</a> from the aether and set one isovalue pixel within, this situated in the same location as the minimal point in our turbulence height map. It is to this point that all lightning bolts meander when we play the Watershed Game.</p>
@@ -71,7 +71,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_04.jpg" title="do_04.png: Potental Map Detail Around Isovalue" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_04.png" title="do_04.png: Potental Map Detail Around Isovalue" height="300" width="300" /></td>
 <td>
 <p>The conventional output from <tt>-distance</tt> is a displacement map which furnishes point-wise offsets of each pixel in the original image to the nearest isovalue. For the Great Watershed Game, we use the potential, or <em>return map</em> instead.</p>
 <p>This data set is a point-wise collection of control words, described above, which we call <i><a target="_parent" href="#PotentialMaps">routing directives</a></i>, one corresponding to each pixel in the selected image. Given a pixel, the associated routing directive conveys to an imagined cursor the least expensive direction it needs to step in order to move "closer" to the isovalue, in quotes because the routing directive may shift the imagined cursor away from the isovalue, at least in terms of Euclidean distance. However, when <tt>-distance</tt> is furnished with a point-wise cost map, as we have done here, the "shortest distance" is the minimal path with the lowest cost sums, which likely is not the shortest distance by Euclidean measure.</p>
@@ -90,7 +90,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic pcnt=180 -input potmap.cimg \<br /> -input 100%,100%,100%,100% \<br /> -input '{$pcnt}',2,1,1,'round(?(0,1023))' \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_05.jpg" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_05.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>
 <p>To play the Watershed Game, we <a target="_parent" href="_input.shtml"><tt>-input</tt></a> three "images" (in the broad G'MIC sense, meaning they might not be pretty to look at).</p>
 <ol>
@@ -105,7 +105,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>-repeat '{{w}}' \<br /> &nbsp;&nbsp;&nbsp;rdir=0 \<br /> &nbsp;&nbsp;&nbsp;kx='{{($&gt;,0,0,0,0)}}' \<br /> &nbsp;&nbsp;&nbsp;ky='{{($&gt;,1,0,0,0)}}' \<br /> &nbsp;&nbsp;&nbsp;-do \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-set[-2] '{{-2,($kx,$ky,0,0,0)}+1}','{$kx}','{$ky}',0,0 \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdir='{{-3,($kx,$ky,0,0,0)}}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-if '{$rdir&amp;1}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kx='{$kx-1}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-elif '{$rdir&amp;2}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kx='{$kx+1}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-endif \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-if '{$rdir&amp;4}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ky='{$ky-1}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-elif '{$rdir&amp;8}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ky='{$ky+1}' \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-endif \<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-while '{$rdir&gt;0}' \<br /> &nbsp;&nbsp;&nbsp;-done \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_06.jpg" title="do_06.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_06.png" title="do_06.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>
 <p>And this, in its entirety, is the Watershed Game: We iterate over our 180 points, and for each randomly chosen coordinate, trace the minimal path from it to the isovalue. The tracing is an example of a <tt>-do&nbsp;&hellip;&nbsp;-while</tt> block. While routing directives remain non-zero, we step to the pixel the directive indicates and read the next directive. We keep on doing that until we read the zero directive, which stops the iteration. This gives us one meandering river, or lightning bolt, depending on how you want to interpret it.</p>
 <p>The body of the <tt>-do&nbsp;&hellip;&nbsp;-while</tt> loop concerns itself with parsing the routing directive, with the current directive retained in <tt>$rdir</tt>. We initialize <tt>$kx</tt> and <tt>$ky</tt> with the current randomly chosen coordinate, then successively mask&nbsp;<tt>$rdir</tt> against powers of two, scanning <tt>$rdir</tt>'s bit fields, and incrementing or decrementing <tt>$kx</tt> and <tt>$ky</tt> respectively, as required. We don't bother with the depth field in this case as our rivers/lightning bolts are flat, but we could. In fact, there is a G'MIC command which is a complete implementation of the partial effort here: see <a target="_parent" href="http://gmic.eu/reference.shtml#minimal_path">-<tt>minimal_path</tt></a>.</p>
@@ -117,7 +117,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>-rm[-3,-1] \<br /> -add[-1] 1e-10 \<br /> -log[-1] \<br /> -div[-1] '{log($pcnt)}' \<br /> -cut -1,'{iM}' \<br /> -normalize[-1] 0,255 \<br /> -dilate[-1] 3 \<br /> -repeat 2 \<br /> -smooth[-1] 10,0.2,0.8,5,3 \<br /> -done \<br /> -normalize[-1] 0,255 \<br /> -output[-1] lbolt.png \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_do_do_08.jpg" class="img_block" title="do_08.png" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /><img src="img/_do_do_07.jpg" title="do_07.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_08.png" class="img_block" title="do_08.png" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /><img src="http://www.particularart.com/static/media/uploads/command_reference/do/do_07.png" title="do_07.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>Once we have plotted our 180 paths, we rescale the the intensity levels according to a logarithmic scale so that the 'less traveled' paths are more readly visible. We dilate, then anisotropically smooth the pathways. We used pretty aggressive smoothing here, giving flame-like bolts, but our choices here are a matter of taste. Less aggressive smoothing lends itself to more jagged electrical-like bolts.</td>
 </tr>
 </tbody>

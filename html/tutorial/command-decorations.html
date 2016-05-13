@@ -15,7 +15,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 
-<h1><img class="img_left" src="img/command-decorations_select.jpg" style="margin: 3px; float: left;" title="Command Selections" width="400" height="300" />Command Decorations</h1>
+<h1><img class="img_left" src="http://www.particularart.com/static/media/uploads/select.png" style="margin: 3px; float: left;" title="Command Selections" width="400" height="300" />Command Decorations</h1>
 <p>By default, commands operate on <em>all </em>images in the stack. Often that is not what we want.</p>
 <p>The image list can, and often will, contain many items. As we <a target="_parent" href="_input.shtml">-input</a> or otherwise <a target="_parent" href="conjuring-images.shtml" title="Conjuring Images and Other Generators">conjure images</a>, the interpreter places them in sequence, assigning indices to them starting from zero as it goes along.</p>
 <p>Non-negative indices designate images with respect to the beginning of the stack. That is, 0, 1, 3 designate the first, second and fourth image.</p>
@@ -110,7 +110,7 @@ hs.wrapperClassName = 'wide-border';
 <li>'-<a target="_parent" href="_normalize.shtml">normalize</a>[^0], single hyphen, replaces all images in the stack <em>except the first</em> with corresponding versions where the intensity range of each channel is remapped to the range 0 &ndash; 255. The stack still has four images. Had we decorated this command with two hyphens, the stack would have had seven images, the second, third and fourth images followed by their normalized versions in positions five, six and seven.</li>
 </ol>
 <p>The four images on the stack look like this:</p>
-<p><img alt="Four images resulting from a series of commands on an initially empty pipeline." src="img/command-decorations_pipeline.jpg" title="Four Image Pipeline" width="683" height="171" /></p>
+<p><img alt="Four images resulting from a series of commands on an initially empty pipeline." src="http://www.particularart.com/static/media/uploads/pipeline.png" title="Four Image Pipeline" width="683" height="171" /></p>
 <p><a target="_parent" align="center" border="0" name="idiomata"></a></p>
 <h2 id="ShorthandSelectionNotation">Shorthand Selection Notation</h2>
 <p>It is very common to operate on the last, penultimate, and third-from-last images on the stack. Righthand command decorations such as [-1], [-2] and [-3] are so prevalent that they have an alternate shorthand form: one, two and three 'pips':</p>

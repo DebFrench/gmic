@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>Wavelet Analysis and Synthesis in G'MIC</h1>
-<div id="InitFigure" style="width: 700px; height: 800px; border: none; padding: 5px; line-height: 100%;"><img src="img/wavelet-analysis-and-synthesis-in-gmic_hr-005-large.jpg" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="680" width="680" />
+<div id="InitFigure" style="width: 700px; height: 800px; border: none; padding: 5px; line-height: 100%;"><img src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-005-large.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="680" width="680" />
 <p style="font-size: 10pt;"><i>Figure 1: One cycle of the DWT, each 2˟2 quadruple of pixels, <b>P</b><sub>jk</sub>, in the input maps to four pixels, one in each quadrant of the analysis, each placed in the same relative location as the quadruple in the original image. These image pixels report on conditions around the neighborhood of the quadruple. Northwest: average intensity, northeast, gradients along the width, southwest, gradients along the height, southeast: gradients along the diagonal. The formulas are for image pixels from the quadrupal of pixels clustered around pixel <b>P</b><sub>jk</sub>.</i></p>
 </div>
 <p>Similar to Fourier analysis and synthesis (<a target="_parent" href="_fft.shtml">-fft</a>, <a target="_parent" href="http://gmic.eu/reference.shtml#ifft">ifft</a>), a wavelet analysis transforms an image into another representation that reflects its frequency, or spectral, content. Unlike Fourier analysis, the wavelet analysis retains spatial relationships. One may view a DWT analysis and recognize scaled versions of the original image, locate versions at a particular scale, and alter them, When reconstituted by the synthesizer, -ihaar, these will reflect the changes applied only to the selected levels of detail. Thus, as in Fourier analysis, one can undertake frequency-based editing, but &ndash; unlike the Fourier transform &ndash; may readily locate particular places in the image to work an effect.</p>
@@ -46,7 +46,7 @@ hs.wrapperClassName = 'wide-border';
 <table id="TabOne" rules="all" class="table table-striped" style="border-color: #808080; border-width: 1px;" cols="2" border="1">
 <tbody>
 <tr>
-<td width="256"><img src="img/wavelet-analysis-and-synthesis-in-gmic_hr-001.jpg" title="hr-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-001.png" title="hr-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3 id="TROne">1</h3>
 The command first separates the input image along its width into even and odd column images. The 'even' image possesses columns 0, 2, 4,...; the 'odd' image possesses columns 1, 3, 5,...</td>
@@ -55,7 +55,7 @@ The command first separates the input image along its width into even and odd co
 <td colspan="2"><tt>&nbsp;gmic hface.cimg \<br />--shift -1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />-resize 50%&nbsp;&nbsp; # Other dimensions default to 100%; NB: Nearest neighbor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # interpolation (default) decimates every other row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # at precisely 50% reductions, leaving even rows on the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # left and odd rows on the right. We are guaranteed this&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # separation by the one pixel leftward shift of the image on the \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # right. With the every-other-row deletion arising from the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # nearest neighbor interpolation, the columns retained in the&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # shifted version are just those deleted in the unshifted&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # version, and vice-versa.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/wavelet-analysis-and-synthesis-in-gmic_hr-002.jpg" title="hr-002.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="384" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-002.png" title="hr-002.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="384" /></td>
 <td>
 <h3 id="TRowTwo">2</h3>
 Makes a second image, <i>diff_</i><i>col</i>, by subtracting the even columns from the odd (<i>odd</i><i> &ndash; </i><i>even</i>)</td>
@@ -64,7 +64,7 @@ Makes a second image, <i>diff_</i><i>col</i>, by subtracting the even columns fr
 <td colspan="2"><tt>-sub[1] [0] \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/wavelet-analysis-and-synthesis-in-gmic_hr-003.jpg" title="hr-003.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-003.png" title="hr-003.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3 id="TRowThree">3</h3>
 Makes a third image, <i>sum_</i><i>col</i>, by adding the odd and even columns (<i>odd</i><i> </i><i>+</i><i> </i><i>even</i>). <br /> Appends together <i>sum_</i><i>col</i> and<i> diff_</i><i>col</i> along the x axis and scales the pair by <!--?xml version="1.0" encoding="UTF-8"?--> <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"> <semantics> <mfrac> <mn>1</mn> <msqrt> <mn>2</mn> </msqrt> </mfrac> <annotation encoding="StarMath 5.0">1 over sqrt 2</annotation> </semantics> </math>.</td>
@@ -79,7 +79,7 @@ Makes a third image, <i>sum_</i><i>col</i>, by adding the odd and even columns (
 <table id="TabTwo" rules="all" class="table table-striped" style="border-color: #808080; border-width: 1px;" cols="2" border="1">
 <tbody>
 <tr>
-<td width="256"><img src="img/wavelet-analysis-and-synthesis-in-gmic_hr-004.jpg" title="hr-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-004.png" title="hr-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3 id="TRowFour">4</h3>
 The command repeats steps 1 through 3, but by separating <em>sum_col diff_col</em> into even and odd rows and finding sums and differences of these rows along the height axis, again scaling the results by <!--?xml version="1.0" encoding="UTF-8"?--> <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"> <semantics> <mfrac> <mn>1</mn> <msqrt> <mn>2</mn> </msqrt> </mfrac> <annotation encoding="StarMath 5.0">1 over sqrt 2</annotation> </semantics> </math>.<br /> Twice scaled by this quantity, the overall dataset has now been divided by 2, and represent pairwise averages of sums and/or differences characteristic of each quadrant.</td>
@@ -88,7 +88,7 @@ The command repeats steps 1 through 3, but by separating <em>sum_col diff_col</e
 <td colspan="2"><tt> # Computations along the height axis \<br /> # mirror those along the width.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br /> --shift 0,-1&nbsp;&nbsp;&nbsp;&nbsp; \<br /> -resize 100%,50% \ <br /> --sub[1] [0]&nbsp;&nbsp;&nbsp;&nbsp; \<br /> -add[0,1]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \<br /> -div '{sqrt(2)}' \ <br /> -append y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \</tt></td>
 </tr>
 <tr>
-<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="img/wavelet-analysis-and-synthesis-in-gmic_hr-005.jpg" title="hr-005.png" height="256" width="256" /></td>
+<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="http://www.particularart.com/static/media/uploads/technotes/haar/hr-005.png" title="hr-005.png" height="256" width="256" /></td>
 <td>
 <h3 id="TRowFive">5</h3>
 <p>At the conclusion of one scaling step, every 2&nbsp;&times; 2 quadruple of pixels from the input image recurs as a single pixel in each quadrant of the analysis, four single pixel &ldquo;images&rdquo; of the quadruple in all. See the beginning of this article for a larger version of this diagram.</p>

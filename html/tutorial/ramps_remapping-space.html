@@ -23,23 +23,23 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table table-striped" style="border-color: #7f7f7f; border-width: 1px;" align="center" border="1" cellpadding="2">
 <tbody>
 <tr>
-<td width="256"><img src="img/ramps_remapping-space_rampp.jpg" title="Circular Ramp" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/ramps/rampp.png" title="Circular Ramp" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td><code>#Make a linear ramp a radial one.<br />gmic 256,256,1,1,'w-x' \<br />-polar2euclidean 0.5,0.5,1,1 \<br />-normalize 0,255</code></td>
 </tr>
 <tr>
-<td width="256"><img src="img/ramps_remapping-space_ramppoc.jpg" title="Off Center Radial Ramp" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/ramps/ramppoc.png" title="Off Center Radial Ramp" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td><code>#Nobody said we have to plot in \<br />#the center \<br />gmic 256,256,1,1,'w-x' \<br />-polar2euclidean 0.25,0.85,1,1 \<br />-normalize 0,255<br /><br /></code></td>
 </tr>
 <tr>
-<td width="256"><img src="img/ramps_remapping-space_ramppos.jpg" title="Radial Off Page" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/ramps/ramppos.png" title="Radial Off Page" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td><code>#Nobody said we even had to stay \<br />#in the square. \<br />gmic 256,256,1,1,'w-x' \<br />-polar2euclidean 1.25,-0.35,1,1 \<br />-normalize 0,255</code></td>
 </tr>
 <tr>
-<td width="256"><img src="img/ramps_remapping-space_ramppp.jpg" title="Pinprick Radial" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/ramps/ramppp.png" title="Pinprick Radial" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td><code>#The third parameter alters radial<br />#scaling. Values greater than one<br />#contract the space toward the center.<br />#Values less than one expand the center<br />#out to the perimeter.<br />gmic 256,256,1,1,'w-x' \<br />&nbsp;&nbsp; -polar2euclidean 0.25,0.85,3,1<br />&nbsp;&nbsp; -normalize 0,255</code></td>
 </tr>
 <tr>
-<td width="256"><img src="img/ramps_remapping-space_ramppfx.jpg" title="Functional Radial" height="257" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/ramps/ramppfx.png" title="Functional Radial" height="257" width="256" /></td>
 <td><code># Generate an arbitrary ramp &amp; wrap \<br /># around the northwest corner. \<br />gmic -function1d \<br />&nbsp;0.3,0,12,43,255,85,127,127,200,170,220,\<br />213,230,255,100 -expand_y 128 \<br />&nbsp;-polar2euclidean -0.0,0.0,0.8,2 \<br />&nbsp;-normalize 0,255</code></td>
 </tr>
 </tbody>

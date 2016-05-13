@@ -16,8 +16,8 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-orientation</h1>
-<p><img src="img/_orientation_usphere.jpg" title="Direction of a color" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />Orientation scales the color components of each pixel in an image so that the length of the color vector is one (see diagram):</p>
-<p style="text-align: center;"><img src="img/_orientation_coverc.jpg" title="Unit vector" height="60" width="60" /></p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/usphere.png" title="Direction of a color" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />Orientation scales the color components of each pixel in an image so that the length of the color vector is one (see diagram):</p>
+<p style="text-align: center;"><img src="http://www.particularart.com/static/media/uploads/coverc.png" title="Unit vector" height="60" width="60" /></p>
 <p>In the resulting image, pixel RGB components plot points on a unit sphere centered on the origin of the RGB color space. A line passing through the origin and the corresponding plot consists of points with the same hue, differing only in luminosity. Informally, the plot itself represents the 'pure' hue, with colors tending toward the origin being shades of, and those tending away from the origin tints of the pure hue.</p>
 <p>An image transformed by -orientation is an apt dataset for a number of color selection and identification algorithms. How dark or light a pixel may be has been put to one side and only chromatic data remains.</p>
 <p>The format of the command is:</p>
@@ -25,13 +25,13 @@ hs.wrapperClassName = 'wide-border';
 <p>which takes no parameters.</p>
 <h2 id="Theory">Theory</h2>
 <p>We can regard a color's red, green and blue components as comprising a position vector in a three dimensional <a target="_parent" href="http://en.wikipedia.org/wiki/RGB_color_space">RGB color space</a> (see <a target="_parent" href="_mix_rgb.shtml">-mix_rgb</a>), with the 'tail' rooted at the origin and the 'head' plotting the color itself.</p>
-<p><img src="img/_orientation_ccube.jpg" title="The RGB Color Space" class="img_block" style="float: left; margin: 3px; border: 0px solid #808080;" height="300" width="300" />Vectors express both direction and length. The RGB color space which color vectors comprise has a <a target="_parent" href="http://en.wikipedia.org/wiki/Euclidean_metric">Euclidean metric</a>. We find the length of color vectors by taking the square root of the sum of squared color components: see <a target="_parent" href="http://en.wikipedia.org/wiki/Pythagorean_theorem">Pythagorean formula</a>.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/ccube.png" title="The RGB Color Space" class="img_block" style="float: left; margin: 3px; border: 0px solid #808080;" height="300" width="300" />Vectors express both direction and length. The RGB color space which color vectors comprise has a <a target="_parent" href="http://en.wikipedia.org/wiki/Euclidean_metric">Euclidean metric</a>. We find the length of color vectors by taking the square root of the sum of squared color components: see <a target="_parent" href="http://en.wikipedia.org/wiki/Pythagorean_theorem">Pythagorean formula</a>.</p>
 <p>There are circumstances when we'd like to consider the length, or magnitude, of a color vector quite apart from the direction in which it points. In G'MIC, <a target="_parent" href="_norm.shtml">-norm</a> extracts that information, producing a grayscale counterpart of a color image where the intensity of pixels reflect the RGB color space length of their counterparts.</p>
 <p>In contrast, -orientation extracts the RGB space orientation of a color vector quite apart from its length. This entails scaling each color component of a pixel by the length of the vector which those components define, producing a triplet of unitless numbers, also composing a vector, but one of unit length. These triplets describe the orientation of colors in RGB space. One can imagine an open-ended line starting at the the origin and passing through the plot on the unit sphere. The direction in which this line points is a shared characteristic of all the colors on that line. They share a common orientation &ndash; a common <a target="_parent" href="http://en.wikipedia.org/wiki/Hue"><em>hue</em></a> &ndash; but differ in their luminance.</p>
 <p>Unsurprisingly, -orientation produces a flat version of its original, generally unappealing, with the shadows and highlights of the original no longer present; both transit to a midlevel gray.&nbsp; The more saturated colors of the original generally become the prominent features of the processed image, which may or may not be appealing. Since the pixels in the resulting image are either zero or one, they are not directly suitable in paint programs and need to be normalized before use with such tools. See <a target="_parent" href="images-as-datasets.shtml">Images as Datasets</a>.&nbsp;</p>
 <p>-orientation almost always is a means to an end and rarely an end in itself. While it might not make pretty pictures, the catalog of unit vectors it creates underlies color search and manipulation schemes. In the following example, -orientation produces a chromatic dataset which helps us locate pixels matching a particular 'key color.' We use that in a way to focus peoples' attention upon interesting photographic things. Details follow.</p>
 <h2 id="ApplicationKeyColor">Application: Key Color</h2>
-<p><img src="img/_orientation_shoes.jpg" title="Shoes Mute and Otherwise" style="margin: 3px; border: 0px solid #808080; float: right;" height="286" width="200" />Images can be <em>too</em> colorful, the natural center of interest lost in a sea of saturation, such as in the bottom image of the shoe rack. All the shoes have brilliant, saturated color.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/shoes.png" title="Shoes Mute and Otherwise" style="margin: 3px; border: 0px solid #808080; float: right;" height="286" width="200" />Images can be <em>too</em> colorful, the natural center of interest lost in a sea of saturation, such as in the bottom image of the shoe rack. All the shoes have brilliant, saturated color.</p>
 <p>In these circumstances we might look for ways to selectively desaturate less interesting parts of an image to focus attention on the more interesting parts. We might be lucky enough to find that the more interesting parts of the image share a common or a dominant set of related hues. In such circumstances, -orientation would plot these hues very close together on the unit sphere. We could set up a rule that colors very close to the center of the cluster retain their saturation &ndash; we may even increase their saturation. On the other hand, we'd like to de-emphasize colors further from the center of the cluster.</p>
 <p>The color at the center of this cluster is a <em>key color</em>; our aim is to saturate all other colors on the basis of how well,&nbsp;in RGB space, those colors align with the key color. Colors at or near to right angles with the key color would be very nearly desaturated; closely aligned colors would not. The shoe rack at the top is the same as that at the bottom; we simply picked a blue-green to emphasize, rendering red, orange and yellow shoes in shades of gray.</p>
 <h3 id="DotProductsKeyColor">Dot Products With Key Color and HSL space.</h3>
@@ -43,7 +43,7 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table striped" style="border-color: #5f5f5f; border-width: 0px;" border="0">
 <tbody>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_7.jpg" title="Burrowing Owl" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_7.png" title="Burrowing Owl" height="283" width="200" /></td>
 <td>
 <p></p>
 <h3>1</h3>
@@ -52,7 +52,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_0.jpg" title="Orientation only" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_0.png" title="Orientation only" height="283" width="200" /></td>
 <td>
 <h3>2</h3>
 <p><code>...--orientation...</code></p>
@@ -60,7 +60,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_1.jpg" title="Key color from eyes" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_1.png" title="Key color from eyes" height="283" width="200" /></td>
 <td>
 <h3>3</h3>
 <p><code>...100%,100%,100%,100% -fill_color[-1] 0.7538,0.655,0.0527...</code></p>
@@ -68,7 +68,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_2.jpg" title="key color times orientation vectors " height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_2.png" title="key color times orientation vectors " height="283" width="200" /></td>
 <td>
 <h3>4</h3>
 <p><code>...-mul[-2,-1]...</code></p>
@@ -76,7 +76,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_3.jpg" title="Normalized to -80,1" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_3.png" title="Normalized to -80,1" height="283" width="200" /></td>
 <td>
 <h3>5</h3>
 <p><code>...-compose_channels[-1] add -normalize[-1] -80,0...</code></p>
@@ -86,7 +86,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_5.jpg" title="Original Saturation" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_5.png" title="Original Saturation" height="283" width="200" /></td>
 <td>
 <h3>6</h3>
 <p><code>...-exp[-1]<br /></code></p>
@@ -94,7 +94,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_4.jpg" title="Color Key Map expotentiated" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_4.png" title="Color Key Map expotentiated" height="283" width="200" /></td>
 <td>
 <p></p>
 <h3>7</h3>
@@ -103,7 +103,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_orientation_bowl_6.jpg" title="Reassembled and back to RGB" height="283" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/orientation/bowl_6.png" title="Reassembled and back to RGB" height="283" width="200" /></td>
 <td>
 <p><code>...-reverse[-4,-2] -remove[-2] -append c -hsl2rgb</code></p>
 <p>We swap saturation maps and drop the original from the image stack, a housekeeping chore. We then -append the three gray scale maps together into one three-channel HSL image, which we move back into RGB space. Now we are home.</p>

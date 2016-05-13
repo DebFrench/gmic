@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-gradient_orientation</h1>
-<div id="FigureOne" style="float: left; width: 300px; height: 500px; border: none; padding: 5px;"><img src="img/_gradient_orientation_go-000.jpg" title="go-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" />
+<div id="FigureOne" style="float: left; width: 300px; height: 500px; border: none; padding: 5px;"><img src="http://www.particularart.com/static/media/uploads/command_reference/gradient_orientation/go-000.png" title="go-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" />
 <table style="text-align: center; width: 270px;" rules="all" class="table-striped" cols="3" border="1" cellspacing="0">
 <tbody></tbody>
 <colgroup><col span="3" width="33%" /></colgroup>
@@ -80,15 +80,15 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table table-striped" style="border-color: #808080; border-width: 1px; border-style: solid;" border="1" cellpadding="2">
 <tbody>
 <tr>
-<td width="256"><img src="img/_gradient_orientation_go-001.jpg" title="Murky Goudy 1911 Bookletter Apersand (go-001.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/gradient_orientation/go-001.png" title="Murky Goudy 1911 Bookletter Apersand (go-001.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>A murky Goudy 1911 Bookletter Ampersand slowly sinking into darkness. The green line marks scan line 160, which we graph at the end of the walkthrough.</td>
 </tr>
 <tr>
-<td width="256"><img src="img/_gradient_orientation_go-002.jpg" title="Gradients along image width and height. (go-002.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/gradient_orientation/go-002.png" title="Gradients along image width and height. (go-002.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>The gradient x component field, produced by executing <a target="_parent" href="http://www.particularart.com/tools-and-toys/gmic/command-guide/filtering/-gradient/">-gradient</a> x on the image in the previous panel.<br /> <br /> These data reflect the intensity changes along the width of the image. In keeping with -gradient's remit, we know how much the intensity of the previous image is changing horizontally by the grayscale level: not at all in the gray areas, trending positive in the white areas, trending negative in the dark areas.<br /> <br /> The red line demarks scanline 160 of this image.</td>
 </tr>
 <tr>
-<td width="256"><img src="img/_gradient_orientation_go-003.jpg" title="Gradients along image height. (go-003.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/gradient_orientation/go-003.png" title="Gradients along image height. (go-003.png)" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>The normalized gradient x component produced by -gradient_orientation 2.<br /> <br /> The normalization which this command does essentially throws information away. Gradient vectors normalized to unit length no longer tell us "how much". For some purposes, however, that is not a terrible loss. In this case, the omission of "how much" makes the orientation of the vector that much clearer. This image only shows the horizontal component of the unit vector. Here, gray means "not much either way in the horizontal orientation." Lighter means "trending to the right!" Darker means "trending to the left!"<br /> <br /> Because "how much" has been thrown out by the process of normalizing the gradient vector to unit length, changing trends along the horizontal orientation become manifestly clear. The sharp transitions in the image on the left coincide with those regions in the original image where the intensity is no longer growing lighter, but is now becoming darker. Finding that precise region in the original image is hard, as the original data are barely changing at all. It is somewhat clearer in the image that -gradient produces. Where the x component has been normalized, however, the trend change is manifestly obvious.<br /> <br /> The blue line demarks scan line 160, which we chart in the next panel.</td>
 </tr>
 <tr>

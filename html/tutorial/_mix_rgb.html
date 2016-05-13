@@ -17,7 +17,7 @@ hs.wrapperClassName = 'wide-border';
 
 <h1>-mix_rgb</h1>
 <p>This command mixes the channels of each pixel in an output image from its counterpart in an input image. Nine <em>transfer weights</em>, W<sub>&lt;in_chn&gt;&rarr;&lt;out_chn&gt;</sub>, govern the reconstitution, one for each pairing of an input channel to an output channel. The final value of each output channel arises from a weighted sum of the three input channels, illustrated in the following schematic:</p>
-<center><a target="_parent" href="img/_mix_rgb_mixrgb.jpg" class="highslide" onclick="return hs.expand(this)"><img class="img_block" src="img/_mix_rgb_mixrgb.jpg" style="margin: 3px; border: 0px solid #a0a0a0;" title="Mix RGB composition pipeline" height="300" width="400" /></a></center>
+<center><a target="_parent" href="img/_mix_rgb_mixrgb.jpg" class="highslide" onclick="return hs.expand(this)"><img class="img_block" src="http://www.particularart.com/static/media/uploads/mixrgb.png" style="margin: 3px; border: 0px solid #a0a0a0;" title="Mix RGB composition pipeline" height="300" width="400" /></a></center>
 <p>The format of the G'MIC command is:</p>
 <p><code>-mix_rgb Wrr,Wgr,Wbr,Wrg,Wgg,Wbg,Wrb,Wgb,Wbb</code></p>
 <p>where each parameter represents one weight and is a floating point numeral ranging from negative to positive infinity, The subscripts denote a particular input-output channel pair which the weight connects:</p>
@@ -115,8 +115,8 @@ hs.wrapperClassName = 'wide-border';
 <table class="table" rules="all" align="center" border="0" cellpadding="2">
 <tbody>
 <tr>
-<td width="256"><img src="img/_mix_rgb_test_rgb.jpg" style="margin: 3px;" title="RGB addive color test pattern" height="256" width="256" /></td>
-<td width="256"><img src="img/_mix_rgb_test_rgb_out.jpg" style="margin: 3px;" title="Transformed Test Pattern" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/test_rgb.png" style="margin: 3px;" title="RGB addive color test pattern" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/test_rgb_out.png" style="margin: 3px;" title="Transformed Test Pattern" height="256" width="256" /></td>
 </tr>
 <tr>
 <td>Input test Pattern</td>
@@ -133,17 +133,17 @@ hs.wrapperClassName = 'wide-border';
 <tbody>
 <tr>
 <td>Identity Matrix: W<sub>rr</sub>=W<sub>gg</sub>=W<sub>bb</sub>=1.0. All other weights are zero. Obviously the identity matrix leaves the test image unchanged.</td>
-<td width="256"><img alt="Color wheel " src="img/_mix_rgb_cwheel.jpg" style="margin: 3px; border: 0px solid #808080;" title="Identity Matrix " height="256" width="256" /></td>
+<td width="256"><img alt="Color wheel " src="http://www.particularart.com/static/media/uploads/cwheel.png" style="margin: 3px; border: 0px solid #808080;" title="Identity Matrix " height="256" width="256" /></td>
 </tr>
 <tr>
 <td>Scale, Green Filter. W<sub>gg</sub>=1.0. All other weights are zero. One may generally manipulate W<sub>rr</sub>, W<sub>gg</sub>, and W<sub>bb</sub> to change the color balance, keeping the off-diagonal weights to zero.</td>
-<td width="256"><img src="img/_mix_rgb_cwheel_02.jpg" style="margin: 3px; border: 0px solid #808080;" title="Green Channel Filter" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/cwheel_02.png" style="margin: 3px; border: 0px solid #808080;" title="Green Channel Filter" height="256" width="256" /></td>
 </tr>
 <tr>
 <td>
 <p>Rotation of 180&deg; around the red axis: W<sub>rr</sub>=1.0, W<sub>gg</sub>=W<sub>bb</sub>=-1.0. All other weights are zero. This weighting introduces color values less than zero, as pure green and pure blue both equal negative one. Normalization repositions black to mid-gray. negative colors transform under normalization to darker shades.</p>
 </td>
-<td width="256"><img src="img/_mix_rgb_cwheel_01.jpg" style="margin: 3px; border: 0px solid #808080;" title="180 degree Rotation around red axis" height="256" width="256" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/cwheel_01.png" style="margin: 3px; border: 0px solid #808080;" title="180 degree Rotation around red axis" height="256" width="256" /></td>
 </tr>
 </tbody>
 </table>
@@ -152,9 +152,9 @@ hs.wrapperClassName = 'wide-border';
 <p>In both runs, '-mix_rgb' computed the pixel-level changes. A front-end script translated rotation axes and degrees of turning into linear maps. Details follow.</p>
 <p>We imagine that in color space, the hue we pick and black, an implied anchor at the origin, establish an axis of rotation. Colors on this axis&nbsp;&ndash; the hub &ndash; will not change under rotations. The anchor color, darker versions of it running toward black, and lighter versions running out to infinity, have no radial distance from the hub, cannot move under any of its rotations, and thus are "preserved". On the other hand, off-hub colors have positive radial distances and, like points on a wheel rim, will move, depending on the rotation angle of the hub, its direction, clockwise or counterclockwise, and the radial distance of the color from the hub. Colors very close to the hub, and closely related to the anchor color, hardly move at all even under large angles of rotation. Conversely, colors far removed from the hub, and very much unlike the anchor color, change a great deal, under even small rotations.</p>
 <p>The nine weights we feed to '-mix_rgb' constitutes a linear map, a general means of translating colors from one spatial configuration to another. '-mix_rgb' can visit every pixel in an image and apply such a map; for our selective color adjustor, it is the computational backend. To connect our notions of hubs and rotations to the linear maps used by '-mix_rgb', we engage <a target="_parent" href="http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodriques' Rotation Formula</a>:</p>
-<p><img src="img/_mix_rgb_rodriques.jpg" title="Rodriques Rotation Formula" class="img_block" style="margin: 3px;" height="30" width="255" /></p>
-<p><strong><em>W</em></strong> is the 3x3 matrix of weights to be used by '-mix_rgb'. &theta; represents the angle of rotation and <strong>u</strong> represents the normalized color vector, that is, the given color vector <strong>c</strong> scaled by its length |<strong>c</strong>| so that the results,<em> <strong>u</strong></em>, has a length of 1.0:<em><strong><img src="img/_mix_rgb_coverc.jpg" title="Unit vector" class="img_block" style="margin: 5px; vertical-align: middle;" height="60" width="60" /></strong></em></p>
-<p><strong><em>I</em></strong> is the 3x3 identity matrix. The cross product of <strong>u</strong> is<img style="vertical-align: middle;" src="img/_mix_rgb_cross.jpg" title="Cross Product of u with itself" height="83" width="174" />and&nbsp;the tensor product of<em><strong> u</strong></em> is <img src="img/_mix_rgb_tensor.jpg" title="Tensor Product of u " style="vertical-align: middle;" height="83" width="174" />. This formulation is for right handed coordinate systems, with positive rotations being counterclockwise. Changing the sign of the second term converts the formular for left handed systems.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/rodriques.png" title="Rodriques Rotation Formula" class="img_block" style="margin: 3px;" height="30" width="255" /></p>
+<p><strong><em>W</em></strong> is the 3x3 matrix of weights to be used by '-mix_rgb'. &theta; represents the angle of rotation and <strong>u</strong> represents the normalized color vector, that is, the given color vector <strong>c</strong> scaled by its length |<strong>c</strong>| so that the results,<em> <strong>u</strong></em>, has a length of 1.0:<em><strong><img src="http://www.particularart.com/static/media/uploads/coverc.png" title="Unit vector" class="img_block" style="margin: 5px; vertical-align: middle;" height="60" width="60" /></strong></em></p>
+<p><strong><em>I</em></strong> is the 3x3 identity matrix. The cross product of <strong>u</strong> is<img style="vertical-align: middle;" src="http://www.particularart.com/static/media/uploads/cross.png" title="Cross Product of u with itself" height="83" width="174" />and&nbsp;the tensor product of<em><strong> u</strong></em> is <img src="http://www.particularart.com/static/media/uploads/tensor.png" title="Tensor Product of u " style="vertical-align: middle;" height="83" width="174" />. This formulation is for right handed coordinate systems, with positive rotations being counterclockwise. Changing the sign of the second term converts the formular for left handed systems.</p>
 <p>To produce the animation, we picked a color <em><strong>c </strong></em>and normalized it, precomputing the cross and tensor matrices. We then stepped through 360&deg; with Rodriques Formula at 0.4&deg; increments for thirty seconds of footage -&nbsp; 900 linear maps fed sequentially to -mix_rgb. Gory details can be found in these <a target="_parent" href="http://www.particularart.com/static/media/uploads/demoanim.zip">Python reference scripts</a>, which depend on <a target="_parent" title="Numpy Scientific Computing" href="http://www.numpy.org/">numpy,</a> <a target="_parent" title="Python bindings for Cairo, 2D rendering" href="http://cairographics.org/pycairo/">pycairo</a> and <a target="_parent" title="Pango Text Rendering" href="http://cairographics.org/pycairo_pango/">pango</a>. The latter two may be dropped if there is no need to render progress text (Degrees: xxxx). &nbsp;</p>
 <p><em>Garry Osgood</em></p>
 

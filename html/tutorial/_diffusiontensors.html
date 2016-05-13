@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-diffusiontensors</h1>
-<p><img src="img/_diffusiontensors_init-000.jpg" title="init-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300px" width="300px" />This command produces <a target="_parent" href="dyidiffusion_eigen-thingys.shtml#structure_and_diffusion_tensors"><i>tensor fields</i></a> from noisy input images. These encode <a target="_parent" href="_smooth.shtml#anisotropic_smoothing"><i>smoothing geometries</i></a> for the corrupted images, each field having the same dimensions as the input image. The tensors comprising each field are in a one-to-one correspondence with the pixels of the input image.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/init-000.png" title="init-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300px" width="300px" />This command produces <a target="_parent" href="dyidiffusion_eigen-thingys.shtml#structure_and_diffusion_tensors"><i>tensor fields</i></a> from noisy input images. These encode <a target="_parent" href="_smooth.shtml#anisotropic_smoothing"><i>smoothing geometries</i></a> for the corrupted images, each field having the same dimensions as the input image. The tensors comprising each field are in a one-to-one correspondence with the pixels of the input image.</p>
 <p>The command implements the "anisotropic smoothing" operation usually attributed to<a target="_parent" href="_smooth.shtml"> -smooth</a>, one that strives to recover corrupted images (see the example on the left). Typically, -smooth calls the internal implementation of -diffusiontensors when it has not otherwise been given a particular smoothing geometry.</p>
 <p>A script author usually calls -diffusiontensors when she wishes to modify smoothing geometries in particular ways. See &ldquo;<a target="_parent" href="dyidiffusion_tensors-for-the-tonsorially-challenged.shtml"><i>Tensors for the Tonsorially Challenged</i></a>&rdquo; in the Cookbook for an example.</p>
 <p>Belying a close relationship, the parameter list for -diffusiontensors echoes many of -smooth's. Indeed, -smooth essentially passes such parameters unchanged to its internal copy of -diffusiontensors. The command has the following format:</p>
@@ -84,7 +84,7 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table  table-striped" style="border-color: #808080; border-width: 1px;" border="1">
 <tbody>
 <tr>
-<td width="256"><img src="img/_diffusiontensors_dift-000.jpg" title="dift-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-000.png" title="dift-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
 <td>
 <p class="western">Original picture. We mark four reference pixels. From top to bottom:</p>
 <ol>
@@ -103,7 +103,7 @@ hs.wrapperClassName = 'wide-border';
 </ol></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_diffusiontensors_dift-001.jpg" title="dift-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-001.png" title="dift-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
 <td>
 <p>The same picture, now corrupted with noise at a variety of scales. We apply the <a target="_parent" href="_plasma.shtml">-plasma</a> command with iterations through two scales, dependent perturbations (alpha) of seventeen and scale independent perturbations (beta) of fourteen. We overlay a Gaussian noise with a variance of thirty.</p>
 <p>Our trial -diffusiontensor parameters are:</p>
@@ -117,7 +117,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="img/_diffusiontensors_dift-002.jpg" title="dift-002.png" height="300px" width="300px" /></td>
+<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-002.png" title="dift-002.png" height="300px" width="300px" /></td>
 <td>
 <p>-diffusiontensors calls <a target="_parent" href="_structuretensors.shtml">-structuretensors</a> to locate the strength and orientation of image features.</p>
 <ol>
@@ -141,7 +141,7 @@ hs.wrapperClassName = 'wide-border';
 </ol></td>
 </tr>
 <tr>
-<td width="256"><img style="margin: 3px; border: 0px solid #808080k;" class="img_block" src="img/_diffusiontensors_dift-003.jpg" title="dift-003.png" height="300px" width="300px" /></td>
+<td width="256"><img style="margin: 3px; border: 0px solid #808080k;" class="img_block" src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-003.png" title="dift-003.png" height="300px" width="300px" /></td>
 <td>
 <p>While a compact representation, tensors do not lend themselves to easy visualization. Here, we solve for their eigenvalues and eigenvectors and overlay the data onto their structure tensor field locales. In each case, the gradient vector is the larger of the two and is directed along the most rapid change in intensity; the companion contour vector is barely visible at this scale. As noted in the text, the magnitude of the difference between &lambda;<sub>+</sub> and &lambda;<sub>\u2500 </sub>signal edges, with the contour vector running along it and the gradient vector crossing it.</p>
 <ol><ol>
@@ -164,7 +164,7 @@ hs.wrapperClassName = 'wide-border';
 </ol></ol></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_diffusiontensors_dift-004.jpg" title="dift-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-004.png" title="dift-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300px" width="300px" /></td>
 <td>
 <p>Given structure tensors and command parameters, we compute the smoothing magnitudes for the four points, harnessing the relationships that are given in the previous section. These magnitudes scale unit vectors with the same orientation as the input structure tensors and form <i>smoothing vectors.</i></p>
 <p>The diagrams on the left depict the smoothing vectors at each of the reference points and are drawn at a larger scale than the previous diagram, approximately at the ratio of 2,421:1.</p>
@@ -186,7 +186,7 @@ hs.wrapperClassName = 'wide-border';
 </ol></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_diffusiontensors_dift-005.jpg" title="dift-005.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-005.png" title="dift-005.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>
 <p>-diffusiontensors calls -<a target="_parent" href="_eigen2tensor.shtml">eigen2tensors</a>. This command recomposes tensor fields from image pairs. The pair consists of a two channel image of eigenvalues and a two channel image of unit vectors; it produces a single tensor field encoding a smoothing geometry. This is passed as a parameter to -smooth.</p>
 <p>In the present case, the two channel eigenvalue image contains the smoothing values; the unit vectors have been carried forward unchanged from the tensor field produced by -structuretensors. This operation gives rise to diffusion tensors for each of the reference points:</p>
@@ -198,7 +198,7 @@ hs.wrapperClassName = 'wide-border';
 </ol></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_diffusiontensors_dift-006.jpg" title="dift-006.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-006.png" title="dift-006.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /></td>
 <td>
 <p>The -smooth command blurs images through diffusion under the control of a given tensor field. In a sense, this command places over each pixel in the image an elliptic diffusion kernel, taken from the tensor field and which has been tailored to the pixel's immediate environment by -diffusiontensors. This gives rise to three broad behaviors:</p>
 <ol>
@@ -220,7 +220,7 @@ hs.wrapperClassName = 'wide-border';
 </table>
 <p></p>
 <p>Neither -diffusiontensors nor -smooth can conjure image information wholly lost to noise. We harnessed -plasma to corrupt the image, which blurs as well as perturbs, so, from a spectral point of view, part of the image was destroyed by a low pass filter. Gone irretrievably are sharp corners and edges.</p>
-<p><img src="img/_diffusiontensors_dift-007.jpg" title="dift-007.png" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="400" />Within those limitations, -diffusiontensors recovered almost all information still manifest in the image. We could filter out most of the salt-and-pepper racket and recover areas of constant tone. Our reconstructed image looks like a somewhat blurred version of the original, the variance, one speculates, not too different from the blurring component in -plasma.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/diffusiontensors/dift-007.png" title="dift-007.png" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="400" />Within those limitations, -diffusiontensors recovered almost all information still manifest in the image. We could filter out most of the salt-and-pepper racket and recover areas of constant tone. Our reconstructed image looks like a somewhat blurred version of the original, the variance, one speculates, not too different from the blurring component in -plasma.</p>
 <p>Comparing a magnified bit of the output with the pristine original illustrates some of the inner workings of -diffusiontensor and -smooth. The edges of the smoothed image seem to have shadowy, thin lines, quite unlike the softer regions in the interiors of shapes. These are footprints of very elliptical smoothing kernels, diffusing their pixels along thin, edge hugging paths. If the image hadn't been so terribly shot up with noise, these artifacts would be not nearly so manifest. Had we pushed the anisotropy parameter near its limits of one, these artifacts would start to look a little bit like curling hair strands; often these look quite lovely.</p>
 <p><em>Garry Osgood</em></p>
 

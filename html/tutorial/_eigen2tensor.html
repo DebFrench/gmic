@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-eigen2tensor</h1>
-<p><img src="img/_eigen2tensor_frntswrl.jpg" title="Pattern made by a conjured diffusion tensor field" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />The -eigen2tensor command computes <em>tensor fields</em> for client commands like <a target="_parent" href="_smooth.shtml">-smooth</a>, given an ordered pair of input datasets representing vector lengths and orientations (<a target="_parent" href="dyidiffusion_eigenvalues-and-eigenvectors.shtml"> eigenvalues and eigenvectors</a> ). Elements of these fields correspond with pixels of some initial operand image and typically quantify various dynamics in the locales of those pixels.</p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/frntswrl.png" title="Pattern made by a conjured diffusion tensor field" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />The -eigen2tensor command computes <em>tensor fields</em> for client commands like <a target="_parent" href="_smooth.shtml">-smooth</a>, given an ordered pair of input datasets representing vector lengths and orientations (<a target="_parent" href="dyidiffusion_eigenvalues-and-eigenvectors.shtml"> eigenvalues and eigenvectors</a> ). Elements of these fields correspond with pixels of some initial operand image and typically quantify various dynamics in the locales of those pixels.</p>
 <p>A related G'MIC command, <a target="_parent" href="_eigen.shtml">-eigen</a>, performs the&nbsp;complementary operation of extracting eigenvalue - eigenvector pairs from tensor fields. -eigen and -eigen2tensor essentially switch between two representations of an image's intensity dynamics: tensors on the one hand and eigenvalue - eigenvector datasets on the other.</p>
 <p>The command takes no parameters but requires that the selected images form ordered datasets of eigenvalue - eigenvector pairs.</p>
 <h2 info="TensorFields">Tensor Fields</h2>
@@ -47,8 +47,8 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic -srand 35195 \<br /> -repeat 2 \<br />&nbsp;&nbsp; 6,6,1,1,'2*u-1' \<br />&nbsp;&nbsp; -resize2dx[-1] 300,5 \<br />&nbsp;&nbsp; -cut[-1] -0.75,0.75 \<br />&nbsp;&nbsp; -normalize 0,1 \<br /> -done \<br /></tt></td>
 </tr>
 <tr>
-<td width="256"><p><img src="img/_eigen2tensor_ette-000.jpg" alt="Random EigenOne" title="ette-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /> <strong>1a.&nbsp;EigenOne</strong></p>
-<p><img src="img/_eigen2tensor_ette-001.jpg" alt="Random EigenTwo" title="ette-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><strong>1b.&nbsp;EigenTwo</strong></p>
+<td width="256"><p><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-000.png" alt="Random EigenOne" title="ette-000.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /> <strong>1a.&nbsp;EigenOne</strong></p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-001.png" alt="Random EigenTwo" title="ette-001.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><strong>1b.&nbsp;EigenTwo</strong></p>
 <p></p>
 </td>
 <td>
@@ -60,14 +60,14 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>8,8,1,1,'2*u-1' \<br /> -resize2dx[-1] 300,5 \<br /> -normalize[-1] -1,1 \<br /></tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_eigen2tensor_ette-002.jpg" alt="Random Sine Dataset" title="ette-002.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /> <strong>2.&nbsp;Cosine</strong></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-002.png" alt="Random Sine Dataset" title="ette-002.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /> <strong>2.&nbsp;Cosine</strong></td>
 <td>Next we conjure <strong>Cosine</strong> from a similarly randomized field, but we're working at the slightly finer resolution of 8 &times; 8., another heuristic. The range of orientations that are available to us run from zero to &pi;, correspondingly <strong>Cosine</strong> runs from -1 to 1. If you are wondering about the half-circle range, we'll confess at this juncture that we are making a fake diffusion tensor field, one that we will feed to -smooth. Diffusing an image from northeast to southwest is pretty much the same as diffusing an image from southwest to northeast. The scrub marks are parallel, no matter which end the arrow head sits, so there'is no call for the complete circular range.</td>
 </tr>
 <tr>
 <td colspan="2"><tt>--sqr[-1] \<br /> -sub[-1] 1 \<br /> -mul[-1] -1 \<br /> -sqrt[-1] \<br /></tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/_eigen2tensor_ette-003.jpg" title="ette-003.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /><strong>3.&nbsp;Sine</strong></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-003.png" title="ette-003.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br /><strong>3.&nbsp;Sine</strong></td>
 <td>
 <p>We derive <b>Sine</b> from <b>Cosine</b> via eveyrone's favorite trigometric identity: cos<sup>2</sup><em>u</em> + sin<sup>2</sup><em>u</em> = 1; though the computation represented in the pipeline looks more like this: sin u =&nbsp;&radic;(1 - cos<sup style="font-size: x-small;">2</sup>u) The<strong> Sine</strong> of all possible orientations of eigenvectors range from 0 to 1, corresponding to the angular range of the half circle: 0&nbsp;&hellip; &pi;.</p>
 <p>We now have<strong> EigenOne, EigenTwo, Cosine</strong> and<strong> Sine</strong> conjured out of the Aether, image dynamics which correspond to no image we know about. <strong><br /></strong></p>
@@ -77,8 +77,8 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>-append[-4,-3] c \<br />-append[-2,-1] c \<br /></tt></td>
 </tr>
 <tr>
-<td width="256"><p><img src="img/_eigen2tensor_ette-004.jpg" alt="EigenOne + EigenTwo" title="ette-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><strong>4a.&nbsp;EigenOne (channel 0: Red) + EigenTwo (Channel 1: Green)</strong></p>
-<p><img src="img/_eigen2tensor_ette-005.jpg" alt="Cosine (Channel 0: Red) + Sine (Channel 1: Green)" title="ette-005.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /> <strong>4b.&nbsp;Cosine (Channel 0: Red) + Sine (Channel 1: Green)</strong></p>
+<td width="256"><p><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-004.png" alt="EigenOne + EigenTwo" title="ette-004.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><strong>4a.&nbsp;EigenOne (channel 0: Red) + EigenTwo (Channel 1: Green)</strong></p>
+<p><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-005.png" alt="Cosine (Channel 0: Red) + Sine (Channel 1: Green)" title="ette-005.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /> <strong>4b.&nbsp;Cosine (Channel 0: Red) + Sine (Channel 1: Green)</strong></p>
 </td>
 <td>
 <p>Here we assemble our randomly derived tensor field. We append <strong>EigenOne</strong> and <strong>EigenTwo</strong> along the spectral image dimension, ditto <strong>Cosine</strong> and <strong>Sine</strong>. This leaves the eigenvalue/eigenvector dataset pair that -eigen2tensor expects to find on the image list.</p>
@@ -88,7 +88,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>-eigen2tensor[-2,-1] \<br />100%,100%,1,3 \<br />-noise[-1] 8,2 \<br />-dilate_circ 3 \<br />-rgb2hsl[-1] \<br />-split[-1] c \<br />-mul[-3] 0.5 \<br />-add[-3] 135.0 \<br />-append[-3,-2,-1] c \<br />-hsl2rgb[-1] \<br />-normalize[-1] 0,255 </tt>\</td>
 </tr>
 <tr>
-<td width="256"><img src="img/_eigen2tensor_ette-006.jpg" alt="Tensor Field" title="ette-006.png" class="img_block" height="300" width="300" /><br />5a.&nbsp;Tensor field produced from<strong> EigenOne,</strong> <strong>EigenTwo</strong>, <strong>Cosine</strong> and <strong>Sine</strong>.<br /> <img src="img/_eigen2tensor_ette-007.jpg" title="ette-007.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br />5b.&nbsp;Emergence of <strong>PrettyPicture</strong> a. k. a. Noise</td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-006.png" alt="Tensor Field" title="ette-006.png" class="img_block" height="300" width="300" /><br />5a.&nbsp;Tensor field produced from<strong> EigenOne,</strong> <strong>EigenTwo</strong>, <strong>Cosine</strong> and <strong>Sine</strong>.<br /> <img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-007.png" title="ette-007.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="300" /><br />5b.&nbsp;Emergence of <strong>PrettyPicture</strong> a. k. a. Noise</td>
 <td>
 <p>Following the invocation of -eigen2tensor, we have a tensor field dataset that represents a smoothing geometry.</p>
 <p>We have no idea what image the smoothing geometry is for, but, when in pursuit of a Higher Art, We don't sweat the details. No picture? Well, heck, there is always noise.</p>
@@ -103,7 +103,7 @@ hs.wrapperClassName = 'wide-border';
 </tr>
 <tr>
 <td>
-<p><span class="internal"><img src="img/_eigen2tensor_ette-008.jpg" title="ette-008.png" class="img_block" style="margin: 3px; border: 0px solid 808080;" height="300" width="300" /><strong>6.&nbsp;PrettyPicture</strong>, now smoothed.</span></p>
+<p><span class="internal"><img src="http://www.particularart.com/static/media/uploads/command_reference/eigen2tensor/ette-008.png" title="ette-008.png" class="img_block" style="margin: 3px; border: 0px solid 808080;" height="300" width="300" /><strong>6.&nbsp;PrettyPicture</strong>, now smoothed.</span></p>
 </td>
 <td>
 <p>Our <strong>PrettyPicture</strong> after three passes using -smooth.</p>

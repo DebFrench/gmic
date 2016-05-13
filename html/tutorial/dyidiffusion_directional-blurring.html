@@ -23,7 +23,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt> gmic <span style="color: #9a3000;">-srand 78124</span> \<br /> street.png \<br /> <span style="color: #9a3000;">'(1^0)' \<br /> -resize[-1] [-2],[-2],[-1],[-1],1 \<br /> 5,5,1,2,'2*u-1' \<br /> -resize[-1] [-3],[-3],[-1],[-1],5 \<br /> -orientation[-1]</span> \<br /> -eigen2tensor[-2,-1] \<br /> -repeat 3 \<br /> -smooth[-2] [-1],50 \<br /> -done \<br /> -rm[-1] </tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_directional-blurring_dyid-13.jpg" title="dyid-13.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-13.png" title="dyid-13.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></td>
 <td>At first glance, it may not be clear how we went about setting <b>EigenOne, EigenTwo, Cosine and Sine</b>.<ol>
 <li>For the eigenvalues, we started with a one pixel, two channel image with <b>EigenOne</b> set to constant one and <b>EigenTwo</b> set to constant zero. <code>'(1^0)'</code>. We resized this to the input dimensions but did not bother to split the channels out as they are set to the way we would like to have them and are ready for -eigen2tensor.</li>
 <li>
@@ -45,7 +45,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic \<br /> -srand 78124 \<br /> street.png \<br /> '(1^0)' \<br /> -resize[-1] [-2],[-2],[-1],[-1],1 \<br /> <span style="color: #9a3000;">msk.png \<br /> -normalize[-1] 0,1 \<br /> -mul[-2,-1]</span> \<br /> 5,5,1,2,'2*u-1' \<br /> -resize[-1] [-3],[-3],[-1],[-1],5 \<br /> -orientation[-1] \<br /> -eigen2tensor[-2,-1] \<br /> -repeat 3 \<br /> -smooth[-2] [-1],50 \<br /> -done \<br /> -rm[-1]</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_directional-blurring_dyid-14.jpg" title="dyid-14.png" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-14.png" title="dyid-14.png" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></td>
 <td>Despite utter chaos, some people Just Know How To Keep On Shopping.<br /> We introduce a mask (<tt>msk.png</tt>) cut to the outline of the woman in the foreground. Nothing complicated. The woman is zero bits, everything else is 255. It sets a region in the <b>EigenOne</b> to zero. Concomitantly, <b>EigenTwo</b> is entirely zero, so the region occupied by our shopper has both <strong>EigenOne</strong> and <strong>EigenTwo</strong> set to zero, and she is not blurred at all.<br /> So, generally, when both eigenvalues are zero blurring turns off.<br /> And, more generally, we may vary the overall degree of blurring by varying <b>EigenOne</b> and <b>EigenTwo</b>. To the extent they differ, directional blurring take place.</td>
 </tr>
 </tbody>
@@ -59,7 +59,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic -srand <span style="color: #9a3000;">78924</span> <br /> street.png <br /> '(1^0)' <br /> -resize[-1] [-2],[-2],[-1],[-1],1 <br /> <span style="color: #9a3000;">--luminance[0] <br /> -apply_curve[-1] 0.4,0,0,63,64,127,255,191,64,255,0 </span><br /> -normalize[-1] 0,1 <br /> -mul[-2,-1] <br /> 5,5,1,2,'2*u-1' <br /> -resize[-1] [-3],[-3],[-1],[-1],5 <br /> -orientation[-1] <br /> -eigen2tensor[-2,-1] <br /> -repeat 3 <br /> -smooth[-2] [-1],50 <br /> -done <br /> -rm[-1] <br /> </tt></td>
 </tr>
 <tr>
-<td width="256"><p><img src="img/dyidiffusion_directional-blurring_dyid-15.jpg" title="dyid-15.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></p>
+<td width="256"><p><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-15.png" title="dyid-15.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="283" width="400" /></p>
 </td>
 <td>The deal here is we took the luminance of the input image and then made a gray scale mask where the midtones map to white, but shadows and highlights map to black, the digerati's classic posterization curve. The tool for this is <a target="_parent" href="http://gmic.eu/reference.shtml#apply_curve">-apply_curve</a>, G'MIC's equivalent to GIMP's curve tool. We used this mask as a multiplier against <b>EigenOne.</b> <b>EigenTwo</b> is constant zero, so we are dealing with skinny blurring ellipses throughout. This gives rise to the hairlike swirl.<br /> The effect is something like a selective blur, with the highlights and shadows holding structure while midtones form swirling banners.</td>
 </tr>

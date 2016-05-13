@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1 id="KMeans">K-Means</h1>
-<p><img src="img/gmic-color-mapping_k-means-algorithm_cm_014.jpg" alt="Dover's Hill, Cotswold, United Kingdom: Progressively Decimated" title="cm-014" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="900" height="300" /></p>
+<p><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_014.png" alt="Dover's Hill, Cotswold, United Kingdom: Progressively Decimated" title="cm-014" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="900" height="300" /></p>
 <p style="font-size: x-small; text-align: right;"><i>Dover's Hill progressively decimated, near <a target="_parent" href="https://en.wikipedia.org/wiki/Chipping_Campden" title="Chipping Campden">Chipping Campden</a>, <a target="_parent" href="https://en.wikipedia.org/wiki/Gloucestershire" title="Gloucestershire">Gloucestershire</a>, The Cotswold, UK <a target="_parent" class="extern" href="http://www.flickr.com/people/jtrickey/">James Trickey</a> Wikimedia Commons</i></p>
 <p>K-means finds the dominant colors in an image through an iterative corrective process. In practice, users specify the number of colors as a parameter, often without any reference whatsoever to the statistical properties of the image. They have the desire (or are constrained because of technical reasons) to reproduce an image using a fixed (and usually small) number of colors. They can choose the colors, and want to choose the <b><i>best</i></b> ones. K-means will find quite good ones, but finding the "best" is currently an outstanding research problem.</p>
 <p>Users might provide a palette of colors as initial hints. The hints could be quite good or really bad; the k-means algorithm (almost!) always converges to a good solution, and (almost!) always better than any hints that users may have provided beforehand. Bad hints just take longer &mdash; maybe a lot longer &mdash; to converge. As used in the G'MIC <a target="_parent" href="/admin/pages/richtextpage/843/htt/tools-and-toys/gmic/command-guide/color-manipulation/-colormap"><tt>-colormap</tt></a> command, the k-means algorithm gets pretty good hints from an initial run of the <a target="_parent" href="gmic-color-mapping_median-cut-algorithm.shtml">median-cut algorithm</a>.</p>
@@ -66,7 +66,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_013.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmic-color-mapping_k-means-algorithm_cm_013_s.jpg" alt="normalization doesn't change relative distance relationships" title="cm-013-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="150" /></a></td>
+<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_013.jpg" class="highslide" onclick="return hs.expand(this)"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_013_s.png" alt="normalization doesn't change relative distance relationships" title="cm-013-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="150" /></a></td>
 <td>
 <pre>    m={im} M={iM} 
    -normalize. 0,255
@@ -86,7 +86,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td>&nbsp;<a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_006.jpg" class="highslide" onclick="return hs.expand(this)"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="img/gmic-color-mapping_k-means-algorithm_cm_006_s.jpg" alt="Histogram and some estimated swatches" title="cm-006-s" width="300" height="194" /></a>
+<td>&nbsp;<a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_006.jpg" class="highslide" onclick="return hs.expand(this)"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_006_s.png" alt="Histogram and some estimated swatches" title="cm-006-s" width="300" height="194" /></a>
 <p style="text-align: center;"><i>Illustration 1</i></p>
 </td>
 <td>
@@ -110,7 +110,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td width="256"><img src="img/gmic-color-mapping_k-means-algorithm_cm_008_s.jpg" title="cm-008-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="45" />
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_008_s.png" title="cm-008-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="45" />
 <p align="center"><i>Illustration 2: Image channel, dimensioned to a one pixel row ([0]), and the presumed optimum palette ([1]). Only one channel is depicted. </i></p>
 </td>
 <td>
@@ -135,7 +135,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td><a target="_parent" href="img/gmic-color-mapping_k-means-algorithm_cm_009.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmic-color-mapping_k-means-algorithm_cm_009_s.jpg" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="135" /> </a>
+<td><a target="_parent" href="img/gmic-color-mapping_k-means-algorithm_cm_009.jpg" class="highslide" onclick="return hs.expand(this)"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_009_s.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="135" /> </a>
 <p style="text-align: center;" id="Frame4|frame"><i>Illustration 3: The top row is effectively a series of four histograms, one for each swatch. Each pixel represents a histogram bin containing a count of pixels tagged with a particular swatch ID and having a particular luminance value. These bins are sorted first by swatch ID, then by counts for particular luminance values. Middle: one ramp for each swatch ID. Ramp steps are multiplied pixel-wise with the top row histogram bins to produce the bottom row, luminance values weighted by histogram counts. The average of these weighted values is that which </i>should<i> be associated with the swatch ID, based as it is on actual population assessments. Of course, these averages may differ from those comprising the current palette.</i></p>
 </td>
 <td>
@@ -172,7 +172,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_010.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmic-color-mapping_k-means-algorithm_cm_010_s.jpg" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="152" /></a><br />
+<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_010.jpg" class="highslide" onclick="return hs.expand(this)"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_010_s.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="152" /></a><br />
 <p style="text-align: center;" id="Frame5|frame"><i>Illustration 4: The top row is the palette that <tt>-index</tt> used to group pixels by swatch IDs. The bottom row has the average luminance values found those groups by one iteration of the k-means algorithm. The difference indicates that the initial palette wasn't exactly correct.</i></p>
 </td>
 <td>
@@ -212,7 +212,7 @@ hs.wrapperClassName = 'wide-border';
 <table style="width: 100%;"><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_011.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmic-color-mapping_k-means-algorithm_cm_011_s.jpg" title="cm-011-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="194" /></a>
+<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_011.jpg" class="highslide" onclick="return hs.expand(this)"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_011_s.png" title="cm-011-s" class="img_block" style="margin: 3px; border: 0px solid #808080;" width="300" height="194" /></a>
 <p style="text-align: center;" id="Frame6|frame"><i>Illustration 5: (Compare also with <a target="_parent" class="intern" href="#Frame7|frame">Illustration 6</a>), superimposed over the histogram of a channel of the original image are the channel values of swatches of successive palettes, converging toward a solution. Iterations read from bottom to top; the initial palette is at the bottom, marked with iteration 0, the solution appears at the top, occurring 25 iterations later. Vertical lines descending from the plots locate the swatches in the histogram. The dark end of the histogram and the darkest swatches are on the left, the lightest on the right. To a lesser and greater extent, the two lightest swatches seemed initially to converge on a light solution, then, around iteration 9, switch directions and commenced converging on a darker solution, reaching it sixteen iterations later.</i></p>
 </td>
 <td>
@@ -245,7 +245,7 @@ hs.wrapperClassName = 'wide-border';
 <table><colgroup><col width="47%" /> <col width="53%" /> </colgroup>
 <tbody>
 <tr>
-<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_012.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmic-color-mapping_k-means-algorithm_cm_012_s.jpg" title="cm-012-s" class="img_block" width="300" height="194" /></a><br />
+<td><a target="_parent" class="intern" href="img/gmic-color-mapping_k-means-algorithm_cm_012.jpg" class="highslide" onclick="return hs.expand(this)"><img src="http://www.particularart.com/static/media/uploads/technotes/colormap/cm_012_s.png" title="cm-012-s" class="img_block" width="300" height="194" /></a><br />
 <p style="text-align: center;" id="Frame7|frame"><i>Illustration 6: Differences of successive palettes, beginning with the not especially well matching palette from the start of the walk through. Convergence of the k-means algorithm is almost always certain, but not necessarily steady and sometimes exhibiting a kind of damped oscillation between two solutions. Here, with our palette, differences dropped exponentially in five iterations from a high of nearly 25 to a low of about 0.6 &ndash; and then became stuck for five more iterations, actually losing ground. It broke through to a new solution at the tenth iteration and converged slowly and steadily for the next fifteen steps.</i></p>
 </td>
 <td>

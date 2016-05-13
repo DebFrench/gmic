@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>-select_color</h1>
-<p><img title="Balloons over Ch&acirc;teau-d&rsquo;&OElig;x, Switzerland" src="img/_select_color_balloon.jpg" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />This command finds pixels which more-or-less match a reference color, according to a given tolerance, returning a single channel, bi-value image (1, 0 or 'True', 'False') where unitary pixels ('True') indicate that the corresponding pixel in the original image is within the given the tolerance.</p>
+<p><img title="Balloons over Ch&acirc;teau-d&rsquo;&OElig;x, Switzerland" src="http://www.particularart.com/static/media/uploads/command_reference/select_color/balloon.png" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />This command finds pixels which more-or-less match a reference color, according to a given tolerance, returning a single channel, bi-value image (1, 0 or 'True', 'False') where unitary pixels ('True') indicate that the corresponding pixel in the original image is within the given the tolerance.</p>
 <p>The graphic on the far left depicts balloons over Ch&acirc;teau-d&rsquo;&OElig;x in the canton of Vaud, Switzerland, and is an eight bit, unsigned integer RGB image. The command <code>-select_color[-1] 20%,230,233,147</code> identifies a pale yellow reference color similar to the top half of the middle balloon. The near-left image shows the output of the command; White identifies pixels with colors within a twenty percent range of the specified color, the given tolerance. Black identifies pixels outside this range, with colors too unlike the pale yellow to merit consideration.</p>
 <p>The <a target="_parent" href="_distance.shtml">-distance</a> command gives an example of using -select_color. See "Application: Modifying a Warning Image" in that article. Also, see the Theory section below.</p>
 <p>The format of the command is:</p>
@@ -31,7 +31,7 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table table-striped" style="border-color: #808080; border-width: 0px;" border="0" lang="en_US">
 <tbody>
 <tr>
-<td width="256"><img src="img/_select_color_flower_00.jpg" title="An RGBA image of a flower" height="200" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_00.png" title="An RGBA image of a flower" height="200" width="200" /></td>
 <td>
 <h3>1</h3>
 An RGBA image of a flower, an image stack item.
@@ -39,7 +39,7 @@ An RGBA image of a flower, an image stack item.
 </td>
 </tr>
 <tr>
-<td width="256"><p><img src="img/_select_color_flower_01.jpg" title="A constant color image selecting rgba(255,222,30,255), the darkest yellow petal on the flower." height="200" width="200" /></p>
+<td width="256"><p><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_01.png" title="A constant color image selecting rgba(255,222,30,255), the darkest yellow petal on the flower." height="200" width="200" /></p>
 </td>
 <td>
 <h3>2</h3>
@@ -48,7 +48,7 @@ A reference color image selecting rgba(255,222,30,255), the darkest yellow petal
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_select_color_flower_02.jpg" title="The difference between the original flower image and the constant color image. This is a normalized image; the visible colors are not very meaningful." height="200" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_02.png" title="The difference between the original flower image and the constant color image. This is a normalized image; the visible colors are not very meaningful." height="200" width="200" /></td>
 <td>
 <h3>3</h3>
 -select_color takes the difference between the original flower image and the constant color image. We depict a <a target="_parent" href="_normalize.shtml">normalized</a>image here; the visible colors are not very meaningful. Internally, this differences image will exhibit both positive and negative intensities in each channel. The dark yellow petal, exactly equal to the reference color, now has a value of rgba(0, 0, 0, 0), but in this normalized image, appears to be a rather warm gray instead of black.
@@ -56,7 +56,7 @@ A reference color image selecting rgba(255,222,30,255), the darkest yellow petal
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_select_color_flower_03.jpg" title="This image results from the -norm command operating on image 3, above" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_03.png" title="This image results from the -norm command operating on image 3, above" /></td>
 <td>
 <h3>4</h3>
 This image results from the <a target="_parent" href="_norm.shtml">-norm</a>command operating on image 3, above and is a data set of vector lengths, a single channel gray scale, with the smallest-length vectors very nearly black. These small vectors correspond to pixels in the original image (1) that are very much like the reference color (2).
@@ -64,7 +64,7 @@ This image results from the <a target="_parent" href="_norm.shtml">-norm</a>comm
 </td>
 </tr>
 <tr>
-<td width="256"><p><img src="img/_select_color_flower_04.jpg" height="200" width="200" /></p>
+<td width="256"><p><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_04.png" height="200" width="200" /></p>
 <p></p>
 </td>
 <td>
@@ -74,7 +74,7 @@ The first parameter given to -select_color, tolerance, is used at the end of the
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/_select_color_flower_05.jpg" title="Tolerance of 128" height="200" width="200" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/command_reference/select_color/flower_05.png" title="Tolerance of 128" height="200" width="200" /></td>
 <td>
 <h3>6</h3>
 This single channel, bi-value image arises from an alternate tolerance parameter of 128 pixels, reflecting a somewhat more encompassing tolerance that selects vector lengths from image 4 with a magnitude of 128 or less, corresponding to pixels in the original image (1) with color space distances equal to or less than 128 pixels away from the reference color. All petals qualify as well as the center of the flower, though its color is more orange-red than yellow. At (255,136,83,255), it is 101.02 pixels away from the reference color. Clearly, the 128 pixel sphere around the reference color accommodates many, not particularly yellow-like colors.

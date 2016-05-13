@@ -16,7 +16,7 @@ hs.wrapperClassName = 'wide-border';
 
 
 <h1>Fake Depth Of Field<em><br /></em></h1>
-<p><img src="img/dyidiffusion_fake-depth-of-field_init-03.jpg" title="init-03.png Bokeh" class="img_block" style="float: left; margin: 3px; border: 0px solid #808080;" height="400" width="400" /><em>"Photographier: c'est dans un m&ecirc;me instant et en une fraction de seconde reconna&icirc;tre un fait et l'organisation rigoureuse de formes per&ccedil;ues visuellement qui expriment et signifient ce fait."</em> &mdash; Henri Cartier-Bresson</p>
+<p><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/init-03.png" title="init-03.png Bokeh" class="img_block" style="float: left; margin: 3px; border: 0px solid #808080;" height="400" width="400" /><em>"Photographier: c'est dans un m&ecirc;me instant et en une fraction de seconde reconna&icirc;tre un fait et l'organisation rigoureuse de formes per&ccedil;ues visuellement qui expriment et signifient ce fait."</em> &mdash; Henri Cartier-Bresson</p>
 <p>Henri Cartier-Bresson reminds us of the decisive moment when, in fleeting instances, the significance of events as well as their precise organization of forms, fall into place, giving the moments their proper expression.</p>
 <p>Sometime later, my finger hits the shutter.</p>
 <p>I suppose, with all the retouching that goes on, I'm not alone in this matter of moments missed nor with my collection of images off on one or another mark. This recipe deals with but one, that of an overly deep depth of field.</p>
@@ -30,14 +30,14 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt>gmic -input http://upload.wikimedia.org/wikipedia/commons/thumb/3/35/JarrahFence_gobeirne.jpg/1280px-JarrahFence_gobeirne.jpg \</tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-35.jpg" title="dyid-35.png Jarrah Fence by Greg O'Beirne" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="400" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-35.png" title="dyid-35.png Jarrah Fence by Greg O'Beirne" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="400" /></td>
 <td><a target="_parent" href="http://commons.wikimedia.org/wiki/User:Gobeirne" title="User:Gobeirne">Greg O'Beirne</a> has given us a nice picture of an old jarrah picket fence in Western Australia. We fetched a copy from Wikimedia Commons. Around x = 740&nbsp;&rarr; 820 there's a nail which we declare to be in the middle of our fake depth of field.</td>
 </tr>
 <tr>
 <td colspan="2"><tt> 100%,100%,1,1,'x' \<br /> -normalize[-1] 0,255 \<br /> -apply_curve[-1] 1,0,63,'{256*740/w}',0,'{256*820/w}',0,255,230 \<br /> [-1] \<br />-normalize[-2,-1] 0,1 \<br /> -append[-2,-1] c \<br /> '(1^0)' -resize[-1] [0],[0],[-1],[-1],1,1 \ -eigen2tensor[-2,-1] \ </tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-36.jpg" title="dyid-36.png" height="300" width="400" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-36.png" title="dyid-36.png" height="300" width="400" /></td>
 <td>
 <p>Our game opens with the synthesis of <strong>EigenOne</strong> and <strong>EigenTwo</strong>, which we duplicate. If you've been sticking with us since the <a target="_parent" href="dyidiffusion.shtml">beginning of these recipies</a>, you'll recall that these two datasets manage blurring, and where these datasets are equal blur goes circular. In these circumstances, <strong>Cosine</strong> and <strong>Sine</strong> datasets become irrelevant &mdash; a circlular blur looks circular no matter how one tilts it. By habit, we set the <strong>Cosine</strong> gray scale to constant one and <strong>Sine</strong> to constant zero. That's an easy unit vector to remember and <strong>Cosine</strong> and <strong>Sine</strong> should, in the aggregate, hold unit vectors.</p>
 <p><a target="_parent" href="http://www.particularart.com/tools-and-toys/gmic/command-guide/-apply_curve/">-apply_curve</a> is the bit that sets up <strong>EigenOne</strong> and <strong>EigenTwo</strong> &mdash; and the amount of blurring: black means 'no blur', white means 'blur lots'; downstream, -smooth's amplitude parameter, a multiplier, gives these expressions precise meaning. Concomitantly, -apply_curve is grounded upon a square graphical remapping relationship with x and y axes graduated from 0 to 255. X represents original intensities from the selected image; y indicates how these originals should change. Typically one explicitly sets around three or four pairs of x = have &rarr; y = want; G'MIC inbetweens the intermediaries. We conjure a prototype grayscale out of the aether and initially make it a left-to-right ramp. By itself, this protoype wholly blurs the right hand side but keeps the left pristine.</p>
@@ -55,7 +55,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2">-repeat 3 \<br /> -smooth[-2] [-1],200 \<br /> -done \<br /> -rm[-1]</td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-37.jpg" title="dyid-37.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="400" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-37.png" title="dyid-37.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="300" width="400" /></td>
 <td>We kick off three passes of -smooth at an amplitude of 200 and we're done. We drop the tensor field and write out a fake depth of field enhanced image.&nbsp;</td>
 </tr>
 </tbody>
@@ -77,7 +77,7 @@ hs.wrapperClassName = 'wide-border';
 <table rules="all" class="table table-striped" style="border-color: #808080; border-width: 1px; border-style: solid;" border="1">
 <tbody>
 <tr>
-<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="img/dyidiffusion_fake-depth-of-field_dyid-38.jpg" title="dyid-38.png" height="400" width="300" /></td>
+<td width="256"><img style="margin: 3px; border: 0px solid #808080;" class="img_block" src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-38.png" title="dyid-38.png" height="400" width="300" /></td>
 <td>
 <p><a target="_parent" href="http://en.wikipedia.org/wiki/Moai">Moais</a> on the flank of <a target="_parent" href="http://en.wikipedia.org/wiki/Rano_Raraku">Rano Raraku</a> at Rapa Nui (Easter Island), 2004. <a target="_parent" href="http://en.wikipedia.org/wiki/en:User:Aurbina">Artemio Urbina</a>; <a target="_parent" href="http://commons.wikimedia.org/wiki/Main_Page">Wikimedia Commons</a></p>
 <p>Studying the image, every pixel seems in sharp focus. It seemed to be a very sunny day and we gather the lens was stopped way down. We decide that the moais are situated on a rising hillside, receding from a near point to the right out to a farpoint on the left. All this is guess work, but seems plausible.</p>
@@ -85,7 +85,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-39.jpg" title="dyid-39.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-39.png" title="dyid-39.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
 <td>
 <h4>moai_depth.png</h4>
 <p>After some thought, experimentation and guesstimation, we arrive at this "depth map" which may have some bearing on reality. This image serves as <strong>EigenOne</strong> and <strong>EigenTwo</strong>.</p>
@@ -94,7 +94,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-40.jpg" title="dyid-40.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-40.png" title="dyid-40.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
 <td>
 <h4>moai_focal.png</h4>
 <p>Regardless of how we set values in <strong>EigenOne</strong> and <strong>EigenTwo</strong>, we must segregate objects in the "focal plane" to another layer. While the regions corresponding to the large moai are black in <strong>EigenOne</strong> and <strong>EigenTwo</strong>, and will be "in focus", there are adjacent regions which are not, and some&nbsp;&ndash; corresponding to the sky &ndash; will be quite light and subject to large circular convolution kernels that will reach into the neighboring moai and partially copy its dark pixels into the sky, creating a wholly unphotographic-like halo around the moai.</p>
@@ -102,7 +102,7 @@ hs.wrapperClassName = 'wide-border';
 </td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-41.jpg" title="dyid-41.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-41.png" title="dyid-41.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
 <td>
 <h4>moai_backplate.png</h4>
 <p>On the underlying layer we have synthesized grass-like and sky-like textures in the regions vacated by the moai, making the image as if the moai hadn't been there. At a very primitive level, convolution involves (partially) copying pixels. To maintain the fiction that grass and sky occupy the regions behind the vacated moai, we put grass and sky there in fact. With this, convolution will copy apt colors and values, minimizing halo effects.</p>
@@ -119,7 +119,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt> gmic moai_backplate.png \<br /> moai_depth.png \<br /> -normalize[-1] 0,1 \<br /> [-1] \<br /> '(1^0)' \<br /> -resize[-1] [0],[0],[-1],[-1],1,1 \<br /> -append[-3,-2] c \<br /> -eigen2tensor[-2,-1] \<br /> -repeat 3 \<br /> -smooth[-2] [-1],50 \<br /> -done \<br /> -rm[-1] \<br /> -normalize[-1] 0,255 \ </tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-42.jpg" title="dyid-42.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-42.png" title="dyid-42.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
 <td>
 <p>We trust that if you have <a target="_parent" href="dyidiffusion.shtml">reviewed the other recipes</a> centered on the -smooth command, the G'MIC script here should be familar, almost routine. We load the depth map, normalize and duplicate it, producing gray scale maps <strong>EigenOne</strong> and <strong>EigenTwo</strong>. The -append command operating along the channel axis packages these gray scales into the scalar dataset that -eigen2vector requires.</p>
 <p>Since these maps are pixelwise equal, the blurring ellipse will be circular throughout, so <strong>Cosine</strong> and <strong>Sine</strong> are irrelevant, but necessary, so we prepare a placeholder map; <strong>Cosine</strong> is a constant unit scalar, <strong>Sine</strong> is a constant zero scalar. Together they define a constant unit vector at each pixel oriented toward zero degrees. This is as good a placeholder as any. As is our wont, we scale these from single pixel images &mdash; the <code>'(1^0)'</code> notation. This produces the directional dataset that -eigen2vector requires. With both datasets on the image list, we invoke -eigen2tensor and that produces the tensor field.</p>
@@ -131,7 +131,7 @@ hs.wrapperClassName = 'wide-border';
 <td colspan="2"><tt> moai_focal.png \<br /> -blend[-2,-1] alpha,1 \<br /> -o[-1] moai_backplate_final.png </tt></td>
 </tr>
 <tr>
-<td width="256"><img src="img/dyidiffusion_fake-depth-of-field_dyid-43.jpg" title="dyid-43.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
+<td width="256"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-43.png" title="dyid-43.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="400" width="300" /></td>
 <td>With the graduated blur complete, we composited the large, righthand moai back into his old spot. We're done.</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ hs.wrapperClassName = 'wide-border';
 <p>T'ain't the same.</p>
 <p>How lenses distribute light is only (very approximately!) gaussian. Observe the <a target="_parent" href="http://en.wikipedia.org/wiki/Bokeh">bokeh pattern</a> on the lefthand side of the frontpiece image. Some of the edges are quite abrupt; not at all like the continuous change in color and tone which characterizes -smooth. Bokeh is only one among many phenomena which occur as light passes through a lens assembly.</p>
 <p>Aptly enough, there is a fuzzy line between photojournalism and photographic illustration, such that there are those who delight in the "unreality" of computer-generated depth of field. For those who care to walk that line, then the equality between <strong>EigenOne</strong> and<strong> EigenTwo</strong> may very well be one of the first things that the photo illustrator abandons, along with constant <strong>Cosines</strong> and <strong>Sines</strong>. We leave you with an uncommented example, something of a visual summary of this sequence of cook book recipes on doing your own diffusion tensor field.</p>
-<div style="text-align: center;"><img src="img/dyidiffusion_fake-depth-of-field_dyid-44.jpg" title="dyid-44.png:  gmic -srand 7508 moai.jpg -rgb2hsl[-1] -split[-1] c -mul[-3] 0.4 -add[-3] 0 -mul[-2] 0.3 -mul[-1] 0.7 -add[-1] 0.5 -append[-3,-2,-1] c -hsl2rgb[-1] -normalize[-1] 0,255 moai_depth.png [-2] -luminance[-1] -apply_curve[-1] 1,0,0,63,93,127,255,191,82,255,0 -normalize[-2,-1] 0,1 -*[-2,-1] 100%,100%,1,1 3,4,1,2,'2*u-1' -resize[-1] [-4],[-4],[-1],[-1],5 -orientation[-1] -append[-3,-2] c  -eigen2tensor[-2,-1] -repeat 4 -smooth[-2] [-1],2000 -done -rm[-1] -drawing[-1] 500 -normalize[-1] 0,255 -o[-1] dyid-44.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="600" width="450" /></div>
+<div style="text-align: center;"><img src="http://www.particularart.com/static/media/uploads/BeginnersCookbook/dyidiffusion/dyid-44.png" title="dyid-44.png:  gmic -srand 7508 moai.jpg -rgb2hsl[-1] -split[-1] c -mul[-3] 0.4 -add[-3] 0 -mul[-2] 0.3 -mul[-1] 0.7 -add[-1] 0.5 -append[-3,-2,-1] c -hsl2rgb[-1] -normalize[-1] 0,255 moai_depth.png [-2] -luminance[-1] -apply_curve[-1] 1,0,0,63,93,127,255,191,82,255,0 -normalize[-2,-1] 0,1 -*[-2,-1] 100%,100%,1,1 3,4,1,2,'2*u-1' -resize[-1] [-4],[-4],[-1],[-1],5 -orientation[-1] -append[-3,-2] c  -eigen2tensor[-2,-1] -repeat 4 -smooth[-2] [-1],2000 -done -rm[-1] -drawing[-1] 500 -normalize[-1] 0,255 -o[-1] dyid-44.png" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="600" width="450" /></div>
 <table rules="all" style="border-color: #7f7f7f; border-width: 1px; background-color: #ffffff;" align="center" border="1" cellpadding="2">
 <tbody>
 <tr>
