@@ -3761,7 +3761,6 @@ update_server : -skip ${1=$_version},${2=1}
   path=/
   -repeat $! -l[$>]
     npath=${"-parent "{0,n}}
-
     -if {['$path']!=['$npath']} # Need to change the path.
       nc=${"-nb_levels[] "$path}
       nn=${"-nb_levels[] "$npath}
@@ -3792,12 +3791,11 @@ update_server : -skip ${1=$_version},${2=1}
           balise="i"
         -done -rm
       -endl -endif
-      -if {narg($command)} nm={0,n} -i[0] ({'$command'}) -y[0] -a y -nm $nm
+      -if {narg(['$command'])} nm={0,n} -i[0] ({'$command'}) -y[0] -a y -nm $nm
       -endif
 
       path=$npath
     -endif
-
   -endl -done
 
   # Search / replace strings.
