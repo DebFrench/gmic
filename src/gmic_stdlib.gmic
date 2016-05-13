@@ -1821,7 +1821,7 @@ _display_warp : -check "${1=15}>0"
   -e[0--3] "Render 2d warping field"$_gmic_s", with cell size $1."
   -v - -repeat $! -l[$>]
     -if {d!=1||s!=2}
-      -error[0--3] "Command '-display_warp': Invalid image ["{$!-$>-1}"]: Dimensions "{w}","{h}","{d}","{s}" does not represent a 2d field of 2d vectors."
+      -v + -error[0--3] "Command '-display_warp': Invalid image ["{$!-$>-1}"]: Dimensions "{w}","{h}","{d}","{s}" does not represent a 2d field of 2d vectors."
     -endif
     -i[0] 100%,100%,1,1,1 -grid[0] $1,$1 -nm[0] {1,n}
     -warp[0] [1],1,1,0 -rm[1]
@@ -3068,7 +3068,7 @@ update_film_emulation_html :
   -repeat {narg($categories)}
     category=${-arg\ {1+$>},$categories}
     presets=${-_gimp_emulate_film_$category}
-    nb_presets+={narg($presets)}
+    nb_presets+={narg({/$presets})}
   -done
 
   -v + -e[] "\n > Update film emulation pages, for "$!" image samples and "$nb_presets" presets." -v -
@@ -3117,10 +3117,8 @@ update_film_emulation_html :
 
     -repeat {narg($presets)}
       preset=${-arg\ {1+$>},$presets}
-      filename=${_path_rc}film_$preset.cimgz
       -v + -e[] "    - "$preset -v -
-
-      -i $filename -to_rgb. s={sqrt(w*h*d)}
+      -input_clut $preset -to_rgb. s={sqrt(w*h*d)}
       -if {!isint($s)}
         -v + -warn[] "Preset '"$preset"' must be resampled." -v -
         -r. 64,64,64,3,3
@@ -3184,7 +3182,7 @@ other softwares that support this feature.</p>\n\n
 <a href=\"https://www.flickr.com/photos/davelau/\">Chi King</a>\47s Flickr accounts, distributed under\n
 <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-by-SA 2.0</a>.</p>\n\n
 <p><font size=\"-1\"><b>Disclaimer:</b><br/>\n
-<i>The trademarked names which may appear in the filenames of the Hald CLUT images are there for informational purposes only. They serve only to inform the user which film stock the given Hald CLUT image\n
+<i>The trademarked names which may appear in the filenames of the Hald-CLUT images are there for informational purposes only. They serve only to inform the user which film stock the given Hald-CLUT image\n
 is designed to approximate. As there is no way to convey this information other than by using the trademarked name, we believe this constitutes fair use. Neither the publisher nor the authors are affiliated\n
 with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
 </div></div><div id=\"footer\"><img alt=\"\" src=\"images/footer.jpg\" /></div></div>\n
@@ -3258,7 +3256,7 @@ with or endorsed by the companies that own the trademarks.</i></font></p>\n\n
 <div class=\"highslide-maincontent\"><center>\n
 <img alt=\"\" border=\"0\" src=\""$category/$basename/$preset.jpg"\" onclick=\"hs.close()\" onmouseover=\"javascript:this.src='"$category/$basename/$preset_esc.jpg"';\" onmouseout=\"javascript:this.src='original/"$basename".jpg';\" />\n
 </center></div>\n
-<div class=\"highslide-caption\"><b>Preset:</b> <i>"$title"</i> [<a href=\""$category/clut/$preset.png"\">Download CLUT</a>]</div></div>\n
+<div class=\"highslide-caption\"><b>Preset:</b> <i>"$title"</i> [<a href=\""$category/clut/$preset.png"\">Download Hald-CLUT</a>]</div></div>\n
 </td></tr>\n
 <tr><td align=\"center\"><font size=\"-1\">"$title"</font></td></tr>\n
 </table></td>\n\n"'})
@@ -4939,7 +4937,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
         --distance[keypoints] 1,[potential],0 X={xM} Y={yM} Z={zM} -rm.
       -else # Using location of maximal reconstruction error
         --decompress_clut[keycoords] $w,$h,$d
-        -if {*0} -w. $w_size,0,"Reconstructed CLUT (step 1)" -endif
+        -if {*0} -w. $w_size,0,"Reconstructed Hald-CLUT (step 1)" -endif
         --. [clut] -abs. max_error={iM} avg_error={ia} X={xM} Y={yM} Z={zM} -rm.
         -if {$max_error<=$2" && "$avg_error<=$3} -break -endif # Found a good-enough solution
         ($max_error^{10*$avg_error}) -a[error,-1] x -_compress_clut_draw_error
@@ -4963,7 +4961,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
         -v + -e[] "\r    - Remove attempt \#"$nb_attempts/$nb_max_attempts" : Keypoints "{keycoords,h}", Max error = "{_$max_error}" ( avg = "{_$avg_error}" )        " -v -
         k={keycoords,round(u(h-1))} --l[keycoords] -s y -rm[$k] -a y -nm new_keycoords -endl  # Remove random keypoint
         --decompress_clut[new_keycoords] $w,$h,$d
-        -if {*0} -w. 400,400,0,"Reconstructed CLUT (step 2)" -endif
+        -if {*0} -w. 400,400,0,"Reconstructed Hald-CLUT (step 2)" -endif
         --. [clut] -abs. new_max_error={iM} new_avg_error={ia} -rm.
         -if {$new_max_error<=$2" && "$new_avg_error<=$3}
           max_error=$new_max_error
@@ -5016,6 +5014,34 @@ compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
 #@gmic cumulate : { x | y | z | c }..{ x | y | z | c } : (no arg) : (+)
 #@gmic : Compute the cumulative function of specified image data, optionally along the specified axes.
 #@gmic : $ image.jpg --histogram --cumulate. -display_graph[-2,-1] 400,300,3
+
+#@gmic input_clut : "clut_name",_resolution>0
+#@gmic : Insert one of the pre-defined HaldCLUT at the end of the image list.
+input_clut : -check "isval(${2=64}) && $2>0"
+  -e[^-1] "Input Hald-CLUT with name '$1' and resolution $2."
+  -v - -l[]
+    -if ${_path_rc}clut_"$1".cimgz -i ${_path_rc}clut_"$1".cimgz -endif
+    -if {"!"$!" || w!=$2 || h!=$2 || d!=$2"}
+      g_path_unix=/usr/lib/gimp/2.0/plug-ins/
+      -rm -repeat 2
+        -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "\
+                       isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)" || "\
+                       isfile(${g_path_unix}gmic_film_cluts.gmz))}
+          -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
+          -elif {isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)} -i ${-path_gimp}plug-ins/gmic_film_cluts.gmz
+          -elif {isfile(${g_path_unix}gmic_film_cluts.gmz)} -i ${g_path_unix}gmic_film_cluts.gmz
+          -endif
+        -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
+        -endif
+        -repeat $! -if {['{$>,n}']==['"$1"']} -k[$>] -break -endif -done
+        -if {$!==1} -break -endif # Hald-CLUT found!
+        -rm
+      -done
+      -if {!$!} -v + -error[0--4] "Command '-input_clut': Unknown CLUT name '$1'." -endif
+      -decompress_clut $2,$2,$2 -round
+      -o. ${_path_rc}clut_$1.cimgz,uchar
+    -endif
+  -endl -v +
 
 #@gmic c : eq. to '-cut'. : (+)
 
@@ -5199,7 +5225,7 @@ map_clut : -check ${-is_image_arg\ $1}
   -to_color
   -pass$1 0 -to_rgb.
   l={round((w*h*d)^(1/3))}
-  -if {w*h*d!=$l^3} -error "Command '-map_clut': Specified CLUT $1 has invalid dimensions "({w},{h},{d},{s}). -endif
+  -if {w*h*d!=$l^3} -error "Command '-map_clut': Specified Hald-CLUT $1 has invalid dimensions "({w},{h},{d},{s}). -endif
   -r. $l,$l,$l,3,-1
   -repeat {$!-1} -l[$>,-1] -split_opacity[0] -/[0] {256/$l}
     --warp. [0],0,1,1
@@ -6438,7 +6464,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
     -warp. [displacement],1,1,1 -c. 0,100% -nm. fconfidence
     --map_clut[source] [-1] -nm. confidence
 
-    # Generate transfer CLUT.
+    # Generate transfer Hald-CLUT.
     [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {256/w} -+. 1
     --_transfer_rgb[target] 0,0,{w} -*.. [-1]
     -warp[-2,-1] [displacement],1,0,1
@@ -6455,7 +6481,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
       -hsv2rgb[clut]
     -endif
 
-    # Map CLUT to get result.
+    # Map Hald-CLUT to get result.
     --map_clut[source] [clut] -nm. res_noregul
 
     # Apply guided smoothing to remove quantization artefacts.
@@ -20331,12 +20357,7 @@ gimp_logo_ca :
 gimp_download_all_data :
 
   # Film emulation.
-  -l[]
-    -i http://gmic.eu/gmic_film_cluts.gmz
-    -o ${_path_rc}gmic_film_cluts.gmz,uchar
-    -rm
-  -onfail -rm
-  -endl
+  -l[] -input_clut foo -rm -onfail -rm -endl
 
   # Grain.
   _filenames_grain=${-_gimp_emulate_grain}
@@ -23002,7 +23023,7 @@ _gimp_apply_curve_preview :
 
 #@gimp Curves [interactive] : gimp_curves_interactive, gimp_curves_interactive_preview
 #@gimp : Colorspace = choice{"RGB","CMY","CMYK","HSI","HSL","HSV","Lab","Lch","YCbCr"}
-#@gimp : Output preset as a CLUT layer = _choice("Disable","Low-res CLUT","High-res CLUT")
+#@gimp : Output preset as a Hald-CLUT layer = _choice("Disable","Low-res CLUT","High-res CLUT")
 #@gimp : Apply transformation from = _choice("New curves [interactive]","Curves defined previously")
 #@gimp : Colorspace = const(0)
 #@gimp : Keypoints = const(0,0,100,100,-1,0,0,100,100,-1,0,0,100,100,-1,0,0,100,100,-1,0,0,100,100)
@@ -23037,10 +23058,10 @@ gimp_curves_interactive :
     -x_color_curves ${-arg\ {$1+1},rgb,cmy,cmyk,hsi,hsl,hsv,lab,lch,ycbcr}
     -u "{$1}{$2}{$3}{$1}{"$__xcc_C0,-1,$__xcc_C1,-1,$__xcc_C2,-1,$__xcc_C3,-1,$__xcc_C4"}"
   -endif
-  -if $2 # Add CLUT layer.
+  -if $2 # Add Hald-CLUT layer.
     (0,255) (0;255) (0/255) -r[-3--1] 2,2,2 -a[-3--1] c
-    -if {$2==2} -r. 256,256,256,3,3 -r. 4096,4096,1,3,-1 # High-res CLUT.
-    -else -r. 64,64,64,3,3 -r. 512,512,1,3,-1 # Low-res CLUT.
+    -if {$2==2} -r. 256,256,256,3,3 -r. 4096,4096,1,3,-1 # High-res Hald-CLUT.
+    -else -r. 64,64,64,3,3 -r. 512,512,1,3,-1 # Low-res Hald-CLUT.
     -endif
     -x_color_curves. last
   -endif
@@ -25975,8 +25996,8 @@ gimp_emulate_film_colorslide_preview :
   -gimp_split_preview "-gimp_emulate_film_colorslide $*",$-1
 
 #@gimp User-defined : gimp_emulate_film_userdefined, gimp_emulate_film_userdefined(1)+
-#@gimp : Specify CLUT as = choice(2,"Top layer","Bottom layer","Filename")
-#@gimp : CLUT filename = file()
+#@gimp : Specify Hald-CLUT as = choice(2,"Top layer","Bottom layer","Filename")
+#@gimp : Hald-CLUT filename = file()
 #@gimp : note = note("<small><b>Note:</b> Do not forget to set the <i>Input layers</i> option if you select <i>Top layer</i> or <i>Bottom layer</i>.</small>")
 #@gimp : sep = separator()
 #@gimp : Opacity = float(1,0,1)
@@ -25991,10 +26012,10 @@ gimp_emulate_film_colorslide_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/30/2014</i>.</small>")
 gimp_emulate_film_userdefined :
   -if {$1<2}
-    -if {$!<2} -gimp_warning_preview "Input layer with CLUT is missing" -return -endif
+    -if {$!<2} -gimp_warning_preview "Input layer with Hald-CLUT is missing" -return -endif
     ind={if($1,-1,0)} -map_clut[^$ind] [$ind] -rm[$ind]
   -else
-    -l "$2" -onfail -gimp_warning_preview "Specified CLUT filename not found" -return -endl
+    -l "$2" -onfail -gimp_warning_preview "Specified Hald-CLUT filename not found" -return -endl
     -map_clut[^-1] [-1] -rm.
   -endif
   -_gimp_emulate_film 0,1,${3--1}
@@ -26030,29 +26051,7 @@ gimp_emulate_film_various_preview :
 
 _gimp_emulate_film :
   -if $1
-    -if ${_path_rc}clut_$2.cimgz -i ${_path_rc}clut_$2.cimgz
-    -else
-      -l[]
-        g_path_unix=/usr/lib/gimp/2.0/plug-ins/
-        -repeat 2
-          -if {!$>" && "(isfile(${_path_rc}gmic_film_cluts.gmz)" || "\
-                         isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)" || "\
-                         isfile(${g_path_unix}gmic_film_cluts.gmz))}
-            -if {isfile(${_path_rc}gmic_film_cluts.gmz)} -i ${_path_rc}gmic_film_cluts.gmz
-            -elif {isfile(${-path_gimp}plug-ins/gmic_film_cluts.gmz)} -i ${-path_gimp}plug-ins/gmic_film_cluts.gmz
-            -elif {isfile(${g_path_unix}gmic_film_cluts.gmz)} -i ${g_path_unix}gmic_film_cluts.gmz
-            -endif
-          -else -l[] -i http://gmic.eu/gmic_film_cluts.gmz -o ${_path_rc}gmic_film_cluts.gmz,uchar -endl
-          -endif
-          -repeat $! -if {['{$>,n}']==['"$2"']} -k[$>] -break -endif -done
-          -if {$!==1} -break -endif # CLUT found!
-          -rm
-        -done
-        -decompress_clut 64,64,64 -round
-      -endl
-      -o. ${_path_rc}clut_$2.cimgz,uchar
-    -endif
-
+    -input_clut "$2"
     -repeat {$!-1}
       -if {$3<1} --map_clut[$>] [-1] -j[$>] [-1],0,0,0,0,$3 -rm.
       -else -map_clut[$>] [-1]
