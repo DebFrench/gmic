@@ -15901,7 +15901,7 @@ padint : -check "isint($1)" -skip ${2=4}
 #@gmic : Return a path to store GIMP configuration files for one user (whose value is OS-dependent).
 path_gimp :
   -v -
-  -if {!narg($_path_gimp)}
+  -if {!narg({'$_path_gimp'})}
     -if {narg({'${GIMP2_DIRECTORY}'})} _path_gimp=${GIMP2_DIRECTORY}
     -elif {narg({'${USERPROFILE}'})} _path_gimp=${USERPROFILE}
     -elif {narg({'${HOME}'})} _path_gimp=${HOME}
@@ -15919,7 +15919,7 @@ path_gimp :
 #@gmic : Return a path to store temporary files (whose value is OS-dependent).
 path_tmp :
   -v -
-  -if {!narg($_path_tmp)}
+  -if {!narg({'$_path_tmp'})}
     -if {narg({'${TMP}'})} _path_tmp=${TMP}
     -elif {narg({'${TEMP}'})} _path_tmp=${TEMP}
     -elif {narg({'${TMPDIR}'})} _path_tmp=${TMPDIR}
