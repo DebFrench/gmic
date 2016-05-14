@@ -5413,7 +5413,7 @@ replace_seq : -skip "${2=}"
 replace_str : -skip "${2=}"
   -e[^-1] "Replace string '$1' by string '${2--1}' in image$? (viewed as string$?)."
   -v -
-  -replace_seq ${-quote\ {'"$1"'}},{'"${2--1}"'}
+  -replace_seq {``{'"$1"'}},{'"${2--1}"'}
   -v +
 
 #@gmic round : rounding_value>=0,_rounding_type : (no arg) : (+)
@@ -15932,11 +15932,6 @@ path_tmp :
   -u $_path_tmp
   -v +
 
-#@gmic quote : string
-#@gmic : Return a "quotified" version of the string.
-quote :
-  -v - -u "$*" -v +
-
 #@gmic region_feature : region_label,feature,_default_value
 #@gmic : Return feature for a specified region.
 #@gmic : This function requires two images [img,region_label] in the selection.
@@ -20686,18 +20681,18 @@ gimp_search_filters : -skip "${1=}"
     # Perform the search.
     --l
       -+ 'if(i>=65&&i<=90,32,0)' -s -,10
-      -if $2 -replace_seq ${-quote\ {'"(in "{`39`}'}},1e10
-      -else -replace_seq ${-quote\ {'"(command "{`39`}'}},1e10
+      -if $2 -replace_seq {``{'"(in "{`39`}'}},1e10
+      -else -replace_seq {``{'"(command "{`39`}'}},1e10
       -endif
-      -replace_seq ${-quote\ {'"* "'}},1e10
+      -replace_seq {``{'"* "'}},1e10
       -if {narg("$1")}
         -if {!$3} # Exclude category name from the search.
-          -if $2 -replace_seq ${-quote\ {'" (command "{`39`}'}},0
-          -else -replace_seq ${-quote\ {'" (in "{`39`}'}},0
+          -if $2 -replace_seq {``{'" (command "{`39`}'}},0
+          -else -replace_seq {``{'" (in "{`39`}'}},0
           -endif
           -ap "-f '>if(y>1&&!i[y-1],0,i)'"
         -endif
-        -replace_seq ${-quote\ {'$term'}},-1e5
+        -replace_seq {``{'$term'}},-1e5
       -else -f -(iM<=255)
       -endif
       -a x -r 100%,1,1,1,2 -lt 0
@@ -29544,7 +29539,7 @@ gimp_animate_elevation3d :
   -if $3 filename="$4/gmic_elevation3d.png" -else filename="" -endif
   -_gimp_elevation3d ${5-6}
   -animate gimp_render3d,"${7-8},${10-19},$9",\
-                         "${7-8},${20-29},$9",$1,$2,${-quote\ $filename}
+                         "${7-8},${20-29},$9",$1,$2,{``$filename}
 
 gimp_animate_elevation3d_preview :
   w={w} h={h}
@@ -29591,7 +29586,7 @@ gimp_animate_extrude3d :
   -if $3 filename="$4/gmic_extrude3d.png" -else filename="" -endif
   -_gimp_extrude3d ${5-7}
   -animate gimp_render3d,"${8-9},${11-20},$10",\
-                         "${8-9},${21-30},$10",$1,$2,${-quote\ $filename}
+                         "${8-9},${21-30},$10",$1,$2,{``$filename}
 
 gimp_animate_extrude3d_preview :
   w={w} h={h}
@@ -29636,7 +29631,7 @@ gimp_animate_imageobject3d :
   -if $3 filename="$4/gmic_imageobject3d.png" -else filename="" -endif
   -_gimp_imageobject3d "_",$5
   -animate gimp_render3d,"${6-7},${9-18},$8",\
-                         "${6-7},${19-28},$8",$1,$2,${-quote\ $filename}
+                         "${6-7},${19-28},$8",$1,$2,{``$filename}
 
 gimp_animate_imageobject3d_preview :
   w={w} h={h}
@@ -29724,7 +29719,7 @@ gimp_transition3d_preview :
 gimp_animate_pencilbw :
   -if $3 filename="$4/gmic_pencilbw.png" -else filename="" -endif
   -animate pencilbw,"${5-6}",\
-                    "${7-8}",$1,$2,${-quote\ $filename}
+                    "${7-8}",$1,$2,{``$filename}
 
 gimp_animate_pencilbw_preview :
   -gimp_animate_preview pencilbw,"${5-6}",\
@@ -29745,7 +29740,7 @@ gimp_animate_pencilbw_preview :
 gimp_animate_stencilbw :
   -if $3 filename="$4/gmic_stencilbw.png" -else filename="" -endif
   -animate stencilbw,"${5-6}",\
-                     "${7-8}",$1,$2,${-quote\ $filename}
+                     "${7-8}",$1,$2,{``$filename}
 
 gimp_animate_stencilbw_preview :
   -gimp_animate_preview stencilbw,"${5-6}",\
@@ -29774,7 +29769,7 @@ gimp_animate_stencilbw_preview :
 gimp_animate_cartoon :
   -if $3 filename="$4/gmic_cartoon.png" -else filename="" -endif
   -animate cartoon,"${6-10},$5",\
-                   "${11-15},$5",$1,$2,${-quote\ $filename}
+                   "${11-15},$5",$1,$2,{``$filename}
 
 gimp_animate_cartoon_preview :
   -gimp_animate_preview cartoon,"${6-10},$5",\
@@ -29797,7 +29792,7 @@ gimp_animate_cartoon_preview :
 gimp_animate_edges :
   -if $3 filename="$4/gmic_edges.png" -else filename="" -endif
   -animate gimp_edges,"${6-7},$5",\
-                      "${8-9},$5",$1,$2,${-quote\ $filename}
+                      "${8-9},$5",$1,$2,{``$filename}
 
 gimp_animate_edges_preview :
   -gimp_animate_preview gimp_edges,"${6-7},$5",\
@@ -29890,7 +29885,7 @@ gimp_lavalampbw_preview :
 gimp_animate_lissajous :
   -if $3 filename="$4/gmic_lissajous.png" -else filename="" -endif
   -animate gimp_lissajous,"${5-22}",\
-                          "${23-40}",$1,$2,${-quote\ $filename}
+                          "${23-40}",$1,$2,{``$filename}
 
 gimp_animate_lissajous_preview :
   -gimp_animate_preview gimp_lissajous,"${5-22}",\
@@ -29914,7 +29909,7 @@ gimp_animate_lissajous_preview :
 gimp_animate_morpho :
   -if $3 filename="$4/gmic_morpho.png" -else filename="" -endif
   -animate gimp_morpho,"$5,$8,$6,$7,0,1",\
-                       "$5,$9,$6,$7,0,1",$1,$2,${-quote\ $filename}
+                       "$5,$9,$6,$7,0,1",$1,$2,{``$filename}
 
 gimp_animate_morpho_preview :
   -gimp_animate_preview gimp_morpho,"$5,$8,$6,$7,0,1",\
@@ -29942,7 +29937,7 @@ gimp_animate_morpho_preview :
 gimp_animate_rodilius :
   -if $3 filename="$4/gmic_rodilius.png" -else filename="" -endif
   -animate rodilius,"${6-10},$5",\
-                    "${11-15},$5",$1,$2,${-quote\ $filename}
+                    "${11-15},$5",$1,$2,{``$filename}
 
 gimp_animate_rodilius_preview :
   -gimp_animate_preview rodilius,"${6-10},$5",\
@@ -29961,7 +29956,7 @@ gimp_animate_rodilius_preview :
 gimp_animate_glow :
   -if $3 filename="$4/gmic_glow.png" -else filename="" -endif
   -animate glow,"$5",\
-                "$6",$1,$2,${-quote\ $filename}
+                "$6",$1,$2,{``$filename}
 
 gimp_animate_glow_preview :
   -gimp_animate_preview glow,"$5",\
