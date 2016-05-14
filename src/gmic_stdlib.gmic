@@ -566,11 +566,13 @@ _help_usage :
 \n     specified command line (see command '"$c"-status"$n"' to learn more about status).
 \n     Expression '"$c"${}"$n"' thus stands for the "${g}"current status value"$n".
 \n
+\n  - '"$c"{``string}"$n"' is substituted by a "${g}"double-quoted version"$n" of the specified string.
+\n
+\n  - '"$c"{/string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
+\n
 \n  - '"$c"{'string'}"$n"' (single quotes) is substituted by the "${g}"sequence of ascii codes"$n" that compose
 \n     the specified string, separated by commas '"$g","$n"'. For instance, item '"$c"{'foo'}"$n"' is substituted
 \n     by '"${c}"102,111,111"$n"'.
-\n
-\n  - '"$c"{/string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
 \n
 \n  - '"$c"{image,feature}"$n"' is substituted by a specific feature of the image "$c"[image]"$n".
 \n     '"${g}"image"$n"' can be either an image number or an image name. It can be also eluded.
