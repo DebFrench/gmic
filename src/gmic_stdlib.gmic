@@ -659,6 +659,7 @@ _help_usage :
 \n
 \n       . '"${c}"atan2(x,y)"$n"' is the version of '"${c}"atan()"$n"' with two arguments '"${g}"y"$n"' and '"${g}"x"$n"' (as in C/C++).
 \n       . '"${c}"hypoth(x,y)"$n"' computes the square root of the sum of the squares of x and y.
+\n       . '"${c}"permut(k,n,with_order)"$n"' computes the number of permutations of k objects from a set of k objects.
 \n       . '"${c}"gauss(x,_sigma)"$n"' returns '"${g}"exp(-x^2/(2*s^2))/sqrt(2*pi*sigma^2)'"$n".
 \n       . '"${c}"cut(value,min,max)"$n"' returns value if it is in range "${g}"[min,max]"$n", or "${g}"min"$n" or "${g}"max"$n" otherwise.
 \n       . '"${c}"narg(a_1,...,a_N)"$n"' returns the number of specified arguments (here, "${g}"N"$n").
