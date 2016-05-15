@@ -754,6 +754,7 @@ _help_usage :
 \n       . '"${c}"[ 'string' ]"$n"' defines a vector whose values are the ascii codes of the specified "${g}"character string"$n".
 \n       . '"${c}"'string'"$n"' does the same, only for strings with a length greater than "${g}"2"$n" and that do not contains single quotes.
 \n          For a single character, it results in a scalar value instead (e.g. "${c}"'A'"$n" is equal to "${g}"65"$n").
+\n       . A special case happens for "${g}"empty"$n" strings: Values of both expressions '"${c}"[ '' ]"$n"' and '"${c}"''"$n"' are "${g}"0"$n".
 \n       . Functions '"${c}"lowercase()"$n"' and '"${c}"uppercase()"$n"' return string with all string characters lowercased or uppercased.
 \n
 \n    _ "${g}"Special operators"$n" can be used:
