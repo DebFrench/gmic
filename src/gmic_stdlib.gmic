@@ -566,11 +566,11 @@ _help_usage :
 \n     specified command line (see command '"$c"-status"$n"' to learn more about status).
 \n     Expression '"$c"${}"$n"' thus stands for the "${g}"current status value"$n".
 \n
-\n  - '"$c"{``string}"$n"' is substituted by a "${g}"double-quoted version"$n" of the specified string.
+\n  - '"$c"{``string}"$n"' (starting with two backquotes) is substituted by a "${g}"double-quoted version"$n" of the specified string.
 \n
 \n  - '"$c"{/string}"$n"' is substituted by the "${g}"escaped version"$n" of the specified string.
 \n
-\n  - '"$c"{'string'}"$n"' (single quotes) is substituted by the "${g}"sequence of ascii codes"$n" that compose
+\n  - '"$c"{'string'}"$n"' (between single quotes) is substituted by the "${g}"sequence of ascii codes"$n" that compose
 \n     the specified string, separated by commas '"$g","$n"'. For instance, item '"$c"{'foo'}"$n"' is substituted
 \n     by '"${c}"102,111,111"$n"'.
 \n
@@ -751,10 +751,10 @@ _help_usage :
 \n    _ "${g}"String manipulation:"$n" Character strings are defined and managed as vectors objects.
 \n       Dedicated functions and initializers to manage strings are
 \n
-\n       . '"${c}"[ 'string' ]"$n"' and '"${c}"'string'"$n"' define a vector whose values are the ascii codes of the specified "${g}"character string"$n"
+\n       . "${c}"[ 'string' ]"$n" and "${c}"'string'"$n" define a vector whose values are the ascii codes of the specified "${g}"character string"$n"
 \n          (e.g. "${c}"'foo'"$n" is equal to "${g}"[ 102,111,111 ]"$n").
-\n       . '"${c}"_'character'"$n"' returns the (scalar) ascii code of the specified character (e.g. "${c}"_'A'"$n" is equal to "${g}"65"$n").
-\n       . A special case happens for "${g}"empty"$n" strings: Values of both expressions '"${c}"[ '' ]"$n"' and '"${c}"''"$n"' are "${g}"0"$n".
+\n       . "${c}"_'character'"$n" returns the (scalar) ascii code of the specified character (e.g. "${c}"_'A'"$n" is equal to "${g}"65"$n").
+\n       . A special case happens for "${g}"empty"$n" strings: Values of both expressions "${c}"[ '' ]"$n" and "${c}"''"$n" are "${g}"0"$n".
 \n       . Functions '"${c}"lowercase()"$n"' and '"${c}"uppercase()"$n"' return string with all string characters lowercased or uppercased.
 \n
 \n    _ "${g}"Special operators"$n" can be used:
