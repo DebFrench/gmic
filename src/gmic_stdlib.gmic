@@ -733,7 +733,7 @@ _help_usage :
 \n          "$g"{ -1=none (memory content) | 0=none | 1=nearest | 2=average | 3=linear | 4=grid | 5=bicubic |
 \n            6=lanczos }"$n".
 \n       . Function '"${c}"find(A,B,_is_forward,_starting_indice)"$n"' returns the index where sub-vector "${g}"B"$n" appears in vector "${g}"A"$n",
-\n          (or "${g}"-1"$n" if "${g}"B"$n" is not found in "${g}"A"$n").
+\n          (or "${g}"-1"$n" if "${g}"B"$n" is not found in "${g}"A"$n"). Argument "${g}"A"$n" can be also replaced by an image indice "${g}"#ind"$n".
 \n       . A "${g}"2"$n"-dimensional vector may be seen as a complex number and used in those particular functions/operators:
 \n         '"${c}"**"$n"' (complex multiplication), '"${c}"//"$n"' (complex division), '"${c}"^^"$n"' (complex exponentiation),
 \n         '"${c}"**="$n"' (complex self-multiplication), '"${c}"//="$n"' (complex self-division), '"${c}"^^="$n"' (complex self-exponentiation),
