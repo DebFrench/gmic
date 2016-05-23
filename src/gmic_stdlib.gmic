@@ -17828,7 +17828,7 @@ x_metaballs3d :
   24,24,24,1,'X=x-w/2;Y=y-h/2;Z=z-d/2;exp(-(X*X+Y*Y+Z*Z)/100)'
   72,72,72 M=8 mode=3
   s0=Dots s1=Wireframe s2=Flat s3=Flat-shaded s4=Gouraud-shaded s5=Phong-shaded
-  -repeat $M fx$>={g} fy$>={g} fz$>={g} -done
+  -repeat $M fx$>={2*g} fy$>={2*g} fz$>={2*g} -done
   -w[0] -1,-1,0,"[G"{`39`}"MIC] 3d metaballs"
   -do
     -repeat $M
