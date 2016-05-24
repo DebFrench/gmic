@@ -3029,30 +3029,30 @@ CImg<char>& gmic::selection2string(const CImg<unsigned int>& selection,
     break;
   case 1:
     cimg_snprintf(res.data(),res.width(),"%s",
-                  basename(images_names[selection[0]].data()));
+                  basename(images_names[selection[0]]));
     break;
   case 2:
     cimg_snprintf(res.data(),res.width(),"%s, %s",
-                  basename(images_names[selection[0]].data()),
-                  basename(images_names[selection[1]].data()));
+                  basename(images_names[selection[0]]),
+                  basename(images_names[selection[1]]));
     break;
   case 3:
     cimg_snprintf(res.data(),res.width(),"%s, %s, %s",
-                  basename(images_names[selection[0]].data()),
-                  basename(images_names[selection[1]].data()),
-                  basename(images_names[selection[2]].data()));
+                  basename(images_names[selection[0]]),
+                  basename(images_names[selection[1]]),
+                  basename(images_names[selection[2]]));
     break;
   case 4:
     cimg_snprintf(res.data(),res.width(),"%s, %s, %s, %s",
-                  basename(images_names[selection[0]].data()),
-                  basename(images_names[selection[1]].data()),
-                  basename(images_names[selection[2]].data()),
-                  basename(images_names[selection[3]].data()));
+                  basename(images_names[selection[0]]),
+                  basename(images_names[selection[1]]),
+                  basename(images_names[selection[2]]),
+                  basename(images_names[selection[3]]));
     break;
   default:
     cimg_snprintf(res.data(),res.width(),"%s, (...), %s",
-                  basename(images_names[selection[0]].data()),
-                  basename(images_names[selection.back()].data()));
+                  basename(images_names[selection[0]]),
+                  basename(images_names[selection.back()]));
   }
   return res;
 }
@@ -3463,6 +3463,7 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
   if (!is_available_display) return *this;
 
   CImgList<T> visu;
+  CImgList<char> t_visu;
   CImg<bool> is_valid(1,selection.height(),1,1,true);
   cimg_forY(selection,l) {
     const CImg<T>& img = images[selection[l]];
@@ -3478,6 +3479,7 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
     const CImg<T>& img = images[uind];
     if (img && is_valid[l]) visu.insert(img,~0U,true);
     else visu.insert(1);
+    t_visu.insert(CImg<char>::string(basename(images_names[uind]),true,true),~0U,true);
   }
 
   CImg<char> gmic_names;
@@ -3510,8 +3512,11 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
       visu[l]._is_shared = images[selection[l]].is_shared();
     }
     print_images(images,images_names,selection,false);
-    if (disp) visu.display(disp.set_title("%s",title.data()),false,'x',0.5f,XYZ,exit_on_anykey);
-    else visu.display(title.data(),false,'x',0.5f,XYZ,exit_on_anykey);
+
+    CImgDisplay tmp_disp;
+    bool tmp_is_exit = false;
+    if (disp) visu._display(disp,0,&t_visu,false,'x',0.5f,XYZ,exit_on_anykey,0,true,tmp_is_exit);
+    else visu._display(tmp_disp,0,&t_visu,false,'x',0.5f,XYZ,exit_on_anykey,0,true,tmp_is_exit);
     cimglist_for(visu,l) visu[l]._is_shared = is_shared(l);
   }
 #endif // #if cimg_display==0
@@ -3581,7 +3586,7 @@ gmic& gmic::display_plots(const CImgList<T>& images, const CImgList<char>& image
       img.print(images_names[uind].data());
       if (!disp) disp.assign(cimg_fitscreen(CImgDisplay::screen_width()/2,CImgDisplay::screen_height()/2,1),0,0);
       img.display_graph(disp.set_title("%s (%dx%dx%dx%d)",
-                                       basename(images_names[uind].data()),
+                                       basename(images_names[uind]),
                                        img.width(),img.height(),img.depth(),img.spectrum()),
                         plot_type,vertex_type,0,xmin,xmax,0,ymin,ymax,exit_on_anykey);
       if (is_verbose) nb_carriages = 0;
@@ -3652,7 +3657,7 @@ gmic& gmic::display_objects3d(const CImgList<T>& images, const CImgList<char>& i
           uind,images_names[uind].data(),
           vertices.width(),primitives.size());
     disp.set_title("%s (%d vertices, %u primitives)",
-                   basename(images_names[uind].data()),
+                   basename(images_names[uind]),
                    vertices.width(),primitives.size());
     if (light3d) colors.insert(light3d,~0U,true);
     background.display_object3d(disp,vertices,primitives,colors,opacities,
@@ -5275,7 +5280,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                   CImg<T>& img = gmic_check(images[selection[l]]);
                   if (disp) disp.resize(cimg_fitscreen(img.width(),img.height(),1),false);
                   else disp.assign(cimg_fitscreen(img.width(),img.height(),1),0,1);
-                  disp.set_title("%s: crop",basename(images_names[selection[l]].data()));
+                  disp.set_title("%s: crop",basename(images_names[selection[l]]));
                   const CImg<int> s = img.get_select(disp,2);
                   print(images,0,"Crop image [%d] with selection (%d,%d,%d) x (%d,%d,%d).",
                         selection[l],
@@ -5383,7 +5388,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                                      draw_text(0,0,"Cut [%g,%g] = [%.3g%%,%.3g%%]",
                                                white,black,0.7f,13,value0,value1,percent0,percent1)).
                           set_title("%s (%dx%dx%dx%d)",
-                                    basename(images_names[selection[l]].data()),
+                                    basename(images_names[selection[l]]),
                                     img.width(),img.height(),img.depth(),img.spectrum()).wait();
                       }
                       const int mx = disp.mouse_x(), my = disp.mouse_y();
@@ -9967,7 +9972,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                   if (img) {
                     if (disp) disp.resize(cimg_fitscreen(img.width(),img.height(),1),false);
                     else disp.assign(cimg_fitscreen(img.width(),img.height(),1),0,1);
-                    disp.set_title("%s: resize",basename(images_names[selection[l]].data()));
+                    disp.set_title("%s: resize",basename(images_names[selection[l]]));
                     img.get_select(disp,0);
                     print(images,0,
                           "Resize image [%d] to %dx%d, with nearest-neighbor interpolation.",
@@ -11488,7 +11493,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                                      draw_text(0,0,"Threshold %g = %.3g%%",
                                                white,black,0.7f,13,value,percent)).
                           set_title("%s (%dx%dx%dx%d)",
-                                    basename(images_names[selection[l]].data()),
+                                    basename(images_names[selection[l]]),
                                     img.width(),img.height(),img.depth(),img.spectrum()).wait();
                       }
                       const int mx = disp.mouse_x(), my = disp.mouse_y();
