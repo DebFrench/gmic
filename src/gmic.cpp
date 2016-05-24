@@ -3513,10 +3513,8 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
     }
     print_images(images,images_names,selection,false);
 
-    CImgDisplay tmp_disp;
-    bool tmp_is_exit = false;
-    if (disp) visu._display(disp,0,&t_visu,false,'x',0.5f,XYZ,exit_on_anykey,0,true,tmp_is_exit);
-    else visu._display(tmp_disp,0,&t_visu,false,'x',0.5f,XYZ,exit_on_anykey,0,true,tmp_is_exit);
+    bool is_exit = false;
+    visu._display(disp,0,&t_visu,false,'x',0.5f,XYZ,exit_on_anykey,0,true,is_exit);
     cimglist_for(visu,l) visu[l]._is_shared = is_shared(l);
   }
 #endif // #if cimg_display==0
