@@ -3474,12 +3474,16 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
     verbosity = _verbosity; is_debug = _is_debug;
   }
 
+  CImg<char> s_tmp;
   cimg_forY(selection,l) {
     const unsigned int uind = selection[l];
     const CImg<T>& img = images[uind];
     if (img && is_valid[l]) visu.insert(img,~0U,true);
     else visu.insert(1);
-    t_visu.insert(CImg<char>::string(basename(images_names[uind]),true,true),~0U,true);
+    const CImg<char> str = CImg<char>::string(basename(images_names[uind]),true,true);
+    s_tmp.assign(str.width() + 16);
+    cimg_snprintf(s_tmp,s_tmp.width(),"#%u: %s",uind,str.data());
+    s_tmp.move_to(t_visu);
   }
 
   CImg<char> gmic_names;
