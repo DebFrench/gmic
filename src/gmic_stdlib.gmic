@@ -3993,7 +3993,7 @@ _update_server_binaries :
   file1=gmic_$1_debian_jessie_i386.deb
   file2=gmic_$1_debian_wheezy_amd64.deb
   file3=gmic_$1_debian_wheezy_i386.deb
-  file4=gmic_$1_ubuntu_wily_amd64.deb
+  file4=gmic_$1_ubuntu_xenial_amd64.deb
   file5=gmic_$1_ubuntu_trusty_i386.deb
   file6=gmic_$1_ubuntu_vivid_amd64.deb
   file7=gmic_$1_win32.zip

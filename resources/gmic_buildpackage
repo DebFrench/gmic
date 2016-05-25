@@ -386,7 +386,7 @@ echo " - Create debian packages."
 
 cp ${HOME}/work/src/deb_${TARFILE}.gz /tmp/ &&
     cd /tmp/ &&
-    PAK=gmic_${VERSION}${SUFFIX}_ubuntu_wily_amd64.deb &&
+    PAK=gmic_${VERSION}${SUFFIX}_ubuntu_xenial_amd64.deb &&
     DIR=gmic-${VERSION}${SUFFIX} &&
     rm -rf $PAK &&
     touch deb_${TARFILE}.gz &&
