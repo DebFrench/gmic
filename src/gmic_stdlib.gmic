@@ -18103,7 +18103,7 @@ x_pacman :
     16,16,1,1,'y' -r[-3,-1] [-2],0,2 -+[-2,-1] -a[-2,-1] c
     16,16,1,3 -_pacman_pacdots_gfx -_pacman_pacgum_gfx -a[-3--1] y
     -warp. [-2],0,0 -rm.. -|[-2,-1] -r. 100%,{h+24},1,3,0,0,0,1
-    -t. "Lives :",10,0,23,1,255 -t. "Score :",{w-140},0,23,1,255
+    -t. "Lives :",10,0,24,1,255 -t. "Score :",{w-140},0,24,1,255
     -if $lives --r[pacman_2] 12,12,1,4,2 -r. {100*$lives}%,100%,1,4,0,2 -j.. [-1],90,7 -rm. -endif
     -nm. visu
     -w[visu] -1,-1,0,"[G"{`39`}"MIC] Pacman" -cursor[0] 0
@@ -18140,7 +18140,7 @@ x_pacman :
         --rotate[pacman_$t,pacmanm_$t] {90*(abs($dp)-1)} -j... [-2],$xp,{24+$yp},0,0,1,[-1],255 -rm[-2,-1]
         -if {$left>=0" && "($left>=5" || "$t<=2)} -j. [time{round($left)}],{(w-{time0,w})/2-10},1 -endif
       -endif
-      -t. $score,{w-65},1,22,1,255
+      -t. $score,{w-65},3,22,1,255
       -if {$is_get_ready}
         -j. [level_N],{(w-{level_N,w})/2},{12+(h-1.5*{level_N,h})/2},0,0,1,[levelm_N]
         -if {int($|*4)%2} -j. [get_ready],{(w-{get_ready,w})/2},{24+(h+{get_ready,h})/2},0,0,1,[get_readym],255 -endif

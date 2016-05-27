@@ -2884,14 +2884,15 @@ CImg<unsigned int> gmic::selection2cimg(const char *const string, const unsigned
     ctyper = is_selection?']':'\'';
 
   CImg<bool> is_selected(1,indice_max,1,1,false);
+  CImg<char> name, item;
   bool is_inverse = *string=='^';
   const char *it = string + (is_inverse?1:0);
   for (bool stopflag = false; !stopflag; ) {
-    CImg<char> name(256), item;
     float ind0 = 0, ind1 = 0, step = 1;
     int iind0 = 0, iind1 = 0;
     bool is_label = false;
     char sep = 0;
+    name.assign(256);
 
     const char *const it_comma = std::strchr(it,',');
     if (it_comma) { item.assign(it,(unsigned int)(it_comma - it + 1)); item.back() = 0; it = it_comma + 1; }
