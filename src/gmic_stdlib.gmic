@@ -20441,6 +20441,7 @@ _gimp_download_all_data :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
+#@gimp : Kim Bartholomew ,
 #@gimp : <a href="http://www.captivemoment.com">Sudi</a>,
 #@gimp : Michael Prostka,
 #@gimp : Arkadi Gelfond,
