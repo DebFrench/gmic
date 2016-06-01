@@ -134,10 +134,21 @@
 
 # This command is run when the cli tool 'gmic' is invoked without arguments on the command line.
 cli_noarg :
-  -version -v +
-  -e[] "\n[gmic] No commands, options or data provided (type 'gmic -h' to get help)."
-  -if {{*,u}>0} -e[] "[gmic] Running in demo mode." -v - -demo , -e[] ""
-  -else -e[] "\n"
+  -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -version
+  -v + -e[] "\n[gmic] No commands, options or data provided (type "$c"'gmic -h'"$n" to get help)." -v -
+  file_update=${_path_rc}cli_update$_version.gmic
+  need_update={"Y = date(0); M = date(1); D = date(2); date_current = Y*365 + M*31 + D;
+                Y = date(0,"$file_update"); M = date(1,"$file_update"); D = date(2,"$file_update"); date_file = Y*365 + M*31 + D;
+                date_current - date_file>45"}
+  -if {{*,u}>0}
+    -v + -e[] "[gmic] "${g}"Running in demo mode."$n -v - -parallel "-if "$need_update" -update -endif","-demo ," -e[] ""
+  -else
+    -if $need_update
+    -v + -e[] "[gmic] Please wait, updating commands..." -v -
+    -update
+    -v + -e[] "\r[gmic] Command update succeeded!       " -v -
+    -endif
+    -v + -e[] "\n"
   -endif -v -
 
 # This command is called each time the cli interface 'gmic' starts.
