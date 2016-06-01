@@ -145,7 +145,7 @@ cli_noarg :
     -l[] -update
       -v + -e[] "\r[gmic] Update commands: "${g}"Success."$n -v -
     -onfail
-      -v 0 -e[] "\r[gmic] Update commands: "${r}"Failed!"$n -v -
+      -v + -e[] "\r[gmic] Update commands: "${r}"Failed!"$n -v -
     -endl
   -endif
   -if {{*,u}>0}
@@ -2652,7 +2652,7 @@ input_glob :
   N=$!
   -m "_ig : $""=arg -repeat $""# -i ${arg{1+$>}} -done"
   -_ig ${} -uncommand _ig
-  -if {$N==$!} -error[0--3] "Command '-input_glob': No matching filenames for pattern '$*'." -endif
+  -if {$N==$!} -v + -error[0--3] "Command '-input_glob': No matching filenames for pattern '$*'." -endif
   -v +
 
 #@gmic input_gpl : filename
@@ -3092,7 +3092,7 @@ _update :
   -l[] cimgz:http://gmic.eu/cli_update$_version.gmic
     -if {h>7" && "same([{^}],'#@gmic',6)} -o raw:$out,char -endif
     -rm
-  -onfail -error[0--3] "Command '-update' : Unreachable update file."
+  -onfail -v + -error[0--3] "Command '-update' : Unreachable update file."
   -endl
   -m $out
   -v +
@@ -5145,7 +5145,7 @@ eigen2tensor :
       -s... c
       --[-5] [-3] --[-4] [-3] -*.. [-5] -*. [-4]
       (1^0^0^1^0^1) -r. [-3] -*. [-4] -rm[-6--4] -+[-3--1]
-    -else -error[0--3] "Command '-eigen2tensor': Invalid image ["{$!-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d eigenvectors."
+    -else -v + -error[0--3] "Command '-eigen2tensor': Invalid image ["{$!-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d eigenvectors."
     -endif
   -nm $nm -endl -done -v +
 
@@ -5244,7 +5244,7 @@ map_clut : -check ${-is_image_arg\ $1}
   -to_color
   -pass$1 0 -to_rgb.
   l={round((w*h*d)^(1/3))}
-  -if {w*h*d!=$l^3} -error "Command '-map_clut': Specified Hald-CLUT $1 has invalid dimensions "({w},{h},{d},{s}). -endif
+  -if {w*h*d!=$l^3} -v + -error "Command '-map_clut': Specified Hald-CLUT $1 has invalid dimensions "({w},{h},{d},{s}). -endif
   -r. $l,$l,$l,3,-1
   -repeat {$!-1} -l[$>,-1] -split_opacity[0] -/[0] {256/$l}
     --warp. [0],0,1,1
@@ -5490,7 +5490,7 @@ vector2tensor :
     -s c
     -if {$!==2} --sqr. -*.. [-3] -sqr...
     -elif {$!==3} --sqr.. --*... [-2] --sqr... -*[-5,-4] [-6] -sqr[-6]
-    -else -error[0--4] "Command '-vector2tensor': Invalid image ["{$!-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d vectors."
+    -else -v + -error[0--4] "Command '-vector2tensor': Invalid image ["{$!-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d vectors."
     -endif
     -a c
   -endl -done -v +
@@ -6281,7 +6281,7 @@ to_a :
 to_color :
   -e[^-1] "Force image$? to be in color mode."
   -v - -repeat $! -l[$>]
-    -if {s>4} -error[] "Command '-to_color': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+    -if {s>4} -v + -error[] "Command '-to_color': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
     -elif {s==2} -r 100%,100%,1,4,0,1,0,0,0,1
     -elif {s==1} -r 100%,100%,1,3,1
     -endif
@@ -6296,16 +6296,17 @@ to_colormode : -skip ${1=0}
   -elif {$1==3} -to_rgb
   -elif {$1==4} -to_rgba
   -else
-    is_rgb=0 is_alpha=0
+    -v - is_rgb=0 is_alpha=0
     -repeat $!
-      -if {$>,!s||s>4} -error "Command '-to_colormode': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+      -if {$>,!s||s>4} -v + -error "Command '-to_colormode': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
       -elif {$>,s==2} is_alpha=1
       -elif {$>,s==3} is_rgb=1
       -elif {$>,s==4} is_rgb=1 is_alpha=1
       -endif
     -done
     -to_colormode {if($is_rgb,3,1)+$is_alpha}
-    -endif
+    -v +
+  -endif
 
 #@gmic to_gray
 #@gmic : Force selected images to be in GRAY mode.
@@ -6313,7 +6314,7 @@ to_colormode : -skip ${1=0}
 to_gray :
   -e[^-1] "Force image$? to be in GRAY mode."
   -v - -repeat $! -l[$>]
-    -if {s>4} -error[] "Command '-to_gray': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+    -if {s>4} -v + -error[] "Command '-to_gray': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
     -elif {s>=3} -channels 0,2 -luminance
     -elif {s==2} -r 100%,100%,100%,1,0
     -endif
@@ -6324,7 +6325,7 @@ to_gray :
 to_graya :
   -e[^-1] "Force image$? to be in GRAYA mode."
   -v - -repeat $! -l[$>]
-    -if {s>4} -error[] "Command '-to_graya': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+    -if {s>4} -v + -error[] "Command '-to_graya': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
     -elif {s==4} --channels 3 -channels.. 0,2 -luminance.. -a c
     -elif {s==3} -luminance -channels 0,1 -sh. 1 -f. 255 -rm.
     -elif {s==1} -channels 0,1 -sh. 1 -f. 255 -rm.
@@ -6356,7 +6357,7 @@ to_pseudogray : -check "isint(${1=5}) && $1>=0 && isint(${3=8}) && $3>0" -skip $
 to_rgb :
    -e[^-1] "Force image$? to be in RGB mode."
    -v - -repeat $! -l[$>]
-     -if {s>4} -error[] "Command '-to_rgb': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+     -if {s>4} -v + -error[] "Command '-to_rgb': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
      -elif {s==4} -channels 0,2
      -elif {s==2} -channels 0,0 -r 100%,100%,100%,3
      -elif {s==1} -r 100%,100%,100%,3
@@ -6368,7 +6369,7 @@ to_rgb :
 to_rgba :
    -e[^-1] "Force image$? to be in RGBA mode."
    -v - -repeat $! -l[$>]
-     -if {s>4} -error[] "Command '-to_rgba': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
+     -if {s>4} -v + -error[] "Command '-to_rgba': Image ["$>"] is not a G,GA,RGB or RGBA image ("{s}" channels)."
      -elif {s==3} -channels 0,3 -sh. 3 -f. 255 -rm.
      -elif {s==2} -r 100%,100%,100%,4 -sh. 2 -f. [-2] -rm.
      -elif {s==1} -r 100%,100%,100%,4 -sh. 3 -f. 255 -rm.
@@ -6896,7 +6897,7 @@ montage : -check "isval(${2=2}) && $2>=0 && $2<=3" -skip "${1=X}",${3=0},"${4=}"
   -v +
 
 _montage :
-  -if {$_p>$_lcode} -error "Command '-montage': Incomplete layout code '"$_scode"'." -endif
+  -if {$_p>$_lcode} -v + -error "Command '-montage': Incomplete layout code '"$_scode"'." -endif
   c={arg($_p,$_code)}
   -if {$c>=0} _p+=1 -u $c # Single indice.
   -elif {$c==-4} # Mirror.
@@ -7973,7 +7974,7 @@ divergence :
     -if {s==1} -g x,0
     -elif {s==2} -s c -g.. x,0 -g. y,0 -+
     -elif {s==3} -s c -g... x,0 -g.. y,0 -g. z,0 -+
-    -else -error[] "Command '-divergence': Cannot compute divergence of image ["$>"] (has "{s}">3 channels)."
+    -else -v + -error[] "Command '-divergence': Cannot compute divergence of image ["$>"] (has "{s}">3 channels)."
     -endif
   -endl -done -v +
 
@@ -8137,17 +8138,17 @@ _haar : # Mono-scale direct haar transform.
 
 _haar_x : # Direct haar transform along the x-axis.
   -if {w<=1} -return -endif
-  -if {w%2} -error[0--6] "Command '-haar': Invalid image width="{w}" (is not even)." -endif
+  -if {w%2} -v + -error[0--6] "Command '-haar': Invalid image width="{w}" (is not even)." -endif
   --shift -1 -r 50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a x
 
 _haar_y : # Direct haar transform along the y-axis.
   -if {h<=1} -return -endif
-  -if {h%2} -error[0--6] "Command '-haar': Invalid image height="{h}" (is not even)." -endif
+  -if {h%2} -v + -error[0--6] "Command '-haar': Invalid image height="{h}" (is not even)." -endif
   --shift 0,-1 -r 100%,50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a y
 
 _haar_z : # Direct haar transform along the z-axis.
   -if {d<=1} -return -endif
-  -if {d%2} -error[0--6] "Command '-haar': Invalid image depth="{h}" (is not even)." -endif
+  -if {d%2} -v + -error[0--6] "Command '-haar': Invalid image depth="{h}" (is not even)." -endif
   --shift 0,0,-1 -r 100%,100%,50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a z
 
 #@gmic heat_flow : _nb_iter>=0,_dt,_keep_sequence={ 0 | 1 }
@@ -8250,17 +8251,17 @@ _ihaar : # Mono-scale inverse haar transform.
 
 _ihaar_x : # Inverse haar transform along the x-axis.
   -if {w<=1} -return -endif
-  -if {w%2} -error[0--6] "Command '-ihaar': Invalid image width="{w}" (is not even)." -endif
+  -if {w%2} -v + -error[0--6] "Command '-ihaar': Invalid image width="{w}" (is not even)." -endif
   -s x,2 -r 200% (-1,1) -*[-2,-1] -+ -/ {sqrt(2)}
 
 _ihaar_y : # Inverse haar transform along the y-axis.
   -if {h<=1} -return -endif
-  -if {h%2} -error "Command '-ihaar': Invalid image height="{h}" (is not even)." -endif
+  -if {h%2} -v + -error "Command '-ihaar': Invalid image height="{h}" (is not even)." -endif
   -s y,2 -r 100%,200% (-1;1) -r. {-2,w} -*[-2,-1] -+ -/ {sqrt(2)}
 
 _ihaar_z : # Inverse haar transform along the z-axis.
   -if {d<=1} -return -endif
-  -if {d%2} -error "Command '-ihaar': Invalid image depth="{h}" (is not even)." -endif
+  -if {d%2} -v + -error "Command '-ihaar': Invalid image depth="{h}" (is not even)." -endif
   -s z,2 -r 100%,100%,200% (-1/1) -r. {-2,w},{-2,h} -*[-2,-1] -+ -/ {sqrt(2)}
 
 #@gmic inn
@@ -9514,7 +9515,7 @@ pointcloud : -check "${1=0}<=2" -skip ${2=0},${3=0},${4=0}
   -e[^-1] "Convert image$? to point clouds, in "${-arg\ 2+($1>=0)*$1-($1<0),{-$1}-opacity,binary,cumulative,labeling}" mode,"\
           "with ($2,$3,$4) as maximal dimensions."
   -v - -repeat $! -l[$>] nm={0,n}
-    -if {"d>1 || s>1"} -error "Command '-pointcloud': Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
+    -if {"d>1 || s>1"} -v + -error "Command '-pointcloud': Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
 
     # Retrieve coordinates and color info.
     -if {h<3} -r 100%,3,1,1,0 -endif
@@ -11634,7 +11635,7 @@ pose3d :
     -s3d -r[2] 3,{2,h/3},1,1,-1 -i[3] 1,{2,h},1,1,1 -a[2,3] x
     -i[3] ($1,$5,$9;$2,$6,$10;$3,$7,$11;$4,$8,$12) -**[2,3]
     -r[2] 1,{2,3*h},1,1,-1 -a y
-  -else -error "Command '-pose3d': Image ["{$!-$>-1}"] does not represent a 3d object."
+  -else -v + -error "Command '-pose3d': Image ["{$!-$>-1}"] does not represent a 3d object."
   -endif -endl -done -v +
 
 #@gmic p3d : eq. to '-primitives3d'. : (+)
@@ -12254,20 +12255,20 @@ _apply_parallel_overlap : -check "${2=0}>=0 && isint(${3=0}) && $3>=0"
 
 _apply_parallel_overlap1 :
   $1
-  -if {narg($__apo_exception)} -error[0--12] $__apo_exception -endif
+  -if {narg($__apo_exception)} -v + -error[0--12] $__apo_exception -endif
 
 _apply_parallel_overlap2 :
   -if {w>=h}
     ovx={round(if(${"-is_percent $2"},w*$2,$2))} w2={int(w/2)}
     --z[0] {$w2-$ovx},100% -z[0] 0,{$w2+$ovx-1}
     -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl"
-    -if {narg($__apo_exception)} -error[0--12] $__apo_exception -endif
+    -if {narg($__apo_exception)} -v + -error[0--12] $__apo_exception -endif
     -z[0] 0,{0,w-1-$ovx} -z[1] $ovx,100% -a x
   -else
     ovy={round(if(${"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
     --rows[0] {$h2-$ovy},100% -rows[0] 0,{$h2+$ovy-1}
     -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl"
-    -if {narg($__apo_exception)} -error[0--12] $__apo_exception -endif
+    -if {narg($__apo_exception)} -v + -error[0--12] $__apo_exception -endif
     -rows[0] 0,{0,h-1-$ovy} -rows[1] $ovy,100% -a y
   -endif
 
@@ -12280,7 +12281,7 @@ _apply_parallel_overlap4 :
     --z[0] {$w2-$ovx},0,100%,{$h2+$ovy-1} --z[0] 0,{$h2-$ovy},{$w2+$ovx-1},100%
     --z[0] {$w2-$ovx},{$h2-$ovy},100%,100% -z[0] 0,0,{$w2+$ovx-1},{$h2+$ovy-1}
     -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl","-l[2] $1 -_check1 -endl","-l[3] $1 -_check1 -endl"
-    -if {narg($__apo_exception)} -error[0--12] $__apo_exception -endif
+    -if {narg($__apo_exception)} -v + -error[0--12] $__apo_exception -endif
     -z[0] 0,0,{0,w-1-$ovx},{0,h-1-$ovy} -z[1] $ovx,0,100%,{1,h-1-$ovy}
     -z[2] 0,$ovy,{2,w-1-$ovx},100% -z[3] $ovx,$ovy,100%,100%
     -a[0,1] x -a[1,2] x -a y
@@ -12308,8 +12309,8 @@ apply_timeout :
               "-do -if {$|>$2} __is_timeout"$id"=1 -error \"\" -endif -wait 500 -while {!$__done"$id"}"
     -onfail
       -v +
-      -if ${__is_timeout$id} -error[0--5] "Command '-apply_timeout': Time out ($2 seconds) for command '$1'."
-      -else -error[0--5] "Command '-apply_timeout': "${}
+      -if ${__is_timeout$id} -v + -error[0--5] "Command '-apply_timeout': Time out ($2 seconds) for command '$1'."
+      -else -v + -error[0--5] "Command '-apply_timeout': "${}
       -endif
     -endl
     -v +
@@ -12451,7 +12452,7 @@ rprogress : -skip ${2=""}
     -progress $m _progress_bounds=$_progress_bounds,{$m+$nm*($M-$m)/100},{$m+$nM*($M-$m)/100}  # Push new bounds.
     -_rprogress "$1"
     -progress $M ($_progress_bounds) _progress_bounds={@0--3} -rm. # Pop bounds.
-  -else -error[0--3] "Command '-rprogress': Invalid argument '$*'."
+  -else -v + -error[0--3] "Command '-rprogress': Invalid argument '$*'."
   -endif
   -v +
 
@@ -15073,7 +15074,7 @@ _xpink :
     -x "which "${prefix}${1}" >/dev/null 2>&1"
     -if {${}!=0} prefix=""
       -x "which "$1" >/dev/null 2>&1"
-      -if {${}!=0} -error "Executable (pink.)"$1" not found in PATH, status = "${}"!! Returning!!\n" -return -endif
+      -if {${}!=0} -v + -error "Executable (pink.)"$1" not found in PATH, status = "${}"!! Returning!!\n" -endif
     -endif
     -output_pink3d ${filename}.pnk -x ${prefix}${1}" "${filename}".pnk $2 "${filename}"_o.pnk >/dev/null 2>&1"
   -else
@@ -15081,9 +15082,9 @@ _xpink :
   -endif
   status=${}
   -file_rm ${x_filename}.pnk
-  -if {$status!=0" && "['"$1"']!='seuilauto'} -error "Exec status is "${status}"." -return
+  -if {$status!=0" && "['"$1"']!='seuilauto'} -v + -error "Exec status is "${status}"."
   -elif ${filename}_o.pnk -i ${filename}_o.pnk -file_rm ${x_filename}_o.pnk -k. -nm. $na
-  -else -error "Exec error!!"
+  -else -v + -error "Exec error!!"
   -endif
 
 _xpinks :
@@ -15344,7 +15345,7 @@ alert : -skip "${1=[G"{`39`}"MIC Alert]},${2=This is an alert box.},${3=OK}"
 
     # Enter event loop.
     -repeat 9 -if {!{*$>}} disp=$> -break -endif -done   # Find available display window.
-    -if {!narg($disp)} -error[0--4] "Command '-alert': Cannot open display window for alert box." -endif
+    -if {!narg($disp)} -v + -error[0--4] "Command '-alert': Cannot open display window for alert box." -endif
 
     selected={if($#==3,0,-1)} clicked=-1
     -do
@@ -16091,13 +16092,14 @@ std_noise :
 #@gmic : Show a menu to select and view all G'MIC interactive demos.
 demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- G\47MIC demo menu ------------------\n
+------ "${g}"G\47MIC demo menu"$n" ------------------\n
 ----\n
----- Mouse button to select a demo.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse button"$n" to select a demo.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v - -l[]
@@ -16199,17 +16201,20 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   -rm -w 0 -endl -v 0 -e[] ""
 
 _demo_color_curves :
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Color curves ----------------------------------------------------------------------------\n
----- Left mouse button on a curve creates a new control point (or moves an existing one).\n
----- Right mouse button on a control point deletes it.\n
----- Left mouse button on the main image window shows the initial image until button is released.\n
----- Right mouse button on the main image window adds a keypoint to all curves from picked color.\n
----- Key 'R' on a curve resets it.\n
----- Keys 'CTRL+D' increase window size.\n
----- Keys 'CTRL+C' decrease window size.\n
----- Keys 'CTRL+R' reset window size.\n
----- Keys 'ESC', 'Q' or 'ENTER' close the current window.\n
+------ "${g}"Color curves"$n" ----------------------------------------------------------------------------\n
+----\n
+---- "${c}"Left mouse button"$n" on a curve creates a new control point (or moves an existing one).\n
+---- "${c}"Right mouse button"$n" on a control point deletes it.\n
+---- "${c}"Left mouse button"$n" on the main image window shows the initial image until button is released.\n
+---- "${c}"Right mouse button"$n" on the main image window adds a keypoint to all curves from picked color.\n
+---- Key '"${c}"R"$n"' on a curve resets it.\n
+---- Keys '"${c}"CTRL+D"$n"' increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' decrease window size.\n
+---- Keys '"${c}"CTRL+R"$n"' reset window size.\n
+---- Keys '"${c}"ESC"$n"', '"${c}"Q"$n"' or '"${c}"ENTER"$n"' close the current window.\n
+----\n
 ------------------------------------------------------------------------------------------------"
   -v - -testimage2d 512 -x_color_curves rgb -v +
 
@@ -16217,18 +16222,19 @@ _demo_color_curves :
 #@gmic : Launch the 2048 game.
 x_2048 :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- 2048 -----------------------------------------------\n
+------ "${g}"2048"$n" -----------------------------------------------\n
 ----\n
----- Join the numbers and get to the 2048 title!\n
+---- Join the numbers and get to the "${g}"2048"$n" title!\n
 ----\n
----- Use your arrow keys to move the tiles. When two tiles\n
+---- Use your "${c}"arrow keys"$n" to move the tiles. When two tiles\n
 ---- with the same number touch, they merge into one!\n
----- This command is a port of the '2048' game originally\n
----- designed by Gabriele Cirulli, and available at:\n
----- http://gabrielecirulli.github.io/2048/\n
+---- This command is a port of the '"${c}"2048"$n"' game originally\n
+---- designed by "${c}"Gabriele Cirulli"$n", and available at:\n
+---- "${r}"http://gabrielecirulli.github.io/2048/"$n"\n
 ----\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v - -l[]
@@ -16370,13 +16376,14 @@ x_2048 :
 #@gmic : Launch the blobs editor.
 x_blobs :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Blobs editor --------------------------\n
+------ "${g}"Blobs editor"$n" --------------------------\n
 ----\n
----- Mouse to insert/move/delete blobs.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse"$n" to insert/move/delete blobs.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------"
   -v -
@@ -16448,12 +16455,13 @@ x_blobs :
 #@gmic : Launch the bouncing balls demo.
 x_bouncing :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Bouncing balls ------------------------------\n
+------ "${g}"Bouncing balls"$n" ------------------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------"
   -v - -l[]
@@ -16503,6 +16511,7 @@ x_bouncing :
 #@gmic : Default value: 'colorspace=rgb'.
 x_color_curves : -skip ${1=rgb}
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[^-1] "Apply color curves of image$?, in the '$1' colorspace."
   -if {['"$1"']=='last'} -v -
     -if {!narg($_xcc_colorbase)} -v + -return -endif
@@ -16510,15 +16519,17 @@ x_color_curves : -skip ${1=rgb}
   -else
     -e[] "\n
 ------------------------------------------------------------------------------------------------\n
----- Left mouse button on a curve creates a new control point (or moves an existing one).\n
----- Right mouse button on a control point deletes it.\n
----- Left mouse button on the main image window shows the initial image until button is released.\n
----- Right mouse button on the main image window adds a keypoint to all curves from picked color.\n
----- Key 'R' on a curve resets it.\n
----- Keys 'CTRL+D' increase window size.\n
----- Keys 'CTRL+C' decrease window size.\n
----- Keys 'CTRL+R' reset window size.\n
----- Keys 'ESC', 'Q' or 'ENTER' close the current window.\n
+----\n
+---- "${c}"Left mouse button"$n" on a curve creates a new control point (or moves an existing one).\n
+---- "${c}"Right mouse button"$n" on a control point deletes it.\n
+---- "${c}"Left mouse button"$n" on the main image window shows the initial image until button is released.\n
+---- "${c}"Right mouse button"$n" on the main image window adds a keypoint to all curves from picked color.\n
+---- Key '"${c}"R"$n"' on a curve resets it.\n
+---- Keys '"${c}"CTRL+D"$n"' increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' decrease window size.\n
+---- Keys '"${c}"CTRL+R"$n"' reset window size.\n
+---- Keys '"${c}"ESC"$n"', '"${c}"Q"$n"' or '"${c}"ENTER"$n"' close the current window.\n
+----\n
 ------------------------------------------------------------------------------------------------"
     -v -
     -__x_color_curves[] $1 _xcc_colorbase=$1
@@ -16662,7 +16673,7 @@ __x_color_curves :
     -m "xcc_goto: -s c,-3 -rgb2ycbcr[0] -a c" -m "xcc_backto: -s c,-3 -ycbcr2rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,128,if(c==1,x,128)) 256,1,1,3,if(!c,128,if(c==1,128,x)) -ycbcr2rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  -else -error[0--3] "Command 'x_color_curves': Unknown specified color space '$1'."
+  -else -v + -error[0--3] "Command 'x_color_curves': Unknown specified color space '$1'."
   -endif
 
 #@gmic x_colorize : _is_lineart={ 0 | 1 },_max_resolution={ 0 | >=128 },_multichannels_output={ 0 | 1 },_[palette1],_[palette2]
@@ -16672,24 +16683,27 @@ __x_color_curves :
 x_colorize : -skip ${1=0},${3=0},${4=0},${5=0} -check "${2=1024}==0 || $2>=128"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
   -v - s0="image" s1="lineart" s2="multichannel" s3="merged" -v +
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[^-1] "Colorize selected B&W "${s{!$1}}"$? interactively, with maximum resolution $2 and "${s{2+!$3}}" output."
   -e[] "\n
 --------------------------------------------------------------------------------------\n
----- Left mouse button creates a new colored control point (or moves an existing one).\n
----- Right mouse button or key 'X' over a control point deletes it.\n
----- Right mouse button or key 'P' anywhere else picks a color from the image.\n
----- Mouse wheel, or keys 'CTRL+arrows UP/DOWN' zoom view in/out.\n
----- 'CTRL+mouse wheel', 'SHIFT+mouse wheel' or arrow keys move image in zoomed view.\n
----- Key 'SPACE' updates the extrapolated color field.\n
----- Key 'TAB' toggles between markers view modes.\n
----- Key 'BACKSPACE' deletes the last control point added.\n
----- Key 'PAGE UP' increases image contrast.\n
----- Key 'PAGE DOWN' decreases image contrast.\n
----- Key 'R' toggles color replace mode.\n
----- Keys 'CTRL+D' increase window size.\n
----- Keys 'CTRL+C' decrease window size.\n
----- Keys 'CTRL+R' reset window size.\n
----- Keys 'ESC', 'Q' or 'ENTER' exit the interactive window.\n
+----\n
+---- "${c}"Left mouse button"$n" creates a new colored control point (or moves an existing one).\n
+---- "${c}"Right mouse button"$n" or key '"${c}"X"$n"' over a control point deletes it.\n
+---- "${c}"Right mouse button"$n" or key '"${c}"P"$n"' anywhere else picks a color from the image.\n
+---- "${c}"Mouse wheel"$n", or keys '"${c}"CTRL+arrows UP/DOWN"$n"' zoom view in/out.\n
+---- '"${c}"CTRL+mouse wheel"$n"', '"${c}"SHIFT+mouse wheel"$n"' or "${c}"arrow keys"$n" move image in zoomed view.\n
+---- Key '"${c}"SPACE"$n"' updates the extrapolated color field.\n
+---- Key '"${c}"TAB"$n"' toggles between markers view modes.\n
+---- Key '"${c}"BACKSPACE"$n"' deletes the last control point added.\n
+---- Key '"${c}"PAGE UP"$n"' increases image contrast.\n
+---- Key '"${c}"PAGE DOWN"$n"' decreases image contrast.\n
+---- Key '"${c}"R"$n"' toggles color replace mode.\n
+---- Keys '"${c}"CTRL+D"$n"' increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' decrease window size.\n
+---- Keys '"${c}"CTRL+R"$n"' reset window size.\n
+---- Keys '"${c}"ESC"$n"', '"${c}"Q"$c"' or '"${c}"ENTER"$n"' exit the interactive window.\n
+----\n
 --------------------------------------------------------------------------------------"
   -v -
   is_palette1=${"-is_image_arg[] $4"}
@@ -16974,12 +16988,13 @@ __x_colorize :
 #@gmic : Launch the fire effect demo.
 x_fire : -skip "${1=G\47MIC}"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Fire effect ------------------------\n
+------ "${g}"Fire effect"$n" ------------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v -
@@ -17017,12 +17032,13 @@ x_fire : -skip "${1=G\47MIC}"
 #@gmic : Launch the fireworks demo.
 x_fireworks :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Fireworks --------------------------\n
+------ "${g}"Fireworks"$n" --------------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------"
   -v - -l[]
@@ -17073,14 +17089,15 @@ x_fireworks :
 #@gmic : Launch the fish-eye effect demo.
 x_fisheye :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Fish-eye effect --------------------\n
+------ "${g}"Fish-eye effect"$n" --------------------\n
 ----\n
----- Mouse pointer moves fish-eye center.\n
----- Mouse buttons set fish-eye size.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse pointer"$n" moves fish-eye center.\n
+---- "${c}"Mouse buttons"$n" set fish-eye size.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v -
@@ -17111,14 +17128,15 @@ x_fisheye :
 #@gmic : Launch the fourier filtering demo.
 x_fourier :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Fourier-filtering ----------------------------------------\n
+------ "${g}"Fourier-filtering"$n" ----------------------------------------\n
 ----\n
----- Mouse buttons on the right image to set min/max frequencies.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to decrease window size.\n
----- Keys 'CTRL+R' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse buttons"$n" on the right image to set min/max frequencies.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to decrease window size.\n
+---- Keys '"${c}"CTRL+R"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------------------"
   -v -
@@ -17214,12 +17232,13 @@ x_fourier :
 #@gmic : Launch the histogram demo.
 x_histogram :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Histogram demo -------------------------------\n
+------ "${g}"Histogram demo"$n" -------------------------------\n
 ----\n
----- Mouse to set parameters.\n
----- Right button or key 'SPACE' to reset.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse"$n" to set parameters.\n
+---- "${c}"Right button"$n" or key '"${c}"SPACE"$n"' to reset.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------"
   -v -
@@ -17312,14 +17331,15 @@ _x_histogram :
 #@gmic : Launch the hough transform demo.
 x_hough :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Hough-transform -----------------------------------------\n
+------ "${g}"Hough-transform"$n" -----------------------------------------\n
 ----\n
----- Mouse buttons on the vote image to draw corresponding line.\n
----- Mouse buttons on the image to vote for all lines crossing.\n
+---- "${c}"Mouse buttons"$n" on the vote image to draw corresponding line.\n
+---- "${c}"Mouse buttons"$n" on the image to vote for all lines crossing.\n
 ---- the clicked point.\n
----- Key 'SPACE' to reset the hough window.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Key '"${c}"SPACE"$n"' to reset the hough window.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------------------"
   -v -
@@ -17397,19 +17417,20 @@ x_hough :
 #@gmic : Launch the Jawbreaker game.
 x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $3<=8"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Jawbreaker --------------------------------------------\n
+------ "${g}"Jawbreaker"$n" --------------------------------------------\n
 ----\n
----- The goal of the game is to remove the maximum number of\n
----- balls on the board, simply by clicking on them. But a\n
+---- The goal of the game is to "${c}"remove the maximum number of\n
+---- balls on the board"$n", simply by clicking on them. But a\n
 ---- colored ball can disappear only if it is grouped with at\n
 ---- least one ball of the same color. The score is higher if\n
 ---- you destroy larger sets of connected colored balls.\n
 ----\n
----- Left mouse button to select/destroy balls on board.\n
----- Key 'BACKSPACE' or 'SPACE' to undo the last move.\n
----- Key 'S' to save snapshot of the current view.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Left mouse button"$n" to select/destroy balls on board.\n
+---- Key '"${c}"BACKSPACE"$n"' or '"${c}"SPACE"$n"' to undo the last move.\n
+---- Key '"${c}"S"$n"' to save snapshot of the current view.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v -
@@ -17541,14 +17562,15 @@ _x_jawbreaker_ball :
 #@gmic : Launch the virtual landscape demo.
 x_landscape :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Virtual landscape -------------------------------------\n
+------ "${g}"Virtual landscape"$n" -------------------------------------\n
 ----\n
 ---- Enjoy the view!\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v - -l[]
@@ -17568,8 +17590,6 @@ x_landscape :
   $W,$H,1,3 -fc. 60,80,135 -nm. ccolors # Color for the horizon.
   $W,$H,1,1,'(y/$H)^2' -nm. mcolors # Mask for the horizon.
   $W,400,1,1,'b=h-1-$Mgmap;if(y>=b,256+(y-b)*255/(h-1-b),y*255/b)' -round. # Background.
-
-#  -v + -p. -q
 
   (96^16^128) (0^200^255) -a[-2,-1] x -r. 256,1,1,3,3
   (0^32^0) (0^64^128) -a[-2,-1] x -r. 256,1,1,3,3
@@ -17636,19 +17656,20 @@ x_landscape :
 #@gmic : Launch the game of life.
 x_life :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- The game of life --------------------------------------\n
+------ "${g}"The game of life"$n" --------------------------------------\n
 ----\n
----- The goal is to create the biggest possible biological\n
----- system. You start with a stock of cells which you can\n
+---- The goal is to create the "${c}"biggest possible biological\n
+---- system"$n". You start with a stock of cells which you can\n
 ---- spread over the board. For each new cells created\n
 ---- simultaneously and spontaneously by your system, you\n
 ---- gain more new cells to scatter.\n
 ----\n
----- Left mouse button to scatter cells in stock.\n
----- Right mouse button to reset game.\n
----- Key 'S' to save snapshot of the current view.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Left mouse button"$n" to scatter cells in stock.\n
+---- "${c}"Right mouse button"$n" to reset game.\n
+---- Key '"${c}"S"$n"' to save snapshot of the current view.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v -
@@ -17723,14 +17744,15 @@ x_life :
 #@gmic : Launch the light effect demo.
 x_light :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Light effect ------------------------\n
+------ "${g}"Light effect"$n" ------------------------\n
 ----\n
----- Move light position with mouse.\n
----- Mouse buttons fade light in/out.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Move light position with "${c}"mouse"$n".\n
+---- "${c}"Mouse buttons"$n" fade light in/out.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v -
@@ -17782,13 +17804,14 @@ x_light :
 #@gmic : Launch Mandelbrot/Julia explorer.
 x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Mandelbrot/Julia explorer -----------------\n
+------ "${g}"Mandelbrot/Julia explorer"$n" -----------------\n
 ----\n
----- Select zooming region with mouse.\n
----- Click once to reset zoom factor.\n
----- Keys 'ESC' or 'Q' to exit.\n
----- Key 'C' to print current fractal coordinates.\n
+---- Select zooming region with "${c}"mouse"$n".\n
+---- "${c}"Click once"$n" to reset zoom factor.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
+---- Key '"${c}"C"$n"' to print current fractal coordinates.\n
 ----\n
 --------------------------------------------------"
 
@@ -17834,13 +17857,14 @@ _x_mandelbrot_palette :
 #@gmic : Launch the 3d metaballs demo.
 x_metaballs3d :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- 3d metaballs ---------------------------------------\n
+------ "${g}"3d metaballs"$n" ---------------------------------------\n
 ----\n
----- Mouse button or 'SPACE' key to toggle rendering mode.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse button"$n" or '"${c}"SPACE"$n"' key to toggle rendering mode.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------------"
   -v - -l[]
@@ -17880,16 +17904,17 @@ x_metaballs3d :
 #@gmic : Launch the Minesweeper game.
 x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Minesweeper -------------------------------------------\n
+------ "${g}"Minesweeper"$n" -------------------------------------------\n
 ----\n
----- The goal is to clear the minefield without detonating a\n
+---- The goal is to "${c}"clear the minefield"$n" without detonating a\n
 ---- mine.\n
 ----\n
----- Left mouse button to try clearing one square.\n
----- Right mouse button to flag or unflag a square.\n
----- Middle mouse button to reset mine field.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Left mouse button"$n" to try clearing one square.\n
+---- "${c}"Right mouse button"$n" to flag or unflag a square.\n
+---- "${c}"Middle mouse button"$n" to reset mine field.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------\n"
   -v -
@@ -17975,14 +18000,15 @@ x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
 #@gmic : Launch the minimal path demo.
 x_minimal_path :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Minimal path ------------------------------------------\n
+------ "${g}"Minimal path"$n" ------------------------------------------\n
 ----\n
----- Click on two points to compute and display the minimal\n
+---- "${c}"Click on two points"$n" to compute and display the minimal\n
 ---- path between those points. The ending point is then\n
 ---- chosen as the next starting point for another path.\n
----- Key 'S' to save snapshot of the current view.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Key '"${c}"S"$n"' to save snapshot of the current view.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v -
@@ -18039,24 +18065,25 @@ x_minimal_path :
 #@gmic : Launch pacman game.
 x_pacman :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Pacman -----------------------------------------------\n
+------ "${g}"Pacman"$n" -----------------------------------------------\n
 ----\n
----- This is a G\47MIC implementation of the pacman game.\n
+---- This is a G\47MIC implementation of the "${g}"pacman"$n" game.\n
 ----\n
 ---- Move the pacman to eat all pacdots on the different levels.\n
----- Eating a pacgum makes pacman invincible for 10 seconds,\n
+---- Eating a pacgum makes pacman invincible for "${c}"10 seconds"$n",\n
 ---- which mean pacman can eat ghosts during this time.\n
----- Eating a ghost earns 100 pts.\n
----- Eating a cherry earns 10 pts.\n
----- Eating a strawberry earns 100 pts.\n
----- Eating an orange earns 1000 pts.\n
----- Eating a banana earns 5000 pts.\n
+---- Eating a ghost earns "${c}"100 pts"$n".\n
+---- Eating a cherry earns "${c}"10 pts"$n".\n
+---- Eating a strawberry earns "${c}"100 pts"$n".\n
+---- Eating an orange earns "${c}"1000 pts"$n".\n
+---- Eating a banana earns "${c}"5000 pts"$n".\n
 ----\n
----- Arrow keys to control pacman.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Arrow keys"$n" to control pacman.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v - -l[]
@@ -18348,16 +18375,17 @@ _pacman_map_level6 :
 #@gmic : Launch the interactive painter.
 x_paint :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Interactive painter -----------------------\n
+------ "${g}"Interactive painter"$n" -----------------------\n
 ----\n
----- Use mouse to select color and brush.\n
----- Left button draws a colored stroke.\n
----- Right button fills a colored region.\n
----- Arrow keys or SPACE and BACKSPACE to swap\n
+---- Use "${c}"mouse"$n" to select color and brush.\n
+---- "${c}"Left button"$n" draws a colored stroke.\n
+---- "${c}"Right button"$n" fills a colored region.\n
+---- "${c}"Arrow keys"$n" or '"${c}"SPACE"$n"' and '"${c}"BACKSPACE"$n"' to swap\n
 ---- between available images.\n
----- Key 'S' to save snapshot of the current view.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Key '"${c}"S"$n"' to save snapshot of the current view.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------"
   -v - -to_rgb
@@ -18473,12 +18501,13 @@ _x_paint :
 #@gmic : Launch the plasma effect demo.
 x_plasma :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Plasma effect ----------------------\n
+------ "${g}"Plasma effect"$n" ----------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v - -l[]
@@ -18538,25 +18567,26 @@ x_plasma :
 #@gmic : Launch the RGB color quantization demo.
 x_quantize_rgb : -check "isint(${1=16}) && $1>1"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- RGB Quantization --------------------------------------\n
+------ "${g}"RGB Quantization"$n" --------------------------------------\n
 ----\n
 ---- This demo shows how RGB colors can be quantified using\n
----- the k-means algorithm.\n
+---- the "${c}"k-means algorithm"$n".\n
 ----\n
----- Left mouse button on 3d view rotates the color cube.\n
----- Right mouse button on 3d view toggles colors/clusters mode.\n
----- Left mouse button on image toggles dithering mode,\n
----- Left mouse button on colormap adds a random color.\n
----- Right mouse button on colormap removes a color.\n
----- Key 'R' init colormap with random values.\n
----- Key 'U' init colormap with uniform sampling.\n
----- Key 'M' init colormap with median-cut algorithm.\n
----- Key 'SPACE' does a single iteration of k-means and pauses.\n
----- Key 'ENTER' runs k-means algorithm.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Left mouse button"$n" on 3d view rotates the color cube.\n
+---- "${c}"Right mouse button"$n" on 3d view toggles colors/clusters mode.\n
+---- "${c}"Left mouse button"$n" on image toggles dithering mode,\n
+---- "${c}"Left mouse button"$n" on colormap adds a random color.\n
+---- "${c}"Right mouse button"$n" on colormap removes a color.\n
+---- Key '"${c}"R"$n"' init colormap with random values.\n
+---- Key '"${c}"U"$n"' init colormap with uniform sampling.\n
+---- Key '"${c}"M"$n"' init colormap with median-cut algorithm.\n
+---- Key '"${c}"SPACE"$n"' does a single iteration of k-means and pauses.\n
+---- Key '"${c}"ENTER"$n"' runs k-means algorithm.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------------------"
   -v -
@@ -18698,12 +18728,13 @@ _x_quantize_rgb_text :
 #@gmic : Launch the 3d reflection demo.
 x_reflection3d :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- 3d reflection ----------------------\n
+------ "${g}"3d reflection"$n" ----------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v -
@@ -18762,12 +18793,13 @@ x_reflection3d :
 #@gmic : Launch the 3d rubber object demo.
 x_rubber3d :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- 3d rubber object -------------------\n
+------ "${g}"3d rubber object"$n" -------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------"
   -v - -rm
@@ -18799,23 +18831,26 @@ x_rubber3d :
 #@gmic : Default value: 'max_resolution=1024'.
 x_segment : -check "${1=1024}==0 || $1>=128"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[^-1] "Extract foreground from background in image$? interactively, with maximum resolution $1."
   -e[] "\n
 ----------------------------------------------------------------------------------------------------\n
----- Left mouse button or key 'F' create a new foreground control point (or move an existing one).\n
----- Right mouse button or key 'B' create a new background control point (or move an existing one).\n
----- Mouse wheel, or keys 'CTRL+arrows UP/DOWN' zoom view in/out.\n
----- 'CTRL+mouse wheel', 'SHIFT+mouse wheel' or arrow keys move image in zoomed view.\n
----- Key 'SPACE' updates the extraction mask.\n
----- Key 'TAB' toggles background view modes.\n
----- Key 'M' toggles marker view modes.\n
----- Key 'BACKSPACE' deletes the last control point added.\n
----- Key 'PAGE UP' increases background opacity.\n
----- Key 'PAGE DOWN' decreases background opacity.\n
----- Keys 'CTRL+D' increase window size.\n
----- Keys 'CTRL+C' decrease window size.\n
----- Keys 'CTRL+R' reset window size.\n
----- Keys 'ESC', 'Q' or 'ENTER' exit the interactive window.\n
+----\n
+---- "${c}"Left mouse button"$n" or key '"${c}"F"$n"' create a new foreground control point (or move an existing one).\n
+---- "${c}"Right mouse button"$n" or key '"${c}"B"$n"' create a new background control point (or move an existing one).\n
+---- "${c}"Mouse wheel"$n", or keys '"${c}"CTRL+arrows UP/DOWN"$n"' zoom view in/out.\n
+---- '"${c}"CTRL+mouse wheel"$n"', '"${c}"SHIFT+mouse wheel"$n"' or "${c}"arrow keys"$n" move image in zoomed view.\n
+---- Key '"${c}"SPACE"$n"' updates the extraction mask.\n
+---- Key '"${c}"TAB"$n"' toggles background view modes.\n
+---- Key '"${c}"M"$n"' toggles marker view modes.\n
+---- Key '"${c}"BACKSPACE"$n"' deletes the last control point added.\n
+---- Key '"${c}"PAGE UP"$n"' increases background opacity.\n
+---- Key '"${c}"PAGE DOWN"$n"' decreases background opacity.\n
+---- Keys '"${c}"CTRL+D"$n"' increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' decrease window size.\n
+---- Keys '"${c}"CTRL+R"$n"' reset window size.\n
+---- Keys '"${c}"ESC"$n"', '"${c}"Q"$n"' or '"${c}"ENTER"$n"' exit the interactive window.\n
+----\n
 ----------------------------------------------------------------------------------------------------"
   -v - -repeat $! -l[$>]
 
@@ -19380,10 +19415,11 @@ x_select_palette : -skip ${1=xsp_variable},${2=0}
 #@gmic : Launch the shade bobs demo.
 x_shadebobs :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Shade bobs -------------------------------\n
+------ "${g}"Shade bobs"$n" -------------------------------\n
 ----\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -------------------------------------------------"
   -v - -rm t=100 -w 512,512,0,"[G"{`39`}"MIC] Shade bobs"
@@ -19421,19 +19457,20 @@ x_shadebobs :
 #@gmic : Launch spline curve editor.
 x_spline :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Spline curve editor --------------------------\n
+------ "${g}"Spline curve editor"$n" --------------------------\n
 ----\n
----- Mouse to insert/move/delete points.\n
----- Key 'R' to reset the curve.\n
----- Key 'SPACE' to shows/hide spline curve.\n
----- Key 'P' to shows/hide control points.\n
----- Key 'ENTER' to shows/hide control polygon.\n
----- Key 'T' to shows/hide point tangents.\n
----- Key 'I' to shows/hide point indices.\n
----- Key 'C' to shows/hide point coordinates.\n
----- Keys '+' and '-' to increase/decrease roundness.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Mouse"$n" to insert/move/delete points.\n
+---- Key '"${c}"R"$n"' to reset the curve.\n
+---- Key '"${c}"SPACE"$n"' to shows/hide spline curve.\n
+---- Key '"${c}"P"$n"' to shows/hide control points.\n
+---- Key '"${c}"ENTER"$n"' to shows/hide control polygon.\n
+---- Key '"${c}"T"$n"' to shows/hide point tangents.\n
+---- Key '"${c}"I"$n"' to shows/hide point indices.\n
+---- Key '"${c}"C"$n"' to shows/hide point coordinates.\n
+---- Keys '"${c}"+"$n"' and '"${c}"-"$n"' to increase/decrease roundness.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 -----------------------------------------------------"
 
@@ -19539,14 +19576,15 @@ x_spline :
 #@gmic : Launch tetris game.
 x_tetris :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Tetris --------------------------------------------\n
+------ "${g}"Tetris"$n" --------------------------------------------\n
 ----\n
----- This is a G\47MIC implementation of the Tetris game.\n
+---- This is a G\47MIC implementation of the "${g}"Tetris"$n" game.\n
 ----\n
----- Arrow keys to move/rotate the triominos.\n
----- Key 'SPACE' to make the current triomino falling.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Arrow keys"$n" to move/rotate the triominos.\n
+---- Key '"${c}"SPACE"$n"' to make the current triomino falling.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 ----------------------------------------------------------"
   -v - -rm
@@ -19652,10 +19690,11 @@ x_tetris :
 #@gmic : Launch tic-tac-toe game.
 x_tictactoe :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Tic-Tac-Toe game -----------------\n
+------ "${g}"Tic-Tac-Toe game"$n" -----------------\n
 ----\n
----- Use mouse to select positions of the\n
+---- Use "${c}"mouse"$n" to select positions of the\n
 ---- symbols. Close window to exit game.\n
 ----\n
 -----------------------------------------"
@@ -19766,15 +19805,16 @@ _x_tictactoe6 : # Generate a +- diagonal stroke and his mask.
 #@gmic : Launch the image waves demo.
 x_waves :
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Image waves --------------------------\n
+------ "${g}"Image waves"$n" --------------------------\n
 ----\n
----- Left mouse button to drop balls.\n
----- Right mouse button to rotate view.\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'CTRL+F' to switch fullscreen mode.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- "${c}"Left mouse button"$n" to drop balls.\n
+---- "${c}"Right mouse button"$n" to rotate view.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"CTRL+F"$n"' to switch fullscreen mode.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 ---------------------------------------------"
   -v -
@@ -19831,12 +19871,13 @@ x_waves :
 #@gmic : Default values: 'opacity=0.2'.
 x_whirl : -check ${1=0.2}>=0
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
   -e[] "\n
------- Fractal whirls ----------------------------\n
+------ "${g}"Fractal whirls"$n" ----------------------------\n
 ----\n
----- Keys 'CTRL+D' to increase window size.\n
----- Keys 'CTRL+C' to reset window size.\n
----- Keys 'ESC' or 'Q' to exit.\n
+---- Keys '"${c}"CTRL+D"$n"' to increase window size.\n
+---- Keys '"${c}"CTRL+C"$n"' to reset window size.\n
+---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
 --------------------------------------------------"
   -v -
