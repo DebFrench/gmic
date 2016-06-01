@@ -16017,8 +16017,8 @@ strcontains :
 
 #@gmic strlen : string1
 #@gmic : Return the length of specified string argument.
-strlen :
-  -v - ({'"$1"'}) -u {w} -rm. -v +
+strlen : -skip "${1=}"
+  -v - -u {narg({'"$1"'})} -v +
 
 #@gmic strreplace : string,search,replace
 #@gmic : Search and replace substrings in an input string.
@@ -20441,7 +20441,8 @@ _gimp_download_all_data :
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
-#@gimp : Kim Bartholomew ,
+#@gimp : Thomas Jakob,
+#@gimp : Kim Bartholomew,
 #@gimp : <a href="http://www.captivemoment.com">Sudi</a>,
 #@gimp : Michael Prostka,
 #@gimp : Arkadi Gelfond,
