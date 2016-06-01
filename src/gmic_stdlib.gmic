@@ -18356,8 +18356,7 @@ _x_paint :
 
   # Init variables.
   -pass[-2,-1] 1 ({'{-2,n}'}) -discard. {'~'} -nm... {t} -rm.
-  color=0,0,0
-  saturation=1
+  __color={0,if(ia<128,[255,255,255],[0,0,0])}
   brushsize=3
   brushopacity=0
   brushangle=90
