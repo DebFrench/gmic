@@ -2296,6 +2296,32 @@ You can define a transparent top layer that will help the seam-carving algorithm
   <note text="&lt;small&gt;Author: &lt;i&gt;David Tschumperl&amp;#233;&lt;/i&gt;.      Latest update: &lt;i&gt;11/02/2011&lt;/i&gt;.&lt;/small&gt;" />
 </preset>
 
+<!-- /Degradations/Pixel sort -->
+<preset name="Pixel sort">
+  <command>
+-gimp_pixelsort_preview $"*"
+  </command>
+  <note text="&lt;small&gt;&lt;b&gt;Sorting parameters:&lt;/b&gt;&lt;/small&gt;" />
+  <choice name="Order" default="1" choice0="Decreasing" choice1="Increasing" />
+  <choice name="Axis" default="0" choice0="X-axis" choice1="Y-axis" choice2="X-axis then Y-axis" choice3="Y-axis then X-axis" />
+  <choice name="Sorting criterion" default="1" choice0="Minimum" choice1="Luminance" choice2="Lightness" choice3="Intensity" choice4="Maximum" choice5="Random" />
+  <separator />
+  <note text="&lt;small&gt;&lt;b&gt;Masking parameters:&lt;/b&gt;&lt;/small&gt;" />
+  <choice name="Mask by" default="1" choice0="Bottom layer" choice1="Criterion" choice2="Contours" choice3="Random" />
+  <float name="Lower mask threshold (%)" default="0" min="0" max="100" />
+  <float name="Higher mask threshold (%)" default="100" min="0" max="100" />
+  <float name="Mask smoothness (%)" default="0" min="0" max="5" />
+  <bool name="Invert mask" default="0" />
+  <bool name="Preview mask" default="0" />
+  <separator />
+  <note text="&lt;small&gt;&lt;b&gt;Note:&lt;/b&gt;&lt;br/&gt;
+This filter implements one version of the algorithm described here :&lt;br/&gt;
+ &lt;/small&gt;" />
+  <link name="http://satyarth.me/articles/pixel-sorting/" url="http://satyarth.me/articles/pixel-sorting/" align="center" />
+  <separator />
+  <note text="&lt;small&gt;Author: &lt;i&gt;David Tschumperl&amp;#233;&lt;/i&gt;.      Latest update: &lt;i&gt;06/06/2016&lt;/i&gt;.&lt;/small&gt;" />
+</preset>
+
 <!-- /Degradations/Rain &amp; snow -->
 <preset name="Rain &amp; snow">
   <command>

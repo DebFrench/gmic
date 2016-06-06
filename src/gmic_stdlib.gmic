@@ -13626,11 +13626,14 @@ pencilbw : -skip ${1=0.3},${2=60}
   -e[^-1] "Apply B&W pencil effect on image$?, with size $1 and amplitude $2."
   -v - -repeat $! -l[$>] -split_opacity -l[0] -norm -b $1 -sharpen 4000 -smooth $2,0,1 -equalize -sqrt -n 0,255 -endl -a c -endl -done -v +
 
-#@gmic pixelsort : _ordering={ + | - },_axis={ x | y | xy | yx },_[sorting_criterion],_[mask]
+#@gmic pixelsort : _ordering={ + | - },_axis={ x | y | z | xy | yx },_[sorting_criterion],_[mask]
 #@gmic : Apply a 'pixel sorting' algorithm on selected images, as described in the page :
 #@gmic : http://satyarth.me/articles/pixel-sorting/
 #@gmic : $ image.jpg --norm --ge. 30% --pixelsort[0] +,y,[1],[2]
-pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; str2=='x' || str2=='y' || str2=='xy' || str2=='yx') && ('${3=}'==0 || "${"-is_image_arg $3"}") && ('${4=}'==0 || "${"-is_image_arg $4"}")"
+pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && "\
+                   "(str2='${2=x}'; str2=='x' || str2=='y' || str2=='z' || str2=='xy' || str2=='yx') && "\
+                   "('${3=}'==0 || "${"-is_image_arg $3"}") && "\
+                   "('${4=}'==0 || "${"-is_image_arg $4"}")"
   -v - s0="descending" s1="ascending" -v +
   -if {'$3'!=0" && "'$4'!=0}
     -e[^-1] "Apply 'pixelsort' effect to image$? in "${s{['$1']=='+'}}" order, along axis $2, with sorting criterion $3 and mask $4."
@@ -13643,7 +13646,7 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; s
   -endif
   -v - -repeat $!
     -if {'$3'!=0} -pass$3 0 -else --compose_channels[$>] + -endif
-    -if {'$4'!=0} -pass$4 0 -else [$>],[$>],1,1,1 -endif
+    -if {'$4'!=0} -pass$4 0 -else [$>],[$>],[$>],1,1 -endif
     -l[$>,-2,-1]
       -ge. 50% -mv.. 0 -a c
       order={`";'$1'=='+'?'<':'>'"`}
@@ -13651,6 +13654,8 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; s
         -_pixelsort $order -channels 1,{s-2}
       -elif {'$2'=='y';}
         -permute yxzc -_pixelsort $order -channels 1,{s-2} -permute yxzc
+      -elif {'$2'=='z';}
+        -permute zxyc -_pixelsort $order -channels 1,{s-2} -permute yzxc
       -elif {'$2'=='xy';}
         -_pixelsort $order -permute yxzc -_pixelsort $order -channels 1,{s-2} -permute yxzc
       -elif {'$2'=='yx';}
@@ -13660,23 +13665,23 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; s
   -done -v +
 
 _pixelsort :
-  1,{h}
+  1,{h},{d}
   -f. ":
-    quicksort(x0,x1,y) = (
+    quicksort(x0,x1,y,z) = (
       _qs_stack = vector"{0,2*w}"();
-      _qs_stack_size = 0;
-      _qs_push(elt0,elt1) = (_qs_stack[_qs_stack_size++] = elt0; _qs_stack[_qs_stack_size++] = elt1);
-      _qs_pop() = (_s1 = _qs_stack[--_qs_stack_size]; _s0 = _qs_stack[--_qs_stack_size]; [_s0,_s1]);
+      _qs_stacksize = 0;
+      _qs_push(elt0,elt1) = (_qs_stack[_qs_stacksize++] = elt0; _qs_stack[_qs_stacksize++] = elt1);
+      _qs_pop() = (_s1 = _qs_stack[--_qs_stacksize]; _s0 = _qs_stack[--_qs_stacksize]; [_s0,_s1]);
       _qs_push(x0,x1);
-      whiledo (_qs_stack_size>0,
+      whiledo (_qs_stacksize>0,
         _qs_range = _qs_pop();
         _qs_lo = _qs_range[0];
         _qs_hi = _qs_range[1];
-        _qs_pivot = i(#0,int((_qs_lo+_qs_hi)/2),y,0,0);
-        whiledo(_qs_lo<=_qs_hi,
-           whiledo(i(#0,_qs_lo,y,0,0)$1_qs_pivot, ++_qs_lo);
-           whiledo(_qs_pivot$1i(#0,_qs_hi,y,0,0), --_qs_hi);
-           if (_qs_lo<=_qs_hi, _qs_tmp = I(#0,_qs_lo,y); I(#0,_qs_lo++,y) = I(#0,_qs_hi,y); I(#0,_qs_hi--,y) = _qs_tmp);
+        _qs_pivot = i(#0,int((_qs_lo + _qs_hi)/2),y,z,0);
+        whiledo (_qs_lo<=_qs_hi,
+           whiledo (i(#0,_qs_lo,y,z,0)$1_qs_pivot, ++_qs_lo);
+           whiledo (_qs_pivot$1i(#0,_qs_hi,y,z,0), --_qs_hi);
+           if (_qs_lo<=_qs_hi, _qs_tmp = I(#0,_qs_lo,y,z); I(#0,_qs_lo++,y,z) = I(#0,_qs_hi,y,z); I(#0,_qs_hi--,y,z) = _qs_tmp);
         );
         if (_qs_range[0]<_qs_hi,_qs_push(_qs_range[0],_qs_hi));
         if (_qs_lo<_qs_range[1],_qs_push(_qs_lo,_qs_range[1]));
@@ -13684,9 +13689,9 @@ _pixelsort :
     );
     s1 = s#0 - 1;
     for (x0 = 0, x0<w#0, ++x0,
-      if (i(#0,x0,y,0,s1),
-        for (x1 = x0, x1<w#0 && i(#0,x1,y,0,s1)==1, ++x1);
-        quicksort(x0,min(x1,w#0-1),y);
+      if (i(#0,x0,y,z,s1),
+        for (x1 = x0, x1<w#0 && i(#0,x1,y,z,s1)==1, ++x1);
+        quicksort(x0,min(x1,w#0-1),y,z);
         x0 = ++x1;
       )
     )"
