@@ -13648,7 +13648,7 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && "\
     -if {'$3'!=0} -pass$3 0 -else --compose_channels[$>] + -endif
     -if {'$4'!=0} -pass$4 0 -else [$>],[$>],[$>],1,1 -endif
     -l[$>,-2,-1]
-      -ge. 50% -mv.. 0 -a c
+      nm={0,n} -ge. 50% -mv.. 0 -a c
       order={`";'$1'=='+'?'<':'>'"`}
       -if {'$2'=='x';}
         -_pixelsort $order -channels 1,{s-2}
@@ -13661,6 +13661,7 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && "\
       -elif {'$2'=='yx';}
         -permute yxzc -_pixelsort $order -permute yxzc -_pixelsort $order -channels 1,{s-2}
       -endif
+      -nm $nm
     -endl
   -done -v +
 
