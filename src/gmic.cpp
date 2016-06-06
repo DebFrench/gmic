@@ -4546,7 +4546,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
 
       // Generate strings for displaying image selections when verbosity>=0.
       CImg<char> gmic_selection;
-      if (is_verbose && !is_check_command && !is_skip_command && !is_echo_command && !is_verbose_command)
+      if (is_debug || (verbosity>=0 && !is_check_command && !is_skip_command && !is_echo_command && !is_verbose_command))
         selection2string(selection,images_names,1,gmic_selection);
 
       if (is_debug) {
