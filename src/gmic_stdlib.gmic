@@ -30879,6 +30879,7 @@ gmicol_rotate :
 #@gmicol clone("Noise [spread]")
 #@gmicol clone("Old-movie stripes")
 #@gmicol clone("Oldschool 8bits")
+#@gmicol clone("Pixel sort")
 
 #@gmicol Rain &amp; snow : gimp_rain_preview, gimp_rain_preview(0)
 #@gmicol : Angle = float(65,-180,180)
