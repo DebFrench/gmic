@@ -25375,6 +25375,11 @@ gimp_8bits_preview :
 #@gimp : Mask smoothness (%) = float(0,0,5)
 #@gimp : Invert mask = bool(0)
 #@gimp : Preview mask = bool(0)
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b>
+#@gimp : This filter implements one version of the algorithm described here :
+#@gimp : </small>"}
+#@gimp : link = link("http://satyarth.me/articles/pixel-sorting/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/06/2016</i>.</small>")
 gimp_pixelsort :
   -_gimp_pixelsort ${1-8},0
