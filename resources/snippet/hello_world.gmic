@@ -44,7 +44,7 @@
 #
 # On a terminal, type :
 #
-# $ gmic http://gmic.eu/snippets/hello_world.gmic -hello
+# $ gmic http://gmic.eu/snippet/hello_world.gmic -hello
 #
 #-------------------------------------------------------
 hello :

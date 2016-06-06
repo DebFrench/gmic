@@ -297,6 +297,7 @@ cd html
 lftp ftp://$GMIC_LOGIN:$GMIC_PASSWD@ftp.gmic.eu -e "mirror -RL . /www/gmic/ ; quit"
 rm -f gmic_stdlib.gmic gmic_stdlib.$SVERSION
 cd ..
+quit
 
 # Construct a clean version of G'MIC directory.
 #----------------------------------------------

@@ -578,7 +578,7 @@ bashcompletion:
 	@mkdir -p ../resources
 	@\gmic -v - gmic_stdlib.gmic raw:gmic_stdlib.gmic,uchar -document_gmic bash 2> ../resources/gmic_bashcompletion.sh
 
-# Generate man page (requires 'gmic' to be installed first).
+# Generate man page (requires 'gmic' to be installed).
 man:
 	@mkdir -p ../man
 	@\gmic -v - gmic_stdlib.gmic raw:gmic_stdlib.gmic,uchar -__help man 2> ../man/gmic.1
