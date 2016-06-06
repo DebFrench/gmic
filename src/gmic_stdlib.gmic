@@ -13629,7 +13629,7 @@ pencilbw : -skip ${1=0.3},${2=60}
 #@gmic pixelsort : _ordering={ + | - },_axis={ x | y | xy | yx },_[sorting_criterion],_[mask]
 #@gmic : Apply a 'pixel sorting' algorithm on selected images, as described in the page :
 #@gmic : http://satyarth.me/articles/pixel-sorting/
-#@gmic : $ image.jpg --norm --ge. 30% -pixelsort[0] +,y,[1],[2]
+#@gmic : $ image.jpg --norm --ge. 30% --pixelsort[0] +,y,[1],[2]
 pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; str2=='x' || str2=='y' || str2=='xy' || str2=='yx') && ('${3=}'==0 || "${"-is_image_arg $3"}") && ('${4=}'==0 || "${"-is_image_arg $4"}")"
   -v - s0="descending" s1="ascending"
   -if {'$3'!=0" && "'$4'!=0}
@@ -13648,23 +13648,22 @@ pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; s
       -ge. 50% -mv.. 0 -a c
       order={`";'$1'=='+'?'<':'>'"`}
       -if {'$2'=='x';}
-        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y
+        -_pixelsort $order -channels 1,{s-2}
       -elif {'$2'=='y';}
-        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y -permute yxzc
+        -permute yxzc -_pixelsort $order -channels 1,{s-2} -permute yxzc
       -elif {'$2'=='xy';}
-        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -a y
-        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y -permute yxzc
+        -_pixelsort $order -permute yxzc -_pixelsort $order -channels 1,{s-2} -permute yxzc
       -elif {'$2'=='yx';}
-        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -a y -permute yxzc
-        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y
+        -permute yxzc -_pixelsort $order -permute yxzc -_pixelsort $order -channels 1,{s-2}
       -endif
     -endl
   -done -v +
 
 _pixelsort :
-  -skip {"
+  1,{h}
+  -f. ":
     quicksort(x0,x1,y) = (
-      _qs_stack = vector"{2*w}"();
+      _qs_stack = vector"{0,2*w}"();
       _qs_stack_size = 0;
       _qs_push(elt0,elt1) = (_qs_stack[_qs_stack_size++] = elt0; _qs_stack[_qs_stack_size++] = elt1);
       _qs_pop() = (_s1 = _qs_stack[--_qs_stack_size]; _s0 = _qs_stack[--_qs_stack_size]; [_s0,_s1]);
@@ -13673,27 +13672,25 @@ _pixelsort :
         _qs_range = _qs_pop();
         _qs_lo = _qs_range[0];
         _qs_hi = _qs_range[1];
-        _qs_pivot = i(int((_qs_lo+_qs_hi)/2),y,0,0);
+        _qs_pivot = i(#0,int((_qs_lo+_qs_hi)/2),y,0,0);
         whiledo(_qs_lo<=_qs_hi,
-           whiledo(i(_qs_lo,y,0,0)$1_qs_pivot, ++_qs_lo);
-           whiledo(_qs_pivot$1i(_qs_hi,y,0,0), --_qs_hi);
-           if (_qs_lo<=_qs_hi, _qs_tmp = I(_qs_lo,y); I(_qs_lo++,y) = I(_qs_hi,y); I(_qs_hi--,y) = _qs_tmp);
+           whiledo(i(#0,_qs_lo,y,0,0)$1_qs_pivot, ++_qs_lo);
+           whiledo(_qs_pivot$1i(#0,_qs_hi,y,0,0), --_qs_hi);
+           if (_qs_lo<=_qs_hi, _qs_tmp = I(#0,_qs_lo,y); I(#0,_qs_lo++,y) = I(#0,_qs_hi,y); I(#0,_qs_hi--,y) = _qs_tmp);
         );
         if (_qs_range[0]<_qs_hi,_qs_push(_qs_range[0],_qs_hi));
         if (_qs_lo<_qs_range[1],_qs_push(_qs_lo,_qs_range[1]));
       )
     );
-    s1 = s - 1;
-    for (y = 0, y<h, ++y,
-      for (x0 = 0, x0<w, ++x0,
-        if (i(x0,y,0,s1),
-          for (x1 = x0, x1<w && i(x1,y,0,s1)==1, ++x1);
-          quicksort(x0,min(x1,w-1),y);
-          x0 = ++x1;
-        )
+    s1 = s#0 - 1;
+    for (x0 = 0, x0<w#0, ++x0,
+      if (i(#0,x0,y,0,s1),
+        for (x1 = x0, x1<w#0 && i(#0,x1,y,0,s1)==1, ++x1);
+        quicksort(x0,min(x1,w#0-1),y);
+        x0 = ++x1;
       )
-    );
-    "}
+    )"
+  -rm.
 
 #@gmic polaroid : _size1>=0,_size2>=0
 #@gmic : Create polaroid effect in selected images.
