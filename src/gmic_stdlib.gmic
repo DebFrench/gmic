@@ -2611,10 +2611,6 @@ gmicky_wilber :
 #@gmic : $ image.jpg (1,2,3;4,5,6;7,8,9) (255^128^64) 400,400,1,3,'if(x>w/2,x,y)*c'
 #@gmic : $$
 
-#@gmic ig : eq. to '-input_glob'.
-ig :
-  -input_glob $*
-
 #@gmic input_clut : "clut_name",_resolution>0
 #@gmic : Insert one of the pre-defined HaldCLUT at the end of the image list.
 input_clut : -check "isval(${2=64}) && $2>0"
@@ -2642,6 +2638,10 @@ input_clut : -check "isval(${2=64}) && $2>0"
       -o. ${_path_rc}clut_$1.cimgz,uchar
     -endif
   -endl -v +
+
+#@gmic ig : eq. to '-input_glob'.
+ig :
+  -input_glob $*
 
 #@gmic input_glob : pattern
 #@gmic : Insert new images from several filenames that match the specified glob pattern.
