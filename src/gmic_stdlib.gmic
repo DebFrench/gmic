@@ -25361,6 +25361,47 @@ gimp_8bits :
 gimp_8bits_preview :
   -gimp_split_preview "-gimp_8bits $*",$-1
 
+#@gimp Pixel sort : gimp_pixelsort, gimp_pixelsort_preview(1)+
+#@gimp : note = note{"<small><b>Sorting parameters:</b></small>"}
+#@gimp : Order = choice(1,"Decreasing","Increasing")
+#@gimp : Axis = choice("X-axis","Y-axis","X-axis then Y-axis","Y-axis then X-axis")
+#@gimp : Sorting criterion = choice(1,"Minimum","Luminance","Lightness","Intensity","Maximum","Random")
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Masking parameters:</b></small>"}
+#@gimp : Mask by = choice(1,"Bottom layer","Criterion","Contours","Random")
+#@gimp : Lower mask threshold (%) = float(0,0,100)
+#@gimp : Higher mask threshold (%) = float(100,0,100)
+#@gimp : Mask smoothness (%) = float(0,0,5)
+#@gimp : Invert mask = bool(0)
+#@gimp : Preview mask = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/06/2016</i>.</small>")
+gimp_pixelsort :
+  -_gimp_pixelsort ${1-8},0
+
+_gimp_pixelsort :
+  -repeat {$!-($4==0)} -l[$>]
+    -if {$3==0} --compose_channels min
+    -elif {$3==1} --luminance
+    -elif {$3==2} --to_rgb -rgb2hsl. -channels. 2
+    -elif {$3==3} --compose_channels +
+    -elif {$3==4} --compose_channels max
+    -else 100%,100%,1,1 -rand. 0,100
+    -endif
+    -if {$4==0} -pass[-1] 0 -norm.
+    -elif {$4==1} [-1]
+    -elif {$4==2} --gradient_norm[0]
+    -else --rand. 0,100
+    -endif
+    -b. $7% -ir. $5%,{$6+0.01}%
+    -if $8 -==. 0 -endif
+    -if $9 -k. -* 255
+    -else -pixelsort[0] {`$1?_'+':_'-'`},{`$2==0?'x':$2==1?'y':$2==2?'xy':'yx'`},[1],[2] -k[0]
+    -endif
+  -endl -done
+
+gimp_pixelsort_preview :
+  -_gimp_pixelsort $*
+
 #@gimp Rain &amp; snow : gimp_rain, gimp_rain_preview(0)
 #@gimp : Angle = float(65,-180,180)
 #@gimp : Speed = float(10,0,50)
