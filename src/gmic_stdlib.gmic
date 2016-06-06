@@ -13626,6 +13626,75 @@ pencilbw : -skip ${1=0.3},${2=60}
   -e[^-1] "Apply B&W pencil effect on image$?, with size $1 and amplitude $2."
   -v - -repeat $! -l[$>] -split_opacity -l[0] -norm -b $1 -sharpen 4000 -smooth $2,0,1 -equalize -sqrt -n 0,255 -endl -a c -endl -done -v +
 
+#@gmic pixelsort : _ordering={ + | - },_axis={ x | y | xy | yx },_[sorting_criterion],_[mask]
+#@gmic : Apply a 'pixel sorting' algorithm on selected images, as described in the page :
+#@gmic : http://satyarth.me/articles/pixel-sorting/
+#@gmic : $ image.jpg --norm --ge. 30% -pixelsort[0] +,y,[1],[2]
+pixelsort : -check "(str1='${1=+}'; str1=='+' || str1=='-') && (str2='${2=x}'; str2=='x' || str2=='y' || str2=='xy' || str2=='yx') && ('${3=}'==0 || "${"-is_image_arg $3"}") && ('${4=}'==0 || "${"-is_image_arg $4"}")"
+  -v - s0="descending" s1="ascending"
+  -if {'$3'!=0" && "'$4'!=0}
+    -v + -e[^-1] "Apply 'pixelsort' effect to image$? in "${s{['$1']=='+'}}" order, along axis $2, with sorting criterion $3 and mask $4." -v -
+  -elif {'$3'!=0" && "'$4'==0}
+    -v + -e[^-1] "Apply 'pixelsort' effect to image$? in "${s{['$1']=='+'}}" order, along axis $2, with sorting criterion $3." -v
+  -elif {'$3'==0" && "'$4'!=0}
+    -v + -e[^-1] "Apply 'pixelsort' effect to image$? in "${s{['$1']=='+'}}" order, along axis $2, with mask $4." -v -
+  -else
+    -v + -e[^-1] "Apply 'pixelsort' effect to image$? in "${s{['$1']=='+'}}" order, along axis $2." -v -
+  -endif
+  -repeat $!
+    -if {'$3'!=0} -pass$3 0 -else --compose_channels[$>] + -endif
+    -if {'$4'!=0} -pass$4 0 -else [$>],[$>],1,1,1 -endif
+    -l[$>,-2,-1]
+      -ge. 50% -mv.. 0 -a c
+      order={`";'$1'=='+'?'<':'>'"`}
+      -if {'$2'=='x';}
+        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y
+      -elif {'$2'=='y';}
+        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y -permute yxzc
+      -elif {'$2'=='xy';}
+        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -a y
+        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y -permute yxzc
+      -elif {'$2'=='yx';}
+        -permute yxzc -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -a y -permute yxzc
+        -s y,{min(h,$_cpus)} -apply_parallel "-_pixelsort "$order -channels 1,{s-2} -a y
+      -endif
+    -endl
+  -done -v +
+
+_pixelsort :
+  -skip {"
+    quicksort(x0,x1,y) = (
+      _qs_stack = vector"{2*w}"();
+      _qs_stack_size = 0;
+      _qs_push(elt0,elt1) = (_qs_stack[_qs_stack_size++] = elt0; _qs_stack[_qs_stack_size++] = elt1);
+      _qs_pop() = (_s1 = _qs_stack[--_qs_stack_size]; _s0 = _qs_stack[--_qs_stack_size]; [_s0,_s1]);
+      _qs_push(x0,x1);
+      whiledo (_qs_stack_size>0,
+        _qs_range = _qs_pop();
+        _qs_lo = _qs_range[0];
+        _qs_hi = _qs_range[1];
+        _qs_pivot = i(int((_qs_lo+_qs_hi)/2),y,0,0);
+        whiledo(_qs_lo<=_qs_hi,
+           whiledo(i(_qs_lo,y,0,0)$1_qs_pivot, ++_qs_lo);
+           whiledo(_qs_pivot$1i(_qs_hi,y,0,0), --_qs_hi);
+           if (_qs_lo<=_qs_hi, _qs_tmp = I(_qs_lo,y); I(_qs_lo++,y) = I(_qs_hi,y); I(_qs_hi--,y) = _qs_tmp);
+        );
+        if (_qs_range[0]<_qs_hi,_qs_push(_qs_range[0],_qs_hi));
+        if (_qs_lo<_qs_range[1],_qs_push(_qs_lo,_qs_range[1]));
+      )
+    );
+    s1 = s - 1;
+    for (y = 0, y<h, ++y,
+      for (x0 = 0, x0<w, ++x0,
+        if (i(x0,y,0,s1),
+          for (x1 = x0, x1<w && i(x1,y,0,s1)==1, ++x1);
+          quicksort(x0,min(x1,w-1),y);
+          x0 = ++x1;
+        )
+      )
+    );
+    "}
+
 #@gmic polaroid : _size1>=0,_size2>=0
 #@gmic : Create polaroid effect in selected images.
 #@gmic : Default values: 'size1=10' and 'size2=20'.
@@ -15765,7 +15834,7 @@ _is_3d :
 
 #@gmic is_image_arg : string
 #@gmic : Return 1 if specified string looks like '[ind]'.
-is_image_arg :
+is_image_arg : -skip "${1=;}"
   -v - asc={'"$1"'} -u {arg(1,$asc)==_'['" && "arg(-1,$asc)==_']'" && "min($asc)>=45" && "max($asc)<=122} -v +
 
 #@gmic is_percent : string
