@@ -20570,6 +20570,7 @@ _gimp_download_all_data :
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
 #@gimp : note = note{"<i>
 #@gimp : <b>2016:</b>
+#@gimp : <a href="http://blog.patdavid.net/">Pat David</a>,
 #@gimp : Juan Jose Rodriguez Vela,
 #@gimp : Thomas Jakob,
 #@gimp : Kim Bartholomew,
@@ -20602,7 +20603,7 @@ _gimp_download_all_data :
 #@gimp : Mika Mantere,
 #@gimp : Christian Beuschel,
 #@gimp : Tore Busch,
-#@gimp : Douc McGregor,
+#@gimp : Douc McGregor.
 #@gimp : \n<b>2015:</b>
 #@gimp : Marcel Dahm,
 #@gimp : Susan Voitel,
@@ -20631,7 +20632,6 @@ _gimp_download_all_data :
 #@gimp : <a href="http://victorfandrey.blogspot.ca">Victor Fandrey</a>,
 #@gimp : Stefan Peter,
 #@gimp : <a href="https://plus.google.com/u/0/+DimitriosPsychogios">Dimitrios Psychogios</a>,
-#@gimp : <a href="http://blog.patdavid.net/">Pat David</a>,
 #@gimp : <a href="https://plus.google.com/+AnttiLuoma">Antti Luoma</a>,
 #@gimp : <a href="https://twitter.com/jeyoung">Eddy Young Tie Yang</a>,
 #@gimp : Thomas Elfstrom,
@@ -20641,8 +20641,8 @@ _gimp_download_all_data :
 #@gimp : Chris Knox,
 #@gimp : <a href="http://tomtappingphotoblog.blogspot.fr/">Thomas Tapping</a>,
 #@gimp : Phillip R Ziesemer,
-#@gimp : Jean Francois,
-#@gimp : \n<b>2008 - 2014:</b>
+#@gimp : Jean Francois.
+#@gimp : \n<b>2010 - 2014:</b>
 #@gimp : Franz Ziereis,
 #@gimp : Alessandro Renzi,
 #@gimp : Tsuda Koshi,
