@@ -13669,23 +13669,23 @@ _pixelsort :
   1,{h},{d}
   -f. ":
     quicksort(x0,x1,y,z) = (
-      _qs_stack = vector"{0,2*w}"();
-      _qs_stacksize = 0;
-      _qs_push(elt0,elt1) = (_qs_stack[_qs_stacksize++] = elt0; _qs_stack[_qs_stacksize++] = elt1);
-      _qs_pop() = (_s1 = _qs_stack[--_qs_stacksize]; _s0 = _qs_stack[--_qs_stacksize]; [_s0,_s1]);
-      _qs_push(x0,x1);
-      whiledo (_qs_stacksize>0,
-        _qs_range = _qs_pop();
-        _qs_lo = _qs_range[0];
-        _qs_hi = _qs_range[1];
-        _qs_pivot = i(#0,int((_qs_lo + _qs_hi)/2),y,z,0);
-        whiledo (_qs_lo<=_qs_hi,
-           whiledo (i(#0,_qs_lo,y,z,0)$1_qs_pivot, ++_qs_lo);
-           whiledo (_qs_pivot$1i(#0,_qs_hi,y,z,0), --_qs_hi);
-           if (_qs_lo<=_qs_hi, _qs_tmp = I(#0,_qs_lo,y,z); I(#0,_qs_lo++,y,z) = I(#0,_qs_hi,y,z); I(#0,_qs_hi--,y,z) = _qs_tmp);
+      stack = vector"{0,2*w}"();
+      stacksize = 0;
+      push(elt0,elt1) = (stack[stacksize++] = elt0; stack[stacksize++] = elt1);
+      pop() = (_s1 = stack[--stacksize]; _s0 = stack[--stacksize]; [_s0,_s1]);
+      push(x0,x1);
+      whiledo (stacksize>0,
+        range = pop();
+        lo = range[0];
+        hi = range[1];
+        pivot = i(#0,int((lo + hi)/2),y,z,0);
+        whiledo (lo<=hi,
+           whiledo (i(#0,lo,y,z,0)$1pivot, ++lo);
+           whiledo (pivot$1i(#0,hi,y,z,0), --hi);
+           if (lo<=hi, tmp = I(#0,lo,y,z); I(#0,lo++,y,z) = I(#0,hi,y,z); I(#0,hi--,y,z) = tmp);
         );
-        if (_qs_range[0]<_qs_hi,_qs_push(_qs_range[0],_qs_hi));
-        if (_qs_lo<_qs_range[1],_qs_push(_qs_lo,_qs_range[1]));
+        if (range[0]<hi,push(range[0],hi));
+        if (lo<range[1],push(lo,range[1]));
       )
     );
     s1 = s#0 - 1;
