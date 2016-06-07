@@ -70,7 +70,7 @@
           plug-in for <a href="http://www.gimp.org" target="_blank">GIMP</a>.<br/><br/>
         </li>
         <li>
-          Take the time to test the software on <b>other architectures</b>, and with <b>different compilers</b> (for Windows especially).<br/><br/>
+          Take the time to test the software on <b>other architectures</b>, and with <b>different compilers</b> (for Windows especially), and provide binary packages.<br/><br/>
         </li>
         <li>
           Give <b>feedback</b> as much as I can when users have <b>questions or issues</b> (for instance, to help integrating <b><font color="#000066">G'MIC</font></b> in other interfaces, as
@@ -83,7 +83,6 @@
       This is obviously not time I can spend during my working hours!
       The web pages of <b><font color="#000066">G'MIC</font></b> are also hosted on a paid service (approx. <b>60eur / year</b> all included).
     </p>
-
   </td>
   </tr></table>
 
