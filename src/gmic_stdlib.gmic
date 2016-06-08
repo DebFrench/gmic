@@ -691,6 +691,7 @@ _help_usage :
 \n
 \n    _ "${g}"Variable names"$n" below are pre-defined. They can be overrided.
 \n
+\n       . '"${c}"l"$n"': length of the associated list of images, if any ("${g}"0"$n" otherwise).
 \n       . '"${c}"w"$n"': width of the associated image, if any ("${g}"0"$n" otherwise).
 \n       . '"${c}"h"$n"': height of the associated image, if any ("${g}"0"$n" otherwise).
 \n       . '"${c}"d"$n"': depth of the associated image, if any ("${g}"0"$n" otherwise).
