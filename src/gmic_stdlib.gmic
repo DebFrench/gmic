@@ -14980,16 +14980,13 @@ average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
   -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",$2,$3,$4,"$5" -v +
 
 _average_files : -skip "${5=}"
-  frame=$2 i=0 stopflag=0 N=0
+  frame=$2 i=0 go_on=1 N=0
   -do
-    -l[] -i $1
-      -if $!
-        -v + -e[] "\r  > Frame ""#"$frame -v -
-        frame+=$4 N+=1
-      -else stopflag=1
-      -endif
-    -onfail stopflag=1
-    -endl # Read one new video frame.
+    -l[] -i[img] $1 -onfail go_on=0 -endl
+    -if $img
+      -v + -e[] "\r  > Frame ""#"$frame -v -
+      frame+=$4 N+=1
+    -endif
     -if {$!>1} -+ -endif
     -if {narg("$5")} --/. $N -c. 0,255 -o. ${-filename\ "$5",$i} -rm. i+=1 -endif
     -if {*}
@@ -14999,7 +14996,7 @@ _average_files : -skip "${5=}"
       -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
       -rm.
     -endif
-  -while {!$stopflag" && "($frame<$3" || "$3==-1)}
+  -while {$go_on" && "($3==-1" || "$frame<=$3)}
   -/ $N -c 0,255
 
 #@gmic files2video : "filename_pattern",_output_filename,_fps>0,_codec
@@ -15020,56 +15017,86 @@ files2video : -check "isint(${3=25}) && $3>0" -skip "${2=output.avi}",${4=mp4v}
   -endl -done
   -o $"$2",0,0,0 -v +
 
-#@gmic median_video : input_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1
+#@gmic median_video : input_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1,_is_fast_approximation={ 0 | 1 }
 #@gmic : Compute the median frame of a video file, doing it by blocks of rows to save memory usage.
 #@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'frame_rows=10%'.
-median_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=10%}>0"
-  -e[^-1] "Compute median frame of video file '$1', with first frame $2, last frame $3, frame step $4, and frame rows $5."
-  -v - -l[]
-    -i "$1",0 -f. 0
-    -_median_files "\"$1\",$frame",$2,$3,$4,$5
+#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1', 'frame_rows=100%' and 'is_fast_approximation=1'.
+median_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=100%}>0 && isval(${6=1})"
+  -v - s0="precise" s1="fast"
+  -v + -e[^-1] "Compute median frame of video file '$1', with first frame $2, last frame $3, frame step $4, frame rows $5 using "${s{!$6}}" algorithm." -v -
+  -l[]
+    -i[res] "$1",0 -f. 0
+    -_median_files "\"$1\",$frame",${2-6}
   -endl -v +
 
-#@gmic median_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1
+#@gmic median_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1,_is_fast_approximation={ 0 | 1 }
 #@gmic : Compute the median frame of a video file, doing it by blocks of rows to save memory usage.
 #@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'frame_rows=10%'.
-median_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=10%}>0"
-  -e[^-1] "Compute median frame of file sequence '$1', with first frame $2, last frame $3, frame step $4, and frame rows $5."
-  -v - -l[]
+#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1', 'frame_rows=100%' and 'is_fast_approximation=1'.
+median_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=100%}>0 && isval(${6=1})"
+  -v - s0="fast" s1="precise"
+  -v + -e[^-1] "Compute median frame of file sequence '$1', with first frame $2, last frame $3, frame step $4, frame rows $5 using "${s{!$6}}" algorithm." -v -
+  -l[]
     -arg2var _file,${"-files \"$1\""}
-    -i ${_file{$frame+1}} -f. 0
-    -_median_files "${_file{$frame+1}}",$2,$3,$4,$5
+    -i[res] ${_file{$frame+1}} -f. 0
+    -_median_files "${_file{$frame+1}}",${2-6}
   -endl -v +
 
 _median_files :
-  h1={h-1} drows={round(${-is_percent\ $5}?$5*h:$5)}
   -if {$3==-1} max_frame="(undefined)" -else max_frame=$3 -endif
+  h1={h-1} drows={round(${-is_percent\ $5}?$5*h:$5)}
   nb_iter={round(h/$drows,1,1)}
   -repeat $nb_iter
     row0={$drows*$>} row1={0,min(h,$row0+$drows-1)}
     -v + -e[] "- Iteration \#"{$>+1}/$nb_iter": Load rows "$row0-$row1/$h1".\n" -v -
+    frame=$2 go_on=1
 
-    # Get all specified rows from the whole video.
-    frame=$2
-    -l[]
-      go_on=1
+    -if $6
+      # Fast method : compute median frame using streamed histogram computation.
+      N=0
+      -i[hist] {w},$drows,256,{s}
       -do
-        -l[] -i $1 -onfail go_on=0 -endl -if {!w} go_on=0 -endif
-        -if $go_on
+        -l[] -i[img] $1 -onfail go_on=0 -endl
+        -if $img
           -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
-          -rows. $row0,$row1
+          -rows[img] $row0,$row1
+          -f[img] "++i(#-2,x,y,i,c)"
+          -rm[img]
           frame+=$4
+          N+=1
         -endif
       -while {$go_on" && "($3==-1" || "$frame<=$3)}
-      -v + -e[] "\r    > Compute median blending of "$!" frames." -v -
-      -__median_files
-    -endl
+      -cumulate[hist] z
+
+      [hist],[hist],1,[hist]
+      N/=2
+      -f. "
+        go_on = 1;
+        for (z = 0, i(#"$hist",x,y,z)<"$N" && z<256, ++z);
+        z"
+      -rm..
+
+    -else
+      # Slow method : compute median frame using temporal quicksort.
+      -l[]
+        -do
+          -l[] -i[img] $1 -onfail go_on=0 -endl
+          -if $go_on
+            -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
+            -rows. $row0,$row1
+            frame+=$4
+          -endif
+        -while {$go_on" && "($3==-1" || "$frame<=$3)}
+        -v + -e[] "\r    > Compute median blending of "$!" frames." -v -
+        -__median_files
+      -endl
+    -endif
+
     max_frame={$frame-$4}
-    -j[0] [1],0,$row0
-    -if {*} -w[0] -endif
+    -j[res] [-1],0,$row0
+    -if {*} -w[res] -endif
     -rm.
+
   -done
   -v + -e[] "- Done!" -v -
 
