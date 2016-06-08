@@ -2883,6 +2883,7 @@ roddy :
 
 #@gmic shape_heart : _size>=0
 #@gmic : Input a 2d heart binary shape with specified size.
+#@gmic : Default value: 'size=512'.
 #@gmic : $ -shape_heart ,
 shape_heart : -check "${1=512}>=0"
   -e[^-1] "Input a $1x$1 heart binary shape."
@@ -3008,6 +3009,37 @@ shape_polygon : -check "${1=512}>=0 && isint(${2=5}) && $2>=3" -skip ${3=0}
     -endl
   -endif
   -nm "[2d $2-polygon shape]"
+  -v +
+
+#@gmic shape_snowflake : size>=0,_nb_recursions>=0
+#@gmic : Input a 2d snowflake binary shape with specified size.
+#@gmic : Default values: 'size=512' and 'nb_recursions=5'.
+#@gmic : $ -repeat 6 -shape_snowflake 256,$> -done
+shape_snowflake : -check "${1=512}>=0 && isint(${2=5}) && $2>=0 && $2<=6"
+  -e[^-1] "Input a $1x$1 snowflake binary shape, with $2 recursions."
+  -v -
+  ir={round($1)}
+  -if {!$ir} 0
+  -else -l[]
+    $ir,$ir (0;120;240) -*. {pi/180} --sin. -cos.. -a[-2,-1] c
+    -repeat $2
+      1,{4*h},1,2
+      -f.. "
+        p0 = J[0];
+        p1 = J[1,2];
+        t = (p1 - p0)/3;
+        pm = (p0 + p1)/2 - 0.866*[ -t[1], t[0] ];
+        k = 4*y;
+        I[#-1,k++] = p0;
+        I[#-1,k++] = p0 + t;
+        I[#-1,k++] = pm;
+        I[#-1,k] = p1 - t;
+      "
+      -rm..
+    -done
+    -*. {0.5*$1} -+. {$1/2} -permute. cyzx -polygon.. {h},{^},1,1 -rm.
+  -endl -endif
+  -nm "[2d snowflake shape]"
   -v +
 
 #@gmic shape_star : _size>=0,_nb_branches>0,0<=_thickness<=1
