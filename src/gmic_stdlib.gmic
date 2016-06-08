@@ -3025,8 +3025,8 @@ shape_snowflake : -check "${1=512}>=0 && isint(${2=5}) && $2>=0 && $2<=6"
     -repeat $2
       1,{4*h},1,2
       -f.. "
-        p0 = J[0];
-        p1 = J[1,2];
+        p0 = I;
+        p1 = I[(y+1)%h];
         t = (p1 - p0)/3;
         pm = (p0 + p1)/2 - 0.866*[ -t[1], t[0] ];
         k = 4*y;
@@ -3045,7 +3045,7 @@ shape_snowflake : -check "${1=512}>=0 && isint(${2=5}) && $2>=0 && $2<=6"
 #@gmic shape_star : _size>=0,_nb_branches>0,0<=_thickness<=1
 #@gmic : Input a 2d star binary shape with specified size.
 #@gmic : Default values: 'size=512', 'nb_branches=5' and 'thickness=0.38'.
-#@gmic : $ -shape_star ,
+#@gmic : $ -repeat 9 -shape_star 256,{$>+2} -done
 shape_star : -check "${1=512}>=0 && ${2=5}>0 && ${3=0.5}>=0 && $3<=1"
   -e[^-1] "Input a $1x$1 star binary shape, with $2 branches and thickness $3."
   -v -
@@ -10379,31 +10379,6 @@ _sierpinski :
   -_sierpinski $1,$2,{($1+$3)/2},{($2+$4)/2},{($1+$5)/2},{($2+$6)/2},{$7-1}
   -_sierpinski {($1+$3)/2},{($2+$4)/2},$3,$4,{($3+$5)/2},{($4+$6)/2},{$7-1}
   -_sierpinski {($1+$5)/2},{($2+$6)/2},$5,$6,{($3+$5)/2},{($4+$6)/2},{$7-1}
-
-#@gmic snowflake : _recursion>=0,_x0,_y0,_x1,_y1,_x2,_y2,_opacity,_col1,..._colN
-#@gmic : Draw a Koch snowflake on selected images.
-#@gmic : Default values: 'recursion=4', 'x0=20', 'y0=70', 'x1=80', 'y1=70', 'x2=50', 'y2=10', 'opacity=1' and 'col1=255'.
-#@gmic : $ image.jpg -snowflake 4
-snowflake : -check ${1=4}>=0 -skip ${2=20},${3=70},${4=80},${5=70},${6=50},${7=10},${8=1},${9=255}
-  -v -
-  -polygon 3,$2%,$3%,$4%,$5%,$6%,$7%,${8--1}
-  -_snowflake $1,$2,$3,$6,$7,${8--1}
-  -_snowflake $1,$6,$7,$4,$5,${8--1}
-  -_snowflake $1,$4,$5,$2,$3,${8--1}
-  -v +
-
-_snowflake :
-  x0={$2+($4-$2)/3} y0={$3+($5-$3)/3}
-  x1={$2+2*($4-$2)/3} y1={$3+2*($5-$3)/3}
-  c={cos(-pi/3)} s={sin(-pi/3)}
-  x2={$x0+($x1-$x0)*$c-($y1-$y0)*$s} y2={$y0+($x1-$x0)*$s+($y1-$y0)*$c}
-  -polygon 3,$x0%,$y0%,$x1%,$y1%,$x2%,$y2%,${6--1}
-  -if $1
-    -_snowflake {$1-1},$2,$3,$x0,$y0,${6--1}
-    -_snowflake {$1-1},$x0,$y0,$x2,$y2,${6--1}
-    -_snowflake {$1-1},$x2,$y2,$x1,$y1,${6--1}
-    -_snowflake {$1-1},$x1,$y1,$4,$5,${6--1}
-  -endif
 
 #@gmic spiralbw
 #@gmic : Draw (squared) spiral on selected images.
@@ -29756,29 +29731,16 @@ gimp_sierpinski :
     --fc.. $8,$9,$10 -j[0] [-1],0,0,0,0,$11,[-2],255 -rm[-2,-1]
   -endl -a c -endl -done
 
-#@gimp Snowflake : gimp_snowflake, gimp_snowflake_preview(1)
-#@gimp : Recursions = int(3,0,5)
-#@gimp : 1st X-coord = float(20,0,100)
-#@gimp : 1st Y-coord = float(70,0,100)
-#@gimp : 2nd X-coord = float(80,0,100)
-#@gimp : 2nd Y-coord = float(70,0,100)
-#@gimp : 3rd X-coord = float(50,0,100)
-#@gimp : 3rd Y-coord = float(10,0,100)
+#@gimp Snowflake : gimp_snowflake, gimp_snowflake(1)
+#@gimp : Recursions = int(5,0,6)
 #@gimp : Opacity = float(1,0,1)
-#@gimp : Color = color(128,128,128)
+#@gimp : Color = color(255,255,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_snowflake :
-  -repeat $! -l[$>] -split_opacity -l[0]
-    -snowflake ${1-11}
+  -repeat $! -l[$>] -to_color -split_opacity -l[0]
+    -shape_snowflake {min(w,h)},$1 100%,100%,1,3,[${3-5}]
+    -j[0] [-1],{([w#0,h#0]-[w#1,h#1])/2},0,0,$2,[-2] -k[0]
   -endl -a c -endl -done
-
-gimp_snowflake_preview :
-  -gimp_snowflake $*
-  -polygon 3,$2%,$3%,$4%,$5%,$6%,$7%,0.7,0xF0F0F0F0,255,255,255,255
-  -polygon 3,$2%,$3%,$4%,$5%,$6%,$7%,0.7,0x0F0F0F0F,0,0,0,255
-  -circle $2%,$3%,5,0.7,0,0,0,255 -circle $2%,$3%,3,1,255,0,0,255
-  -circle $4%,$5%,5,0.7,0,0,0,255 -circle $4%,$5%,3,1,0,255,0,255
-  -circle $6%,$7%,5,0.7,0,0,0,255 -circle $6%,$7%,3,1,0,0,255,255
 
 #@gimp Superformula : gimp_superformula, gimp_superformula(1)
 #@gimp : Resolution = int(4096,2,8192)
