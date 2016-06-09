@@ -15039,13 +15039,17 @@ _median_files :
         -endif
       -while {$go_on" && "($3==-1" || "$frame<=$3)}
       -cumulate[hist] z
-
+      N2={int($N/2)}
       [hist],[hist],1,[hist]
-      N/=2
-      -f. ":
-        go_on = 1;
-        for (z = 0, i(#"$hist",x,y,z)<"$N" && z<256, ++z);
-        z"
+      -if {$N%2} # Odd number of frames.
+        -f. ":go_on = 1; for (z = 0, i(#"$hist",x,y,z,c)<"$N2" && z<256, ++z); z"
+      -else # Even number of frames.
+        -f. ":init(N2p="$N2";N2n=N2p + 1);
+              go_on = 1;
+              for (zp = 0, i(#"$hist",x,y,zp,c)<N2p && zp<256, ++zp);
+              for (zn = zp, i(#"$hist",x,y,zn,c)<N2n && zn<256, ++zn);
+              0.5*(zn + zp);"
+      -endif
       -rm..
 
     -else
