@@ -15042,7 +15042,7 @@ _median_files :
         -l[] $1 -nm. img -onfail go_on=0 -endl
         -if $img
           -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
-          -if {{*}" && "$nb_iter==1} -w[img] -1,-1,0,"Frame ""#"$frame -endif
+          -if {{*}" && "!$>} -w[img] -1,-1,0,"Frame ""#"$frame -endif
           -rows[img] $row0,$row1 -f[img] ":++i(#-2,x,y,i,c)"
           -rm[img]
           frame+=$4 N+=1
@@ -15069,6 +15069,7 @@ _median_files :
           -l[] $1 -nm. img -onfail go_on=0 -endl
           -if $go_on
             -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
+            -if {{*}" && "!$>} -w. -1,-1,0,"Frame ""#"$frame -endif
             -rows. $row0,$row1
             frame+=$4
           -endif
@@ -20929,6 +20930,7 @@ gimp_gmicky_preview :
 #@gimp : - <b>08/20/2014</b> : version <i>1.6.0</i>.\n
 #@gimp : - <b>03/25/2016</b> : version <i>1.7.0</i>.\n
 #@gimp : - <span foreground="purple"><b>05/30/2016</b> : version <i>1.7.2</i> (Current stable).</span>\n
+#@gimp : - <b>06/09/2016</b> : version <i>1.7.3</i> (Current pre-release).\n
 #@gimp : "}
 #@gimp : sep = separator()
 #@gimp : link = link("View latest changelog","https://discuss.pixls.us/t/release-of-gmic-1-7-2")
@@ -26316,7 +26318,7 @@ _gimp_emulate_film_colorslide :
 gimp_emulate_film_colorslide_preview :
   -gimp_split_preview "-gimp_emulate_film_colorslide $*",$-1
 
-#@gimp User-defined : gimp_emulate_film_userdefined, gimp_emulate_film_userdefined(1)+
+#@gimp User-defined : gimp_emulate_film_userdefined, gimp_emulate_film_userdefined_preview(1)+
 #@gimp : Specify Hald-CLUT as = choice(2,"Top layer","Bottom layer","Filename")
 #@gimp : Hald-CLUT filename = file()
 #@gimp : note = note("<small><b>Note:</b> Do not forget to set the <i>Input layers</i> option if you select <i>Top layer</i> or <i>Bottom layer</i>.</small>")
@@ -26328,6 +26330,7 @@ gimp_emulate_film_colorslide_preview :
 #@gimp : Hue = float(0,-180,180)
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>More info at:</small>")
 #@gimp : link = link{"Film Emulation Presets in G'MIC","http://gmic.eu/film_emulation/index.shtml"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/30/2014</i>.</small>")
@@ -26338,8 +26341,12 @@ gimp_emulate_film_userdefined :
   -else
     -l "$2" -onfail -gimp_warning_preview "Specified Hald-CLUT filename not found" -return -endl
     -map_clut[^-1] [-1] -rm.
+    -if {iM>255} -/ 255 -endif # Was possibly a 16bits HaldCLUT.
   -endif
   -_gimp_emulate_film 0,1,${3--1}
+
+gimp_emulate_film_userdefined_preview :
+  -gimp_split_preview "-gimp_emulate_film_userdefined $*",$-1
 
 #@gimp Various : gimp_emulate_film_various, gimp_emulate_film_various_preview(1)+
 #@gimp : Preset = choice{"None","60's","60's (faded)","60's (faded alt)","Alien green","Black &amp; White","Bleach bypass","Blue mono",
