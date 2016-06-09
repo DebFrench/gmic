@@ -14957,7 +14957,7 @@ average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
 _average_files : -skip "${5=}"
   frame=$2 i=0 go_on=1 N=0
   -do
-    -l[] -i $1 -nm. img -onfail go_on=0 -endl
+    -l[] $1 -nm. img -onfail go_on=0 -endl
     -if $img
       -v + -e[] "\r  > Frame ""#"$frame -v -
       frame+=$4 N+=1
@@ -15034,11 +15034,8 @@ _median_files :
         -l[] $1 -nm. img -onfail go_on=0 -endl
         -if $img
           -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
-          -rows[img] $row0,$row1
-          -f[img] ":++i(#-2,x,y,i,c)"
-          -rm[img]
-          frame+=$4
-          N+=1
+          -rows[img] $row0,$row1 -f[img] ":++i(#-2,x,y,i,c)" -rm[img]
+          frame+=$4 N+=1
         -endif
       -while {$go_on" && "($3==-1" || "$frame<=$3)}
       -cumulate[hist] z
@@ -15055,7 +15052,7 @@ _median_files :
       # Slow method : compute median frame using temporal quicksort.
       -l[]
         -do
-          -l[] -i[img] $1 -onfail go_on=0 -endl
+          -l[] $1 -nm. img -onfail go_on=0 -endl
           -if $go_on
             -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
             -rows. $row0,$row1
