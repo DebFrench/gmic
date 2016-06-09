@@ -14957,7 +14957,7 @@ average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
 _average_files : -skip "${5=}"
   frame=$2 i=0 go_on=1 N=0
   -do
-    -l[] -i[img] $1 -onfail go_on=0 -endl
+    -l[] -i $1 -nm. img -onfail go_on=0 -endl
     -if $img
       -v + -e[] "\r  > Frame ""#"$frame -v -
       frame+=$4 N+=1
@@ -15031,7 +15031,7 @@ _median_files :
       N=0
       -i[hist] {w},$drows,256,{s}
       -do
-        -l[] -i[img] $1 -onfail go_on=0 -endl
+        -l[] $1 -nm. img -onfail go_on=0 -endl
         -if $img
           -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
           -rows[img] $row0,$row1
