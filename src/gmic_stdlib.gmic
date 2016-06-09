@@ -2023,7 +2023,8 @@ _document_gmic_declaration_bash :
     _shortcut+=1
   -elif {$!>1} # Command is regular and has arguments.
     _command$_argcommand={0,t}
-    -if {[{^}]=='help'} _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
+    -if {[{0,^}]=='help'}
+      _argument$_argcommand="$coms\" -- \"$cur"  # Manage help command.
     -else
       -if {$!==2} ({'>'}) -endif # Add shadow parameter when single argument.
       -discard[^0] {'" "'} -i[2--2] ({'" "'}) -a[^0] y
