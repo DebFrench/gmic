@@ -2653,20 +2653,28 @@ input_clut : -check "isval(${2=64}) && $2>0"
 input_cube :
   -e[^-1] "Input Hald-CLUT from file '$1'."
   -v - -l[]
-    -i raw:"$1",uchar -s +,{'\n'}
+    -i raw:"$1",uchar -discard 13 -s -,{'\n'} -autocrop 32
+
+    # Discard comments.
+    -repeat $! -if {$<,i==_'#'} -rm[$<] -endif -done
 
     # Retrieve CLUT dimension.
     N=0
     -repeat $! -if {same([{$>,^}],'LUT_3D_SIZE',11)}
       -rows[$>] 11,100% -autocrop[$>] 32
-      dim={$>,t} N=$> -break
+      dim={$>,t} N=$> -rm[$>] -break
     -endif -done
 
     # Retrieve CLUT data.
-    -k[{$N+1}--1] -a y -autocrop. 32 -autocrop 10
+    N=0
+    -repeat $! -if {$>,i>=_'0'&&i<=_'9'} N=$> -break -endif -done
+    -k[$N--1]
+    (10) -append[^-1] [-1],y -rm. -a y
+
     tmp_file=${-file_rand}
     -o raw:$tmp_file,uchar -rm
     -i dlm:$tmp_file
+
     -r 3,$dim,$dim,$dim,-1 -permute yzcx -* 255
     1 -o. raw:$tmp_file -rm.
     -nm "$1"
