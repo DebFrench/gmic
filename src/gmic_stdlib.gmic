@@ -2653,7 +2653,7 @@ input_clut : -check "isval(${2=64}) && $2>0"
 input_cube :
   -e[^-1] "Input Hald-CLUT from file '$1'."
   -v - -l[]
-    -i raw:"$1",uchar -discard 13 -s -,{'\n'} -autocrop 32
+    -i raw:"$1",uchar -discard 13 -s -,{'\n'}
 
     # Discard comments.
     -repeat $! -if {$<,i==_'#'} -rm[$<] -endif -done
