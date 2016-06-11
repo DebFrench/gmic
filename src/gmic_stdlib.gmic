@@ -2669,6 +2669,7 @@ input_cube :
     -i dlm:$tmp_file
     -r 3,$dim,$dim,$dim,-1 -permute yzcx -* 255
     1 -o. raw:$tmp_file -rm.
+    -nm "$1"
   -endl -v +
 
 #@gmic ig : eq. to '-input_glob'.
