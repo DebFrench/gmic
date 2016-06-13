@@ -23921,7 +23921,7 @@ gimp_apply_Labcurve_preview :
 #@gimp Customized CLUT : gimp_customized_clut,gimp_customized_clut_preview(1)+
 #@gimp : Keypoint influence (%) = float(100,0,100)
 #@gimp : Lock uniform sampling = choice{0,"None","8 keypoints (RGB corners)","27 keypoints","64 keypoints","125 keypoints","216 keypoints","343 keypoints"},
-#@gimp : Spatial regularization = int(0,0,5)
+#@gimp : Spatial regularization = int(0,0,20)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Global correction:</b></small>")
 #@gimp : Gamma = float(0,-1.2,1.2)
@@ -23996,10 +23996,8 @@ gimp_customized_clut :
   -if {!$3} -map_clut[^-1] [-1] # w/o spatial regularization
   -else -repeat {$!-1}          # w/ spatial regularization
     ind=$>
-    [$>]
-    -map_clut[$>] [-2]
-    -repeat $3 -bilateral[$ind] [-1],2%,3.5% -done
-    -rm.
+    --luminance[$>] --map_clut[$>] [-2] --. [$>]
+    -repeat $3 -guided. [-2],1,12 -done -+[$>,-1] -rm.
   -done -endif
 
   -repeat $! -l[$>] -split_opacity -to_rgb[0]
@@ -24412,7 +24410,7 @@ gimp_selective_desaturation :
     -endif
     -c[1] 0,1
     -rgb2hsl[0] -s[0] c
-    mM={im},{iM} -repeat $6 -guided. [2],1,0.1 -done -n. $mM # Regularization step.
+    mM={[im,iM]} -repeat $6 -guided. [2],1,0.1 -done -n. $mM # Regularization step.
     -if {$7==0} -*[1,-1]
     -elif {$7==1} ($1^$2^$3) -rgb2hsl. -*[1] {i[1]} -rm[-2,-1]
     -else -rv[1,-1] -rm.
