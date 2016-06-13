@@ -6295,20 +6295,6 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
             is_released = false; ++position; continue;
           }
 
-          // Delete file.
-          if (!is_double_hyphen && !std::strcmp("-delete",command)) {
-            gmic_substitute_args();
-            const char *arg_text = gmic_argument_text_printed();
-            print(images,0,"Delete file '%s'.",
-                  arg_text);
-            err = std::remove(argument);
-            if (err)
-              warn(images,0,false,
-                   "Command '-delete': Could not delete file '%s'.",
-                   arg_text);
-            ++position; continue;
-          }
-
           // Display.
           if (!is_double_hyphen && !std::strcmp("-display",command)) {
             gmic_substitute_args();
@@ -13683,7 +13669,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                     "convolve","correlate","color3d","col3d","cosh","continue","cumulate",
                     "cursor",
                     "done","do","debug","divide","distance","dilate","discard","double3d","denoise",
-                    "deriche","dijkstra","displacement","delete","display","display3d",
+                    "deriche","dijkstra","displacement","display","display3d",
                     "endif","else","elif","endlocal","endl","echo","exec","error","endian","exp",
                     "eq","ellipse","equalize","erode","elevation3d","eigen","eikonal",
                     "fill","flood","files","focale3d","fft",
