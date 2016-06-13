@@ -6948,35 +6948,39 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
             gmic_substitute_args();
             float radius = 0, regularization = 0;
             *argz = *argc = 0;
-            sep =  0;
+            sep0 = sep1 = 0;
             if (cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
                             indices,argx,argy,&end)==3 &&
                 (cimg_sscanf(argx,"%f%c",&radius,&end)==1 ||
-                 (cimg_sscanf(argx,"%f%c%c",&radius,&sep,&end)==2 && sep=='%')) &&
-                cimg_sscanf(argy,"%f%c",&regularization,&end)==1 &&
+                 (cimg_sscanf(argx,"%f%c%c",&radius,&sep0,&end)==2 && sep0=='%')) &&
+                (cimg_sscanf(argy,"%f%c",&regularization,&end)==1 ||
+                 (cimg_sscanf(argy,"%f%c%c",&regularization,&sep1,&end)==2 && sep1=='%')) &&
                 (ind=selection2cimg(indices,images.size(),images_names,"-guided",true,
                                     false,CImg<char>::empty())).height()==1 &&
                 radius>=0 && regularization>=0) {
               print(images,0,"Apply guided filter on image%s, with guide image [%u], "
-                    "radius %g%s and regularization %g.",
+                    "radius %g%s and regularization %g%s.",
                     gmic_selection.data(),
                     *ind,
-                    radius,sep=='%'?"%":"",
-                    regularization);
+                    radius,sep0=='%'?"%":"",
+                    regularization,sep1=='%'?"%":"");
               const CImg<T> guide = gmic_image_arg(*ind);
-              if (sep=='%') radius = -radius;
+              if (sep0=='%') radius = -radius;
+              if (sep1=='%') regularization = -regularization;
               cimg_forY(selection,l) gmic_apply(blur_guided(guide,radius,regularization));
             } else if (cimg_sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
-                                    argx,argy,&end)==2 &&
+                                   argx,argy,&end)==2 &&
                        (cimg_sscanf(argx,"%f%c",&radius,&end)==1 ||
-                        (cimg_sscanf(argx,"%f%c%c",&radius,&sep,&end)==2 && sep=='%')) &&
-                       cimg_sscanf(argy,"%f%c",&regularization,&end)==1 &&
+                        (cimg_sscanf(argx,"%f%c%c",&radius,&sep0,&end)==2 && sep0=='%')) &&
+                       (cimg_sscanf(argy,"%f%c",&regularization,&end)==1 ||
+                        (cimg_sscanf(argy,"%f%c%c",&regularization,&sep1,&end)==2 && sep1=='%')) &&
                        radius>=0 && regularization>=0) {
-              print(images,0,"Apply guided filter on image%s, with radius %g%s and regularization %g.",
+              print(images,0,"Apply guided filter on image%s, with radius %g%s and regularization %g%s.",
                     gmic_selection.data(),
-                    radius,sep=='%'?"%":"",
-                    regularization);
-              if (sep=='%') radius = -radius;
+                    radius,sep0=='%'?"%":"",
+                    regularization,sep1=='%'?"%":"");
+              if (sep0=='%') radius = -radius;
+              if (sep1=='%') regularization = -regularization;
               cimg_forY(selection,l) gmic_apply(blur_guided(images[selection[l]],radius,regularization));
             } else arg_error("guided");
             is_released = false; ++position; continue;
