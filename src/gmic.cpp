@@ -4349,6 +4349,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
   double vmin = 0, vmax = 0, value, value0, value1, nvalue, nvalue0, nvalue1;
   bool is_endlocal = false;
   float opacity = 0;
+  int err;
 
   // Allocate string variables, widely used afterwards
   // (prevents stack overflow on recursive calls while remaining thread-safe).
@@ -4456,8 +4457,8 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           ++item; is_double_hyphen = true;
         }
         strreplace_fw(item);
-        int err = cimg_sscanf(item,"%255[^[]%c%255[a-zA-Z_0-9.eE%^,:+-]%c%c",
-                                    command,&sep0,restriction,&sep1,&end);
+        err = cimg_sscanf(item,"%255[^[]%c%255[a-zA-Z_0-9.eE%^,:+-]%c%c",
+                          command,&sep0,restriction,&sep1,&end);
 
         const unsigned int l_command = err==1?(unsigned int)std::strlen(command):0;
         if (err==1 && l_command>=2 && command[l_command - 1]=='.') { // Selection shortcut.
@@ -6292,6 +6293,20 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                                                              constraints));
             } else arg_error("displacement");
             is_released = false; ++position; continue;
+          }
+
+          // Delete file.
+          if (!is_double_hyphen && !std::strcmp("-delete",command)) {
+            gmic_substitute_args();
+            const char *arg_text = gmic_argument_text_printed();
+            print(images,0,"Delete file '%s'.",
+                  arg_text);
+            err = std::remove(argument);
+            if (err)
+              warn(images,0,false,
+                   "Command '-delete': Could not delete file '%s'.",
+                   arg_text);
+            ++position; continue;
           }
 
           // Display.
@@ -13468,9 +13483,8 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
 
           // YUV file.
           float first_frame = 0, last_frame = 0, step = 1, dx = 0, dy = 1;
-          int err = 0;
-          if ((err=cimg_sscanf(options,"%f,%f,%f,%f,%f",
-                               &dx,&dy,&first_frame,&last_frame,&step))>=1) {
+          if ((err = cimg_sscanf(options,"%f,%f,%f,%f,%f",
+                                 &dx,&dy,&first_frame,&last_frame,&step))>=1) {
             dx = cimg::round(dx);
             dy = cimg::round(dy);
             if (dx<=0 || dy<=0)
@@ -13516,13 +13530,12 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
 
           // TIFF file.
           float first_frame = 0, last_frame = 0, step = 1;
-          int err = 0;
 #ifdef cimg_use_tiff
           static const TIFFErrorHandler default_handler = TIFFSetWarningHandler(0);
           if (is_very_verbose) TIFFSetWarningHandler(default_handler);
           else TIFFSetWarningHandler(0);
 #endif // #ifdef cimg_use_tiff
-          if ((err=cimg_sscanf(options,"%f,%f,%f",&first_frame,&last_frame,&step))>0) {
+          if ((err = cimg_sscanf(options,"%f,%f,%f",&first_frame,&last_frame,&step))>0) {
             first_frame = cimg::round(first_frame);
             if (err>1) { // Load multiple frames.
               last_frame = cimg::round(last_frame);
@@ -13670,7 +13683,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                     "convolve","correlate","color3d","col3d","cosh","continue","cumulate",
                     "cursor",
                     "done","do","debug","divide","distance","dilate","discard","double3d","denoise",
-                    "deriche","dijkstra","displacement","display","display3d",
+                    "deriche","dijkstra","displacement","delete","display","display3d",
                     "endif","else","elif","endlocal","endl","echo","exec","error","endian","exp",
                     "eq","ellipse","equalize","erode","elevation3d","eigen","eikonal",
                     "fill","flood","files","focale3d","fft",
