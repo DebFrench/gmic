@@ -23917,6 +23917,106 @@ gimp_apply_Labcurve_preview :
      -endif
   -mv. 1 -done -rm[0]
 
+#@gimp Customize CLUT : gimp_customize_clut,gimp_customize_clut_preview(1)+
+#@gimp : note = note("<small><b>Keypoint parameters:</b></small>")
+#@gimp : Keypoint influence (%) = float(100,0,100)
+#@gimp : Lock RGB corner points = bool(0)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Global correction:</b></small>")
+#@gimp : Gamma = float(0,-1.2,1.2)
+#@gimp : Contrast = float(1,0,4)
+#@gimp : Brightness = float(0,-255,255)
+#@gimp : Hue = float(0,-180,180)
+#@gimp : Saturation = float(0,-1,1)
+#@gimp : Post-normalize = bool(0)
+#@gimp : sep = separator()
+#@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
+#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT image")
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Color correspondences:</b></small>")
+#@gimp : Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
+#@gimp : sep = separator(), Source color #2 = color(255,255,255), Target color #2 = color(255,255,255)
+#@gimp : sep = separator(), Source color #3 = color(0,0,0), Target color #3 = color(0,0,0)
+#@gimp : sep = separator(), Source color #4 = color(0,0,0), Target color #4 = color(0,0,0)
+#@gimp : sep = separator(), Source color #5 = color(0,0,0), Target color #5 = color(0,0,0)
+#@gimp : sep = separator(), Source color #6 = color(0,0,0), Target color #6 = color(0,0,0)
+#@gimp : sep = separator(), Source color #7 = color(0,0,0), Target color #7 = color(0,0,0)
+#@gimp : sep = separator(), Source color #8 = color(0,0,0), Target color #8 = color(0,0,0)
+#@gimp : sep = separator(), Source color #9 = color(0,0,0), Target color #9 = color(0,0,0)
+#@gimp : sep = separator(), Source color #10 = color(0,0,0), Target color #10 = color(0,0,0)
+#@gimp : sep = separator(), Source color #11 = color(0,0,0), Target color #11 = color(0,0,0)
+#@gimp : sep = separator(), Source color #12 = color(0,0,0), Target color #12 = color(0,0,0)
+#@gimp : sep = separator(), Source color #13 = color(0,0,0), Target color #13 = color(0,0,0)
+#@gimp : sep = separator(), Source color #14 = color(0,0,0), Target color #14 = color(0,0,0)
+#@gimp : sep = separator(), Source color #15 = color(0,0,0), Target color #15 = color(0,0,0)
+#@gimp : sep = separator(), Source color #16 = color(0,0,0), Target color #16 = color(0,0,0)
+#@gimp : sep = separator(), Source color #17 = color(0,0,0), Target color #17 = color(0,0,0)
+#@gimp : sep = separator(), Source color #18 = color(0,0,0), Target color #18 = color(0,0,0)
+#@gimp : sep = separator(), Source color #19 = color(0,0,0), Target color #19 = color(0,0,0)
+#@gimp : sep = separator(), Source color #20 = color(0,0,0), Target color #20 = color(0,0,0)
+#@gimp : sep = separator(), Source color #21 = color(0,0,0), Target color #21 = color(0,0,0)
+#@gimp : sep = separator(), Source color #22 = color(0,0,0), Target color #22 = color(0,0,0)
+#@gimp : sep = separator(), Source color #23 = color(0,0,0), Target color #23 = color(0,0,0)
+#@gimp : sep = separator(), Source color #24 = color(0,0,0), Target color #24 = color(0,0,0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/13/2016</i>.</small>")
+gimp_customize_clut :
+
+  # Build CLUT.
+  64,64,64,4
+
+  $=arg
+  -repeat 24
+    sr=${arg{11+6*$<}} sg=${arg{12+6*$<}} sb=${arg{13+6*$<}}
+    tr=${arg{14+6*$<}} tg=${arg{15+6*$<}} tb=${arg{16+6*$<}}
+    xyz={int(0.25*[$sr,$sg,$sb])}
+    -point. $xyz,1,$tr,$tg,$tb,1
+  -done
+
+  -if $2 # Lock RGB corners points
+    -point. 0,0,0,1,0,0,0,1 -point. 63,0,0,1,255,0,0,1 -point. 63,63,0,1,255,255,0,1 -point. 0,63,0,1,0,255,0,1
+    -point. 0,0,63,1,0,0,255,1 -point. 63,0,63,1,255,0,255,1 -point. 63,63,63,1,255,255,255,1 -point. 0,63,63,1,0,255,255,1
+  -endif
+
+  -s c,-3
+  -if {$1<100} # Need to compute a weighting map.
+    --distance. 1
+    -if $1 -pow. {1/(0.05+4*$1%)} -else -f. 0 -endif
+    -n. 0,1 -nm. influence -mv. -3
+  -endif
+  -eq. 0 -inpaint_diffusion.. [-1],100%,1,20 -rm.
+
+  -if $influence
+    100%,100%,100%,3,[x,y,z] -n. 0,255
+    -j. [-2],0,0,0,0,1,[-3]
+    -rm[-3,-2]
+  -endif
+
+  # Apply CLUT on input layers + global color corrections.
+  -map_clut[^-1] [-1]
+  -repeat $! -l[$>] -split_opacity -to_rgb[0]
+    -apply_gamma[0] {10^$3}                            # Gamma correction
+    --[0] 128 -*[0] $4 -+[0] 128 -+[0] $5 -c[0] 0,255  # B&W contrast and brightness.
+    -if {$6||$7}
+      -rgb2hsv[0]
+      -sh[0] 0 -+. $6 -%. 360 -rm.
+      -sh[0] 1 -+. $7 -c. 0,1 -rm.
+      -hsv2rgb[0]
+    -endif
+    -if $8 -n[0] 0,255 -endif
+  -a c -endl -done
+
+  -if $9
+    -if {$9==2} -r. 256,256,256,3,5 -c. 0,255 -endif
+    siz={w^1.5} -r. $siz,$siz,1,3,-1
+    -mv. 0
+  -else -rm. -endif
+
+gimp_customize_clut_preview :
+  -if {$10<7} -gimp_split_preview "-gimp_customize_clut ${1-8},0,0,${11--1}",$10
+  -else
+    -gimp_customize_clut ${1-8},1,0,${11--1} -k[0]
+  -endif
+
 #@gimp Decompose channels : gimp_decompose_channels, gimp_decompose_channels_preview
 #@gimp : Color basis = choice(7,"RGB","HSV","HSL","HSI","YUV","YCbCr","XYZ","Lab","Lch","CMY","CMYK","YIQ")
 #@gimp : Action = choice("Decompose","Recompose")
@@ -26442,13 +26542,13 @@ _gimp_emulate_film :
   -repeat $! -l[$>] -split_opacity
     -apply_gamma[0] {10^$4}                            # Gamma correction
     --[0] 128 -*[0] $5 -+[0] 128 -+[0] $6 -c[0] 0,255  # B&W contrast and brightness.
-    -if {$7||$8||$9}
+    -if {$7||$8}
       -rgb2hsv[0]
       -sh[0] 0 -+. $7 -%. 360 -rm.
       -sh[0] 1 -+. $8 -c. 0,1 -rm.
       -hsv2rgb[0]
-      -if $9 -n[0] 0,255 -endif
     -endif
+    -if $9 -n[0] 0,255 -endif
   -a c -endl -done
 
 #@gimp <i>[Collages]</i>
