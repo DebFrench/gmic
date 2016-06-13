@@ -31060,6 +31060,7 @@ gmicol_rotate :
 #@gmicol clone("B-color")
 #@gmicol _
 
+#@gmicol clone("Customize CLUT")
 #@gmicol clone("Detect skin")
 #@gmicol clone("Equalize HSV")
 #@gmicol clone("HSL adjustment")
