@@ -3745,6 +3745,7 @@ update_server : -skip ${1=$_version},${2=1}
      "-replace_str cmyk,CMYK "\
      "-replace_str b&amp;w,B&amp;W "\
      "-replace_str gimp,GIMP "\
+     "-replace_str clut,CLUT "\
      "-replace_str roddy,Roddy "\
      "-replace_str crt,CRT "\
      "-replace_str g\47mic,G\47MIC "\
@@ -23917,10 +23918,10 @@ gimp_apply_Labcurve_preview :
      -endif
   -mv. 1 -done -rm[0]
 
-#@gimp Customize CLUT : gimp_customize_clut,gimp_customize_clut_preview(1)+
+#@gimp Customized CLUT : gimp_customized_clut,gimp_customized_clut_preview(1)+
 #@gimp : note = note("<small><b>Keypoint parameters:</b></small>")
 #@gimp : Keypoint influence (%) = float(100,0,100)
-#@gimp : Lock RGB corner points = bool(0)
+#@gimp : Lock uniform sampling = choice{0,"None","8 keypoints (RGB corners)","27 keypoints","64 keypoints","125 keypoints","216 keypoints","343 keypoints"},
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Global correction:</b></small>")
 #@gimp : Gamma = float(0,-1.2,1.2)
@@ -23933,7 +23934,7 @@ gimp_apply_Labcurve_preview :
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
 #@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT image")
 #@gimp : sep = separator()
-#@gimp : note = note("<small><b>Color correspondences:</b></small>")
+#@gimp : note = note("<small><b>Color correspondence keypoints:</b></small>")
 #@gimp : Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
 #@gimp : sep = separator(), Source color #2 = color(255,255,255), Target color #2 = color(255,255,255)
 #@gimp : sep = separator(), Source color #3 = color(0,0,0), Target color #3 = color(0,0,0)
@@ -23959,7 +23960,7 @@ gimp_apply_Labcurve_preview :
 #@gimp : sep = separator(), Source color #23 = color(0,0,0), Target color #23 = color(0,0,0)
 #@gimp : sep = separator(), Source color #24 = color(0,0,0), Target color #24 = color(0,0,0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/13/2016</i>.</small>")
-gimp_customize_clut :
+gimp_customized_clut :
 
   # Build CLUT.
   64,64,64,4
@@ -23968,13 +23969,13 @@ gimp_customize_clut :
   -repeat 24
     sr=${arg{11+6*$<}} sg=${arg{12+6*$<}} sb=${arg{13+6*$<}}
     tr=${arg{14+6*$<}} tg=${arg{15+6*$<}} tb=${arg{16+6*$<}}
-    xyz={int(0.25*[$sr,$sg,$sb])}
+    xyz={round((63/255)*[$sr,$sg,$sb])}
     -point. $xyz,1,$tr,$tg,$tb,1
   -done
 
-  -if $2 # Lock RGB corners points
-    -point. 0,0,0,1,0,0,0,1 -point. 63,0,0,1,255,0,0,1 -point. 63,63,0,1,255,255,0,1 -point. 0,63,0,1,0,255,0,1
-    -point. 0,0,63,1,0,0,255,1 -point. 63,0,63,1,255,0,255,1 -point. 63,63,63,1,255,255,255,1 -point. 0,63,63,1,0,255,255,1
+  -if $2 # Lock uniform sampling
+    -uniform_distribution {(1+$2)^3},3
+    -repeat {w} -point.. {round(63*I[$>])},1,{255*I[$>]},1 -done -rm.
   -endif
 
   -s c,-3
@@ -24011,10 +24012,10 @@ gimp_customize_clut :
     -mv. 0
   -else -rm. -endif
 
-gimp_customize_clut_preview :
-  -if {$10<7} -gimp_split_preview "-gimp_customize_clut ${1-8},0,0,${11--1}",$10
+gimp_customized_clut_preview :
+  -if {$10<7} -gimp_split_preview "-gimp_customized_clut ${1-8},0,0,${11--1}",$10
   -else
-    -gimp_customize_clut ${1-8},1,0,${11--1} -k[0]
+    -gimp_customized_clut ${1-8},1,0,${11--1} -k[0]
   -endif
 
 #@gimp Decompose channels : gimp_decompose_channels, gimp_decompose_channels_preview
