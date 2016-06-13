@@ -773,6 +773,7 @@ _help_usage :
 \n       . "${c}"_'character'"$n" returns the (scalar) ascii code of the specified character (e.g. "${c}"_'A'"$n" is equal to "${g}"65"$n").
 \n       . A special case happens for "${g}"empty"$n" strings: Values of both expressions "${c}"[ '' ]"$n" and "${c}"''"$n" are "${g}"0"$n".
 \n       . Functions '"${c}"lowercase()"$n"' and '"${c}"uppercase()"$n"' return string with all string characters lowercased or uppercased.
+\n       . Function '"${c}"stod(str,is_strict)"$n"' parses specified string "${c}"'str'"$n" and returns the value contained in it.
 \n
 \n    _ "${g}"Special operators"$n" can be used:
 \n
@@ -2653,30 +2654,36 @@ input_clut : -check "isval(${2=64}) && $2>0"
 input_cube :
   -e[^-1] "Input Hald-CLUT from file '$1'."
   -v - -l[]
-    -i raw:"$1",uchar -discard 13 -s -,{'\n'}
+    -i raw:"$1",uchar -discard 13 -s -,10
+    -repeat $! -if {$<,i==_'#'} -rm[$<] -endif -done # Discard lines of comments.
+    -apply_parallel "-autocrop 32"
 
-    # Discard comments.
-    -repeat $! -if {$<,i==_'#'} -rm[$<] -endif -done
+    # Parse header to retrieve CLUT info.
+    min=0,0,0 max=1,1,1 dim= size=
+    -repeat $!
+      -if {same([{$>,^}],'DOMAIN_MIN',10)}
+        -l[$>] -rows 10,100% -autocrop 32 -split -,32 min={{0,t}},{{1,t}},{{2,t}} -k[0] -endl
+      -elif {same([{$>,^}],'DOMAIN_MAX',10)}
+        -l[$>] -rows 10,100% -autocrop 32 -split -,32 max={{0,t}},{{1,t}},{{2,t}} -k[0] -endl
+      -elif {same([{$>,^}],'LUT_1D_SIZE',11)}
+        -l[$>] -rows 11,100% dim=1 size={{t}} -endl
+      -elif {same([{$>,^}],'LUT_3D_SIZE',11)}
+        -l[$>] -rows 11,100% dim=3 size={{t}} -endl
+      -elif {$>,i>=_'0'&&i<=_'9'} -k[$>--1] -break
+      -endif
+    -done
+    -if {!narg($dim)" || "(0$dim!=1" && "0$dim!=3)} -error "Command '-input_cube': Undefined or invalid CLUT dimension, in file '$1'."
+    -elif {!narg($size)" || "0$size<=0} -error "Command '-input_cube': Undefined CLUT size, in file '$1'."
+    -endif
 
-    # Retrieve CLUT dimension.
-    N=0
-    -repeat $! -if {same([{$>,^}],'LUT_3D_SIZE',11)}
-      -rows[$>] 11,100% -autocrop[$>] 32
-      dim={$>,t} N=$> -rm[$>] -break
-    -endif -done
+    # Get CLUT data.
+    -apply_parallel "-split -,32 ({{0,t}}^{{1,t}}^{{2,t}}) -k." -a y
+    -if {$dim==1} -s c -y... x -y. z -r $size,$size,$size -a c
+    -else -r $size,$size,$size,3,-1
+    -endif
 
-    # Retrieve CLUT data.
-    N=0
-    -repeat $! -if {$>,i>=_'0'&&i<=_'9'} N=$> -break -endif -done
-    -k[$N--1]
-    (10) -append[^-1] [-1],y -rm. -a y
-
-    tmp_file=${-file_rand}
-    -o raw:$tmp_file,uchar -rm
-    -i dlm:$tmp_file
-
-    -r 3,$dim,$dim,$dim,-1 -permute yzcx -* 255
-    1 -o. raw:$tmp_file -rm.
+    # Renormalize to [0-255] range.
+    -repeat 3 -sh $> --. {arg(1+$>,$min)} -*. {255/(arg(1+$>,$max)-arg(1+$>,$min))} -rm. -done
     -nm "$1"
   -endl -v +
 
