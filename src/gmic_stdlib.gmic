@@ -24053,7 +24053,7 @@ gimp_customize_clut :
   -else -repeat {$!-1}          # w/ spatial regularization
     ind=$>
     --luminance[$>] --map_clut[$>] [-2] --. [$>]
-    -repeat $3 -guided. [-2],1,12 -done -+[$>,-1] -rm.
+    -repeat $3 -guided. [-2],2,50 -done -+[$>,-1] -rm.
   -done -endif
 
   -repeat $! -l[$>] -split_opacity -to_rgb[0]
