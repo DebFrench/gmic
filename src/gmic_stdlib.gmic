@@ -23918,7 +23918,7 @@ gimp_apply_Labcurve_preview :
      -endif
   -mv. 1 -done -rm[0]
 
-#@gimp Customized CLUT : gimp_customized_clut,gimp_customized_clut_preview(1)+
+#@gimp Customize CLUT : gimp_customize_clut,gimp_customize_clut_preview(1)+
 #@gimp : Keypoint influence (%) = float(100,0,100)
 #@gimp : Lock uniform sampling = choice{0,"None","8 keypoints (RGB corners)","27 keypoints","64 keypoints","125 keypoints","216 keypoints","343 keypoints"},
 #@gimp : Spatial regularization = int(0,0,20)
@@ -23932,58 +23932,58 @@ gimp_apply_Labcurve_preview :
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator()
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
-#@gimp : Preview type = choice{"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT image","3D CLUT (keypoints)","3D CLUT (full)"}
+#@gimp : Preview type = choice{8,"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT image","3D CLUT"}
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Color correspondences:</b></small>")
-#@gimp : Action #1 = choice(1,"Lock source","Replace source by target"), Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
+#@gimp : Action #1 = choice(1,"Ignore","Lock source","Replace source by target"), Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #2 = choice(1,"Lock source","Replace source by target"), Source color #2 = color(255,255,255), Target color #2 = color(255,255,255)
+#@gimp : Action #2 = choice(1,"Ignore", "Lock source","Replace source by target"), Source color #2 = color(255,255,255), Target color #2 = color(255,196,128)
 #@gimp : sep = separator()
-#@gimp : Action #3 = choice(1,"Lock source","Replace source by target"), Source color #3 = color(0,0,0), Target color #3 = color(0,0,0)
+#@gimp : Action #3 = choice("Ignore", "Lock source","Replace source by target"), Source color #3 = color(0,0,0), Target color #3 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #4 = choice(1,"Lock source","Replace source by target"), Source color #4 = color(0,0,0), Target color #4 = color(0,0,0)
+#@gimp : Action #4 = choice("Ignore", "Lock source","Replace source by target"), Source color #4 = color(0,0,0), Target color #4 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #5 = choice(1,"Lock source","Replace source by target"), Source color #5 = color(0,0,0), Target color #5 = color(0,0,0)
+#@gimp : Action #5 = choice("Ignore", "Lock source","Replace source by target"), Source color #5 = color(0,0,0), Target color #5 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #6 = choice(1,"Lock source","Replace source by target"), Source color #6 = color(0,0,0), Target color #6 = color(0,0,0)
+#@gimp : Action #6 = choice("Ignore", "Lock source","Replace source by target"), Source color #6 = color(0,0,0), Target color #6 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #7 = choice(1,"Lock source","Replace source by target"), Source color #7 = color(0,0,0), Target color #7 = color(0,0,0)
+#@gimp : Action #7 = choice("Ignore", "Lock source","Replace source by target"), Source color #7 = color(0,0,0), Target color #7 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #8 = choice(1,"Lock source","Replace source by target"), Source color #8 = color(0,0,0), Target color #8 = color(0,0,0)
+#@gimp : Action #8 = choice("Ignore", "Lock source","Replace source by target"), Source color #8 = color(0,0,0), Target color #8 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #9 = choice(1,"Lock source","Replace source by target"), Source color #9 = color(0,0,0), Target color #9 = color(0,0,0)
+#@gimp : Action #9 = choice("Ignore", "Lock source","Replace source by target"), Source color #9 = color(0,0,0), Target color #9 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #10 = choice(1,"Lock source","Replace source by target"), Source color #10 = color(0,0,0), Target color #10 = color(0,0,0)
+#@gimp : Action #10 = choice("Ignore", "Lock source","Replace source by target"), Source color #10 = color(0,0,0), Target color #10 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #11 = choice(1,"Lock source","Replace source by target"), Source color #11 = color(0,0,0), Target color #11 = color(0,0,0)
+#@gimp : Action #11 = choice("Ignore", "Lock source","Replace source by target"), Source color #11 = color(0,0,0), Target color #11 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #12 = choice(1,"Lock source","Replace source by target"), Source color #12 = color(0,0,0), Target color #12 = color(0,0,0)
+#@gimp : Action #12 = choice("Ignore", "Lock source","Replace source by target"), Source color #12 = color(0,0,0), Target color #12 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #13 = choice(1,"Lock source","Replace source by target"), Source color #13 = color(0,0,0), Target color #13 = color(0,0,0)
+#@gimp : Action #13 = choice("Ignore", "Lock source","Replace source by target"), Source color #13 = color(0,0,0), Target color #13 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #14 = choice(1,"Lock source","Replace source by target"), Source color #14 = color(0,0,0), Target color #14 = color(0,0,0)
+#@gimp : Action #14 = choice("Ignore", "Lock source","Replace source by target"), Source color #14 = color(0,0,0), Target color #14 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #15 = choice(1,"Lock source","Replace source by target"), Source color #15 = color(0,0,0), Target color #15 = color(0,0,0)
+#@gimp : Action #15 = choice("Ignore", "Lock source","Replace source by target"), Source color #15 = color(0,0,0), Target color #15 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #16 = choice(1,"Lock source","Replace source by target"), Source color #16 = color(0,0,0), Target color #16 = color(0,0,0)
+#@gimp : Action #16 = choice("Ignore", "Lock source","Replace source by target"), Source color #16 = color(0,0,0), Target color #16 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #17 = choice(1,"Lock source","Replace source by target"), Source color #17 = color(0,0,0), Target color #17 = color(0,0,0)
+#@gimp : Action #17 = choice("Ignore", "Lock source","Replace source by target"), Source color #17 = color(0,0,0), Target color #17 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #18 = choice(1,"Lock source","Replace source by target"), Source color #18 = color(0,0,0), Target color #18 = color(0,0,0)
+#@gimp : Action #18 = choice("Ignore", "Lock source","Replace source by target"), Source color #18 = color(0,0,0), Target color #18 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #19 = choice(1,"Lock source","Replace source by target"), Source color #19 = color(0,0,0), Target color #19 = color(0,0,0)
+#@gimp : Action #19 = choice("Ignore", "Lock source","Replace source by target"), Source color #19 = color(0,0,0), Target color #19 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #20 = choice(1,"Lock source","Replace source by target"), Source color #20 = color(0,0,0), Target color #20 = color(0,0,0)
+#@gimp : Action #20 = choice("Ignore", "Lock source","Replace source by target"), Source color #20 = color(0,0,0), Target color #20 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #21 = choice(1,"Lock source","Replace source by target"), Source color #21 = color(0,0,0), Target color #21 = color(0,0,0)
+#@gimp : Action #21 = choice("Ignore", "Lock source","Replace source by target"), Source color #21 = color(0,0,0), Target color #21 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #22 = choice(1,"Lock source","Replace source by target"), Source color #22 = color(0,0,0), Target color #22 = color(0,0,0)
+#@gimp : Action #22 = choice("Ignore", "Lock source","Replace source by target"), Source color #22 = color(0,0,0), Target color #22 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #23 = choice(1,"Lock source","Replace source by target"), Source color #23 = color(0,0,0), Target color #23 = color(0,0,0)
+#@gimp : Action #23 = choice("Ignore", "Lock source","Replace source by target"), Source color #23 = color(0,0,0), Target color #23 = color(0,0,0)
 #@gimp : sep = separator()
-#@gimp : Action #24 = choice(1,"Lock source","Replace source by target"), Source color #24 = color(0,0,0), Target color #24 = color(0,0,0)
+#@gimp : Action #24 = choice("Ignore", "Lock source","Replace source by target"), Source color #24 = color(0,0,0), Target color #24 = color(0,0,0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/14/2016</i>.</small>")
-gimp_customized_clut :
+gimp_customize_clut :
 
   # Build CLUT.
   64,64,64,4
@@ -23996,10 +23996,12 @@ gimp_customized_clut :
   $=arg # Add user-defined color correspondences
   -repeat 24
     mode=${arg{12+7*$<}}
-    sr=${arg{13+7*$<}} sg=${arg{14+7*$<}} sb=${arg{15+7*$<}}
-    tr=${arg{16+7*$<}} tg=${arg{17+7*$<}} tb=${arg{18+7*$<}}
-    xyz={round((63/255)*[$sr,$sg,$sb])}
-    -point. $xyz,1,{$mode?[$tr,$tg,$tb]:[$sr,$sg,$sb]},1
+    -if $mode
+      sr=${arg{13+7*$<}} sg=${arg{14+7*$<}} sb=${arg{15+7*$<}}
+      tr=${arg{16+7*$<}} tg=${arg{17+7*$<}} tb=${arg{18+7*$<}}
+      xyz={round((63/255)*[$sr,$sg,$sb])}
+      -point. $xyz,1,{$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]},1
+    -endif
   -done
 
   -s c,-3
@@ -24043,10 +24045,51 @@ gimp_customized_clut :
   -else -rm.
   -endif
 
-gimp_customized_clut_preview :
-  -if {$11<7} -gimp_split_preview "-gimp_customized_clut ${1-9},0,0,${12--1}",$11
-  -else
-    -rm -gimp_customized_clut ${1-9},1,0,${12--1}
+gimp_customize_clut_preview :
+  -if {$11<7} -gimp_split_preview "-gimp_customize_clut ${1-9},0,0,${12--1}",$11
+  -elif {$11==7} # HaldCLUT preview
+    -rm -gimp_customize_clut ${1-9},1,0,${12--1}
+  -elif {$11>=8} # 3d CLUT preview
+    -k[0] -to_rgb w={w} h={h}
+    --gimp_customize_clut ${1-9},1,0,${12--1} -mv. 1
+    -r. 64,64,64,3,-1 -pointcloud3d. -o3d. 0.15
+    -l[]
+      -if $2 # Lock uniform sampling
+        -uniform_distribution {(1+$2)^3},3
+        -repeat {w} -circle3d {0,round(64*I[$>])},1.5 -col3d. {0,255*I[$>]} -done -rm[0]
+      -endif
+      $=arg # Add user-defined color correspondences
+      -repeat 24
+        mode=${arg{12+7*$<}}
+        -if $mode
+          sr=${arg{13+7*$<}} sg=${arg{14+7*$<}} sb=${arg{15+7*$<}}
+          tr=${arg{16+7*$<}} tg=${arg{17+7*$<}} tb=${arg{18+7*$<}}
+          xy={round((64/255)*[$sr,$sg])}
+          z={round((64/255)*$sb)-0.1}
+          -circle3d $xy,$z,1.5 -col3d. {$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]}
+        -endif
+      -done
+      -colorcube3d -*3d. {64/255} -o3d. 0.5 -col3d. 0 -p3d. 1
+    -endl
+    -+3d[2--1]
+    -pose3d. 5.10656,2.04904,2.723,-316.115,-0.0815767,4.97762,-3.59262,-41.7094,-3.40685,2.95212,4.16756,-118.811,0,0,203,1
+
+    # Try to find the best layout for displaying preview.
+    w/=2 h/=2
+    -if {$w>$h} # Landscape mode.
+      -r2dy[0,1] $h
+      -text_outline[0] "Before",2,0,13,1,0.75
+      -text_outline[1] "After",2,0,13,1,0.75
+      -a[0,1] y
+    -else # Portrait mode.
+      -r2dx[0,1] $w
+      -text_outline[0] "Before",2,0,13,1,0.75
+      -text_outline[1] "After",2,0,13,1,0.75
+      -a[0,1] x
+    -endif
+    -snapshot3d. {0,1.1*min(w,h)},1.2,64,64,64 -autocrop. --. 64 -r. {0,w},{0,h},1,3,0,0,0.5,0.5 -+. 64
+    -text_outline. "RGB CLUT",2,0,13,1,0.75
+    -a {`$w>$h?_'x':_'y'`}
   -endif
 
 #@gimp Decompose channels : gimp_decompose_channels, gimp_decompose_channels_preview
@@ -31092,7 +31135,7 @@ gmicol_rotate :
 #@gmicol clone("B-color")
 #@gmicol _
 
-#@gmicol clone("Customized CLUT")
+#@gmicol clone("Customize CLUT")
 #@gmicol clone("Detect skin")
 #@gmicol clone("Equalize HSV")
 #@gmicol clone("HSL adjustment")
