@@ -23933,6 +23933,7 @@ gimp_apply_Labcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
 #@gimp : Preview type = choice{8,"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT image","3D CLUT"}
+#@gimp : CLUT opacity = float(0.25,0,1)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Color correspondences:</b></small>")
 #@gimp : Action #1 = choice(1,"Ignore","Lock source","Replace source by target"), Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
@@ -23995,10 +23996,10 @@ gimp_customize_clut :
 
   $=arg # Add user-defined color correspondences
   -repeat 24
-    mode=${arg{12+7*$<}}
+    mode=${arg{13+7*$<}}
     -if $mode
-      sr=${arg{13+7*$<}} sg=${arg{14+7*$<}} sb=${arg{15+7*$<}}
-      tr=${arg{16+7*$<}} tg=${arg{17+7*$<}} tb=${arg{18+7*$<}}
+      sr=${arg{14+7*$<}} sg=${arg{15+7*$<}} sb=${arg{16+7*$<}}
+      tr=${arg{17+7*$<}} tg=${arg{18+7*$<}} tb=${arg{19+7*$<}}
       xyz={round((63/255)*[$sr,$sg,$sb])}
       -point. $xyz,1,{$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]},1
     -endif
@@ -24052,7 +24053,7 @@ gimp_customize_clut_preview :
   -elif {$11>=8} # 3d CLUT preview
     -k[0] -to_rgb w={w} h={h}
     --gimp_customize_clut ${1-9},1,0,${12--1} -mv. 1
-    -r. 64,64,64,3,-1 -pointcloud3d. -o3d. 0.15
+    -r. 64,64,64,3,-1 -pointcloud3d. -o3d. {$12/3}
     -l[]
       -if $2 # Lock uniform sampling
         -uniform_distribution {(1+$2)^3},3
@@ -24060,10 +24061,10 @@ gimp_customize_clut_preview :
       -endif
       $=arg # Add user-defined color correspondences
       -repeat 24
-        mode=${arg{12+7*$<}}
+        mode=${arg{13+7*$<}}
         -if $mode
-          sr=${arg{13+7*$<}} sg=${arg{14+7*$<}} sb=${arg{15+7*$<}}
-          tr=${arg{16+7*$<}} tg=${arg{17+7*$<}} tb=${arg{18+7*$<}}
+          sr=${arg{14+7*$<}} sg=${arg{15+7*$<}} sb=${arg{16+7*$<}}
+          tr=${arg{17+7*$<}} tg=${arg{18+7*$<}} tb=${arg{19+7*$<}}
           xy={round((64/255)*[$sr,$sg])}
           z={round((64/255)*$sb)-0.1}
           -circle3d $xy,$z,1.5 -col3d. {$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]}
