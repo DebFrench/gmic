@@ -24106,19 +24106,19 @@ gimp_customize_clut_preview :
     -pose3d. 5.10656,2.04904,2.723,-316.115,-0.0815767,4.97762,-3.59262,-41.7094,-3.40685,2.95212,4.16756,-118.811,0,0,203,1
 
     # Try to find the best layout for displaying preview.
-    w/=2 h/=2
-    -if {$w>$h} # Landscape mode.
-      -r2dy[0,1] $h
+    -if {$w>$h} # Landscape mode
+      -r2dx[0,1] {0,round(w/2)}
       -text_outline[0] "Before",2,0,13,1,0.75
       -text_outline[1] "After",2,0,13,1,0.75
-      -a[0,1] y
+      -a[0,1] y -r[0] 100%,$h,1,3,0
     -else # Portrait mode.
-      -r2dx[0,1] $w
+      -r2dy[0,1] {0,round(h/2)}
       -text_outline[0] "Before",2,0,13,1,0.75
       -text_outline[1] "After",2,0,13,1,0.75
-      -a[0,1] x
+      -a[0,1] x -r[0] $w,100%,1,3,0
     -endif
-    -snapshot3d. {0,1.1*min(w,h)},1.2,64,64,64 -autocrop. --. 64 -r. {0,w},{0,h},1,3,0,0,0.5,0.5 -+. 64
+
+    -snapshot3d. {0,1.1*min(w,h)},1.2,64,64,64 -autocrop. --. 64 -r. {0,max(w,$w-w)},{0,max(h,$h-h)},1,3,0,0,0.5,0.5 -+. 64
     -text_outline. "RGB CLUT",2,0,13,1,0.75
     -a {`$w>$h?_'x':_'y'`}
   -endif
