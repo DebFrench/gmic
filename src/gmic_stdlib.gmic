@@ -23960,7 +23960,7 @@ gimp_apply_Labcurve_preview :
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator()
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
-#@gimp : Preview type = choice{8,"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT","3D CLUT"}
+#@gimp : Preview type = choice{8,"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT","3D CLUT (fast)","3D CLUT (precise)"}
 #@gimp : CLUT opacity = float(0.5,0,1)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Color correspondences:</b></small>")
@@ -24080,7 +24080,7 @@ gimp_customize_clut_preview :
   -elif {$11==7} # HaldCLUT preview
     -rm -gimp_customize_clut ${1-9},1,0,${12--1}
   -elif {$11>=8} # 3d CLUT preview
-    _N=32 # Reduce resolution of CLUT for preview
+    _N={$11>=9?64:32}
     -k[0] -to_rgb w={w} h={h}
     --gimp_customize_clut ${1-9},1,0,${12--1} -mv. 1
     -r. $_N,$_N,$_N,3,-1 -pointcloud3d. -o3d. $12
