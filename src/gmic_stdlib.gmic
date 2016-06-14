@@ -23961,7 +23961,7 @@ gimp_apply_Labcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
 #@gimp : Preview type = choice{8,"Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical","HaldCLUT","3D CLUT"}
-#@gimp : CLUT opacity = float(0.25,0,1)
+#@gimp : CLUT opacity = float(0.5,0,1)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Color correspondences:</b></small>")
 #@gimp : Action #1 = choice(1,"Ignore","Lock source","Replace source by target"), Source color #1 = color(0,0,0), Target color #1 = color(0,0,0)
@@ -24015,11 +24015,12 @@ gimp_apply_Labcurve_preview :
 gimp_customize_clut :
 
   # Build CLUT.
-  64,64,64,4
+  -if {!narg($_N)} N=64 -else N=$_N -endif N1={$N-1}
+  $N,$N,$N,4
 
   -if $2 # Lock uniform sampling
     -uniform_distribution {(1+$2)^3},3
-    -repeat {w} -point.. {round(63*I[$>])},1,{255*I[$>]},1 -done -rm.
+    -repeat {w} -point.. {round($N1*I[$>])},1,{255*I[$>]},1 -done -rm.
   -endif
 
   $=arg # Add user-defined color correspondences
@@ -24028,7 +24029,7 @@ gimp_customize_clut :
     -if $mode
       sr=${arg{14+7*$<}} sg=${arg{15+7*$<}} sb=${arg{16+7*$<}}
       tr=${arg{17+7*$<}} tg=${arg{18+7*$<}} tb=${arg{19+7*$<}}
-      xyz={round((63/255)*[$sr,$sg,$sb])}
+      xyz={round(($N1/255)*[$sr,$sg,$sb])}
       -point. $xyz,1,{$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]},1
     -endif
   -done
@@ -24079,13 +24080,14 @@ gimp_customize_clut_preview :
   -elif {$11==7} # HaldCLUT preview
     -rm -gimp_customize_clut ${1-9},1,0,${12--1}
   -elif {$11>=8} # 3d CLUT preview
+    _N=32 # Reduce resolution of CLUT for preview
     -k[0] -to_rgb w={w} h={h}
     --gimp_customize_clut ${1-9},1,0,${12--1} -mv. 1
-    -r. 64,64,64,3,-1 -pointcloud3d. -o3d. {$12/3}
+    -r. $_N,$_N,$_N,3,-1 -pointcloud3d. -o3d. $12
     -l[]
       -if $2 # Lock uniform sampling
         -uniform_distribution {(1+$2)^3},3
-        -repeat {w} -circle3d {0,round(64*I[$>])},1.5 -col3d. {0,255*I[$>]} -done -rm[0]
+        -repeat {w} -circle3d {0,round($_N*I[$>])},0.75 -col3d. {0,255*I[$>]} -done -rm[0]
       -endif
       $=arg # Add user-defined color correspondences
       -repeat 24
@@ -24093,12 +24095,12 @@ gimp_customize_clut_preview :
         -if $mode
           sr=${arg{14+7*$<}} sg=${arg{15+7*$<}} sb=${arg{16+7*$<}}
           tr=${arg{17+7*$<}} tg=${arg{18+7*$<}} tb=${arg{19+7*$<}}
-          xy={round((64/255)*[$sr,$sg])}
-          z={round((64/255)*$sb)-0.1}
-          -circle3d $xy,$z,1.5 -col3d. {$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]}
+          xy={round(($_N/255)*[$sr,$sg])}
+          z={round(($_N/255)*$sb)-0.1}
+          -circle3d $xy,$z,0.75 -col3d. {$mode==2?[$tr,$tg,$tb]:[$sr,$sg,$sb]}
         -endif
       -done
-      -colorcube3d -*3d. {64/255} -o3d. 0.5 -col3d. 0 -p3d. 1
+      -colorcube3d -*3d. {$_N/255} -o3d. 0.5 -col3d. 0 -p3d. 1
     -endl
     -+3d[2--1]
     -pose3d. 5.10656,2.04904,2.723,-316.115,-0.0815767,4.97762,-3.59262,-41.7094,-3.40685,2.95212,4.16756,-118.811,0,0,203,1
