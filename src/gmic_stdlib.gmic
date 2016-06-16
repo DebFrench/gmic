@@ -5029,7 +5029,7 @@ apply_curve : -check "${1=1}>=0 && $1<=1" -skip ${2=0},${3=100}
 apply_gamma : -check $1>=0
   -e[^-1] "Apply Gamma-correction to image$?, with gamma $1."
   -if {$1==1} -return -endif
-  -v - -repeat $! -l[$>] mM={im},{iM} -n 0,1 -^ {1/$1} -n $mM -endl -done -v +
+  -v - -repeat $! -l[$>] mM={[im,iM]} -n 0,1 -^ {1/$1} -n $mM -endl -done -v +
 
 #@gmic balance_gamma : _ref_color1,...
 #@gmic : Compute gamma-corrected color balance of selected image, with respect to specified reference color.
@@ -5065,7 +5065,7 @@ compress_clut : -check "isint(${1=2048}) && $1>=1 && ${2=17.5}>=0 && ${3=1.75}>=
     -v + -e[] "  > Process clut '"$nm"' ("${w}"x"${h}"x"${d}")." -v -
     -nm clut
     100%,100%,100% -nm. keypoints
-    --laplacian[0] -norm. -pow. 0.5 -nm. potential
+    --laplacian[0] -norm. -^. 0.5 -nm. potential
 
     # Insert initialization keypoints.
     0 -nm. keycoords
@@ -5389,7 +5389,7 @@ normlp : -check "isval(${1==2}) && $1>=0"
   -elif {$1==1} -abs -compose_channels +
   -elif {$1==2} -norm
   -elif {$1==inf} -abs -compose_channels max
-  -else -pow $1 -compose_channels + -pow {1/$1}
+  -else -^ $1 -compose_channels + -^ {1/$1}
   -endif
   -v +
 
@@ -5604,6 +5604,36 @@ vector2tensor :
 #@gmic :: Colors manipulation
 #
 #---------------------------------
+
+#@gmic adjust_colors : -100<=_brightness<=100,-100<=_contrast<=100,-100<=_gamma<=100,-100<=_hue_shift<=100,-100<=_saturation<=100,_value_min,_value_max
+#@gmic : Perform a global adjustment of colors on selected images.
+#@gmic : Range of correct image values are considered to be in [value_min,value_max] (e.g. [0,255]).
+#@gmic : If 'value_min==value_max==0', value range is estimated from min/max values of selected images.
+#@gmic : Processed images have pixel values constrained in [value_min,value_max].
+#@gmic : Default values: 'brightness=0', 'contrast=0', 'gamma=0', 'hue_shift=0', 'saturation=0', 'value_min=value_max=0'.
+#@gmic : $ image.jpg --adjust_colors 0,30,0,0,30
+adjust_colors : -check "${1=0}>=-100 && $1<=100 && ${2=0}>=-100 && $2<=100 && ${3=0}>=-100 && $3<=100 && ${4=0}>=-100 && $4<=100 && ${5=0}>=-100 && $5<=100" -skip ${6=0},${7=0}
+  -e[^-1] "Adjust colors of image$?, with brightness $1, contrast $2, gamma $3, hue shift $4, saturation $5 and value range [$6,$7]."
+  -v - -repeat $! -l[$>] -split_opacity
+    range={"$6==$7 && $6==0?[im,iM]:[min($6,$7),max($6,$7)]"}
+    m={arg(1,$range)} M={arg(2,$range)} fact={255/max(1e-5,$M-$m)}
+    -- $m -* $fact
+    -if {$4" || "$5} # Adjust Hue/Saturation
+      -to_rgb[0] -rgb2hsv[0]
+      -sh[0] 0 -+. {$4*1.8} -rm.
+      -sh[0] 1 -+. {($5%)^(1+($5>0))} -c. 0,1 -rm.
+      -hsv2rgb[0]
+    -endif
+    -if $3 # Adjust Gamma
+      -/[0] 255 -^[0] {10^-($3%)} -*[0] 255
+    -endif
+    -if $2 # Adjust Contrast
+      --[0] 128 -*[0] {exp($2/64)} -+[0] 128
+    -endif
+    -+[0] {$1*2} # Adjust Brightness
+    -/[0] $fact -+[0] $m -c[0] $range # Renormalize values.
+    -a c
+  -endl -done -v +
 
 #@gmic ac : eq. to '-apply_channels'.
 ac :
@@ -6598,7 +6628,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
 
     # Enforce luminosity constraint for non-confident colors.
     -if {$4>0}
-      -pow[fconfidence] {$4/10} -*[fconfidence] -1 -+[fconfidence] 1
+      -^[fconfidence] {$4/10} -*[fconfidence] -1 -+[fconfidence] 1
       --f[fconfidence] x --f. y --f. z -a[-3--1] c -*. {256/w}
       -rgb2hsv[clut,-1] -channels. 100%
       -j[clut] [-1],0,0,0,2,1,[fconfidence] -rm.
@@ -13304,7 +13334,7 @@ brushify : -check ${"-is_image_arg $1"}" &&"\         # $1: [brush]
 
     # Generate set of random points with orientations.
     --diffusiontensors[img] $9,$10,$11,$12 -nm. geometry
-    --channels[geometry] 0 -sh[geometry] 2 -+[-2,-1] -pow. 0.3 -quantize. $2,0 -*. -1 -+. $2 --. 1 -nm. contours
+    --channels[geometry] 0 -sh[geometry] 2 -+[-2,-1] -^. 0.3 -quantize. $2,0 -*. -1 -+. $2 --. 1 -nm. contours
     1,{img,max(1,${"-is_percent $8"}?wh*$8:$8)} -rand. 0,{img,w-1} --rand. 0,{img,h-1} -a[-2,-1] c -nm. pts
     --to_rgba[img] -nm. res
 
@@ -24033,7 +24063,7 @@ gimp_customize_clut :
   -s c,-3
   -if {$1<100} # Need to compute a weighting map.
     --distance. 1
-    -if $1 -pow. {1/(0.05+4*$1%)} -else -f. 0 -endif
+    -if $1 -^. {1/(0.05+4*$1%)} -else -f. 0 -endif
     -n. 0,1 -nm. influence -mv. -3
   -endif
   -eq. 0 -inpaint_diffusion.. [-1],100%,1,20 -rm.
