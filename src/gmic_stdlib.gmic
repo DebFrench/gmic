@@ -22808,18 +22808,19 @@ gimp_bwrecolorize_preview :
   -gimp_split_preview "-gimp_bwrecolorize ${^0}",$-1
 
 #@gimp Dithering : gimp_ditheredbw, gimp_ditheredbw_preview(0)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Smoothness = float(0,0,10)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : Hue = float(0,0,360)
-#@gimp : Saturation = float(0,0,1)
+#@gimp : Saturation (%) = float(100,0,100)
+#@gimp : Smoothness = float(0,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_ditheredbw :
   -repeat $! -l[$>] -split_opacity -l[0]
-    -luminance -n 0,255 -apply_gamma {10^$1} -- 128 -* $2 -+ 128 -+ $3 -b $4 -c 0,255 -ditheredbw
-    -if {$5||$6} -/ 255 -i[0] 100%,100%,1,2 -fc[0] $5,$6 -a c -hsv2rgb -endif
+    -luminance  -adjust_colors ${1-3} -b $6
+    -ditheredbw
+    -if {$4" || "$5} -/ 255 -i[0] 100%,100%,1,2 -fc[0] $4,{$5%} -a c -hsv2rgb -endif
   -endl -a c -endl -done
 
 gimp_ditheredbw_preview :
@@ -22896,8 +22897,8 @@ gimp_engrave_preview :
 #@gimp Freaky B&amp;W : gimp_freaky_bw, gimp_freaky_bw_preview
 #@gimp : Strength (%) = float(90,0,100)
 #@gimp : Oddness (%) = float(20,0,100)
-#@gimp : Brightness = float(0,-1,1)
-#@gimp : Contrast = float(0.1,-1,2)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>09/30/2015</i>.</small>")
 gimp_freaky_bw :
@@ -22944,7 +22945,7 @@ gimp_freaky_bw :
 
     # Merge result with original color image.
     -j[0] [1],0,0,0,0,{$1%} -rm.
-    -- $ia -* {1+$4} -+ $ia -+ {$3*255} -c 0,255
+    -adjust_colors ${3-4}
   -endl -a c -endl -done
 
 gimp_freaky_bw_preview :
@@ -23190,9 +23191,9 @@ gimp_boost_chroma_preview :
   -gimp_split_preview "-gimp_boost_chroma $*",$-1
 
 #@gimp Channel processing : gimp_channel_processing, gimp_channel_processing_preview(1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Value action = choice("None","Cut","Cut &amp; Normalize","Normalize","Threshold")
 #@gimp : Low value = float(0,0,100)
@@ -23208,10 +23209,7 @@ gimp_boost_chroma_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 _gimp_channel_processing :
-  -apply_gamma. {10^$1}
-  -if {$2!=1} --. 128 -*. $2 -+. 128 -endif
-  -+. $3
-  -b. $4% -c. 0,255
+  -adjust_colors ${1-3} -b. $4%
   -if {$5==1} -c. $6%,$7%
   -elif {$5==2} -c. $6%,$7% -n. 0,255
   -elif {$5==3} -n. $6%,$7%
@@ -23981,11 +23979,11 @@ gimp_apply_Labcurve_preview :
 #@gimp : Spatial regularization = int(0,0,20)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Global correction:</b></small>")
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator()
 #@gimp : Output corresponding CLUT = _choice("Disable","512x512 layer","4096x4096 layer")
@@ -24084,19 +24082,8 @@ gimp_customize_clut :
     --luminance[$>] --map_clut[$>] [-2] --. [$>]
     -repeat $3 -guided. [-2],2,50 -done -+[$>,-1] -rm.
   -done -endif
-
-  -repeat $! -l[$>] -split_opacity -to_rgb[0]
-    -apply_gamma[0] {10^$4}                            # Gamma correction
-    --[0] 128 -*[0] $5 -+[0] 128 -+[0] $6 -c[0] 0,255  # B&W contrast and brightness.
-    -if {$7" || "$8}
-      -rgb2hsv[0]
-      -sh[0] 0 -+. $7 -%. 360 -rm.
-      -sh[0] 1 -+. $8 -c. 0,1 -rm.
-      -hsv2rgb[0]
-    -endif
-    -if $9 -n[0] 0,255 -endif
-  -a c -endl -done
-
+  -adjust_colors ${4-8},0,255
+  -if $9 -repeat $! -l[$>] -split_opacity -n[0] 0,255 -a c -endl -done -endif
   -if $10
     -if {$10==2} -r. 256,256,256,3,5 -c. 0,255 -endif
     siz={w^1.5} -r. $siz,$siz,1,3,-1
@@ -24548,17 +24535,14 @@ gimp_selective_desaturation :
 gimp_selective_desaturation_preview :
   -gimp_split_preview "-gimp_selective_desaturation $*",$-1
 
-#@gimp Sepia : gimp_sepia, gimp_sepia_preview
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
+#@gimp Sepia : gimp_sepia, gimp_sepia_preview(1)+
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_sepia :
-  -sepia
-  -repeat $!
-    -sh. 0,2 -apply_gamma. {10^$1} --. 128 -*. $2 -+. {128+$3} -c. 0,255
-  -rm. -mv. 0 -done
+  -sepia -adjust_colors ${1-3},0,0,0,255
 
 gimp_sepia_preview :
   -gimp_split_preview "-gimp_sepia $*",$-1
@@ -26270,11 +26254,11 @@ gimp_map_tones_fast_preview :
 #@gimp : Scale = float(100,30,200)
 #@gimp : Colored grain = bool()
 #@gimp : sep = separator()
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,0,1)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : Preview grain alone = bool()
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/10/2014</i>.</small>")
@@ -26300,18 +26284,10 @@ __gimp_emulate_grain :
     --syntexturize. {0,max(10,100*w/$4)},{0,max(10,100*h/$4)}
     -if $5 --syntexturize.. {w},{h} --syntexturize... {w},{h} -a[-3--1] c -endif
     -r. {0,w},{0,h},1,100%,5 -c. 0,255
-    -apply_gamma. {10^$6}                    # Gamma correction
-    --. 128 -*. $7 -+. 128 -+. $8 -c. 0,255  # B&W contrast and brightness.
-    -if {$9||$10}
-      -to_color. -rgb2hsv.
-      -sh. 0 -+. $9 -%. 360 -rm.
-      -sh. 1 -+. $10 -rm.
-      -hsv2rgb.
-    -endif
+    -adjust_colors. ${6-10}
     -if $12 -k[0,-1] -rv
     -else -blend[0,-1] ${bm$2},{if($2<=4,$3,1)}
     -endif
-
   -a[^-1] c -endl -done -rm.
 
 #@gimp B&amp;W films : gimp_emulate_film_bw, gimp_emulate_film_bw_preview(1)+
@@ -27933,9 +27909,9 @@ gimp_crystal_preview :
 
 #@gimp Halftone : gimp_halftone, gimp_halftone_preview(0)
 #@gimp : note = note("<b><small>Image parameters :</small></b>")
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : sep = separator(), note = note("<b><small>Halftone parameters :</small></b>")
 #@gimp : Number of tones = int(5,2,32)
@@ -27946,7 +27922,7 @@ gimp_crystal_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/23/2012</i>.</small>")
 gimp_halftone :
-  -apply_gamma {10^$1} -- 128 -* $2 -+ 128 -+ $3 -b $4 -c 0,255
+  -adjust_colors ${1-3},0,0,0,255 -b $4
   -repeat $! -l[$>] -split_opacity
     -halftone[0] ${5-9}
   -a c -endl -done
@@ -28355,9 +28331,9 @@ gimp_sponge_preview :
 #@gimp : sep = separator()
 #@gimp : Equalize = bool(1)
 #@gimp : Colors = float(1,0,3)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>03/18/2011</i>.</small>")
 gimp_stained_glass :
@@ -28366,8 +28342,7 @@ gimp_stained_glass :
     -n 0,255
     -if $4 -equalize. -endif
     -rgb2lab. -sh. 1,2 -*. $5 -rm. -lab2rgb.
-    -apply_gamma. {10^$6} --. 128 -*. $7 -+. {128+$8}
-    -c. 0,255
+    -adjust_colors. ${6-8}
   -endl -a c -endl -done
 
 gimp_stained_glass_preview :
@@ -31009,28 +30984,7 @@ gmicol_bokeh :
 #@gmicol _<b>Basics</b>
 #----------------------
 
-#@gmicol Adjust colors : gmicol_adjust_colors, gmicol_adjust_colors_preview
-#@gmicol : Contrast = float(1,0,3)
-#@gmicol : Brightness = float(0,-1,1)
-#@gmicol : Gamma = float(0,-1.2,1.2)
-#@gmicol : Hue = float(0,0,360)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>10/23/2012</i>.</small>")
-#@gmicol : thumbnail_parameters = 1.8,0,0,50
-gmicol_adjust_colors :
-  -repeat $! -l[$>]
-    avg={ia} -- $avg -* $1 -+ $avg
-    -+ {$2*256}
-    -if {$3!=1} -apply_gamma {10^$3} -endif
-    -if {$4%360}
-      -to_colormode {max(3,s)+1-s%2} -split_opacity -l[0]
-        -rgb2hsv -sh 0 -+. $4 -%. 360 -rm. -hsv2rgb
-      -endl
-    -a c -endif
-  -endl -done -c 0,255
-
-gmicol_adjust_colors_preview :
-  -gimp_split_preview "-gmicol_adjust_colors $*",$-1
+#@gmicol clone("Basic adjustments")
 
 #@gmicol Autocrop : autocrop, autocrop
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>10/25/2012</i>.</small>")
