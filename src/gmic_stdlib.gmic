@@ -5484,9 +5484,9 @@ quantize : -check "isint($1) && $1>=1" -skip ${2=1},${3=0}
   -v - -repeat $! -l[$>]
     -if $3 # Uniform quantization.
       -if {s==1} # Greyscale image.
-        -if $2 mM={im},{iM} -n 0,$1 -round 1,-1 -min {$1-1} -n $mM
+        -if $2 mM={[im,iM]} -n 0,$1 -round 1,-1 -min {$1-1} -n $mM
         -else -n 0,$1 -round 1,-1 -min {$1-1} -endif
-      -else mM={im},{iM} -uniform_distribution $1,{s} -n. $mM -index.. [-1],0,$2 -rm.
+      -else mM={[im,iM]} -uniform_distribution $1,{s} -n. $mM -index.. [-1],0,$2 -rm.
       -endif
     -else --colormap $1,1,1 -index.. [-1],0,$2 -rm. # Non-uniform quantization.
     -endif
@@ -8902,7 +8902,7 @@ periodize_poisson :
   -e[^-1] "Periodize image$? using Poisson solver in Fourier space."
   -v - -repeat $! -l[$>]
     -s c -repeat $! -l[$>]
-      mM={im},{iM} sum={0,is}
+      mM={[im,iM]} sum={0,is}
       -laplacian -fft.
       -if {d==1} 100%,100%,1,1,'-(4-2*cos(2*x*pi/w)-2*cos(2*y*pi/h))' # 2d version.
       -else 100%,100%,100%,1,'-(6-2*cos(2*x*pi/w)-2*cos(2*y*pi/h)-2*cos(2*z*pi/d))' # 3d version.
@@ -9088,7 +9088,7 @@ syntexturize : -check "${1=100%}>0 && ${2=$1}>0"
   -v - -repeat $! -l[$>]
 
     # Prepare input image data.
-    mM={im},{iM} -repeat {s} -sh. $> sum$>={is} var$>={iv} -rm. -done  # Retrieve some stats for post-normalization.
+    mM={[im,iM]} -repeat {s} -sh. $> sum$>={is} var$>={iv} -rm. -done  # Retrieve some stats for post-normalization.
     nw={if(${-is_percent\ $1},$1*w,$1)}
     nh={if(${-is_percent\ $2},$2*h,$2)}
     -repeat {s} sum$>*={$nw*$nh/(w*h)} -done # Re-estimate output (0,0) frequency.
@@ -14424,7 +14424,7 @@ zoom : -skip ${1=2},${2=0.5},${3=0.5},${4=0.5},${5=0}
 cracks : -skip ${1=0.2},${2=40},${3=0}
   -e[^-1] "Add random cracks to image$?, with density $1."
   -v - -repeat $! -l[$>]
-    ({im},{iM}) [-2],[-2],1,1 -noise. $1,2 -distance. 1 -sharpen. 10000
+    ({[im,iM]}) [-2],[-2],1,1 -noise. $1,2 -distance. 1 -sharpen. 10000
     -if $3 -g. xy -+[-2,-1] -n. -1,1 -else -n. 0,1 -endif
     -*. $2 -+[-3,-1] -c.. {^} -rm.
   -endl -done -v +
@@ -14447,7 +14447,7 @@ light_patch : -skip ${1=10},${2=0.9},${3=1.7}
 noise_hurl : -skip ${1=10}
   -e[^-1] "Add hurl noise to image$?, with amplitude $1%."
   -v - -repeat $! -l[$>]
-    --f 0 -noise. 10 -n. {-2,im},{-2,iM} 100%,100%,1,1,-2
+    --f 0 -noise. 10 -n. {-2,[im,iM]} 100%,100%,1,1,-2
     -noise. $1,2 ->=. 0 -r. [-2]
     -*.. [-1] -*. -1 -+. 1 -*[-3,-1] -+
   -endl -done -v +
@@ -14554,7 +14554,7 @@ texturize_paper :
 vignette : -check "${1=100}>=0 && ${2=70}>=0 && $2<=100 && ${3=90}>=0 && $3<=100"
   -e[^-1] "Add vignette effect to image$?, with strength $1 and size $2."
   -v - -repeat $! -l[$>]
-    mM={im},{iM} d={max(w,h)}
+    mM={[im,iM]} d={max(w,h)}
     $d,$d -=. 1,50%,50% -distance. 1 -r. [-2],2
     -c. $2%,$3% -n. 0,$1 -- -c $mM
   -endl -done -v +
@@ -21157,7 +21157,7 @@ survey :
 
   # Fetch survey data.
   -i raw:http://gmic.eu/gmic_survey.raw,uchar -s -,10
-  -repeat {$!-1} -l[{$<-1},$<] -if {ia=={-2,ia}" && "im=={-2,im}" && "iM=={-2,iM}} -rm. -endif -endl -done # Remove duplicates
+  -repeat {$!-1} -l[{$<-1},$<] -if {"ia==ia#-2 && im==im#-2 && iM==iM#-2"} -rm. -endif -endl -done # Remove duplicates
 
   # Get sequence of anwsers for each question.
   -m "__survey : -_survey $""1"
@@ -22441,7 +22441,7 @@ _gimp_shapeism7 : # Custom
 gimp_smooth_abstract :
   -repeat $! -l[$>] -split_opacity -l[0]
     -srgb2rgb
-    mM={im},{iM} --b $4 -n. $mM -gradient_norm. -le. {50-$5}
+    mM={[im,iM]} --b $4 -n. $mM -gradient_norm. -le. {50-$5}
     -inpaint_diffusion[0] [1],$1%,$2,$3 -rm.
     -nm 0,255 -rgb2srgb
   -endl -a c -endl -done
