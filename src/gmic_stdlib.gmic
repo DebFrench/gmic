@@ -23153,6 +23153,20 @@ gimp_color_abstraction :
 gimp_color_abstraction_preview :
   -gimp_split_preview "-gimp_color_abstraction $*",$-1
 
+#@gimp Basic adjustments : gimp_adjust_colors, gimp_adjust_colors_preview
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/16/2016</i>.</small>")
+gimp_adjust_colors :
+  -adjust_colors ${1-5},0,255
+
+gimp_adjust_colors_preview :
+  -gimp_split_preview "-gimp_adjust_colors $*",$-1
+
 #@gimp Boost-fade : gimp_boost_fade, gimp_boost_fade_preview
 #@gimp : Amplitude = float(5,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
@@ -26317,12 +26331,12 @@ __gimp_emulate_grain :
 #@gimp : "Ilford HP5 Plus 400","Ilford HPS 800","Ilford Pan F Plus 50","Ilford XP2","Kodak BW 400 CN","Kodak HIE (HS Infra)","Kodak T-Max 100","Kodak T-Max 3200",
 #@gimp : "Kodak T-Max 400","Kodak Tri-X 400","Polaroid 664","Polaroid 667","Polaroid 672","Rollei IR 400","Rollei Ortho 25","Rollei Retro 100 Tonal","Rollei Retro 80s"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator()
 #@gimp : Pseudo-gray dithering = int(0,0,5)
@@ -26355,12 +26369,12 @@ gimp_emulate_film_bw_preview :
 #@gimp : "Polaroid Time Zero (Expired) ---","Polaroid Time Zero (Expired) --","Polaroid Time Zero (Expired) -","Polaroid Time Zero (Expired)","Polaroid Time Zero (Expired) +","Polaroid Time Zero (Expired) ++",
 #@gimp : "Polaroid Time Zero (Expired) Cold ---","Polaroid Time Zero (Expired) Cold --","Polaroid Time Zero (Expired) Cold -","Polaroid Time Zero (Expired) Cold"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26402,12 +26416,12 @@ gimp_emulate_film_instant_consumer_preview :
 #@gimp : "Polaroid 690 Cold --","Polaroid 690 Cold -","Polaroid 690 Cold","Polaroid 690 Cold +","Polaroid 690 Cold ++",
 #@gimp : "Polaroid 690 Warm --","Polaroid 690 Warm -","Polaroid 690 Warm","Polaroid 690 Warm +","Polaroid 690 Warm ++"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26438,12 +26452,12 @@ gimp_emulate_film_instant_pro_preview :
 #@gimp : "Agfa Ultra Color 100","Agfa Vista 200","Fuji Superia 200","Fuji Superia HG 1600","Fuji Superia Reala 100","Fuji Superia X-Tra 800",
 #@gimp : "Kodak Elite 100 XPRO","Kodak Elite Color 200","Kodak Elite Color 400","Kodak Portra 160 NC","Kodak Portra 160 VC","Lomography Redscale 100"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26463,12 +26477,12 @@ gimp_emulate_film_negative_color_preview :
 #@gimp : Preset = choice{"None","Fuji 160C","Fuji 400H","Fuji 800Z","Fuji Ilford HP5","Kodak Portra 160","Kodak Portra 400","Kodak Portra 800","Kodak TMAX 3200","Kodak TRI-X 400"}
 #@gimp : Effect = choice(1,"Low","Standard","High","Higher")
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26496,12 +26510,12 @@ gimp_emulate_film_negative_new_preview :
 #@gimp : "Kodak Portra 160 NC","Kodak Portra 160 VC","Kodak Portra 400 NC","Kodak Portra 400 UC","Kodak Portra 400 VC"}
 #@gimp : Effect = choice(1,"Low","Standard","High","Higher")
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26532,12 +26546,12 @@ gimp_emulate_film_negative_old_preview :
 #@gimp : "Kodak 2383 (Constlclip)","Kodak 2383 (Constlmap)","Kodak 2383 (Cuspclip)",
 #@gimp : "Kodak 2393 (Constlclip)","Kodak 2393 (Constlmap)","Kodak 2393 (Cuspclip)"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been provided by <b>Juan Melara</b>, and are freely available at:</small>")
@@ -26565,12 +26579,12 @@ gimp_emulate_film_print_preview :
 #@gimp : "Kodak Elite Chrome 400","Kodak Elite ExtraColor 100","Kodak Kodachrome 200","Kodak Kodachrome 25","Kodak Kodachrome 64","Lomography X-Pro Slide 200",
 #@gimp : "Polaroid 669","Polaroid 690","Polaroid Polachrome"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More info at:</small>")
@@ -26594,12 +26608,12 @@ gimp_emulate_film_colorslide_preview :
 #@gimp : HaldCLUT filename = file()
 #@gimp : note = note("<small><b>Note:</b> Do not forget to set the <i>Input layers</i> option if you select <i>Top layer</i> or <i>Bottom layer</i>.</small>")
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>More info at:</small>")
@@ -26634,12 +26648,12 @@ gimp_emulate_film_userdefined_preview :
 #@gimp : "Sunny (rich)","Super warm","Super warm (rich)","Sutro FX","Vibrant","Vibrant (alien)","Vibrant (contrast)","Vibrant (crome-ish)",
 #@gimp : "Vintage","Vintage (alt)","Vintage (brighter)","Warm","Warm (highlight)","Warm (yellow)"}
 #@gimp : sep = separator()
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Gamma = float(0,-1.2,1.2)
-#@gimp : Contrast = float(1,0,4)
-#@gimp : Brightness = float(0,-255,255)
-#@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(0,-1,1)
+#@gimp : Strength (%) = float(100,0,100)
+#@gimp : Brightness (%) = float(0,-100,100)
+#@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
+#@gimp : Hue (%) = float(0,-100,100)
+#@gimp : Saturation (%) = float(0,-100,100)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>More info at:</small>")
@@ -26664,24 +26678,14 @@ _gimp_emulate_film :
   -if $1
     -input_clut "$2"
     -repeat {$!-1}
-      -if {$3<1} --map_clut[$>] [-1] -j[$>] [-1],0,0,0,0,$3 -rm.
+      -if {$3<100} --map_clut[$>] [-1] -j[$>] [-1],0,0,0,0,{$3%} -rm.
       -else -map_clut[$>] [-1]
       -endif
     -done
     -rm.
   -endif
-
-  -repeat $! -l[$>] -split_opacity
-    -apply_gamma[0] {10^$4}                            # Gamma correction
-    --[0] 128 -*[0] $5 -+[0] 128 -+[0] $6 -c[0] 0,255  # B&W contrast and brightness.
-    -if {$7||$8}
-      -rgb2hsv[0]
-      -sh[0] 0 -+. $7 -%. 360 -rm.
-      -sh[0] 1 -+. $8 -c. 0,1 -rm.
-      -hsv2rgb[0]
-    -endif
-    -if $9 -n[0] 0,255 -endif
-  -a c -endl -done
+  -adjust_colors ${4-8},0,255
+  -if $9 -repeat $! -l[$>] -split_opacity -n[0] 0,255 -a c -endl -done -endif
 
 #@gimp <i>[Collages]</i>
 #-----------------------
