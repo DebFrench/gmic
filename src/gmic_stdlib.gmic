@@ -30959,7 +30959,37 @@ gmicol_logo_en :
 gmicol_bokeh :
   -repeat $! -l[$>] -gimp_bokeh $* -gimp_merge_layers -endl -done
 
-#@gmicol clone("Brushify")
+#@gmicol Brushify : gmicol_brushify, gmicol_brushify_preview(0)
+#@gmicol : note = note("<small><b>Brush parameters:</b></small>")
+#@gmicol : Shape = choice(5,"Rectangle","Diamond","Pentagon","Hexagon","Octogon","Ellipse","Gaussian","Star","Heart")
+#@gmicol : Ratio = float(0.25,0,1)
+#@gmicol : Number of sizes = int(4,1,16)
+#@gmicol : Maximal size = int(64,1,128)
+#@gmicol : Minimal size (%)= float(25,0,100)
+#@gmicol : Number of orientations = int(12,1,24)
+#@gmicol : Fuzzyness = float(0,0,10)
+#@gmicol : Smoothness = float(2,0,10)
+#@gmicol : Light type = choice(4,"None","Flat","Darken","Lighten","Full")
+#@gmicol : Light strength = float(0.2,0,1)
+#@gmicol : Opacity = float(0.5,0,1)
+#@gmicol : sep = separator()
+#@gmicol : note = note("<small><b>Painting parameters:</b></small>")
+#@gmicol : Density (%) = float(30,0,100)
+#@gmicol : Contour coherence = float(1,0,1)
+#@gmicol : Orientation coherence = float(1,0,1)
+#@gmicol : Gradient smoothness = float(1,0,10)
+#@gmicol : Structure smoothness = float(5,0,10)
+#@gmicol : Primary angle = float(0,-180,180)
+#@gmicol : Angle dispersion = float(0.2,0,1)
+#@gmicol : sep = separator()
+#@gmicol : Preview brush = bool(1)
+#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/22/2016</i>.</small>")
+gmicol_brushify :
+  -gimp_brushify {2+$1},${2--1}
+
+gmicol_brushify_preview :
+  -gimp_brushify_preview {2+$1},${2--1}
+
 #@gmicol clone("Cartoon")
 #@gmicol clone("Circle abstraction")
 #@gmicol clone("Cubism")
