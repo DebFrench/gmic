@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!-- <body onload="javascript:hop();"></body> -->
 <!--#include file="header.html" -->
 
 <div id="bloc_option"><div id="top_vert"><div id="text_top">In a nutshell</div></div>
@@ -29,25 +28,6 @@
               </script>
 
               <hr noshade="noshade" size="1" width="90%"></hr>
-              <!-- <p><table width="90%" border="0" cellspacing="0" cellpadding="0"><tr> -->
-              <!--       <td> -->
-              <!--         <a id="gift_id" href="morechocolate.shtml"><img src="img/gift.png" /></a> -->
-              <!--         <script> -->
-              <!--           $("#gift_id").mousedown(function(){ -->
-              <!--           $(this).removeClass("over").addClass("down"); -->
-              <!--           }).mouseup(function(){ -->
-              <!--           $(this).removeClass("down"); -->
-              <!--           }).mouseover(function(){ -->
-              <!--           $(this).removeClass("down").addClass("over"); -->
-              <!--           }).mouseout(function(){ -->
-              <!--           $(this).removeClass("over"); -->
-              <!--           }) -->
-              <!--         </script> -->
-              <!--       </td> -->
-              <!--       <td align="center"><a href="morechocolate.shtml"><font size="-1">Want to reward the developers ?</font></a></td> -->
-              <!--   </tr></table></p> -->
-              <!-- <hr noshade="noshade" size="1" width="90%"></hr> -->
-
             </center>
           </td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

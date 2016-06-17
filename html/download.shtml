@@ -20,25 +20,6 @@
                   (artwork by <a href="http://www.mahvin.com/">Mahvin</a>)</i></font><br/>
 
               <hr noshade="noshade" size="1" width="90%"></hr>
-              <!-- <p><table width="90%" border="0" cellspacing="0" cellpadding="0"><tr> -->
-              <!--       <td> -->
-              <!--         <a id="gift_id" href="morechocolate.shtml"><img src="img/gift.png" /></a> -->
-              <!--         <script> -->
-              <!--           $("#gift_id").mousedown(function(){ -->
-              <!--           $(this).removeClass("over").addClass("down"); -->
-              <!--           }).mouseup(function(){ -->
-              <!--           $(this).removeClass("down"); -->
-              <!--           }).mouseover(function(){ -->
-              <!--           $(this).removeClass("down").addClass("over"); -->
-              <!--           }).mouseout(function(){ -->
-              <!--           $(this).removeClass("over"); -->
-              <!--           }) -->
-              <!--         </script> -->
-              <!--       </td> -->
-              <!--       <td align="center"><a href="morechocolate.shtml"><font size="-1">Want to reward the developers ?</font></a></td> -->
-              <!-- </tr></table></p> -->
-              <!-- <hr noshade="noshade" size="1" width="90%"></hr> -->
-
             </center>
           </td>
           <td width="700" valign="top">
@@ -46,80 +27,80 @@
             <hr noshade="noshade" size="1" width="90%"></hr>
 
             <font size="-1">
-            <table align="center" border="0" cellpadding="2" cellspacing="0" width="90%">
-              <tr>
-                <td><a href="http://gmic.eu/gimp.shtml"><img alt="" src="img/download_gimp.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/gimp.shtml"><font size="3">G'MIC plug-in for GIMP only</font></a><br/>
-                  installers/binaries for Windows/Linux<br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/windows/gmic_win64.zip"><img alt="" src="img/download_win64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/windows/gmic_win64.zip"><font size="3">G'MIC for Windows (64 bits)</font></a><br/>
-                  zip file<br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/windows/gmic_win32.zip"><img alt="" src="img/download_win32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/windows/gmic_win32.zip"><font size="3">G'MIC for Windows (32 bits)</font></a><br/>
-                  zip file<br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><img alt="" src="img/download_debian64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (64 bits)</font></a><br/>
-                  deb file<br/>
-                  alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_amd64.deb">for Debian 7 <i>Wheezy</i> (64 bits)</a><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><img alt="" src="img/download_debian32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (32 bits)</font></a><br/>
-                  deb file<br/>
-                  alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_i386.deb">for Debian 7 <i>Wheezy</i> (32 bits)</a><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><img alt="" src="img/download_ubuntu64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td>
-                  <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (64 bits)</font></a><br/>
-                  deb file<br/>
-                  alternative1: <a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb">for Ubuntu 15.04 <i>Vivid</i> (64 bits)</a><br/>
-                  alternative2: <a href="http://gmic.eu/files/linux/gmic_ubuntu_xenial_amd64.deb">for Ubuntu 16.04 <i>Xenial</i> (64 bits)</a><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><img alt="" src="img/download_ubuntu32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (32 bits)</font></a><br/>
-                  deb file<br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_static_linux64.zip"><img alt="" src="img/download_linux64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_static_linux64.zip"><font size="3">G'MIC for Linux, static version (64 bits)</font></a><br/>
-                  zip file, <i>beware: without display capabilities!</i><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/linux/gmic_static_linux32.zip"><img alt="" src="img/download_linux32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/linux/gmic_static_linux32.zip"><font size="3">G'MIC for Linux, static version (32 bits)</font></a><br/>
-                  zip file, <i>beware: without display capabilities!</i><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://karo03.bplaced.de/gmic/release/"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC for MacOSX (64bits, LISANET version)</font></a><br/>
-                  dmg file<br/>
-                  alternative: <a href="http://www.partha.com/">Partha version (64 bits)</a><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_source.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC source</font></a><br/>
-                  tar.gz file<br/>
-                  alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files/prerelease"><font size="3">G'MIC pre-release for testing</font></a><br/>
-                  source and Windows/Linux installers/binaries<br/><br/></td>
-              </tr>
-              <tr>
-                <td><a href="http://gmic.eu/files/"><img alt="" src="img/download_browse.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
-                <td><a href="http://gmic.eu/files"><font size="3">Browse all files</font></a><br/></td>
-              </tr>
-            </table>
-            <hr noshade="noshade" size="1" width="90%"></hr>
+              <table align="center" border="0" cellpadding="2" cellspacing="0" width="90%">
+                <tr>
+                  <td><a href="http://gmic.eu/gimp.shtml"><img alt="" src="img/download_gimp.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/gimp.shtml"><font size="3">G'MIC plug-in for GIMP only</font></a><br/>
+                    installers/binaries for Windows/Linux<br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/windows/gmic_win64.zip"><img alt="" src="img/download_win64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/windows/gmic_win64.zip"><font size="3">G'MIC for Windows (64 bits)</font></a><br/>
+                    zip file<br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/windows/gmic_win32.zip"><img alt="" src="img/download_win32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/windows/gmic_win32.zip"><font size="3">G'MIC for Windows (32 bits)</font></a><br/>
+                    zip file<br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><img alt="" src="img/download_debian64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_amd64.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (64 bits)</font></a><br/>
+                    deb file<br/>
+                    alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_amd64.deb">for Debian 7 <i>Wheezy</i> (64 bits)</a><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><img alt="" src="img/download_debian32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/linux/gmic_debian_jessie_i386.deb"><font size="3">G'MIC for Debian 8 <i>Jessie</i> (32 bits)</font></a><br/>
+                    deb file<br/>
+                    alternative: <a href="http://gmic.eu/files/linux/gmic_debian_wheezy_i386.deb">for Debian 7 <i>Wheezy</i> (32 bits)</a><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb"><img alt="" src="img/download_ubuntu64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td>
+                    <a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_amd64.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (64 bits)</font></a><br/>
+                    deb file<br/>
+                    alternative1: <a href="http://gmic.eu/files/linux/gmic_ubuntu_vivid_amd64.deb">for Ubuntu 15.04 <i>Vivid</i> (64 bits)</a><br/>
+                    alternative2: <a href="http://gmic.eu/files/linux/gmic_ubuntu_xenial_amd64.deb">for Ubuntu 16.04 <i>Xenial</i> (64 bits)</a><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><img alt="" src="img/download_ubuntu32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/linux/gmic_ubuntu_trusty_i386.deb"><font size="3">G'MIC for Ubuntu 14.04 LTS <i>Trusty</i> (32 bits)</font></a><br/>
+                    deb file<br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_static_linux64.zip"><img alt="" src="img/download_linux64.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/linux/gmic_static_linux64.zip"><font size="3">G'MIC for Linux, static version (64 bits)</font></a><br/>
+                    zip file, <i>beware: without display capabilities!</i><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/linux/gmic_static_linux32.zip"><img alt="" src="img/download_linux32.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/linux/gmic_static_linux32.zip"><font size="3">G'MIC for Linux, static version (32 bits)</font></a><br/>
+                    zip file, <i>beware: without display capabilities!</i><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://karo03.bplaced.de/gmic/release/"><img alt="" src="img/download_macosx.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://karo03.bplaced.de/gmic/release/"><font size="3">G'MIC for MacOSX (64bits, LISANET version)</font></a><br/>
+                    dmg file<br/>
+                    alternative: <a href="http://www.partha.com/">Partha version (64 bits)</a><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_source.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC source</font></a><br/>
+                    tar.gz file<br/>
+                    alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files/prerelease"><font size="3">G'MIC pre-release for testing</font></a><br/>
+                    source and Windows/Linux installers/binaries<br/><br/></td>
+                </tr>
+                <tr>
+                  <td><a href="http://gmic.eu/files/"><img alt="" src="img/download_browse.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
+                  <td><a href="http://gmic.eu/files"><font size="3">Browse all files</font></a><br/></td>
+                </tr>
+              </table>
+              <hr noshade="noshade" size="1" width="90%"></hr>
 
             </td>
         </tr></table>
@@ -188,7 +169,7 @@
         <li>
           Compile the <b><a href="gimp.shtml">GIMP plug-in</a></b> only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make gimp</tt>&nbsp;&nbsp;
         </li>
-        </ul>
+      </ul>
       Note that compiling issues (compiler segfault) may happen with versions of <i>g++ 4.8.1</i> and <i>4.8.2</i>.
       If you encounter this kind of errors, you probably have to disable the support of OpenMP
       in <b><font color="#000066">G'MIC</font></b> to make it work, by compiling it with:
