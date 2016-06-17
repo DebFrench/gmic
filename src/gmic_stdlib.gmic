@@ -20226,8 +20226,8 @@ gimp_filter_sources : -skip ${1=0}
            "\#@gimp : sep = separator()"\n\
            "\#@gimp : note = note{\"If you\47d like to send <b>more</b> than a single hot chocolate for our efforts, please visit the following page where you can contribute"\n\
            "\#@gimp : extra to help keep us motivated (via <b>Paypal</b>):\"}"\n\
-           "\#@gimp : link = link{\"Offer even more hot chocolate to the G\47MIC developers\",\"http://gmic.eu/morechocolate.shtml\"}"\n\
-           "\#@gimp : link = link{\"http://gmic.eu/morechocolate.shtml\"}"\n\
+           "\#@gimp : link = link{\"Offer even more hot chocolate to the G\47MIC developers\",\"http://opensource.graphics/more-chocolate/\"}"\n\
+           "\#@gimp : link = link{\"http://opensource.graphics/more-chocolate/\"}"\n\
            "\#@gimp : sep = separator()"\n\
            "\#@gimp : note = note{\"<small><b>Note:</b> This filter won\47t appear anymore after you re-run the plug-in. So, don\47t miss the occasion!</small>\"}"\n\
            "\#@gimp : sep = separator(), note = note(\"<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/30/2015</i>.</small>\")"\n\
