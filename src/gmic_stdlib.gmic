@@ -20781,19 +20781,9 @@ _gimp_download_all_data :
 #@gimp : note = link(0,"[3] G'MIC filter template","http://gmic.eu/template.gmic")
 
 #@gimp Friends Hall of Fame : _none_, gimp_friends
-#@gimp : note = note{"\n<span foreground="purple" underline="single">Donators :</span>"}
-#@gimp : note = note{"<b><small>Note:</small></b> Donations are mainly used to help making <b>G'MIC</b> more visible
-#@gimp :              (cover expenses for web hosting and open-source events, for instance). Also, it will motivate
-#@gimp :              the team to design more new image filters/effects and buy the hot chocolate for the coding time!
-#@gimp :              Feel free to give a little if you appreciate <b>G'MIC</b>, by clicking on:"}
-#@gimp : link = link{"Make a donation via Paypal","http://gmic.eu/morechocolate.shtml"}
-#@gimp : link = link{"Make a donation via Flattr","http://flattr.com/thing/41097/GMIC-GREYCs-Magic-for-Image-Computing"}
-#@gimp : link = link{"Make a donation via Bitcoin","bitcoin:1N5BsWvLRGHq42KLdCEtXuGvu9pat93kHD?label=G'MIC%20Donation"}
-#@gimp : Btc address: = text("1N5BsWvLRGHq42KLdCEtXuGvu9pat93kHD")
-#@gimp : sep = separator()
-#@gimp : note = note{" <b>-</b> A big hug goes to these friends who offered us liters of hot chocolate (recently received first) :"}
+#@gimp : note = note{"\n<span foreground="purple" underline="single">Supporters:</span>"}
+#@gimp : note = note{" <b>-</b> A big hug goes to these friends who supported the project:"}
 #@gimp : note = note{"<i>
-#@gimp : <b>2016:</b>
 #@gimp : Luigi Scarselli,
 #@gimp : <a href="http://blog.patdavid.net/">Pat David</a>,
 #@gimp : Juan Jose Rodriguez Vela,
@@ -20829,7 +20819,6 @@ _gimp_download_all_data :
 #@gimp : Christian Beuschel,
 #@gimp : Tore Busch,
 #@gimp : Douc McGregor.
-#@gimp : \n<b>2015:</b>
 #@gimp : Marcel Dahm,
 #@gimp : Susan Voitel,
 #@gimp : <a href="https://www.flickr.com/photos/henkkoning">Henk Koning</a>,
@@ -20867,7 +20856,6 @@ _gimp_download_all_data :
 #@gimp : <a href="http://tomtappingphotoblog.blogspot.fr/">Thomas Tapping</a>,
 #@gimp : Phillip R Ziesemer,
 #@gimp : Jean Francois.
-#@gimp : \n<b>2010 - 2014:</b>
 #@gimp : Franz Ziereis,
 #@gimp : Alessandro Renzi,
 #@gimp : Tsuda Koshi,
@@ -20898,7 +20886,7 @@ _gimp_download_all_data :
 #@gimp : <a href="http://www.artwanted.com/artist.cfm?artid=10918">Lyle Kroll</a>.
 #@gimp : </i>"}
 #@gimp : sep = separator()
-#@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
+#@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders:</span>"}
 #@gimp : note = note{" <b>-</b> We've received <b>37</b> postcards from <b>G'MIC</b> enthusiasts so far.
 #@gimp :               You could be the <b>38th</b> sender :)"}
 #@gimp : note = note{" <b>-</b> A big hug goes to these postcard senders (recently received first) :"}
@@ -20943,7 +20931,7 @@ _gimp_download_all_data :
 #@gimp : </i>"}
 #@gimp : sep = separator()
 #@gimp : note = note{"\nMay the force be with you!"}
-gimp_friends : -skip $*
+gimp_friends :
   -if $! ratio={w/h} -else ratio=1 -endif
   -rm -_heart80x73 -scale3x -r 150%,150%,1,1,0,0,0.5,0.5
   --*. 70 --*.. 110 --*... 255 -*[-4] 255 -a c
