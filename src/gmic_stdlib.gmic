@@ -20222,7 +20222,7 @@ gimp_filter_sources : -skip ${1=0}
            "\#@gimp : Just follow the link below (or copy/paste into your browser) and click <b>on the sponsored link</b> that is shown. It\47s as simple as that and"\n\
            "\#@gimp : we\47ll drink to you :)\"}"\n\
            "\#@gimp : link = link{\"Send a free hot chocolate to the G\47MIC developers\",\"http://gmic.eu/freechocolate.shtml\"}"\n\
-           "\#@gimp : link = link{\"http://gmic.eu/freechocolate.shtml/\"}"\n\
+           "\#@gimp : link = link{\"http://gmic.eu/freechocolate.shtml\"}"\n\
            "\#@gimp : note = note{\"If you\47d like to send <b>more</b> than a single hot chocolate for our efforts, you are welcome too!\"}"\n\
            "\#@gimp : sep = separator()"\n\
            "\#@gimp : note = note{\"<small><b>Note:</b> This filter won\47t appear anymore after you re-run the plug-in. So, don\47t miss the occasion!</small>\"}"\n\
