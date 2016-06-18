@@ -28532,7 +28532,7 @@ gimp_inpaint_diffusion :
     R=$4 G=$5 B=$6 A=$7
     -if {!$A" && "(s==2" || "s==4)} -split_opacity --!=. 0 -*[0,-1] -a c R=0 G=0 B=0 -endif # Purely transparent color.
     --select_color 0,$R,$G,$B,$A
-    -if $8 -dilate. {1+2*$8} -endif
+    -if {$8} -dilate. {1+2*$8} -endif
     -inpaint_diffusion.. [1],$1%,$2,$3
     -rm.
   -endl -done -c 0,255
