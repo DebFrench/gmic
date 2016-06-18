@@ -9074,7 +9074,7 @@ solidify : -check "${1=75%}>=0 && isint(${2=1}) && $2>=0 && $2<=2 && ${3=20}>=0"
   -v - s0="isotropic" s1="delaunay-oriented" s2="edge-oriented"
   -v + -e[^-1] "Solidify transparent image$? with smoothness $1 and $3 iterations of "${s$2}" diffusion." -v -
   -repeat $! -l[$>] -split_opacity
-    -if {$!>1} -le. 128 -inpaint_diffusion.. [1],${1-3} -rm. -endif
+    -if {$!>1} -le. 128 -inpaint_diffusion.. [1],${1-3} -rm. -c 0,255 -endif
   -endl -done -v +
 
 #@gmic syntexturize : _width[%]>0,_height[%]>0
@@ -22427,7 +22427,7 @@ gimp_smooth_abstract :
     -srgb2rgb
     mM={[im,iM]} --b $4 -n. $mM -gradient_norm. -le. {50-$5}
     -inpaint_diffusion[0] [1],$1%,$2,$3 -rm.
-    -nm 0,255 -rgb2srgb
+    -rgb2srgb -c 0,255
   -endl -a c -endl -done
 
 gimp_smooth_abstract_preview :
@@ -24051,7 +24051,7 @@ gimp_customize_clut :
     -if $1 -^. {1/(0.05+4*$1%)} -else -f. 0 -endif
     -n. 0,1 -nm. influence -mv. -3
   -endif
-  -eq. 0 -inpaint_diffusion.. [-1],100%,1,20 -rm.
+  -eq. 0 -inpaint_diffusion.. [-1],100%,1,20 -rm. -c. 0,255
 
   -if $influence
     100%,100%,100%,3,[x,y,z] -n. 0,255
@@ -27008,7 +27008,7 @@ gimp_frame_smooth :
      -frame $sx,$sy,1
      -inpaint_diffusion[0] [1],100%,1,15
      -rm.
-  -endl -done
+  -endl -done -c 0,255
 
 #@gimp Old photograph : gimp_old_photo, gimp_old_photo(1)
 #@gimp : Vignette strength = float(200,0,255)
@@ -28535,7 +28535,7 @@ gimp_inpaint_diffusion :
     -if $8 -dilate. {1+2*$8} -endif
     -inpaint_diffusion.. [1],$1%,$2,$3
     -rm.
-  -endl -done
+  -endl -done -c 0,255
 
 gimp_inpaint_diffusion_preview :
   -gimp_inpaint_diffusion ${1-7},{1+$8}
