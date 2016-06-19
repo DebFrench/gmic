@@ -16530,7 +16530,7 @@ x_2048 :
 ---- with the same number touch, they merge into one!\n
 ---- This command is a port of the '"${c}"2048"$n"' game originally\n
 ---- designed by "${c}"Gabriele Cirulli"$n", and available at:\n
----- "${r}"http://gabrielecirulli.github.io/2048/"$n"\n
+---- "${g}"http://gabrielecirulli.github.io/2048/"$n"\n
 ----\n
 ---- Keys '"${c}"ESC"$n"' or '"${c}"Q"$n"' to exit.\n
 ----\n
