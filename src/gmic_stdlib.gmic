@@ -26416,13 +26416,14 @@ gimp_old_photo :
 #@gimp : X-shadow = float(0,-20,20)
 #@gimp : Y-shadow = float(0,-20,20)
 #@gimp : Smoothness = float(3,0,5)
+#@gimp : Curvature = float(0,0,1)
 #@gimp : Angle = float(20,-180,180)
 #@gimp : Vignette strength = float(50,0,255)
 #@gimp : Vignette min radius = float(70,0,100)
 #@gimp : Vignette max radius = float(95,0,100)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
 gimp_polaroid :
-  -vignette ${7-9} -polaroid $1,$2 -drop_shadow $3%,$4%,$5% -rotate $6,1,0
+  -vignette ${8-10} -polaroid $1,$2 -drop_shadow $3%,$4%,$5%,$6 -rotate $7,1,0
 
 #@gimp Tunnel : gimp_tunnel, gimp_tunnel(1)
 #@gimp : Depth = int(4,1,100)
