@@ -83,7 +83,7 @@ if [ "$OSTYPE" == "msys" ]; then
             OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win64.zip &&
             OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win64.exe &&
             rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
-
+            sed s\/XXX\/${VERSION}${SUFFIX}\/g /e/work/src/gmic/resources/gmic_gimp64.iss > tmp.iss
             cd gmic-src && make clean && rm -f gmic gmic_gimp *.o && \
             make OPT_CFLAGS="-O3 -m64 -mtune=generic" cli gimp libc
     else
@@ -97,7 +97,7 @@ if [ "$OSTYPE" == "msys" ]; then
                 OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win64.zip &&
                 OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win64.exe &&
                 rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
-
+                sed s\/XXX\/${VERSION}${SUFFIX}\/g /e/work/src/gmic/resources/gmic_gimp64.iss > tmp.iss
                 cd gmic-src && make clean && rm -f gmic gmic_gimp *.o && \
                 make CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
                      MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
@@ -114,7 +114,7 @@ if [ "$OSTYPE" == "msys" ]; then
                 OUTZIP2=gmic_gimp_${VERSION}${SUFFIX}_win32.zip &&
                 OUTINST=gmic_gimp_${VERSION}${SUFFIX}_win32.exe &&
                 rm -rf ${OUTDIR1} ${OUTDIR2} ${OUTZIP1} ${OUTZIP2} ${OUTINST} &&
-
+                sed s\/XXX\/${VERSION}${SUFFIX}\/g /e/work/src/gmic/resources/gmic_gimp32.iss > tmp.iss
                 cd gmic-src && make clean && rm -f gmic gmic_gimp *.o && \
                 make CC="g++ -I/mingw/include -I/env/gcc492/mingw32/include -I/env/gcc492/mingw32/i686-w64-mingw32/include -I/opencv/include -I/opencv/include/opencv -I/opencv/include/opencv2" \
                      MANDATORY_LIBS+="-L/env/gcc492/mingw32/lib -L/env/gcc492/mingw32/i686-w64-mingw32/lib -L/mingw/lib -lz" \
@@ -142,7 +142,6 @@ if [ "$OSTYPE" == "msys" ]; then
         cp -f ${OUTZIP2} /e/work/src/ &&
 
         # Construct Inno Setup installer.
-        sed s\/XXX\/${VERSION}${SUFFIX}\/g /e/work/src/gmic/resources/gmic_gimp.iss > tmp.iss &&
         /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe tmp.iss
     touch ${OUTINST} &&
         sleep 3 &&
