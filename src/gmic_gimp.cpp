@@ -2851,7 +2851,7 @@ void process_image(const char *const command_line, const bool is_apply) {
           gimp_selection_none(image_id);
           const int layer_pos = _gimp_image_get_item_position(image_id,layers[0]);
           max_width = max_height = 0;
-          cimglist_for(spt.images,p) {
+          cimglist_for(spt.images,p) if (spt.images[p]) {
             layer_posx = layer_posy = 0;
             if (p<layers.height()) {
               layer_blendmode = gimp_layer_get_mode(layers[p]);
@@ -2919,7 +2919,7 @@ void process_image(const char *const command_line, const bool is_apply) {
         gimp_image_undo_group_start(image_id);
         gint top_layer_id = 0, layer_id = 0;
         max_width = max_height = 0;
-        cimglist_for(spt.images,p) {
+        cimglist_for(spt.images,p) if (spt.images[p]) {
           layer_blendmode = GIMP_NORMAL_MODE;
           layer_opacity = 100;
           layer_posx = layer_posy = 0;
@@ -2969,7 +2969,8 @@ void process_image(const char *const command_line, const bool is_apply) {
 #endif
           img.assign();
         }
-        gimp_image_resize(image_id,cimg::max(image_width,max_width),cimg::max(image_height,max_height),0,0);
+        const unsigned int Mw = cimg::max(image_width,max_width), Mh = cimg::max(image_height,max_height);
+        if (Mw && Mh) gimp_image_resize(image_id,Mw,Mh,0,0);
         if (output_mode==1) gimp_image_set_active_layer(image_id,active_layer_id);
         else { // Destroy preview widget will force the preview to get the new active layer as base image.
           gimp_image_set_active_layer(image_id,top_layer_id);
@@ -2993,7 +2994,7 @@ void process_image(const char *const command_line, const bool is_apply) {
                                                               gimp_image_get_precision(image_id));
 #endif
           gimp_image_undo_group_start(nimage_id);
-          cimglist_for(spt.images,p) {
+          cimglist_for(spt.images,p) if (spt.images[p]) {
             layer_blendmode = GIMP_NORMAL_MODE;
             layer_opacity = 100;
             layer_posx = layer_posy = 0;
