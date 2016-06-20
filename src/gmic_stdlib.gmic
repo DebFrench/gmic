@@ -28699,7 +28699,8 @@ _gimp_random3d4 : ($1) -/. 3 -torus3d $1,{^} -rm..
 #@gimp : Color = color(255,0,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/27/2013</i>.</small>")
 gimp_ball :
-  -ball $1,${5-7},${2-4} -mv. 0 -nm[0] "name(Ball)"
+  -ball $1,${5-7},${2-4}
+  -if {$!>1} -mv. 0 -nm[0] "name(Ball),pos("{0,0.5*([${-max_wh}]-[w,h])}")" -else -nm[0] "name(Ball)" -endif
 
 gimp_ball_preview :
   -gimp_ball $*
@@ -29199,7 +29200,7 @@ gimp_lissajous :
     -+[-2,-1]
   -endl -done
 
-#@gimp Mandelbrot-julia sets : gimp_mandelbrot, gimp_mandelbrot_preview
+#@gimp Mandelbrot - Julia sets : gimp_mandelbrot, gimp_mandelbrot_preview
 #@gimp : X-center = float(0,-2,2)
 #@gimp : Y-center = float(0,-2,2)
 #@gimp : Zoom = float(0,0,100)
@@ -30029,14 +30030,24 @@ gimp_gmic_demos_preview :
   -k[$1,-1] -rows. $1 -map[0] [1] -k[0]
 
 #@gimp Histogram analysis : _none_, gimp_display_histogram(1)
-#@gimp : Clusters = int(256,2,256)
-#@gimp : Luminance only = bool(0)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+#@gimp : Number of clusters = int(256,2,1024)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","Linear RGB [all]","Linear RGB [red]","Linear RGB [green]","Linear RGB [blue]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]","YIQ [luma]","YIQ [chromas]")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
 gimp_display_histogram :
-  -to_rgb -if $2 -luminance -endif
-  -repeat $!
-    -display_histogram. {w},{h},$1,0,255
-  -mv. 0 -done
+  mode=${-arg\ 1+$2,all,rgba,rgb,rgb_r,rgb_g,rgb_b,rgba_a,\
+             lrgb,lrgb_r,lrgb_g,lrgb_b,\
+             ycbcr_y,ycbcr_cbcr,ycbcr_cb,ycbcr_cr,ycbcr_cg,\
+             lab_l,lab_ab,lab_a,lab_b,\
+             lch_ch,lch_c,lch_h,\
+             hsv_h,hsv_s,hsv_v,hsi_i,hsl_l,\
+             cmyk_c,cmyk_m,cmyk_y,cmyk_k,\
+             yiq_y,yiq_iq}
+  -_ac_$mode -m "_ac_precond : "$_p -m "_ac_forward : "$_f -m "_ac_backward : "$_b
+  -repeat $! -l[$>]
+    -_ac_precond -_ac_forward[0] -channels $_s
+    -display_histogram {w},{h},$1,0,255
+    -if {s==2" || "s==4} -channels 0,2 -endif
+  -endl -done
 
 #@gimp Import data : gimp_import_image, gimp_no_preview
 #@gimp : Filename = file()
