@@ -8119,7 +8119,7 @@ divergence :
 dog : -check "${1=2%}>=0 && ${2=3%}>=0"
   -e[^-1] "Compute difference of gaussian on image$?, with standard deviations $1 and $2."
   -v - -repeat $! -l[$>]
-    [0] -parallel "-b[0] $1","-b[1] $2" -- -norm
+    [0] -parallel "-b[0] $1","-b[1] $2" -- -abs
   -endl -done -v +
 
 #@gmic diffusiontensors : _sharpness>=0,0<=_anisotropy<=1,_alpha[%],_sigma[%],is_sqrt={ 0 | 1 }
@@ -20981,25 +20981,6 @@ gimp_gmicky_preview :
   -if $filename $filename -else $url -o $filename -endif
   -r2dy $h
 
-#@gimp Links : _none_, _none_
-#@gimp : note = note{"
-#@gimp : Here is a list of links that might help you in finding additional information about the <b>G'MIC</b> open-source project.
-#@gimp : "}
-#@gimp : sep = separator()
-#@gimp : note = note("<small><b>Documentation:</b></small>")
-#@gimp : note = link{0,"Official G'MIC wiki.","https://github.com/dtschump/gmic-community/wiki"}
-#@gimp : note = link{0,"Screenshots of some of the plug-in filters.","http://gmic.eu/gimp.shtml"}
-#@gimp : note = link{0,"Tutorial for learning the G'MIC language.","http://gmic.eu/tutorial/index.shtml"}
-#@gimp : note = link{0,"Reference documentation of the G'MIC language (html).","http://gmic.eu/reference.shtml"}
-#@gimp : note = link{0,"Reference documentation of the G'MIC language (pdf).","http://gmic.eu/gmic_reference.pdf"}
-#@gimp : note = link{0,"Tutorial videos","http://www.youtube.com/channel/UC05Y8hpbFOSQ4ivh01R_1AQ"}
-#@gimp : sep = separator()
-#@gimp : note = note("<small><b>News / Communities:</b></small>")
-#@gimp : note = link{0,"G'MIC news on Google+.","https://plus.google.com/117441237982283011318/posts"}
-#@gimp : note = link{0,"G'MIC community on Google+.","https://plus.google.com/u/0/b/117441237982283011318/communities/100367598461382347439"}
-#@gimp : note = link{0,"G'MIC community on GimpChat.","http://www.gimpchat.com/viewforum.php?f=28"}
-#@gimp : note = link{0,"G'MIC community on Flickr.","http://www.flickr.com/groups/gmic/discuss/"}
-
 #@gimp Release notes : _none_, _none_
 #@gimp : note = note{"
 #@gimp : - <b>01/13/2009</b> : version <i>1.3.0</i> (initial plug-in release).\n
@@ -22795,7 +22776,7 @@ gimp_bwrecolorize_preview :
 #@gimp : Contrast (%) = float(0,-100,100)
 #@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : Hue = float(0,0,360)
-#@gimp : Saturation (%) = float(100,0,100)
+#@gimp : Saturation (%) = float(0,0,100)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
@@ -22882,6 +22863,7 @@ gimp_engrave_preview :
 #@gimp : Oddness (%) = float(20,0,100)
 #@gimp : Brightness (%) = float(0,-100,100)
 #@gimp : Contrast (%) = float(0,-100,100)
+#@gimp : Gamma (%) = float(0,-100,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>09/30/2015</i>.</small>")
 gimp_freaky_bw :
@@ -22928,7 +22910,7 @@ gimp_freaky_bw :
 
     # Merge result with original color image.
     -j[0] [1],0,0,0,0,{$1%} -rm.
-    -adjust_colors ${3-4}
+    -adjust_colors ${3-5}
   -endl -a c -endl -done
 
 gimp_freaky_bw_preview :
@@ -23306,77 +23288,7 @@ gimp_colormap :
 gimp_colormap_preview :
   -gimp_split_preview "-gimp_colormap $*",$-1
 
-#@gimp Curves : gimp_apply_curve, gimp_apply_curve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","Linear RGB [all]","Linear RGB [red]","Linear RGB [green]","Linear RGB [blue]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]","YIQ [luma]","YIQ [chromas]")
-#@gimp : Value action = choice("None","Cut","Normalize")
-#@gimp : Display histogram = float(0,0,1)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_apply_curve :
-  -ac "-_gimp_apply_curve ${1-13}",$14,$15
-
-_gimp_apply_curve :
-  -apply_curve $13,0,$1,\
-                   ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                   ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                   ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                   ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                   ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                   255,$12
-
-gimp_apply_curve_preview :
-  -function1d $13,0,$1,\
-                  ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                  ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                  ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                  ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                  ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                  255,$12
-  -mv. 0
-  -repeat {$!-1}
-    --gimp_split_preview. "-gimp_apply_curve $*",$-1
-    100%,100% -axes. 0,255,255,0,13,1,255 --dilate. 3 -r.. [-3] -j... [-2],0,0,0,0,1,[-1],255 -rm[-2,-1]
-    -grid. 10%,10%,0,0,0.3,0xCCCCCCCC,255
-    -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-    -if $-2
-      [-1],[-1] -to_gray... -histogram... 256,0,255 -graph. [-3],3,0,0,0,1,1 -!=. 0 -*. 255 -rm...
-      --xor[-2,-1] -j... [-1],0,0,0,0,$16,[-2],255 -rm[-2,-1]
-     -else -rm.. -endif
-     100%,100% -graph. [0],1,0,255,0,1,255 --dilate. 3 -r.. [-3] -j... [-2],0,0,0,0,1,[-1],255 -rm[-2,-1]
-     -_gimp_apply_curve_preview 0,$1,0 -_gimp_apply_curve_preview $2,$3,1
-     -_gimp_apply_curve_preview $4,$5,2 -_gimp_apply_curve_preview $6,$7,3
-     -_gimp_apply_curve_preview $8,$9,4 -_gimp_apply_curve_preview $10,$11,5
-     -_gimp_apply_curve_preview 255,$12,6
-  -mv. 1 -done -rm[0]
-
-_gimp_apply_curve_preview :
-  -if {$1>=0}
-    x={$1*100/255}% y={100-$2*100/255}%
-    -ellipse. $x,$y,3,3,0,1,0xFFFFFFFF,0,0,0 -ellipse. $x,$y,2,2,0,1,0,255,0
-    -t. $3,$x,{$y*h-20},13,1,255
-  -endif
-
-#@gimp Curves [interactive] : gimp_curves_interactive, gimp_curves_interactive_preview
+#@gimp Curves : gimp_curves_interactive, gimp_curves_interactive_preview
 #@gimp : Colorspace = choice{"RGB","CMY","CMYK","HSI","HSL","HSV","Lab","Lch","YCbCr"}
 #@gimp : Output preset as a HaldCLUT layer = _choice("Disable","Low-res CLUT","High-res CLUT")
 #@gimp : Apply transformation from = _choice("New curves [interactive]","Curves defined previously")
@@ -23423,538 +23335,6 @@ gimp_curves_interactive :
 
 gimp_curves_interactive_preview :
   -gimp_curves_interactive $1,0,1,${4--1}
-
-#@gimp Curves [RGB]
-#@gimp Red : gimp_apply_RGBcurve, gimp_apply_Rcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp Green : gimp_apply_RGBcurve, gimp_apply_Gcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp Blue : gimp_apply_RGBcurve, gimp_apply_Bcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-#@gimp _
-gimp_apply_RGBcurve : -skip $1
-  -gimp_apply_RGBcurve_configfile
-  -repeat {$!-1} -l[$>,-1]
-    -to_colormode[0] {max(3,s)}
-    -sh[0] 0 -_gimp_apply_RGBcurve. {-2,@0-12} -rm.
-    -sh[0] 1 -_gimp_apply_RGBcurve. {-2,@13-25} -rm.
-    -sh[0] 2 -_gimp_apply_RGBcurve. {-2,@26-38} -rm.
-  -endl -done
-  -rm.
-
-_gimp_apply_RGBcurve :
-  -apply_curve $13,0,$1,\
-                   ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                   ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                   ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                   ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                   ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                   255,$12
-  -c 0,255
-
-gimp_apply_Rcurve_preview :
-  -gimp_apply_RGBcurve_configfile
-  -sh. 0,0,0,0 -f. ${1--3} -rm.
-  -gimp_apply_RGBcurve_preview[^-1] {^},0,${-2,-1} -rm.
-
-gimp_apply_Gcurve_preview :
-  -gimp_apply_RGBcurve_configfile
-  -sh. 1,1,0,0 -f. ${1--3} -rm.
-  -gimp_apply_RGBcurve_preview[^-1] {^},1,${-2,-1} -rm.
-
-gimp_apply_Bcurve_preview :
-  -gimp_apply_RGBcurve_configfile
-  -sh. 2,2,0,0 -f. ${1--3} -rm.
-  -gimp_apply_RGBcurve_preview[^-1] {^},2,${-2,-1} -rm.
-
-gimp_apply_RGBcurve_configfile :
-  filename=${-path_tmp}.gmic_RGBcurve.dlm
-  -if $filename $filename -else (0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1) -r. 100%,3 -endif
-
-gimp_apply_RGBcurve_preview :
-  (${1--3}) -r. 13,3,1,1,-1 -o. ${-path_tmp}.gmic_RGBcurve.dlm -rm.
-  -function1d $13,0,$1,\
-                  ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                  ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                  ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                  ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                  ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                  255,$12
-  -function1d $26,0,$14,\
-                  ${"-if {$15>=0} -u $15,$16, -else -u \"\" -endif"}\
-                  ${"-if {$17>=0} -u $17,$18, -else -u \"\" -endif"}\
-                  ${"-if {$19>=0} -u $19,$20, -else -u \"\" -endif"}\
-                  ${"-if {$21>=0} -u $21,$22, -else -u \"\" -endif"}\
-                  ${"-if {$23>=0} -u $23,$24, -else -u \"\" -endif"}\
-                  255,$25
-  -function1d $39,0,$27,\
-                  ${"-if {$28>=0} -u $28,$29, -else -u \"\" -endif"}\
-                  ${"-if {$30>=0} -u $30,$31, -else -u \"\" -endif"}\
-                  ${"-if {$32>=0} -u $32,$33, -else -u \"\" -endif"}\
-                  ${"-if {$34>=0} -u $34,$35, -else -u \"\" -endif"}\
-                  ${"-if {$36>=0} -u $36,$37, -else -u \"\" -endif"}\
-                  255,$38
-  -a[-3--1] y -mv. 0
-  -repeat {$!-1}
-    --gimp_split_preview. "-gimp_apply_RGBcurve 0",$-1
-    100%,100% -axes. 0,255,255,0,13,1,255 --dilate. 3 -r.. [-3] -j... [-2],0,0,0,0,1,[-1],255 -rm[-2,-1]
-    -grid. 10%,10%,0,0,0.3,0xCCCCCCCC,255
-    -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -if $-2
-        [-1],[-1],1,1,-{$-2*255/100} -to_gray... -histogram... 256,0,255 -graph. [-3],3,0,0,0,1,0
-        -rm... -+. {$-2*255/100} -+[-2,-1] -c. 0,255
-     -else -rm.. -endif
-     -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -sh[0] 0,0,0,0
-     -graph.. [-1],1,0,255,0,1,255,128,128 --. 1
-     -graph.. [-1],1,0,255,0,0.5,200,0,0 -rm.
-     -sh[0] 1,1,0,0
-     -graph.. [-1],1,0,255,0,1,128,255,128 --. 1
-     -graph.. [-1],1,0,255,0,0.5,0,200,0 -rm.
-     -sh[0] 2,2,0,0
-     -graph.. [-1],1,0,255,0,1,128,128,255 --. 1
-     -graph.. [-1],1,0,255,0,0.5,0,0,200 -rm.
-     -if {$40==0}
-       -_gimp_apply_curve_preview 0,$1,0 -_gimp_apply_curve_preview $2,$3,1
-       -_gimp_apply_curve_preview $4,$5,2 -_gimp_apply_curve_preview $6,$7,3
-       -_gimp_apply_curve_preview $8,$9,4 -_gimp_apply_curve_preview $10,$11,5
-       -_gimp_apply_curve_preview 255,$12,6
-     -elif {$40==1}
-       -_gimp_apply_curve_preview 0,$14,0 -_gimp_apply_curve_preview $15,$16,1
-       -_gimp_apply_curve_preview $17,$18,2 -_gimp_apply_curve_preview $19,$20,3
-       -_gimp_apply_curve_preview $21,$22,4 -_gimp_apply_curve_preview $23,$24,5
-       -_gimp_apply_curve_preview 255,$25,6
-     -else
-       -_gimp_apply_curve_preview 0,$27,0 -_gimp_apply_curve_preview $28,$29,1
-       -_gimp_apply_curve_preview $30,$31,2 -_gimp_apply_curve_preview $32,$33,3
-       -_gimp_apply_curve_preview $34,$35,4 -_gimp_apply_curve_preview $36,$37,5
-       -_gimp_apply_curve_preview 255,$38,6
-     -endif
-  -mv. 1 -done -rm[0]
-
-#@gimp Curves [YCbCr]
-#@gimp Luminance : gimp_apply_YCbCrcurve, gimp_apply_Ycurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp Blue chrominance : gimp_apply_YCbCrcurve, gimp_apply_Cbcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp Red chrominance : gimp_apply_YCbCrcurve, gimp_apply_Crcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-#@gimp _
-gimp_apply_YCbCrcurve : -skip $1
-  -gimp_apply_YCbCrcurve_configfile
-  -repeat {$!-1} -l[$>,-1]
-    -to_colormode[0] {max(3,s)} -sh[0] 0,2 -rgb2ycbcr. -rm.
-    -sh[0] 0 -_gimp_apply_YCbCrcurve. {-2,@0-12} -rm.
-    -sh[0] 1 -_gimp_apply_YCbCrcurve. {-2,@13-25} -rm.
-    -sh[0] 2 -_gimp_apply_YCbCrcurve. {-2,@26-38} -rm.
-    -sh[0] 0,2 -ycbcr2rgb. -rm.
-  -endl -done
-  -rm.
-
-_gimp_apply_YCbCrcurve :
-  -apply_curve $13,0,$1,\
-                   ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                   ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                   ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                   ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                   ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                   255,$12
-  -c 0,255
-
-gimp_apply_Ycurve_preview :
-  -gimp_apply_YCbCrcurve_configfile
-  -sh. 0,0,0,0 -f. ${1--3} -rm.
-  -gimp_apply_YCbCrcurve_preview[^-1] {^},0,${-2,-1} -rm.
-
-gimp_apply_Cbcurve_preview :
-  -gimp_apply_YCbCrcurve_configfile
-  -sh. 1,1,0,0 -f. ${1--3} -rm.
-  -gimp_apply_YCbCrcurve_preview[^-1] {^},1,${-2,-1} -rm.
-
-gimp_apply_Crcurve_preview :
-  -gimp_apply_YCbCrcurve_configfile
-  -sh. 2,2,0,0 -f. ${1--3} -rm.
-  -gimp_apply_YCbCrcurve_preview[^-1] {^},2,${-2,-1} -rm.
-
-gimp_apply_YCbCrcurve_configfile :
-  filename=${-path_tmp}.gmic_YCbCrcurve.dlm
-  -if $filename $filename -else (0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1) -r. 100%,3 -endif
-
-gimp_apply_YCbCrcurve_preview :
-  (${1--3}) -r. 13,3,1,1,-1 -o. ${-path_tmp}.gmic_YCbCrcurve.dlm -rm.
-  -function1d $13,0,$1,\
-                  ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                  ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                  ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                  ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                  ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                  255,$12
-  -function1d $26,0,$14,\
-                  ${"-if {$15>=0} -u $15,$16, -else -u \"\" -endif"}\
-                  ${"-if {$17>=0} -u $17,$18, -else -u \"\" -endif"}\
-                  ${"-if {$19>=0} -u $19,$20, -else -u \"\" -endif"}\
-                  ${"-if {$21>=0} -u $21,$22, -else -u \"\" -endif"}\
-                  ${"-if {$23>=0} -u $23,$24, -else -u \"\" -endif"}\
-                  255,$25
-  -function1d $39,0,$27,\
-                  ${"-if {$28>=0} -u $28,$29, -else -u \"\" -endif"}\
-                  ${"-if {$30>=0} -u $30,$31, -else -u \"\" -endif"}\
-                  ${"-if {$32>=0} -u $32,$33, -else -u \"\" -endif"}\
-                  ${"-if {$34>=0} -u $34,$35, -else -u \"\" -endif"}\
-                  ${"-if {$36>=0} -u $36,$37, -else -u \"\" -endif"}\
-                  255,$38
-  -a[-3--1] y -mv. 0
-  -repeat {$!-1}
-    --gimp_split_preview. "-gimp_apply_YCbCrcurve 0",$-1
-    -axes. 0,255,255,0,13,1,255
-    100%,100% -axes. 0,255,255,0,13,1,255 --dilate. 3 -r.. [-3] -j... [-2],0,0,0,0,1,[-1],255 -rm[-2,-1]
-    -grid. 10%,10%,0,0,0.3,0xCCCCCCCC,255
-    -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -if $-2
-        [-1],[-1],1,1,-{$-2*255/100} -to_gray... -histogram... 256,0,255 -graph. [-3],3,0,0,0,1,0
-        -rm... -+. {$-2*255/100} -+[-2,-1] -c. 0,255
-     -else -rm.. -endif
-     -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -sh[0] 0,0,0,0
-     -graph.. [-1],1,0,255,0,1,255,255,255 --. 1
-     -graph.. [-1],1,0,255,0,0.5,200,200,200 -rm.
-     -sh[0] 1,1,0,0
-     -graph.. [-1],1,0,255,0,1,128,128,255 --. 1
-     -graph.. [-1],1,0,255,0,0.5,0,0,200 -rm.
-     -sh[0] 2,2,0,0
-     -graph.. [-1],1,0,255,0,1,255,128,128 --. 1
-     -graph.. [-1],1,0,255,0,0.5,200,0,0 -rm.
-     -if {$40==0}
-       -_gimp_apply_curve_preview 0,$1,0 -_gimp_apply_curve_preview $2,$3,1
-       -_gimp_apply_curve_preview $4,$5,2 -_gimp_apply_curve_preview $6,$7,3
-       -_gimp_apply_curve_preview $8,$9,4 -_gimp_apply_curve_preview $10,$11,5
-       -_gimp_apply_curve_preview 255,$12,6
-     -elif {$40==1}
-       -_gimp_apply_curve_preview 0,$14,0 -_gimp_apply_curve_preview $15,$16,1
-       -_gimp_apply_curve_preview $17,$18,2 -_gimp_apply_curve_preview $19,$20,3
-       -_gimp_apply_curve_preview $21,$22,4 -_gimp_apply_curve_preview $23,$24,5
-       -_gimp_apply_curve_preview 255,$25,6
-     -else
-       -_gimp_apply_curve_preview 0,$27,0 -_gimp_apply_curve_preview $28,$29,1
-       -_gimp_apply_curve_preview $30,$31,2 -_gimp_apply_curve_preview $32,$33,3
-       -_gimp_apply_curve_preview $34,$35,4 -_gimp_apply_curve_preview $36,$37,5
-       -_gimp_apply_curve_preview 255,$38,6
-     -endif
-  -mv. 1 -done -rm[0]
-
-#@gimp Curves [Lab]
-#@gimp Lightness : gimp_apply_Labcurve, gimp_apply_Lcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp A-color : gimp_apply_Labcurve, gimp_apply_acurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-
-#@gimp B-color : gimp_apply_Labcurve, gimp_apply_bcurve_preview
-#@gimp : Starting Y = int(0,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(1) = int(-1,-1,255)
-#@gimp : Y-coord(1) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(2) = int(-1,-1,255)
-#@gimp : Y-coord(2) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(3) = int(-1,-1,255)
-#@gimp : Y-coord(3) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(4) = int(-1,-1,255)
-#@gimp : Y-coord(4) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : X-coord(5) = int(-1,-1,255)
-#@gimp : Y-coord(5) = int(128,0,255)
-#@gimp : sep = separator()
-#@gimp : Ending Y = int(255,0,255)
-#@gimp : sep = separator()
-#@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Display histogram = float(0,0,100)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-#@gimp _
-gimp_apply_Labcurve : -skip $1
-  -gimp_apply_Labcurve_configfile
-  -repeat {$!-1} -l[$>,-1]
-    -to_colormode[0] {max(3,s)} -sh[0] 0,2 -rgb2lab. -rm.
-    -sh[0] 0 -*. 2.55 -_gimp_apply_Labcurve. {-2,@0-12} -/. 2.55 -rm.
-    -sh[0] 1 -+. 86 -*. 1.38587 -_gimp_apply_Labcurve. {-2,@13-25} -/. 1.38587 --. 86 -rm.
-    -sh[0] 2 -+. 108 -*. 1.25616 -_gimp_apply_Labcurve. {-2,@26-38} -/. 1.25616 --. 108 -rm.
-    -sh[0] 0,2 -lab2rgb. -rm.
-  -endl -done
-  -rm.
-
-_gimp_apply_Labcurve :
-  -apply_curve $13,0,$1,\
-                   ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                   ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                   ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                   ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                   ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                   255,$12
-  -c 0,255
-
-gimp_apply_Lcurve_preview :
-  -gimp_apply_Labcurve_configfile
-  -sh. 0,0,0,0 -f. ${1--3} -rm.
-  -gimp_apply_Labcurve_preview[^-1] {^},0,${-2,-1} -rm.
-
-gimp_apply_acurve_preview :
-  -gimp_apply_Labcurve_configfile
-  -sh. 1,1,0,0 -f. ${1--3} -rm.
-  -gimp_apply_Labcurve_preview[^-1] {^},1,${-2,-1} -rm.
-
-gimp_apply_bcurve_preview :
-  -gimp_apply_Labcurve_configfile
-  -sh. 2,2,0,0 -f. ${1--3} -rm.
-  -gimp_apply_Labcurve_preview[^-1] {^},2,${-2,-1} -rm.
-
-gimp_apply_Labcurve_configfile :
-  filename=${-path_tmp}.gmic_Labcurve.dlm
-  -if $filename $filename -else (0,-1,128,-1,128,-1,128,-1,128,-1,128,255,1) -r. 100%,3 -endif
-
-gimp_apply_Labcurve_preview :
-  (${1--3}) -r. 13,3,1,1,-1 -o. ${-path_tmp}.gmic_Labcurve.dlm -rm.
-  -function1d $13,0,$1,\
-                  ${"-if {$2>=0} -u $2,$3, -else -u \"\" -endif"}\
-                  ${"-if {$4>=0} -u $4,$5, -else -u \"\" -endif"}\
-                  ${"-if {$6>=0} -u $6,$7, -else -u \"\" -endif"}\
-                  ${"-if {$8>=0} -u $8,$9, -else -u \"\" -endif"}\
-                  ${"-if {$10>=0} -u $10,$11, -else -u \"\" -endif"}\
-                  255,$12
-  -function1d $26,0,$14,\
-                  ${"-if {$15>=0} -u $15,$16, -else -u \"\" -endif"}\
-                  ${"-if {$17>=0} -u $17,$18, -else -u \"\" -endif"}\
-                  ${"-if {$19>=0} -u $19,$20, -else -u \"\" -endif"}\
-                  ${"-if {$21>=0} -u $21,$22, -else -u \"\" -endif"}\
-                  ${"-if {$23>=0} -u $23,$24, -else -u \"\" -endif"}\
-                  255,$25
-  -function1d $39,0,$27,\
-                  ${"-if {$28>=0} -u $28,$29, -else -u \"\" -endif"}\
-                  ${"-if {$30>=0} -u $30,$31, -else -u \"\" -endif"}\
-                  ${"-if {$32>=0} -u $32,$33, -else -u \"\" -endif"}\
-                  ${"-if {$34>=0} -u $34,$35, -else -u \"\" -endif"}\
-                  ${"-if {$36>=0} -u $36,$37, -else -u \"\" -endif"}\
-                  255,$38
-  -a[-3--1] y -mv. 0
-  -repeat {$!-1}
-    --gimp_split_preview. "-gimp_apply_Labcurve 0",$-1
-    -axes. 0,255,255,0,13,1,255
-    100%,100% -axes. 0,255,255,0,13,1,255 --dilate. 3 -r.. [-3] -j... [-2],0,0,0,0,1,[-1],255 -rm[-2,-1]
-    -grid. 10%,10%,0,0,0.3,0xCCCCCCCC,255
-    -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -if $-2
-        [-1],[-1],1,1,-{$-2*255/100} -to_gray... -histogram... 256,0,255 -graph. [-3],3,0,0,0,1,0
-        -rm... -+. {$-2*255/100} -+[-2,-1] -c. 0,255
-     -else -rm.. -endif
-     -line. 0,100%,100%,0,0.3,0xCCCCCCCC,255
-     -sh[0] 0,0,0,0
-     -graph.. [-1],1,0,255,0,1,255,255,255 --. 1
-     -graph.. [-1],1,0,255,0,0.5,200,200,200 -rm.
-     -sh[0] 1,1,0,0
-     -graph.. [-1],1,0,255,0,1,255,128,128 --. 1
-     -graph.. [-1],1,0,255,0,0.5,200,0,0 -rm.
-     -sh[0] 2,2,0,0
-     -graph.. [-1],1,0,255,0,1,128,128,255 --. 1
-     -graph.. [-1],1,0,255,0,0.5,0,0,200 -rm.
-     -if {$40==0}
-       -_gimp_apply_curve_preview 0,$1,0 -_gimp_apply_curve_preview $2,$3,1
-       -_gimp_apply_curve_preview $4,$5,2 -_gimp_apply_curve_preview $6,$7,3
-       -_gimp_apply_curve_preview $8,$9,4 -_gimp_apply_curve_preview $10,$11,5
-       -_gimp_apply_curve_preview 255,$12,6
-     -elif {$40==1}
-       -_gimp_apply_curve_preview 0,$14,0 -_gimp_apply_curve_preview $15,$16,1
-       -_gimp_apply_curve_preview $17,$18,2 -_gimp_apply_curve_preview $19,$20,3
-       -_gimp_apply_curve_preview $21,$22,4 -_gimp_apply_curve_preview $23,$24,5
-       -_gimp_apply_curve_preview 255,$25,6
-     -else
-       -_gimp_apply_curve_preview 0,$27,0 -_gimp_apply_curve_preview $28,$29,1
-       -_gimp_apply_curve_preview $30,$31,2 -_gimp_apply_curve_preview $32,$33,3
-       -_gimp_apply_curve_preview $34,$35,4 -_gimp_apply_curve_preview $36,$37,5
-       -_gimp_apply_curve_preview 255,$38,6
-     -endif
-  -mv. 1 -done -rm[0]
 
 #@gimp Customize CLUT : gimp_customize_clut,gimp_customize_clut_preview(1)+
 #@gimp : Keypoint influence (%) = float(100,0,100)
@@ -24283,21 +23663,125 @@ gimp_hsv_equalizer_preview :
     -*[2,-1] -a c -hsv2rgb
   -endif -endl
 
-#@gimp Mixer [RGB] : gimp_mix_rgb, gimp_mix_rgb_preview(1)+
-#@gimp : Red contrast = float(1,0,4)
-#@gimp : Red brightness = float(0,-255,255)
-#@gimp : Red smoothness = float(0,0,10)
-#@gimp : Green contrast = float(1,0,4)
-#@gimp : Green brightness = float(0,-255,255)
-#@gimp : Green smoothness = float(0,0,10)
-#@gimp : Blue contrast = float(1,0,4)
-#@gimp : Blue brightness = float(0,-255,255)
-#@gimp : Blue smoothness = float(0,0,10)
-#@gimp : note = note()
+#@gimp Mixer [CMYK] : gimp_mix_cmyk, gimp_mix_cmyk_preview(1)+
+#@gimp : Cyan factor = float(1,0,4)
+#@gimp : Cyan shift = float(0,-255,255)
+#@gimp : Cyan smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Magenta factor = float(1,0,4)
+#@gimp : Magenta shift = float(0,-255,255)
+#@gimp : Magenta smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Yellow factor = float(1,0,4)
+#@gimp : Yellow shift = float(0,-255,255)
+#@gimp : Yellow smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Key factor = float(1,0,4)
+#@gimp : Key shift = float(0,-255,255)
+#@gimp : Key smoothness = float(0,0,10)
+#@gimp : sep = separator()
 #@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
 #@gimp : Tones smoothness = float(2,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
+gimp_mix_cmyk :
+  -repeat $! -l. -split_opacity -rv -to_rgb.
+    -gimp_start_mix $13,$14
+    -rgb2cmyk. -s. c
+    -*[-4] $1 -+[-4] $2 -b[-4] $3%
+    -*... $4 -+... $5 -b... $6%
+    -*.. $7 -+.. $8 -b.. $9%
+    -*. $10 -+. $11 -b. $12%
+    -a[-4--1] c -cmyk2rgb.
+    -gimp_end_mix $13
+  -if {$!!=3} -rv -a c -endif -endl -mv. 0 -done
+
+gimp_mix_cmyk_preview :
+  -gimp_split_preview "-gimp_mix_cmyk $*",$-1
+
+#@gimp Mixer [HSV] : gimp_mix_hsv, gimp_mix_hsv_preview(1)+
+#@gimp : Hue factor = float(1,0,4)
+#@gimp : Hue shift = float(0,-180,180)
+#@gimp : Hue smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Saturation factor = float(1,0,4)
+#@gimp : Saturation shift = float(0,-1,1)
+#@gimp : Saturation smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Value factor = float(1,0,4)
+#@gimp : Value shift = float(0,-1,1)
+#@gimp : Value smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
+#@gimp : Tones smoothness = float(2,0,10)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
+gimp_mix_hsv :
+  -repeat $! -l. -split_opacity -rv -to_rgb.
+    -gimp_start_mix $10,$11
+    -rgb2hsv. -s. c --[-2,-1] 0.5
+    -*... $1 -+... $2 -b... $3%
+    -*.. $4 -+.. $5 -b.. $6%
+    -*. $7 -+. $8 -b. $9%
+    -%... 360 -+[-2,-1] 0.5 -c[-2,-1] 0,1 -a[-3--1] c -hsv2rgb.
+    -gimp_end_mix $10
+  -if {$!!=3} -rv -a c -endif -endl -mv. 0 -done
+
+gimp_mix_hsv_preview :
+  -gimp_split_preview "-gimp_mix_hsv $*",$-1
+
+#@gimp Mixer [Lab] : gimp_mix_lab, gimp_mix_lab_preview(1)+
+#@gimp : Lightness factor = float(1,0.5,1.5)
+#@gimp : Lightness shift = float(0,-50,50)
+#@gimp : Lightness smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : A-color factor = float(1,0,4)
+#@gimp : A-color shift = float(0,-20,20)
+#@gimp : A-color smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : B-color factor = float(1,0,4)
+#@gimp : B-color shift = float(0,-20,20)
+#@gimp : B-color smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
+#@gimp : Tones smoothness = float(2,0,10)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
+gimp_mix_lab :
+  -repeat $! -l[$>] -split_opacity -to_rgb[0]
+    -gimp_parallel_overlap[0] "-_gimp_mix_lab $*",0,{3*max($3,$6,$9)}
+    -a c
+  -endl -mv[$>] 0 -done
+
+_gimp_mix_lab :
+  -gimp_start_mix $10,$11
+  -rgb2lab. -s. c
+  -*... $1 -+... $2 -b... $3%
+  -*.. $4 -+.. $5 -b.. $6%
+  -*. $7 -+. $8 -b. $9%
+  -a[-3--1] c -lab2rgb.
+  -gimp_end_mix $10
+
+gimp_mix_lab_preview :
+  -gimp_split_preview "-gimp_mix_lab $*",$-1
+
+#@gimp Mixer [RGB] : gimp_mix_rgb, gimp_mix_rgb_preview(1)+
+#@gimp : Red factor = float(1,0,4)
+#@gimp : Red shift = float(0,-255,255)
+#@gimp : Red smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Green factor = float(1,0,4)
+#@gimp : Green shift = float(0,-255,255)
+#@gimp : Green smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Blue factor = float(1,0,4)
+#@gimp : Blue shift = float(0,-255,255)
+#@gimp : Blue smoothness = float(0,0,10)
+#@gimp : sep = separator()
+#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
+#@gimp : Tones smoothness = float(2,0,10)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
 gimp_start_mix :
   -if {$1==1} --tones. 3 -+[-2,-1] -b[-2,-1] $2% -r[-2,-1] [-3] -*. [-3] -mv... $!
   -elif {$1==2} --tones. 3 -+[-3,-1] -b[-2,-1] $2% -r[-2,-1] [-3] -*.. [-3] -mv... $!
@@ -24324,20 +23808,22 @@ gimp_mix_rgb_preview :
   -gimp_split_preview "-gimp_mix_rgb $*",$-1
 
 #@gimp Mixer [YCbCr] : gimp_mix_ycbcr, gimp_mix_ycbcr_preview(1)+
-#@gimp : Luminance contrast = float(1,0,4)
-#@gimp : Luminance brightness = float(0,-255,255)
+#@gimp : Luminance factor = float(1,0,4)
+#@gimp : Luminance shift = float(0,-255,255)
 #@gimp : Luminance smoothness = float(0,0,10)
-#@gimp : Blue chroma contrast = float(1,0,4)
-#@gimp : Blue chroma brightness = float(0,-255,255)
+#@gimp : sep = separator()
+#@gimp : Blue chroma factor = float(1,0,4)
+#@gimp : Blue chroma shift = float(0,-255,255)
 #@gimp : Blue chroma smoothness = float(0,0,10)
-#@gimp : Red chroma contrast = float(1,0,4)
-#@gimp : Red chroma brightness = float(0,-255,255)
+#@gimp : sep = separator()
+#@gimp : Red chroma factor = float(1,0,4)
+#@gimp : Red chroma shift = float(0,-255,255)
 #@gimp : Red chroma smoothness = float(0,0,10)
-#@gimp : note = note()
+#@gimp : sep = separator()
 #@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
 #@gimp : Tones smoothness = float(2,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/20/2016</i>.</small>")
 gimp_mix_ycbcr :
   -repeat $! -l. -split_opacity -rv -to_rgb.
     -gimp_start_mix $10,$11
@@ -24351,101 +23837,6 @@ gimp_mix_ycbcr :
 
 gimp_mix_ycbcr_preview :
   -gimp_split_preview "-gimp_mix_ycbcr $*",$-1
-
-#@gimp Mixer [HSV] : gimp_mix_hsv, gimp_mix_hsv_preview(1)+
-#@gimp : Hue contrast = float(1,0,4)
-#@gimp : Hue brightness = float(0,-180,180)
-#@gimp : Hue smoothness = float(0,0,10)
-#@gimp : Saturation contrast = float(1,0,4)
-#@gimp : Saturation brightness = float(0,-1,1)
-#@gimp : Saturation smoothness = float(0,0,10)
-#@gimp : Value contrast = float(1,0,4)
-#@gimp : Value brightness = float(0,-1,1)
-#@gimp : Value smoothness = float(0,0,10)
-#@gimp : note = note()
-#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gimp : Tones smoothness = float(2,0,10)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_mix_hsv :
-  -repeat $! -l. -split_opacity -rv -to_rgb.
-    -gimp_start_mix $10,$11
-    -rgb2hsv. -s. c --[-2,-1] 0.5
-    -*... $1 -+... $2 -b... $3%
-    -*.. $4 -+.. $5 -b.. $6%
-    -*. $7 -+. $8 -b. $9%
-    -%... 360 -+[-2,-1] 0.5 -c[-2,-1] 0,1 -a[-3--1] c -hsv2rgb.
-    -gimp_end_mix $10
-  -if {$!!=3} -rv -a c -endif -endl -mv. 0 -done
-
-gimp_mix_hsv_preview :
-  -gimp_split_preview "-gimp_mix_hsv $*",$-1
-
-#@gimp Mixer [Lab] : gimp_mix_lab, gimp_mix_lab_preview(1)+
-#@gimp : Lightness contrast = float(1,0.5,1.5)
-#@gimp : Lightness brightness = float(0,-50,50)
-#@gimp : Lightness smoothness = float(0,0,10)
-#@gimp : A-color contrast = float(1,0,4)
-#@gimp : A-color brightness = float(0,-20,20)
-#@gimp : A-color smoothness = float(0,0,10)
-#@gimp : B-color contrast = float(1,0,4)
-#@gimp : B-color brightness = float(0,-20,20)
-#@gimp : B-color smoothness = float(0,0,10)
-#@gimp : note = note()
-#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gimp : Tones smoothness = float(2,0,10)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_mix_lab :
-  -repeat $! -l[$>] -split_opacity -to_rgb[0]
-    -gimp_parallel_overlap[0] "-_gimp_mix_lab $*",0,{3*max($3,$6,$9)}
-    -a c
-  -endl -mv[$>] 0 -done
-
-_gimp_mix_lab :
-  -gimp_start_mix $10,$11
-  -rgb2lab. -s. c
-  -*... $1 -+... $2 -b... $3%
-  -*.. $4 -+.. $5 -b.. $6%
-  -*. $7 -+. $8 -b. $9%
-  -a[-3--1] c -lab2rgb.
-  -gimp_end_mix $10
-
-gimp_mix_lab_preview :
-  -gimp_split_preview "-gimp_mix_lab $*",$-1
-
-#@gimp Mixer [CMYK] : gimp_mix_cmyk, gimp_mix_cmyk_preview(1)+
-#@gimp : Cyan contrast = float(1,0,4)
-#@gimp : Cyan brightness = float(0,-255,255)
-#@gimp : Cyan smoothness = float(0,0,10)
-#@gimp : Magenta contrast = float(1,0,4)
-#@gimp : Magenta brightness = float(0,-255,255)
-#@gimp : Magenta smoothness = float(0,0,10)
-#@gimp : Yellow contrast = float(1,0,4)
-#@gimp : Yellow brightness = float(0,-255,255)
-#@gimp : Yellow smoothness = float(0,0,10)
-#@gimp : Key contrast = float(1,0,4)
-#@gimp : Key brightness = float(0,-255,255)
-#@gimp : Key smoothness = float(0,0,10)
-#@gimp : note = note()
-#@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gimp : Tones smoothness = float(2,0,10)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_mix_cmyk :
-  -repeat $! -l. -split_opacity -rv -to_rgb.
-    -gimp_start_mix $13,$14
-    -rgb2cmyk. -s. c
-    -*[-4] $1 -+[-4] $2 -b[-4] $3%
-    -*... $4 -+... $5 -b... $6%
-    -*.. $7 -+.. $8 -b.. $9%
-    -*. $10 -+. $11 -b. $12%
-    -a[-4--1] c -cmyk2rgb.
-    -gimp_end_mix $13
-  -if {$!!=3} -rv -a c -endif -endl -mv. 0 -done
-
-gimp_mix_cmyk_preview :
-  -gimp_split_preview "-gimp_mix_cmyk $*",$-1
 
 #@gimp Select-replace color : gimp_select_color, gimp_select_color_preview(0)
 #@gimp : Similarity space = choice(0,"RGB[A]","RGB","YCbCr","Red","Green","Blue","Opacity","Luminance","Blue &amp; Red chrominances","Hue","Saturation")
@@ -24668,10 +24059,12 @@ gimp_curvature_preview :
 #@gimp : 2nd Variance = float(1.5,0,5)
 #@gimp : Threshold = float(0,0,49)
 #@gimp : Negative colors = bool(0)
+#@gimp : Monochrome = bool(1)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_dog :
   -dog $1%,$2%
+  -if $5 -norm -endif
   -c $3%,{100-$3}%
   -if $4 -negative -endif
   -n 0,255
