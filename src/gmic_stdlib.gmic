@@ -4017,7 +4017,7 @@ update_server : -skip ${1=$_version},${2=1}
     -_update_server_upload[] /tmp/gimp_update$1.gmic
     -_update_server_upload[] /tmp/update$1.gmic,update.gmic
 
-    -if {$1>=172} (172,173)
+    -if {$1>=172} (172,173,174)
     -else 0
     -endif
     -repeat {w}
@@ -6541,7 +6541,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
   sigma=1.5
 
   -repeat $! -pass$1 0 -l[$>,-1]
-    nm_from={0,b} nm_to={1,b}
+    nm_source={0,b} nm_target={1,b}
     -nm[0] source -nm[1] target
 
     # Generate matching functions from 3d RGB features.
@@ -6572,7 +6572,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
         -circle[$visu] {i[3]},{i[4]},5,1,0,0,0 -circle[$visu] {i[3]},{i[4]},3,1,0,255,0
         -s. y,2 -rows[-2,-1] 0,1 -a[-2,-1] x -permute. xczy
         --warp[$both] [-1],0,0 -rm..
-        -*. {$5/256} -s. x,2
+        -*. {($5-1)/255} -s. x,2
         --. [-2] -*. -1 -a[-2,-1] c
         N+=1
       -while {*}
@@ -6592,11 +6592,11 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
     # Generate video of matching.
     # -if videos
     #   N=$!
-    #   [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {256/w} -+. 1
+    #   [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {255/(w-1)} -+. 1
     #   --_transfer_rgb[source] 0,$sigma,{w} -*.. [-1] -distance. 1 -*. -1 -watershed.. [-1] -rm.
     #   --_transfer_rgb[source] 0,$sigma,{w} -a[-2,-1] c
 
-    #   [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {256/w} -+. 1
+    #   [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {255/(w-1)} -+. 1
     #   --_transfer_rgb[target] 0,$sigma,{w} -*.. [-1] -distance. 1 -*. -1 -watershed.. [-1] -rm.
     #   --_transfer_rgb[target] 0,$sigma,{w} -a[-2,-1] c
     #   -warp. [displacement],1,1,1,48
@@ -6608,7 +6608,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
     #     -append[^0] [0],x -rm[0]
     #     -r2dx 1024
     #     [-1]x20
-    #     -o videos/video_${nm_from}_to_${nm_to}.avi,10
+    #     -o videos/video_${nm_source}_to_${nm_target}.avi,10
     #     -rm
     #   -endl
     # -endif
@@ -6619,7 +6619,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
     --map_clut[source] [-1] -nm. confidence
 
     # Generate transfer CLUT.
-    [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {256/w} -+. 1
+    [displacement],[displacement],[displacement],1,x --f. y --f. z -a[-3--1] c -*. {255/(w-1)} -+. 1
     --_transfer_rgb[target] 0,0,{w} -*.. [-1]
     -warp[-2,-1] [displacement],1,0,1
     -distance. 1 -*. -1 -watershed.. [-1] -rm. --. 1
@@ -6629,7 +6629,7 @@ transfer_rgb : -check "${2=0.3}>=0 && ${3=8}>=0 && ${4=0.15}>=0 && ${5=64}>=0 &&
     # Enforce luminosity constraint for non-confident colors.
     -if {$4>0}
       -^[fconfidence] {$4/10} -*[fconfidence] -1 -+[fconfidence] 1
-      --f[fconfidence] x --f. y --f. z -a[-3--1] c -*. {256/w}
+      --f[fconfidence] x --f. y --f. z -a[-3--1] c -*. {255/(w-1)}
       -rgb2hsv[clut,-1] -channels. 100%
       -j[clut] [-1],0,0,0,2,1,[fconfidence] -rm.
       -hsv2rgb[clut]
@@ -6661,7 +6661,7 @@ _transfer_rgb : -v - -l[] -check "${1=0}>=0 && ${2=1.5}>=0 && ${3=128}>0" gamma=
   -e[^-1] "Convert image$? as 3d volumetric scalar functions for color matching, with gamma "$gamma", smoothness "$smoothness" and resolution "$res"."
   -v - -to_rgb -repeat $! -l[$>]
     -b 0.3%
-    -r {w*h},3,1,1,-1 -* {$res/256} -c 0,{$res-1}
+    -r {w*h},3,1,1,-1 -* {($res-1)/255}
     -pointcloud 1,$res,$res,$res -f 'if(i,i^$gamma,0)' -b $smoothness% -n 0,1
   -endl -done -v +
 
@@ -8031,7 +8031,7 @@ denoise_patchpca : -check "${1=1.8} && $1>=0 && isint(${2=7}) && $2>0 && isint($
 #@gmic : $ image.jpg --deriche 30,0,x -deriche.. 30,0,y -add
 #@gmic : $$
 
-#@gmic dilate : size>=0 : size_x>=0,size_y>=0,size_z>=0 : [mask],_boundary,_is_normalized={ 0 | 1 } : (+)
+#@gmic dilate : size>=0 : size_x>=0,size_y>=0,size_z>=0 : [kernel],_boundary,_is_normalized={ 0 | 1 } : (+)
 #@gmic : Dilate selected images by a rectangular or the specified structuring element.
 #@gmic : 'boundary' can be { 0=dirichlet | 1=neumann }.
 #@gmic : Default values: 'size_z=1', 'boundary=1' and 'is_normalized=0'.
@@ -8149,7 +8149,7 @@ edges : -skip ${1=15%}
   -e[^-1] "Estimate image contours of image$?, with threshold $1."
   -v - -gradient_norm -b 0.5 ->= $1 -distance 0 -equalize -negative -c 30%,70% -n 0,1 -v +
 
-#@gmic erode : size>=0 : size_x>=0,size_y>=0,_size_z>=0 : [mask],_boundary,_is_normalized={ 0 | 1 } : (+)
+#@gmic erode : size>=0 : size_x>=0,size_y>=0,_size_z>=0 : [kernel],_boundary,_is_normalized={ 0 | 1 } : (+)
 #@gmic : Erode selected images by a rectangular or the specified structuring element.
 #@gmic : 'boundary' can be { 0=dirichlet | 1=neumann }.
 #@gmic : Default values: 'size_z=1', 'boundary=1' and 'is_normalized=0'.
@@ -24272,34 +24272,47 @@ gimp_local_orientation :
 gimp_local_orientation_preview :
   -gimp_split_preview "-gimp_local_orientation ${^0}",$-1
 
-#@gimp Morphological filter : gimp_morpho, gimp_morpho_preview(0)
-#@gimp : Action = choice("Erosion","Dilation","Opening","Closing",
-#@gimp : "Original - Erosion","Dilation - Original","Original - Opening","Closing - Original")
+#@gimp Morphological filter : gimp_morpho_v2, gimp_morpho_v2_preview(0)
+#@gimp : Action = choice("Erosion","Dilation","Opening","Closing","Original - Erosion","Dilation - Original","Original - Opening","Closing - Original")
+#@gimp : Kernel = choice(0,"Square","Octagonal","Circular","Custom")
 #@gimp : Size = int(5,2,60)
+#@gimp : note = note("<small>Parameter <i>Size</i> is inactive for <i>Custom</i> kernel.</small>")
+#@gimp : Custom kernel = text("1,0,1; 0,1,0; 1,0,1")
 #@gimp : Negative = bool()
-#@gimp : Shape = choice(0,"Square","Octagonal","Circular")
 #@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","Linear RGB [all]","Linear RGB [red]","Linear RGB [green]","Linear RGB [blue]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]","YIQ [luma]","YIQ [chromas]")
 #@gimp : Value action = choice("None","Cut","Stretch")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/06/2014</i>.</small>")
-gimp_morpho :
-  -ac "-__gimp_morpho ${^0}",$5,$6
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/22/2016</i>.</small>")
+gimp_morpho_v2 :
+  -ac "-_gimp_morpho_v2 ${1-3},\"$4\",$5",$6,$7
 
-gimp_morpho_preview :
-  -gimp_split_preview "-gimp_morpho ${^0}",$-1
-
-__gimp_morpho :
-  -if {$4==1} suf="_oct" -elif {$4==0} suf="" -else suf="_circ" -endif
-  -if {$1==0} -erode$suf $2
-  -elif {$1==1} -dilate$suf $2
-  -elif {$1==2} -erode$suf $2 -dilate$suf $2
-  -elif {$1==3} -dilate$suf $2 -erode$suf $2
-  -elif {$1==4} -repeat $! --erode$suf $2 --[-2,-1] -mv. 0 -done
-  -elif {$1==5} -repeat $! --dilate$suf $2 -rv[-2,-1] --[-2,-1] -mv. 0 -done
-  -elif {$1==6} -repeat $! --erode$suf $2 -dilate$suf. $2 --[-2,-1] -mv. 0 -done
-  -else -repeat $! --dilate$suf $2 -erode$suf. $2 -rv[-2,-1] --[-2,-1] -mv. 0 -done
+gimp_morpho_v2_preview :
+  -gimp_split_preview "-gimp_morpho_v2 ${1-3},\"$4\",${5--1}",$-1
+  -if {$2==3}
+    ({'"$4"'}) -f. "(i>=_'0' && i<=_'9') || i==_',' || i==_';'?i:-1" -discard. -1 ({t}) -rr2d. {0,max(24,w/6)},{0,max(24,h/6)},0,1 -gt. 0 -*. 255
+    -to_rgba. -frame. 1,1,0,0,0,0,255 -frame. 1,1,255 -frame. 1,1,0,0,0,0,255
+    -j[^-1] [-1],2,2,0,0,0.75 -rm.
+  -else
   -endif
-  -if $3 -repeat $! -l[$>] -split_opacity -negative[0] -a c -endl -done -endif
+
+_gimp_morpho_v2 :
+  ({'"$4"'}) -f. "(i>=_'0' && i<=_'9') || i==_',' || i==_';'?i:-1" -discard. -1 ckernel={t} -rm.
+  -if {$2==0} -m "my_erode: -erode $""1" -m "my_dilate: -dilate $""1"
+  -elif {$2==1} -m "my_erode: -erode_oct $""1" -m "my_dilate: -dilate_oct $""1"
+  -elif {$2==2} -m "my_erode: -erode_circ $""1" -m "my_dilate: -dilate_circ $""1"
+  -else -m "my_erode : ("$ckernel") -erode[^-1] [-1] -rm." -m "my_dilate : ("$ckernel") -dilate[^-1] [-1] -rm."
+  -endif
+  -if {$1==0} -my_erode $3
+  -elif {$1==1} -my_dilate $3
+  -elif {$1==2} -my_erode $3 -my_dilate $3
+  -elif {$1==3} -my_dilate $3 -my_erode $3
+  -elif {$1==4} -repeat $! -l[$>] --my_erode $3 -- -endl -done
+  -elif {$1==5} -repeat $! -l[$>] --my_dilate $3 -rv -- -endl -done
+  -elif {$1==6} -repeat $! -l[$>] --my_erode $3 -my_dilate. $3 -- -endl -done
+  -else -repeat $! -l[$>] --my_dilate $3 -my_erode. $3 -rv -- -endl -done
+  -endif
+  -if $5 -repeat $! -l[$>] -split_opacity -negative[0] -a c -endl -done -endif
+  -uncommand my_erode,my_dilate
 
 #@gimp Segmentation : gimp_segment_watershed, gimp_segment_watershed_preview(0)
 #@gimp : Edge threshold = float(2,0,15)
