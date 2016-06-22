@@ -5673,14 +5673,14 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                                     false,CImg<char>::empty())).height()==1 &&
                 boundary<=1) {
               print(images,0,
-                    "Convolve image%s with mask [%u] and %s boundary conditions, "
+                    "Convolve image%s with kernel [%u] and %s boundary conditions, "
                     "with%s normalization.",
                     gmic_selection.data(),
                     *ind,
                     boundary?"neumann":"dirichlet",
                     is_normalized?"":"out");
-              const CImg<T> mask = gmic_image_arg(*ind);
-              cimg_forY(selection,l) gmic_apply(convolve(mask,boundary,(bool)is_normalized));
+              const CImg<T> kernel = gmic_image_arg(*ind);
+              cimg_forY(selection,l) gmic_apply(convolve(kernel,boundary,(bool)is_normalized));
             } else arg_error("convolve");
             is_released = false; ++position; continue;
           }
@@ -5701,14 +5701,14 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                                     false,CImg<char>::empty())).height()==1 &&
                 boundary<=1) {
               print(images,0,
-                    "Correlate image%s with mask [%u] and %s boundary conditions, "
+                    "Correlate image%s with kernel [%u] and %s boundary conditions, "
                     "with%s normalization.",
                     gmic_selection.data(),
                     *ind,
                     boundary?"neumann":"dirichlet",
                     is_normalized?"":"out");
-              const CImg<T> mask = gmic_image_arg(*ind);
-              cimg_forY(selection,l) gmic_apply(correlate(mask,boundary,(bool)is_normalized));
+              const CImg<T> kernel = gmic_image_arg(*ind);
+              cimg_forY(selection,l) gmic_apply(correlate(kernel,boundary,(bool)is_normalized));
             } else arg_error("correlate");
             is_released = false; ++position; continue;
           }
@@ -6085,7 +6085,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-dilate",command)) {
             gmic_substitute_args();
             float sx = 3, sy = 3, sz = 1;
-            unsigned int is_normalized = 0;
+            unsigned int is_real = 0;
             boundary = 1;
             sep = 0;
             if (((cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",
@@ -6093,23 +6093,23 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                  cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%u%c",
                              indices,&boundary,&end)==2 ||
                  cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%u,%u%c",
-                             indices,&boundary,&is_normalized,&end)==3) &&
+                             indices,&boundary,&is_real,&end)==3) &&
                 (ind=selection2cimg(indices,images.size(),images_names,"-dilate",true,
                                     false,CImg<char>::empty())).height()==1 &&
                 boundary<=1) {
-              print(images,0,"Dilate image%s with mask [%u] and %s boundary conditions, "
-                    "with%s normalization.",
+              print(images,0,"Dilate image%s with kernel [%u] and %s boundary conditions, "
+                    "in %s mode.",
                     gmic_selection.data(),
                     *ind,
                     boundary?"neumann":"dirichlet",
-                    is_normalized?"":"out");
-              const CImg<T> mask = gmic_image_arg(*ind);
-              cimg_forY(selection,l) gmic_apply(dilate(mask,boundary,(bool)is_normalized));
+                    is_real?"real":"binary");
+              const CImg<T> kernel = gmic_image_arg(*ind);
+              cimg_forY(selection,l) gmic_apply(dilate(kernel,boundary,(bool)is_real));
             } else if ((cimg_sscanf(argument,"%f%c",
                                     &sx,&end)==1) &&
                        sx>=0) {
               sx = cimg::round(sx);
-              print(images,0,"Dilate image%s with mask of size %g and neumann boundary conditions.",
+              print(images,0,"Dilate image%s with kernel of size %g and neumann boundary conditions.",
                     gmic_selection.data(),
                     sx);
               cimg_forY(selection,l) gmic_apply(dilate((unsigned int)sx));
@@ -6121,7 +6121,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
               sx = cimg::round(sx);
               sy = cimg::round(sy);
               sz = cimg::round(sz);
-              print(images,0,"Dilate image%s with %gx%gx%g mask and neumann boundary conditions.",
+              print(images,0,"Dilate image%s with %gx%gx%g kenrel and neumann boundary conditions.",
                     gmic_selection.data(),
                     sx,sy,sz);
               cimg_forY(selection,l) gmic_apply(dilate((unsigned int)sx,(unsigned int)sy,(unsigned int)sz));
@@ -6602,7 +6602,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           // Erode.
           if (!std::strcmp("-erode",command)) {
             gmic_substitute_args();
-            unsigned int is_normalized = 0;
+            unsigned int is_real = 0;
             float sx = 3, sy = 3, sz = 1;
             boundary = 1;
             sep = 0;
@@ -6611,23 +6611,23 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                  cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%u%c",
                              indices,&boundary,&end)==2 ||
                  cimg_sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%u,%u%c",
-                             indices,&boundary,&is_normalized,&end)==3) &&
+                             indices,&boundary,&is_real,&end)==3) &&
                 (ind=selection2cimg(indices,images.size(),images_names,"-erode",true,
                                     false,CImg<char>::empty())).height()==1 &&
                 boundary<=1) {
-              print(images,0,"Erode image%s with mask [%u] and %s boundary conditions, "
-                    "with%s normalization.",
+              print(images,0,"Erode image%s with kernel [%u] and %s boundary conditions, "
+                    "in %s mode.",
                     gmic_selection.data(),
                     *ind,
                     boundary?"neumann":"dirichlet",
-                    is_normalized?"":"out");
-              const CImg<T> mask = gmic_image_arg(*ind);
-              cimg_forY(selection,l) gmic_apply(erode(mask,boundary,(bool)is_normalized));
+                    is_real?"real":"binary");
+              const CImg<T> kernel = gmic_image_arg(*ind);
+              cimg_forY(selection,l) gmic_apply(erode(kernel,boundary,(bool)is_real));
             } else if ((cimg_sscanf(argument,"%f%c",
                                     &sx,&end)==1) &&
                        sx>=0) {
               sx = cimg::round(sx);
-              print(images,0,"Erode image%s with mask of size %g and neumann boundary conditions.",
+              print(images,0,"Erode image%s with kernel of size %g and neumann boundary conditions.",
                     gmic_selection.data(),
                     sx);
               cimg_forY(selection,l) gmic_apply(erode((unsigned int)sx));
@@ -6639,7 +6639,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
               sx = cimg::round(sx);
               sy = cimg::round(sy);
               sz = cimg::round(sz);
-              print(images,0,"Erode image%s with %gx%gx%g mask and neumann boundary conditions.",
+              print(images,0,"Erode image%s with %gx%gx%g kernel and neumann boundary conditions.",
                     gmic_selection.data(),
                     sx,sy,sz);
               cimg_forY(selection,l) gmic_apply(erode((unsigned int)sx,(unsigned int)sy,(unsigned int)sz));
