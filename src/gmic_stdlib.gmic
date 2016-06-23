@@ -24302,8 +24302,8 @@ _gimp_morpho_v2 :
   -elif {$2==1} -m "my_erode: -erode_oct $""1" -m "my_dilate: -dilate_oct $""1"
   -elif {$2==2} -m "my_erode: -erode_circ $""1" -m "my_dilate: -dilate_circ $""1"
   -else
-    -m "my_erode : ("$ckernel") -if {$_verion<174} -mirror. xy -endif -erode[^-1] [-1] -rm."
-    -m "my_dilate : ("$ckernel") -if {$_verion<174} -mirror. xy -endif -dilate[^-1] [-1] -rm."
+    -m "my_erode : ("$ckernel") -erode[^-1] [-1] -rm."
+    -m "my_dilate : ("$ckernel") -dilate[^-1] [-1] -rm."
   -endif
   -if {$1==0} -my_erode $3
   -elif {$1==1} -my_dilate $3
