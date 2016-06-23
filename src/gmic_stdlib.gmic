@@ -4133,16 +4133,18 @@ _update_server_binaries :
       -if $file
         -strreplace $file,_$1_,_
         file_short=${}
+        is_win=${-strcontains[]" "$file,win}
+        -if $is_win folder="windows" -else folder="linux" -endif
+
         -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/prerelease/"$file_short -v -
         -_update_server_upload $file,"files/prerelease/"$file_short
         -if {!$is_pre}
-          is_win=${-strcontains[]" "$file,win}
-          -if $is_win folder="windows" -else folder="linux" -endif
           -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/"$folder/$file"'." -v -
           -_update_server_upload $file,"files/"$folder/$file
         -endif
         -v + -e[] "- Upload file '"$file"' to 'http://gmic.eu/files/"$folder/$file_short"'." -v -   # Pre-releases set as default downloads
         -_update_server_upload $file,"files/"$folder/$file_short
+
         file$>= N-=1
       -endif
     -done
