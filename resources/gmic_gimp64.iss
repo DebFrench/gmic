@@ -28,7 +28,7 @@ UninstallFilesDir={app}\uninst
 AppendDefaultDirName=false
 UsePreviousAppDir=true
 DirExistsWarning=no
-OutputBaseFilename=gmic_gimp_XXX_win32
+OutputBaseFilename=gmic_gimp_XXX_win64
 
 [Files]
 Source: gmic-gimp-build\gmic_gimp.exe; DestDir: {app}
