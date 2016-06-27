@@ -3787,6 +3787,7 @@ update_server : -skip ${1=$_version},${2=1}
   -load_gmic http://gmic.eu/gmic_stdlib.$1
   -if {$1!=$_version} -l -load_gmic http://gmic.eu/backports$1.gmic -onfail -endl -endif
   -x "cd $HOME/work/src/gmic-community && git pull 2>&1 >/dev/null"
+  -load_gmic ${HOME}/work/src/gmic-community/andreas_pahlsson.gmic
   -load_gmic ${HOME}/work/src/gmic-community/garagecoder.gmic
   -load_gmic ${HOME}/work/src/gmic-community/garry_osgood.gmic
   -load_gmic ${HOME}/work/src/gmic-community/gentlemanbeggar.gmic
