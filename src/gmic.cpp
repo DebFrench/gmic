@@ -13978,7 +13978,7 @@ int main(int argc, char **argv) {
 
   // Update file (in resources directory).
   filename_update.assign(1024);
-  cimg_snprintf(filename_update,filename_update.width(),"%scli_update%u.gmic",
+  cimg_snprintf(filename_update,filename_update.width(),"%supdate%u.gmic",
                 gmic::path_rc(),gmic_version);
   try {
     commands_update.load_raw(filename_update).append(CImg<char>::vector(0),'y');

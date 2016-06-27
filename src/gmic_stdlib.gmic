@@ -3785,24 +3785,23 @@ update_server : -skip ${1=$_version},${2=1}
   -v + -e[] "> Load and archive .gmic source files.\n" -v -
   _nb_sources=0
   -load_gmic http://gmic.eu/gmic_stdlib.$1
-  -if {$1!=$_version} -l -load_gmic http://gmic.eu/backports$1.gmic -onfail -endl -endif
   -x "cd $HOME/work/src/gmic-community && git pull 2>&1 >/dev/null"
   -load_gmic ${HOME}/work/src/gmic-community/andreas_pahlsson.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/garagecoder.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/andy_kelday.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/arto_huotari.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/david_tschumperle.gmic
   -load_gmic ${HOME}/work/src/gmic-community/garry_osgood.gmic
   -load_gmic ${HOME}/work/src/gmic-community/gentlemanbeggar.gmic
   -load_gmic ${HOME}/work/src/gmic-community/iain_fergusson.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/jayprich.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/james_prichard.gmic
   -load_gmic ${HOME}/work/src/gmic-community/jerome_boulanger.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/karos.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/naggobot.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/jerome_ferrari.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/karsten_rodenacker.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/martin_souphead.gmic
   -load_gmic ${HOME}/work/src/gmic-community/photocomix.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/ronounours.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/souphead.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/sylvie_alexandre.gmic
   -load_gmic ${HOME}/work/src/gmic-community/tom_keil.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/translation_ja.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/samj.gmic
-  -load_gmic ${HOME}/work/src/gmic-community/zonder.gmic
+  -load_gmic ${HOME}/work/src/gmic-community/tou_omiya.gmic
 
   # Merge them together.
   -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y -a y -discard 13 -replace 9,32
@@ -3983,7 +3982,7 @@ update_server : -skip ${1=$_version},${2=1}
   -if {$nb_filters>400}
     -v + -e[] "> Compress and save output .gmic files." -v -
     --a y -l.
-    --compress_gmic[0]
+    --compress_gmic_cli[0]
     --compress_gmic_gimp[0]
 
     # Add footer and header.
@@ -4006,22 +4005,23 @@ update_server : -skip ${1=$_version},${2=1}
     -y -a[6-8] y -a[3-5] y -a[0-2] y
 
     # Upload filter files on G'MIC server.
+    -o[0] raw:${_path_rc}update$1.gmic,uchar
     -o[1] raw:${_path_rc}cli_update$1.gmic,uchar
     -o[2] raw:${_path_rc}gimp_update$1.gmic,uchar
 
-    -o[0] raw:/tmp/update$1.gmic,uchar
+    -o[0] cimgz:/tmp/update$1.gmic,uchar
     -o[1] cimgz:/tmp/cli_update$1.gmic,uchar
     -o[2] cimgz:/tmp/gimp_update$1.gmic,uchar
 
     -_update_server_upload[] /tmp/update$1.gmic
     -_update_server_upload[] /tmp/cli_update$1.gmic
     -_update_server_upload[] /tmp/gimp_update$1.gmic
-    -_update_server_upload[] /tmp/update$1.gmic,update.gmic
 
     -if {$1>=172} (172,173,174)
     -else 0
     -endif
     -repeat {w}
+      -_update_server_upload[] /tmp/update$1.gmic,update{i[$>]}.gmic
       -_update_server_upload[] /tmp/cli_update$1.gmic,cli_update{i[$>]}.gmic
       -_update_server_upload[] /tmp/gimp_update$1.gmic,gimp_update{i[$>]}.gmic
     -done -rm.
@@ -15753,17 +15753,17 @@ _bin2dec :
   -u {if($is_negative,-1,1)*{is}}
   -rm.
 
-# compress_gmic
+# compress_gmic_cli
 # Compress .gmic custom command files for the 'gmic' command line tool,
 # by removing empty lines, and useless comments (non starting with '#@gmic').
-compress_gmic :
+compress_gmic_cli :
   -v -
   -s -,10 N=$!
-  -ap -_compress_gmic
+  -ap -_compress_gmic_cli
   -s -,10 -i[1--2] (10) -a y
   -v +
 
-_compress_gmic :
+_compress_gmic_cli :
   -if {i==_'#'}
     -if {!same([{^}],'#@gmic',6)" || (i[6]!=_' ' && i[6]!=_':')"} -rm. (10) -endif
   -else
@@ -20206,7 +20206,7 @@ __help_end : #  <-- don't remove me, used as a end marker for command '-help' !
 # This command can be superseded on the user '.gmic' file to add sources for the plug-in.
 gimp_filter_sources : -skip ${1=0}
   ({'{/$_path_user}'})
-  ({'http://gmic.eu/gimp_update$_version.gmic'},1) # Override default filters.
+  ({'http://gmic.eu/update$_version.gmic'},1) # Override default filters.
 
   # Include 'hot chocolate' filter.
   file_hotchocolate=${_path_rc}hotchocolate.gmic
