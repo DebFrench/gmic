@@ -136,7 +136,7 @@
 cli_noarg :
   -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -version
   -v + -e[] "\n[gmic] No commands, options or data provided (type "$c"'gmic -h'"$n" to get help)." -v -
-  file_update=${_path_rc}cli_update$_version.gmic
+  file_update=${_path_rc}update$_version.gmic
   need_update={"Y = date(0); M = date(1); D = date(2); date_current = Y*365 + M*31 + D;
                 Y = date(0,"$file_update"); M = date(1,"$file_update"); D = date(2,"$file_update"); date_file = Y*365 + M*31 + D;
                 date_current - date_file>=7"}
@@ -3191,8 +3191,8 @@ update :
 _update :
   -e[0--3] "Update commands from the latest definition file on the G\47MIC server."
   -v -
-  out=${_path_rc}cli_update$_version.gmic
-  -l[] cimgz:http://gmic.eu/cli_update$_version.gmic
+  out=${_path_rc}update$_version.gmic
+  -l[] cimgz:http://gmic.eu/update$_version.gmic
     -if {h>7" && "same([{^}],'#@gmic',6)} -o raw:$out,char -endif
     -rm
   -onfail -v + -error[0--3] "Command '-update' : Unreachable update file."
@@ -4007,15 +4007,15 @@ update_server : -skip ${1=$_version},${2=1}
 
     # Upload filter files on G'MIC server.
     -o[0] raw:${_path_rc}update$1.gmic,uchar
-    -o[1] raw:${_path_rc}cli_update$1.gmic,uchar
-    -o[2] raw:${_path_rc}gimp_update$1.gmic,uchar
-
     -o[0] cimgz:/tmp/update$1.gmic,uchar
-    -o[1] cimgz:/tmp/cli_update$1.gmic,uchar
-    -o[2] cimgz:/tmp/gimp_update$1.gmic,uchar
-
+    -_update_server_upload[] ${_path_rc}update$1.gmic,plain_update$1.gmic
     -_update_server_upload[] /tmp/update$1.gmic
+
     -if {$1<=174}
+      -o[1] raw:${_path_rc}cli_update$1.gmic,uchar
+      -o[2] raw:${_path_rc}gimp_update$1.gmic,uchar
+      -o[1] cimgz:/tmp/cli_update$1.gmic,uchar
+      -o[2] cimgz:/tmp/gimp_update$1.gmic,uchar
       -_update_server_upload[] /tmp/cli_update$1.gmic
       -_update_server_upload[] /tmp/gimp_update$1.gmic
     -endif
