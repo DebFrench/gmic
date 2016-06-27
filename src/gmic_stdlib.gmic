@@ -3984,6 +3984,7 @@ update_server : -skip ${1=$_version},${2=1}
     --a y -l.
     --compress_gmic_cli[0]
     --compress_gmic_gimp[0]
+    -compress_gmic[0]
 
     # Add footer and header.
     -i[0,1,2] ({'"#@gmic"\n\
@@ -15753,6 +15754,24 @@ _bin2dec :
   -u {if($is_negative,-1,1)*{is}}
   -rm.
 
+# compress_gmic
+# Compress .gmic custom command files for compressing update files a little bit,
+# by removing empty lines, and useless comments.
+compress_gmic :
+  -v -
+  -s -,10 N=$!
+  -ap -_compress_gmic
+  -s -,10 -i[1--2] (10) -a y
+  -v +
+
+_compress_gmic :
+  -if {i==_'#'}
+    -if {h<6" || "!same([{^}],'#@g',3)} -rm. (10) -endif
+  -else
+    -l. -s +,32,35 -if {$!>2} -k[0] -endif -a y -endl
+    -autocrop. 32 -if {!w} -rm. (10) -endif
+  -endif
+
 # compress_gmic_cli
 # Compress .gmic custom command files for the 'gmic' command line tool,
 # by removing empty lines, and useless comments (non starting with '#@gmic').
@@ -20682,6 +20701,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Mauro Quercia</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>PhotoComiX</i> <small>(testing, translation &amp; filters)</small>
 #@gimp : <b> -</b> <i>Garry Osgood</i> <small>(documentation &amp; filters)</small>
+#@gimp : <b> -</b> <i>Andreas P&#229;hlsson</i> <small>(filters)</small>
 #@gimp : <b> -</b> <i>James Prichard</i> <small>(testing &amp; filters)</small>
 #@gimp : <b> -</b> <i>Guilherme Razgriz</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Karsten Rodenacker</i> <small>(packaging &amp; code)</small>
