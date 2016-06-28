@@ -9,8 +9,8 @@
  #  Copyright   : Tobias Fleischer
  #                ( https://plus.google.com/u/0/b/117441237982283011318/+TobiasFleischer )
  #
- #  Licenses        : This file is 'dual-licensed', you have to choose one
- #                    of the two licenses below to apply.
+ #  Licenses    : This file is 'dual-licensed', you have to choose one
+ #                of the two licenses below to apply.
  #
  #                    CeCILL-C
  #                    The CeCILL-C license is close to the GNU LGPL.
