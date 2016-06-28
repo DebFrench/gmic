@@ -42,6 +42,7 @@
  #  knowledge of the CeCILL license and that you accept its terms.
  #
 */
+
 #ifndef gmic_version
 #define gmic_version 174
 
