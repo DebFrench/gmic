@@ -341,6 +341,7 @@ if [ "$1" == "final" ]; then
     sed "s/PRERELEASE_CFLAGS = /NO_PRERELEASE_CFLAGS = /" Makefile > /tmp/Makefile
     mv /tmp/Makefile Makefile
 fi
+sed s\/"cli gimp lib"\/"cli gimp lib libc zart"\/g Makefile > /tmp/Makefile
 sed s\/_gmic_versio3\/$VERSION\/g Makefile > /tmp/Makefile
 mv /tmp/Makefile Makefile
 sed s\/_gmic_versio1\/$RELEASE1\/g Makefile > /tmp/Makefile
