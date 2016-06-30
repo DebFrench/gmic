@@ -17,16 +17,9 @@ git push
 
 cd $HOME/work/src/gmic
 cp -rf COPYING README README.md $HOME/work/src/gmic-community
-cp -rf COPYING README README.md $HOME/work/src/gmic-minimal
-cp -rf src/*.cpp src/*.h src/*.c src/Makefile src/*.scm $HOME/work/src/gmic-minimal/src
 
 echo -e "\n  ** gmic-community\n"
 cd $HOME/work/src/gmic-community
 git pull
-git commit -uno -am "$COM"
-git push
-
-echo -e "\n  ** gmic-minimal\n"
-cd $HOME/work/src/gmic-minimal
 git commit -uno -am "$COM"
 git push

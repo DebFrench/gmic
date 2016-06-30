@@ -4381,6 +4381,7 @@ _update_tutorial_html :
   -replace_str "@#","$!"
   -replace_str "@{-1,","{"
   -replace_str "@{","{"
+  -replace_str "gmic-minimal","gmic"
 
   # Discard original header.
   -s -,{'"<!-- GIMMICKRY! -->"'} -k[1]

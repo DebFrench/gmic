@@ -88,7 +88,7 @@
                   <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><img alt="" src="img/download_source.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
                   <td><a href="http://gmic.eu/files/source/gmic_source.tar.gz"><font size="3">G'MIC source</font></a><br/>
                     tar.gz file<br/>
-                    alternative: <a href="https://github.com/dtschump/gmic-minimal">git repository</a><br/><br/></td>
+                    alternative: <a href="https://github.com/dtschump/gmic">git repository</a><br/><br/></td>
                 </tr>
                 <tr>
                   <td><a href="http://gmic.eu/files/prerelease"><img alt="" src="img/download_prerelease.png" border="0"></img></a></td><td>&nbsp;&nbsp;</td>
@@ -147,10 +147,8 @@
       </pre>
       Then, get the <b><font color="#000066">G'MIC</font></b> source from the <i>git</i> repository:
       <pre style="font-family:monospace;">
-        $ git clone <a href="https://github.com/dtschump/gmic-minimal">https://github.com/dtschump/gmic-minimal.git</a> gmic-src
+        $ git clone <a href="https://github.com/dtschump/gmic">https://github.com/dtschump/gmic.git</a> gmic-src
       </pre>
-      If you need more than the source (i.e. the additional resources and web pages), use the <i>git</i> repository named <tt style="font-family:monospace;">gmic</tt>
-      instead of <tt style="font-family:monospace;">gmic-minimal</tt>.
       Alternatively, you may also prefer to get the source from <a href="http://gmic.eu/files/source/gmic_source.tar.gz">the last released stable <i>.tar.gz</i> file</a>
       instead of the current development version.<br/><br/>
       You are now ready to compile the following <b><font color="#000066">G'MIC</font></b> interfaces:
