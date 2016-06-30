@@ -437,7 +437,7 @@ static:
 staticlibc:
 	$(MAKE) "CFLAGS+=$(GMIC_STATIC_LIBC_CFLAGS) $(OPT_CFLAGS)" "LIBS+=$(GMIC_STATIC_LIBC_LIBS)" libcgmicstatic
 
-zart:
+zart: CImg.h gmic_stdlib.h
 	@if [ ! -d ../zart ]; then ln -s ../gmic-community/zart ..; fi
 ifeq ($(OS),Darwin)
 	cd ../zart && qmake zart.pro && $(MAKE) && $(STRIP) zart.app/Contents/MacOS/zart
@@ -632,6 +632,6 @@ uninstall:
 distclean: clean
 
 clean:
-	rm -rf CImg.h gmic_stdlib.h gmic*.o gmic$(EXE) gmic_gimp$(EXE) use_libgmic$(EXE) use_libcgmic$(EXE) use_libcgmic_static$(EXE) libgmic* libcgmic* *~
+	rm -rf ../zart CImg.h gmic_stdlib.h gmic*.o gmic$(EXE) gmic_gimp$(EXE) use_libgmic$(EXE) use_libcgmic$(EXE) use_libcgmic_static$(EXE) libgmic* libcgmic* *~
 
 # End of Makefile.
