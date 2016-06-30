@@ -438,6 +438,7 @@ staticlibc:
 	$(MAKE) "CFLAGS+=$(GMIC_STATIC_LIBC_CFLAGS) $(OPT_CFLAGS)" "LIBS+=$(GMIC_STATIC_LIBC_LIBS)" libcgmicstatic
 
 zart:
+	@if [ ! -d ../zart ]; then ln -s ../gmic-community/zart ..; fi
 ifeq ($(OS),Darwin)
 	cd ../zart && qmake zart.pro && $(MAKE) && $(STRIP) zart.app/Contents/MacOS/zart
 else
