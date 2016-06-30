@@ -438,7 +438,7 @@ staticlibc:
 	$(MAKE) "CFLAGS+=$(GMIC_STATIC_LIBC_CFLAGS) $(OPT_CFLAGS)" "LIBS+=$(GMIC_STATIC_LIBC_LIBS)" libcgmicstatic
 
 zart: CImg.h gmic_stdlib.h
-	@if [ ! -d ../zart ]; then ln -s ../gmic-community/zart ..; fi
+	@if [ ! -d ../zart ]; then ln -fs ../gmic-community/zart ..; fi
 ifeq ($(OS),Darwin)
 	cd ../zart && qmake zart.pro && $(MAKE) && $(STRIP) zart.app/Contents/MacOS/zart
 else
@@ -459,8 +459,8 @@ else
 endif
 
 libcgmic.o: gmic.cpp gmic.h gmic_stdlib.h CImg.h
-	@ln -fs ../../gmic-community/libcgmic/gmic_libc.cpp .
-	@ln -fs ../../gmic-community/libcgmic/gmic_libc.h .
+	@if [ ! -f gmic_libc.cpp ]; then ln -fs ../../gmic-community/libcgmic/gmic_libc.cpp .; fi
+	@if [ ! -f gmic_libc.h ]; then ln -fs ../../gmic-community/libcgmic/gmic_libc.h .; fi
 	$(CXX) -o libcgmic.o -c gmic_libc.cpp $(PIC) $(CFLAGS)
 libcgmic: libgmic.o libcgmic.o
 ifeq ($(OS),Darwin)
@@ -473,7 +473,7 @@ else
 	$(CXX) -shared -Wl,-soname,libcgmic.so.1 -o libcgmic$(SO) libcgmic.o libgmic.o $(LIBS)
 endif
 endif
-	@ln -fs ../../gmic-community/libcgmic/use_libcgmic.c .
+	@if [ ! -f use_libcgmic.c ]; then ln -fs ../../gmic-community/libcgmic/use_libcgmic.c .; fi
 	$(CC) -std=c99 -o use_libcgmic use_libcgmic.c -L. -lcgmic
 
 libcgmicstatic.o: gmic.cpp gmic.h gmic_stdlib.h CImg.h
