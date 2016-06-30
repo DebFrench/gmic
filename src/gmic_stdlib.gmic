@@ -23368,7 +23368,7 @@ gimp_curves_interactive_preview :
 #@gimp Customize CLUT : gimp_customize_clut,gimp_customize_clut_preview(1)+
 #@gimp : Keypoint influence (%) = float(100,0,100)
 #@gimp : Lock uniform sampling = choice{0,"None","8 keypoints (RGB corners)","27 keypoints","64 keypoints","125 keypoints","216 keypoints","343 keypoints"},
-#@gimp : Spatial regularization = int(0,0,20)
+#@gimp : Spatial regularization = int(10,0,30)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Global correction:</b></small>")
 #@gimp : Brightness (%) = float(0,-100,100)
