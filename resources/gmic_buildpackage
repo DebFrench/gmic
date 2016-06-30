@@ -230,6 +230,9 @@ cd gmic/src/
 cp -f gmic_stdlib.gmic ../html/
 cp -f gmic_stdlib.gmic ../html/gmic_stdlib.$SVERSION
 make stdlib CImg.h
+ln -fs ../gmic-community/zart ..
+ln -fs ../../gmic-community/libcgmic/gmic_libc.cpp .
+ln -fs ../../gmic-community/libcgmic/gmic_libc.cpp .
 
 if [ "$1" == "final" ]; then
     git tag -d v.$SVERSION
@@ -370,7 +373,12 @@ rm -f ${TARFILE} ${TARFILE}.gz deb_${TARFILE} deb_${TARFILE}.gz
 tar chvf deb_${TARFILE} `basename $DIR`
 gzip deb_${TARFILE}
 cp -f deb_${TARFILE}.gz ${HOME}/work/src/
+
 rm -rf `basename $DIR`/debian
+rm -rf `basename $DIR`/zart
+rm -rf `basename $DIR`/src/gmic_libc.cpp
+rm -rf `basename $DIR`/src/gmic_libc.h
+rm -rf `basename $DIR`/src/use_libcgmic.c
 tar chvf ${TARFILE} `basename $DIR`
 gzip ${TARFILE}
 cp -f ${TARFILE}.gz ${HOME}/work/src/

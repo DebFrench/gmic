@@ -459,7 +459,8 @@ else
 endif
 
 libcgmic.o: gmic.cpp gmic.h gmic_stdlib.h CImg.h
-	@if [ ! -f gmic_libc.cpp ]; then ln -s ../../gmic-community/libcgmic/gmic_libc.cpp .; fi
+	@ln -fs ../../gmic-community/libcgmic/gmic_libc.cpp .
+	@ln -fs ../../gmic-community/libcgmic/gmic_libc.h .
 	$(CXX) -o libcgmic.o -c gmic_libc.cpp $(PIC) $(CFLAGS)
 libcgmic: libgmic.o libcgmic.o
 ifeq ($(OS),Darwin)
@@ -472,7 +473,7 @@ else
 	$(CXX) -shared -Wl,-soname,libcgmic.so.1 -o libcgmic$(SO) libcgmic.o libgmic.o $(LIBS)
 endif
 endif
-	@if [ ! -f use_libcgmic.c ]; then ln -s ../../gmic-community/libcgmic/use_libcgmic.c .; fi
+	@ln -fs ../../gmic-community/libcgmic/use_libcgmic.c .
 	$(CC) -std=c99 -o use_libcgmic use_libcgmic.c -L. -lcgmic
 
 libcgmicstatic.o: gmic.cpp gmic.h gmic_stdlib.h CImg.h
