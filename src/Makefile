@@ -385,13 +385,13 @@ ifeq ($(OS),Unix)
 	@echo "**"
 	@echo "** Start building G'MIC with default Unix configuration."
 	@echo "**"
-	$(MAKE) cli gimp lib
+	$(MAKE) cli gimp lib libc zart
 else
 ifeq ($(OS),Darwin)
 	@echo "**"
 	@echo "** Start building G'MIC with default MacOSX configuration."
 	@echo "**"
-	$(MAKE) cli gimp lib
+	$(MAKE) cli gimp lib libc zart
 else
 	@echo "**"
 	@echo "** Start building G'MIC with default Windows configuration."
