@@ -7,7 +7,6 @@ BUILDD_MEM_OK := $(strip $(shell test $(BUILDD_MEM) -gt 1800000 && echo yes))
 	dh $@ --sourcedirectory=src
 
 clean:
-	rm -f src/gmic_use_lib
 	dh $@ --sourcedirectory=src
 
 override_dh_auto_test:
