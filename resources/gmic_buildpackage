@@ -364,6 +364,7 @@ rm -f `find . -name "*~"`
 rm -r `find . -name "\#*"`
 rm -r `find . -name "CVS"`
 rm -r `find . -name ".git"`
+cd zart && qmake
 
 # Create .tar.gz source archives.
 #--------------------------------
