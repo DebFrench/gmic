@@ -637,7 +637,6 @@ uninstall:
 distclean: clean
 
 clean:
-	cd ../zart && make clean
-	rm -rf ../zart CImg.h gmic_stdlib.h gmic_libc.cpp use_libcgmic.c gmic$(EXE) gmic_gimp$(EXE) use_libgmic$(EXE) use_libcgmic$(EXE) use_libcgmic_static$(EXE) gmic*.o libgmic* libcgmic* *~
+	rm -rf CImg.h gmic_stdlib.h gmic$(EXE) gmic_gimp$(EXE) use_libgmic$(EXE) use_libcgmic$(EXE) use_libcgmic_static$(EXE) gmic*.o libgmic* libcgmic* *~
 
 # End of Makefile.
