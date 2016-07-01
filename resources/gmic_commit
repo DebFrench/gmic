@@ -15,9 +15,6 @@ cd $HOME/work/src/gmic
 git commit -uno -am "$COM"
 git push
 
-cd $HOME/work/src/gmic
-cp -rf COPYING README README.md $HOME/work/src/gmic-community
-
 echo -e "\n  ** gmic-community\n"
 cd $HOME/work/src/gmic-community
 git pull
