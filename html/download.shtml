@@ -147,7 +147,7 @@
       </pre>
       Then, get the <b><font color="#000066">G'MIC</font></b> source from the <i>git</i> repository:
       <pre style="font-family:monospace;">
-        $ git clone <a href="https://github.com/dtschump/gmic">https://github.com/dtschump/gmic.git</a> gmic-src
+        $ git clone <a href="https://github.com/dtschump/gmic">https://github.com/dtschump/gmic.git</a> gmic
       </pre>
       Alternatively, you may also prefer to get the source from <a href="http://gmic.eu/files/source/gmic_source.tar.gz">the last released stable <i>.tar.gz</i> file</a>
       instead of the current development version.<br/><br/>
@@ -156,16 +156,16 @@
       <a href="http://gmic.eu/gimp.shtml"><i>gmic_gimp</i></a> (plug-in for <a href="http://www.gimp.org">GIMP</a>)
       and <i>libgmic</i> (the <b><font color="#000066">G'MIC</font></b> C++ library). Just type:
       <pre style="font-family:monospace;">
-        $ cd gmic-src/src
+        $ cd gmic/src
         $ make
       </pre>
       and go out for a long drink (the compilation takes time). Alternatively, you may want to:<br/>
       <ul>
         <li>
-          Compile the <b><a href="libgmic.shtml">libgmic</a></b> library only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make lib</tt>&nbsp;&nbsp; instead.
+          Compile the <b><a href="gimp.shtml">GIMP plug-in</a></b> only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make gimp</tt>&nbsp;&nbsp;
         </li>
         <li>
-          Compile the <b><a href="gimp.shtml">GIMP plug-in</a></b> only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make gimp</tt>&nbsp;&nbsp;
+          Compile the <b><a href="libgmic.shtml">libgmic</a></b> library only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make lib</tt>&nbsp;&nbsp; instead.
         </li>
       </ul>
       Note that compiling issues (compiler segfault) may happen with versions of <i>g++ 4.8.1</i> and <i>4.8.2</i>.
@@ -175,7 +175,7 @@
         $ make OPENMP_CFLAGS="" OPENMP_LIBS=""
       </pre>
       Now, you should have the compiled files <tt style="font-family:monospace;">gmic</tt>, <tt style="font-family:monospace;">gmic_gimp</tt>, <tt style="font-family:monospace;">libgmic.a</tt>
-      and <tt style="font-family:monospace;">libgmic.so</tt> in your <tt style="font-family:monospace;">gmic-src/</tt> folder.<br/><br/>
+      and <tt style="font-family:monospace;">libgmic.so</tt> in your <tt style="font-family:monospace;">gmic/src/</tt> folder.<br/><br/>
 
       Additionally, you may want to compile <a href="img/zart.jpg" class="highslide" onclick="return hs.expand(this)"><b>ZArt</b></a><div class="highslide-caption">Screenshot of <b>ZArt</b> in action.</div>.
       For this, you need to install these additional dependencies:
@@ -184,15 +184,14 @@
       </pre>
       And then,
       <pre style="font-family:monospace;">
-        $ cd ../zart
-        $ qmake zart.pro
-        $ make
+        $ git clone <a href="https://github.com/dtschump/gmic-community">https://github.com/dtschump/gmic-community.git</a> ../../gmic-community
+        $ make zart
       </pre>
       And you should be able to run <tt style="font-family:monospace;">zart</tt> from here.<br/><br/>
 
       Also, please remember that the source code in the <i>git</i> repository
       is constantly under development and may be a bit unstable, so always test the latest stable archive before complaining
-      (and of course, please <a href="https://github.com/dtschump/gmic-community/issues">report bugs</a> if you encounter any).
+      (and of course, please <a href="https://github.com/dtschump/gmic/issues">report bugs</a> if you encounter any).
 
   </div></div><div id="footer"><img alt="" src="images/footer.jpg" /></div></div>
 
