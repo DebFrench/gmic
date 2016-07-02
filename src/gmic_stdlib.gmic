@@ -20809,6 +20809,7 @@ _gimp_download_all_data :
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who supported the project:"}
 #@gimp : note = note{"<i>
 #@gimp : <a href="https://plus.google.com/u/0/b/117441237982283011318/112547676857320288448/about">Paolo Finetti</a>,
+#@gimp : James Stalnaker,
 #@gimp : Luigi Scarselli,
 #@gimp : <a href="http://blog.patdavid.net/">Pat David</a>,
 #@gimp : Juan Jose Rodriguez Vela,
