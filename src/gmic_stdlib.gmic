@@ -20230,7 +20230,7 @@ __help_end : #  <-- don't remove me, used as a end marker for command '-help' !
 # This command can be superseded on the user '.gmic' file to add sources for the plug-in.
 gimp_filter_sources : -skip ${1=0}
   ({'{/$_path_user}'})
-  ({'http://gmic.eu/update$_version.gmic'},1) # Override default filters.
+  ({'http://gmic.eu/update$_version.gmic'},1) # Latest '1' to override default filters.
 
   # Include 'hot chocolate' filter.
   file_hotchocolate=${_path_rc}hotchocolate.gmic
