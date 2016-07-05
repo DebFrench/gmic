@@ -3193,7 +3193,9 @@ _update :
   -v -
   out=${_path_rc}update$_version.gmic
   -l[] cimgz:http://gmic.eu/update$_version.gmic
-    -if {h>7" && "same([{^}],'#@gmic',6)} -o raw:$out,char -endif
+    -if {h>7" && "same([{^}],'#@gmic',6)}
+      -if {$_version<174} -o raw:$out,char -else -o cimgz:$out,char -endif
+    -endif
     -rm
   -onfail -v + -error[0--3] "Command '-update' : Unreachable update file."
   -endl
