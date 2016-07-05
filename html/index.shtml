@@ -33,7 +33,8 @@
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
           <td valign="top">
-            <b><font color="#000066">G'MIC</font></b> is a full-featured open-source framework for <b><a href="https://en.wikipedia.org/wiki/Image_processing">image processing</a></b>.
+            <b><font color="#000066">G'MIC</font></b> is a full-featured open-source framework for <b><a href="https://en.wikipedia.org/wiki/Image_processing">image processing</a></b>,
+            distributed under the <b><a href="http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html">CeCILL license</a></b>.
             It provides several different <b><a href="https://en.wikipedia.org/wiki/User_interface">user interfaces</a></b> to convert/manipulate/filter/visualize
             <b>generic image datasets</b>, ranging from 1d scalar signals to 3d+t sequences of multi-spectral volumetric images, thus including 2d color images.<br/><br/>
             These user interfaces are:<br/><br/>
@@ -41,7 +42,7 @@
             <table cellpadding="10" cellspacing="0">
               <tr>
                 <td valign="top">
-                  <b>1</b> - A command-line interface <b><a href="tutorial/basics.shtml">gmic</a></b>, to use the <b><font color="#000066">G'MIC</font></b> features from a shell.
+                  <b>1</b> - A command-line interface <b><a href="tutorial/basics.shtml">gmic</a></b>, to use the <b><font color="#000066">G'MIC</font></b> image processing features from a shell.
                   In this setting, <b><font color="#000066">G'MIC</font></b> may be seen as a friendly companion to the <a href="http://www.imagemagick.org">ImageMagick</a>
                   or <a href="http://www.graphicsmagick.org">GraphicsMagick</a> software suites.
                   <p align="right"><i><font size="-1"><a href="tutorial/basics.shtml">[learn more...]</a></font></i></p>
@@ -53,7 +54,7 @@
               <tr>
                 <td valign="top">
                   <b>2</b> - A small, portable, thread-safe and multi-threaded, <i>C++</i> image processing library <b><a href="libgmic.shtml">libgmic</a></b>, to be linked to third-party applications.
-                  <a href="libgmic.shtml">Its simple API</a> allows programmers to add all <b><font color="#000066">G'MIC</font></b> image processing features in their own software without much efforts
+                  <a href="libgmic.shtml">Its simple API</a> allows programmers to add all <b><font color="#000066">G'MIC</font></b> features in their own software without much efforts
                   (a <i>C</i> API is available as well).
 
                   <p align="right"><i><font size="-1"><a href="libgmic.shtml">[learn more...]</a></font></i></p>
