@@ -13981,7 +13981,12 @@ int main(int argc, char **argv) {
   cimg_snprintf(filename_update,filename_update.width(),"%supdate%u.gmic",
                 gmic::path_rc(),gmic_version);
   try {
-    commands_update.load_raw(filename_update).append(CImg<char>::vector(0),'y');
+    try {
+      commands_update.load_cimg(filename_update);
+    } catch (...) {
+      commands_update.load_raw(filename_update);
+    }
+    commands_update.append(CImg<char>::vector(0),'y');
     try { gmic_instance.add_commands(commands_update);
     } catch (...) { is_invalid_update = true; throw; }
   } catch (...) { commands_update.assign(); }
