@@ -1860,8 +1860,8 @@ CImg<int> get_input_layers(CImgList<T>& images) {
     GeglRectangle rect;
     gegl_rectangle_set(&rect,rgn_x,rgn_y,rgn_width,rgn_height);
     GeglBuffer *buffer = gimp_drawable_get_buffer(input_layers[l]);
-    const char *const format = spectrum==1?"Y' " s_gmic_pixel_type:spectrum==2?"Y'A " s_gmic_pixel_type:
-      spectrum==3?"R'G'B' " s_gmic_pixel_type:"R'G'B'A " s_gmic_pixel_type;
+    const char *const format = spectrum==1?"Y " s_gmic_pixel_type:spectrum==2?"YA " s_gmic_pixel_type:
+      spectrum==3?"RGB " s_gmic_pixel_type:"RGBA " s_gmic_pixel_type;
     CImg<float> img(spectrum,rgn_width,rgn_height);
     gegl_buffer_get(buffer,&rect,1,babl_format(format),img.data(),0,GEGL_ABYSS_NONE);
     (img*=255).permute_axes("yzcx");
@@ -2831,8 +2831,8 @@ void process_image(const char *const command_line, const bool is_apply) {
             GeglRectangle rect;
             gegl_rectangle_set(&rect,rgn_x,rgn_y,rgn_width,rgn_height);
             GeglBuffer *buffer = gimp_drawable_get_shadow_buffer(layers[p]);
-            const char *const format = img.spectrum()==1?"Y' float":img.spectrum()==2?"Y'A float":
-              img.spectrum()==3?"R'G'B' float":"R'G'B'A float";
+            const char *const format = img.spectrum()==1?"Y float":img.spectrum()==2?"YA float":
+              img.spectrum()==3?"RGB float":"RGBA float";
             (img/=255).permute_axes("cxyz");
             gegl_buffer_set(buffer,&rect,0,babl_format(format),img.data(),0);
             g_object_unref(buffer);
@@ -2894,8 +2894,8 @@ void process_image(const char *const command_line, const bool is_apply) {
             gimp_drawable_detach(drawable);
 #else
             GeglBuffer *buffer = gimp_drawable_get_shadow_buffer(layer_id);
-            const char *const format = img.spectrum()==1?"Y' float":img.spectrum()==2?"Y'A float":
-              img.spectrum()==3?"R'G'B' float":"R'G'B'A float";
+            const char *const format = img.spectrum()==1?"Y float":img.spectrum()==2?"YA float":
+              img.spectrum()==3?"RGB float":"RGBA float";
             (img/=255).permute_axes("cxyz");
             gegl_buffer_set(buffer,NULL,0,babl_format(format),img.data(),0);
             g_object_unref(buffer);
@@ -2959,8 +2959,8 @@ void process_image(const char *const command_line, const bool is_apply) {
           gimp_drawable_detach(drawable);
 #else
           GeglBuffer *buffer = gimp_drawable_get_shadow_buffer(layer_id);
-          const char *const format = img.spectrum()==1?"Y' float":img.spectrum()==2?"Y'A float":
-            img.spectrum()==3?"R'G'B' float":"R'G'B'A float";
+          const char *const format = img.spectrum()==1?"Y float":img.spectrum()==2?"YA float":
+            img.spectrum()==3?"RGB float":"RGBA float";
           (img/=255).permute_axes("cxyz");
           gegl_buffer_set(buffer,NULL,0,babl_format(format),img.data(),0);
           g_object_unref(buffer);
@@ -3029,8 +3029,8 @@ void process_image(const char *const command_line, const bool is_apply) {
             gimp_drawable_detach(drawable);
 #else
             GeglBuffer *buffer = gimp_drawable_get_shadow_buffer(layer_id);
-            const char *const format = img.spectrum()==1?"Y' float":img.spectrum()==2?"Y'A float":
-              img.spectrum()==3?"R'G'B' float":"R'G'B'A float";
+            const char *const format = img.spectrum()==1?"Y float":img.spectrum()==2?"YA float":
+              img.spectrum()==3?"RGB float":"RGBA float";
             (img/=255).permute_axes("cxyz");
             gegl_buffer_set(buffer,NULL,0,babl_format(format),img.data(),0);
             g_object_unref(buffer);
