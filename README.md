@@ -6,7 +6,7 @@
 -----------------------
 
 **G'MIC** is a full-featured open-source framework for **[image processing](https://en.wikipedia.org/wiki/Image_processing)**. It provides several different **[user interfaces](https://en.wikipedia.org/wiki/User_interface)** to convert/manipulate/filter/visualize **generic image datasets**, ranging from _1d scalar signals_ to _3d+t sequences of multi-spectral volumetric images_, thus including _2d color images_.
-These interfaces are:
+These user interfaces are:
 
 - **1** - A small, portable, thread-safe and multi-threaded _C++_ image processing library **[libgmic](http://gmic.eu/libgmic.shtml)**, to be linked to third-party applications. [Its simple API](http://gmic.eu/libgmic.shtml) allows programmers to add all **G'MIC** image processing features in their own software without much efforts (a _C_ API is provided as well).
 
