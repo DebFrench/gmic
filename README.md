@@ -10,6 +10,8 @@ These user interfaces are:
 
 - **1** - A small, portable, thread-safe and multi-threaded _C++_ image processing library **[libgmic](http://gmic.eu/libgmic.shtml)**, to be linked to third-party applications. [Its simple API](http://gmic.eu/libgmic.shtml) allows programmers to add all **G'MIC** image processing features in their own software without much efforts (a _C_ API is provided as well).
 
+<a href="http://gmic.eu/img/gmic_libgmic.jpg">![interface_libgmic](http://gmic.eu/img/gmic_libgmic_thumb.jpg)</a>
+
 - **2** - A command-line interface **[gmic](http://gmic.eu/tutorial/basics.shtml)**, to use the **G'MIC** features from a shell. In this setting, **G'MIC** may be seen as a friendly companion to the [ImageMagick](http://www.imagemagick.org) or [GraphicsMagick](http://www.graphicsmagick.org) software suites.
 
 <a href="http://gmic.eu/img/gmic_cli.jpg">![cli_interface](http://gmic.eu/img/gmic_cli_thumb.jpg)<a>
@@ -25,8 +27,6 @@ These user interfaces are:
 - **5** - A Qt-based interface **[ZArt](https://www.youtube.com/watch?v=k1l3RdvwHeM)**, for real-time processing of video streaming coming from webcams or video files.
 
 <a href="http://gmic.eu/img/gmic_zart.jpg">![interface_zart](http://gmic.eu/img/gmic_zart_thumb.jpg)</a>
-
-<a href="http://gmic.eu/img/gmic_libgmic.jpg">![interface_libgmic](http://gmic.eu/img/gmic_libgmic_thumb.jpg)</a>
 
 -----------------------
 
