@@ -159,7 +159,7 @@
         $ cd gmic/src
         $ make
       </pre>
-      and go out for a long drink (the compilation takes time). Alternatively, you may want to:<br/>
+      and go out for a long drink (there are only few source files, but the compilation takes time). Alternatively, you may want to:<br/>
       <ul>
         <li>
           Compile the <b><a href="gimp.shtml">GIMP plug-in</a></b> only. If so, type &nbsp;&nbsp;<tt style="font-family:monospace;">$ make gimp</tt>&nbsp;&nbsp;
@@ -187,7 +187,6 @@
         $ git clone <a href="https://github.com/dtschump/gmic-community">https://github.com/dtschump/gmic-community.git</a> ../../gmic-community
         $ make zart
       </pre>
-      And you should be able to run <tt style="font-family:monospace;">zart</tt> from here.<br/><br/>
 
       Also, please remember that the source code in the <i>git</i> repository
       is constantly under development and may be a bit unstable, so always test the latest stable archive before complaining
