@@ -46,6 +46,8 @@ Other open-source projects are known to use some of the <b><font color="#000066"
 - **[Photoflow](http://aferrero2707.github.io/PhotoFlow/)**, a fully non-destructive photo retouching program.
 - **[Veejay](http://veejayhq.net/)**, a visual instrument and realtime video sampler.
 
+Purchasing specific **commercial licenses** for using G'MIC in closed-source applications is also possible. **[Contact us](http://tschumperle.users.greyc.fr)** if you are interested.
+
 -----------------------
 
 <a href="http://gmic.eu">![Logo](http://gmic.eu/img/logos2.jpg)</a>
