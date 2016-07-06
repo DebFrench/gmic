@@ -1864,6 +1864,9 @@ CImg<int> get_input_layers(CImgList<T>& images) {
       spectrum==3?"R'G'B' " s_gmic_pixel_type:"R'G'B'A " s_gmic_pixel_type;
     CImg<float> img(spectrum,rgn_width,rgn_height);
     gegl_buffer_get(buffer,&rect,1,babl_format(format),img.data(),0,GEGL_ABYSS_NONE);
+//    GimpColorTransform transform = gimp_color_transform_new(gimp_image_get_color_profile(image),gimp_drawable_get_format(drawable),gimp_color_profile_new_srgb(),babl_format("R'G'B'A float"),intent,flags);
+// if (transform==NULL) gegl_buffer_copy()...
+// else gimp_color_transform_process_buffer(transform, gimp_drawable_get_buffer (drawable), rect1, tmp_buffer, rect2);
     (img*=255).permute_axes("yzcx");
     g_object_unref(buffer);
 #endif
