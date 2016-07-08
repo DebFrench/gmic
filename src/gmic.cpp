@@ -10083,7 +10083,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           // Rotate.
           if (!std::strcmp("-rotate",command)) {
             gmic_substitute_args();
-            float angle = 0, zoom = 1, cx = 0, cy = 0;
+            float angle = 0, cx = 0, cy = 0;
             unsigned int interpolation = 1;
             sep0 = sep1 = *argx = *argy = 0;
             boundary = 0;
@@ -10094,9 +10094,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                  cimg_sscanf(argument,"%f,%u,%u%c",
                              &angle,&interpolation,&boundary,&end)==3 ||
                  cimg_sscanf(argument,"%f,%u,%u,%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
-                             &angle,&interpolation,&boundary,argx,argy,&end)==5 ||
-                 cimg_sscanf(argument,"%f,%u,%u,%255[0-9.eE%+-],%255[0-9.eE%+-],%f%c",
-                             &angle,&interpolation,&boundary,argx,argy,&zoom,&end)==6) &&
+                             &angle,&interpolation,&boundary,argx,argy,&end)==5) &&
                 (!*argx ||
                  cimg_sscanf(argx,"%f%c",&cx,&end)==1 ||
                  (cimg_sscanf(argx,"%f%c%c",&cx,&sep0,&end)==2 && sep0=='%')) &&
@@ -10116,7 +10114,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                   const float
                     ncx = sep0=='%'?cx*(img.width() - 1)/100:cx,
                     ncy = sep1=='%'?cy*(img.height() - 1)/100:cy;
-                  gmic_apply(rotate(angle,ncx,ncy,zoom,interpolation,boundary));
+                  gmic_apply(rotate(angle,ncx,ncy,interpolation,boundary));
                 }
               } else {
                 print(images,0,"Rotate image%s of %g°, %s interpolation and %s boundary conditions.",
