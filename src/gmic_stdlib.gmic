@@ -18995,7 +18995,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
         n1={sqrt(($u1)^2+($v1)^2)}
         nu1={if($n1>135,$u1*135/$n1,$u1)} nv1={if($n1>135,$v1*135/$n1,$v1)} nw1={sqrt(max(0,18225-($nu1)^2-($nv1)^2))}
         u={$nv0*$nw1-$nw0*$nv1} v={$nw0*$nu1-$nu0*$nw1} w={$nv0*$nu1-$nu0*$nv1} n={sqrt(($u)^2+($v)^2+($w)^2)}
-        -rotation3d[] $u,$v,$w,{asin($n/18225)*180/pi} -mv[pose3d] $! -**[-2,-1] -nm. pose3d
+        -rotation3d[] $u,$v,$w,{-asin($n/18225)*180/pi} -mv[pose3d] $! -**[-2,-1] -nm. pose3d
         u0=$u1 v0=$v1 -rm[visu_3d]
       -endif
     -elif {!($b&1)} u0=
