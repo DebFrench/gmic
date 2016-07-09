@@ -7282,11 +7282,11 @@ _resize3dz : -check "$1>0 && ${2=3}>=0 && $2<=6 && ${3=0}>=0 && $3<=2 && ${4=0}>
     -r[$>] {max(1,w*$size/d)},{max(1,h*$size/d)},{max(1,$size)},100%,${2-7}
   -endl -done -v +
 
-#@gmic rotate : angle,_interpolation,_boundary,_center_x[%],_center_y[%] : (+)
-#@gmic : Rotate selected images with specified angle (in deg.).
+#@gmic rotate : angle,_interpolation,_boundary,_center_x[%],_center_y[%] : u,v,w,angle,interpolation,boundary,_center_x[%],_center_y[%],_center_z[%] : (+)
+#@gmic : Rotate selected images with specified angle (in deg.), and optionally 3d axis (u,v,w).
 #@gmic : 'interpolation' can be { 0=none | 1=linear | 2=bicubic }.
 #@gmic : 'boundary' can be { 0=dirichlet | 1=neumann | 2=periodic }.
-#@gmic : When rotation center is specified, the size of the image is preserved.
+#@gmic : When a rotation center (cx,cy,_cz) is specified, the size of the image is preserved.
 #@gmic : Default values: 'interpolation=1', 'boundary=0' and 'center_x=center_y=(undefined)'.
 #@gmic : $ image.jpg --rotate -25,1,2,50%,50% -rotate[0] 25
 

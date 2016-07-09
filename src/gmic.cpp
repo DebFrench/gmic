@@ -6508,7 +6508,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                  (cimg_sscanf(argc,"%f%c%c",&r,&sep0,&end)==2 && sep0=='%'))) {
               if (!*argc) r = R;
               print(images,0,"Draw %s ellipse at (%g%s,%g%s) with radii (%g%s,%g%s) on image%s, "
-                    "with orientation %g°, opacity %g and color (%s).",
+                    "with orientation %g deg., opacity %g and color (%s).",
                     sep1=='x'?"outlined":"filled",
                     x,sepx=='%'?"%":"",
                     y,sepy=='%'?"%":"",
@@ -10084,9 +10084,9 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           // Rotate.
           if (!std::strcmp("-rotate",command)) {
             gmic_substitute_args();
-            float angle = 0, cx = 0, cy = 0;
+            float angle = 0, u = 0, v = 0, w = 0, cx = 0, cy = 0, cz = 0;
             unsigned int interpolation = 1;
-            sep0 = sep1 = *argx = *argy = 0;
+            char sep2 = sep1 = sep0 = *argx = *argy = 0;
             boundary = 0;
             if ((cimg_sscanf(argument,"%f%c",
                              &angle,&end)==1 ||
@@ -10104,7 +10104,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                  (cimg_sscanf(argy,"%f%c%c",&cy,&sep1,&end)==2 && sep1=='%')) &&
                 interpolation<=2 && boundary<=2) {
               if (*argx) {
-                print(images,0,"Rotate image%s of %g°, %s interpolation, %s boundary conditions "
+                print(images,0,"Rotate image%s of %g deg., %s interpolation, %s boundary conditions "
                       "with center at (%g%s,%g%s).",
                       gmic_selection.data(),angle,
                       interpolation==0?"nearest-neighbor":interpolation==1?"linear":"cubic",
@@ -10118,12 +10118,20 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_apply(rotate(angle,ncx,ncy,interpolation,boundary));
                 }
               } else {
-                print(images,0,"Rotate image%s of %g°, %s interpolation and %s boundary conditions.",
+                print(images,0,"Rotate image%s of %g deg., %s interpolation and %s boundary conditions.",
                       gmic_selection.data(),angle,
                       interpolation==0?"nearest-neighbor":interpolation==1?"linear":"cubic",
                       boundary==0?"dirichlet":boundary==1?"neumann":"periodic");
                 cimg_forY(selection,l) gmic_apply(rotate(angle,interpolation,boundary));
               }
+            } else if ((cimg_sscanf(argument,"%f,%f,%f,%f,%u,%u%c",
+                                    &u,&v,&w,&angle,&interpolation,&boundary,&end)==6) &&
+                       interpolation<=2 && boundary<=2) {
+              print(images,0,"Rotate image%s around axis (%g,%g,%g) with angle %g deg., %s interpolation and %s boundary conditions.",
+                    gmic_selection.data(),u,v,w,angle,
+                    interpolation==0?"nearest-neighbor":interpolation==1?"linear":"cubic",
+                    boundary==0?"dirichlet":boundary==1?"neumann":"periodic");
+              cimg_forY(selection,l) gmic_apply(rotate(u,v,w,angle,interpolation,boundary));
             } else arg_error("rotate");
             is_released = false; ++position; continue;
           }
@@ -10205,7 +10213,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
             float u = 0, v = 0, w = 1, angle = 0;
             if (cimg_sscanf(argument,"%f,%f,%f,%f%c",
                             &u,&v,&w,&angle,&end)==4) {
-              print(images,0,"Rotate 3d object%s around axis (%g,%g,%g), with angle %g°.",
+              print(images,0,"Rotate 3d object%s around axis (%g,%g,%g), with angle %g deg.",
                     gmic_selection.data(),
                     u,v,w,
                     angle);
