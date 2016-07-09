@@ -15044,13 +15044,14 @@ apply_video : -skip "${1=},${2=},${3=}" -check "isint(${4=0}) && $4>=0 && isint(
 #@gmic average_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Compute the average frame of a file sequence.
 #@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
   -e[^-1] "Average frames of file sequence '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
   -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",$2,$3,$4,"$5" -v +
 
 _average_files : -skip "${5=}"
-  -is_videofilename "$5" is_outvideo=${}
+  -is_avifilename "$5" is_outavi=${}
   frame=$2 i=0 go_on=1 N=0
   -do
     -l[] $1 -nm. img -onfail go_on=0 -endl
@@ -15061,7 +15062,7 @@ _average_files : -skip "${5=}"
     -if {$!>1} -+ -endif
     -if {narg("$5")}
       --/. $N -c. 0,255
-      -if $is_outvideo -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} -endif
+      -if $is_outavi -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} -endif
       -rm. i+=1
     -endif
     -if {*}
@@ -15076,7 +15077,7 @@ _average_files : -skip "${5=}"
     -endif
   -while {$go_on" && "($3==-1" || "$frame<=$3)}
   -/ $N -c 0,255
-  -if $is_outvideo -o[] "$5",25,mp4v,0 -endif
+  -if $is_outavi -o[] "$5",25,mp4v,0 -endif
 
 #@gmic average_video : input_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Compute the average frame of a video file.
@@ -15089,13 +15090,14 @@ average_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
 #@gmic fade_files : "filename_pattern",_number_of_fading_frames>=1,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Create temporal fading sequence from an input file sequence.
 #@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
 #@gmic : Default values: '_number_of_fading_frames=20', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
   -e[^-1] "Fade frames of file sequence '$1', with $2 fading frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
   -v - -arg2var _file,${"-files \"$1\""} -_fade_files[] "${_file{$frame+1}}",$2,$3,$4,$5,"$6" -v +
 
 _fade_files : -skip "${6=}"
-  -is_videofilename "$6" is_outvideo=${}
+  -is_avifilename "$6" is_outavi=${}
   frame=$3 i=0
   -l
     $1 w={w} h={h} s={s} # Load first image.
@@ -15108,7 +15110,7 @@ _fade_files : -skip "${6=}"
         -v + -e[] "\r  - "$title -v -
         --j[0] [1],0,0,0,0,{$>/$2}
         -if {narg("$6")}
-          -if $is_outvideo -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
+          -if $is_outavi -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
         -endif
         -if {*}
           -w. -1,-1,0,$title
@@ -15121,7 +15123,7 @@ _fade_files : -skip "${6=}"
       -rm[0] pframe=$frame frame+=$5
     -while {($4==-1" || "$frame<=$4)}
   -onfail -rm
-  -if $is_outvideo -o[] "$6",25,mp4v,0 -endif
+  -if $is_outavi -o[] "$6",25,mp4v,0 -endif
   -endl
 
 #@gmic fade_video : input_filename,_number_of_fading_frames>=1,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
@@ -16143,6 +16145,11 @@ is_3d :
 # Faster version.
 _is_3d :
   -v - -u {"h>6 && int(i[0])==67 && int(i[1])==73 && int(i[2])==109 && int(i[3])==103 && int(i[4])==51 && int(i[5])==100"} -v +
+
+#@gmic is_avifilename
+#@gmic : Return 1 if extension of specified filename is typical from video files.
+is_avifilename : -skip "${1=}"
+  -v - 0 -nm. "_$1" -u {"lowercase(['"{x}"'])=='avi'"} -rm. -v +
 
 #@gmic is_image_arg : string
 #@gmic : Return 1 if specified string looks like '[ind]'.
