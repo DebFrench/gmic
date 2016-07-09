@@ -15092,7 +15092,7 @@ _fade_files : -skip "${6=}"
   frame=$3 i=0
   -l
     $1 w={w} h={h} s={s} # Load first image.
-    -if {*} -w. ${-fitscreen\ $w,$h} -endif
+    -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
     pframe=$frame frame+=$5
     -do
       $1 -to_colormode. $s -r. $w,$h
