@@ -10139,8 +10139,8 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                         (cimg_sscanf(argz,"%f%c%c",&cz,&sep1,&end)==2 && sep2=='%')) &&
                        interpolation<=2 && boundary<=2) { // 3d rotation
               if (*argx) {
-                print(images,0,"Rotate image%s around axis (%g,%g,%g) with angle %g deg., %s interpolation, %s boundary conditions "
-                      "and center at (%g%s,%g%s,%g%s).",
+                print(images,0,"Rotate image%s around axis (%g,%g,%g) with angle %g deg., %s interpolation, "
+                      "%s boundary conditions and center at (%g%s,%g%s,%g%s).",
                       gmic_selection.data(),u,v,w,angle,
                       interpolation==0?"nearest-neighbor":interpolation==1?"linear":"cubic",
                       boundary==0?"dirichlet":boundary==1?"neumann":"periodic",
@@ -10154,7 +10154,8 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_apply(rotate(u,v,w,angle,ncx,ncy,ncz,interpolation,boundary));
                 }
               } else {
-                print(images,0,"Rotate image%s around axis (%g,%g,%g) with angle %g deg., %s interpolation and %s boundary conditions.",
+                print(images,0,"Rotate image%s around axis (%g,%g,%g) with angle %g deg., %s interpolation "
+                      "and %s boundary conditions.",
                       gmic_selection.data(),u,v,w,angle,
                       interpolation==0?"nearest-neighbor":interpolation==1?"linear":"cubic",
                       boundary==0?"dirichlet":boundary==1?"neumann":"periodic");
