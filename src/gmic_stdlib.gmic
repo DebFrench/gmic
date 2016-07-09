@@ -15097,7 +15097,7 @@ _fade_files : -skip "${6=}"
     -do
       $1 -to_colormode. $s -r. $w,$h
       -repeat $2
-        -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")." -v -
+        -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2"). " -v -
         --j[0] [1],0,0,0,0,{$>/$2}
         -if {narg("$6")} -filename "$6",$i i+=1 -o. ${} -endif
         -if {*}
