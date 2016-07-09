@@ -15068,7 +15068,10 @@ _average_files : -skip "${5=}"
     -if {$!>1} -+ -endif
     -if {narg("$5")} --/. $N -c. 0,255 -o. ${-filename\ "$5",$i} -rm. i+=1 -endif
     -if {*}
-      --n 0,255 -w. -1,-1,0,"Frame ""#"$frame
+      --n 0,255
+      -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,"Frame ""#"$frame
+      -else -w. -1,-1,0,"Frame ""#"$frame
+      -endif
       -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
       -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
       -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
@@ -15137,7 +15140,11 @@ _median_files :
         -l[] $1 -nm. img -onfail go_on=0 -endl
         -if $img
           -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
-          -if {{*}" && "!$>} -w[img] -1,-1,0,"Frame ""#"$frame -endif
+          -if {{*}" && "!$>}
+            -if {!narg($wh)} wh=${-fitscreen[]\ {img,w},{img,h}} -w[img] $wh,0,"Frame ""#"$frame
+            -else -w[img] -1,-1,0,"Frame ""#"$frame
+            -endif
+          -endif
           -rows[img] $row0,$row1 -f[img] ":++i(#-2,x,y,i,c)"
           -rm[img]
           frame+=$4 N+=1
@@ -15164,7 +15171,11 @@ _median_files :
           -l[] $1 -nm. img -onfail go_on=0 -endl
           -if $go_on
             -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
-            -if {{*}" && "!$>} -w. -1,-1,0,"Frame ""#"$frame -endif
+            -if {{*}" && "!$>}
+              -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,"Frame ""#"$frame
+              -else -w. -1,-1,0,"Frame ""#"$frame
+              -endif
+            -endif
             -rows. $row0,$row1
             frame+=$4
           -endif
