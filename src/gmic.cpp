@@ -10209,7 +10209,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
                     gmic_selection.data(),
                     u,v,w,
                     angle);
-              CImg<float>::rotation_matrix(u,v,w,(float)(angle*cimg::PI/180)).move_to(vertices);
+              CImg<float>::rotation_matrix(u,v,w,angle).move_to(vertices);
               cimg_forY(selection,l) {
                 const unsigned int uind = selection[l];
                 CImg<T>& img = images[uind];
