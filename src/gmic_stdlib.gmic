@@ -3153,7 +3153,7 @@ testimage2d : -check "${1=512}>0 && ${2=$1}>0 && ${3=3}>0"
   Dmax2={0.15*min($1,$2)^2}
   $1,$2,1,$3,'X=x-w/2;Y=y-h/2;a=atan2(Y,X);if(X^2+Y^2<=$Dmax2,255*abs(cos(c+200*(x/w-0.5)*(y/h-0.5))),850*(a%(0.1*(c+1))))'
   -polygon. 4,20%,20%,60%,20%,70%,70%,35%,45%,0.9,0,255,0
-  -torus3d {$1/7},{$1/20} -r3d. 0,1,1,80 -col3d. 128,200,255
+  -torus3d {$1/7},{$1/20} -r3d. 0,1,1,-80 -col3d. 128,200,255
   -j3d.. [-1],30%,70%,0,1,5,0,0 -rm. -round. 1
   -nm. "[2d test image]"
   -v +
@@ -10865,12 +10865,12 @@ axes3d : -check ${4=23}>0 -skip ${1=1},${2=$1},${3=$2},"${5=X},${6=Y},${7=Z}"
   -_axes3d "O",$4 --3d. $m3,$m3,$m3
   -if $1
     -line3d 0,0,0,$1,0,0
-    -cone3d $m,{2*$m},16 -r3d. 0,1,0,-90 -+3d. {$1-$m2},0,0
+    -cone3d $m,{2*$m},16 -r3d. 0,1,0,90 -+3d. {$1-$m2},0,0
     -_axes3d "$5",$4 -+3d. {$1+$m3},0,0
   -endif
   -if $2
     -line3d 0,0,0,0,$2,0
-    -cone3d $m,{2*$m},16 -r3d. 1,0,0,90 -+3d. 0,{$2-$m2},0
+    -cone3d $m,{2*$m},16 -r3d. 1,0,0,-90 -+3d. 0,{$2-$m2},0
     -_axes3d "$6",$4 -+3d. 0,{$2+$m3},0
   -endif
   -if $3
@@ -11279,15 +11279,16 @@ histogram3d :
 #@gmic : $ image.jpg -animate flower,"30,0","30,5",6 -image6cube3d
 image6cube3d :
   -e[^-1] "Generate 3d mapped cubes from image$?."
-  -v - M={max(${-max_wh})} -r $M,$M,1,3 -imageplane3d -n3d -c3d -repeat {int($!/6)}
-    -+3d[-6] 0,0,-0.5
-    -r3d[-5] 1,0,0,180 -+3d[-5] 0,0,0.5
-    -r3d[-4] 0,1,0,-90 -+3d[-4] -0.5,0,0
-    -r3d... 0,1,0,90 -+3d... 0.5,0,0
-    -r3d.. 1,0,0,90 -+3d.. 0,-0.5,0
-    -r3d. 1,0,0,-90 -+3d. 0,0.5,0
-    -+3d[-6--1] -nm. "[3d image cube]"
-  -mv. 0 -done -v +
+  -v - M={max(${-max_wh})} -r $M,$M,1,3 -imageplane3d -n3d -c3d
+  -repeat {int($!/6)} -l[$>-{$>+5}]
+    -+3d[0] 0,0,-0.5
+    -r3d[1] 0,1,0,90 -+3d[1] -0.5,0,0
+    -r3d[2] 0,1,0,180 -+3d[2] 0,0,0.5
+    -r3d[3] 0,1,0,270 -+3d[3] 0.5,0,0
+    -r3d[4] 1,0,0,90 -+3d[4] 0,0.5,0
+    -r3d[5] 1,0,0,270 -+3d[5] 0,-0.5,0
+    -+3d -nm "[3d image cube]"
+  -endl -done -v +
 
 #@gmic imageblocks3d : _maximum_elevation,_smoothness[%]>=0
 #@gmic : Generate 3d blocks from selected images.
@@ -11779,7 +11780,7 @@ projections3d : -skip ${1=50%},${2=50%},${3=50%},${4=1}
     --columns.. $1,$1 -permute. zyxc
     -slices... $3,$3 -r[-3--1] 100%,100%,1,3
     -imageplane3d[-3--1]
-    -r3d. 0,1,0,90 -r3d.. 1,0,0,-90
+    -r3d. 0,1,0,-90 -r3d.. 1,0,0,90
     -+3d... 0,0,$z -+3d.. 0,$y,0 -+3d. $x,0,0
     -+3d[-3--1] -o3d. 0.8
     -if $4 -box3d $w,$h,$d -p3d. 1 -o3d. 0.4 -+3d[-2,-1] -endif
@@ -12668,10 +12669,10 @@ frame_cube : -check "${1=1}>=0" -skip ${2=0},${3=0},${4=0},${5=0},${6=0},${7=0}
     -else
       m={max(w,h)} w={w} h={h} s={s}
       -imageplane3d -c3d -/3d. $w,$h,1
-      --_frame_cube[0] $4 -r3d. 0,1,0,90 -+3d. -0.5,0,-0.5  # Left side.
-      --_frame_cube[0] $5 -r3d. 0,1,0,-90 -+3d. 0.5,0,-0.5  # Right side.
-      --_frame_cube[0] $6 -r3d. 1,0,0,90 -+3d. 0,0.5,-0.5   # Lower side.
-      --_frame_cube[0] $7 -r3d. 1,0,0,-90 -+3d. 0,-0.5,-0.5 # Upper side.
+      --_frame_cube[0] $4 -r3d. 0,1,0,-90 -+3d. -0.5,0,-0.5  # Left side.
+      --_frame_cube[0] $5 -r3d. 0,1,0,90 -+3d. 0.5,0,-0.5  # Right side.
+      --_frame_cube[0] $6 -r3d. 1,0,0,-90 -+3d. 0,0.5,-0.5   # Lower side.
+      --_frame_cube[0] $7 -r3d. 1,0,0,90 -+3d. 0,-0.5,-0.5 # Upper side.
       -+3d 0,0,1 -+3d -*3d $w,$h,$m  # Append sides together.
       f=1000
       cx=$2*$w/2*($f+$m*$1)/$f
@@ -13142,7 +13143,7 @@ puzzle : -check "isint(${1=512}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=
   -e[^-1] "Draw $3x$4 puzzle pattern on image$?, with curvature $5, centering $6, connectors variability $7 and resolution $8."
   -v - -l[]
     -if {$4>=2} -_puzzle[] $3,{$4-1},${5-8} -+3d. 0,1 -endif
-    -if {$3>=2} -_puzzle[] $4,{$3-1},${5-8} -r3d. 0,0,1,90 -+3d. 1,$4 -endif
+    -if {$3>=2} -_puzzle[] $4,{$3-1},${5-8} -r3d. 0,0,1,-90 -+3d. 1,$4 -endif
     -*3d {$1/$3},{$2/$4} -quadrangle3d 0,0,0,{$1-1},0,0,{$1-1},{$2-1},0,0,{$2-1},0 -p3d. 1 -+3d -col3d 1
     $1,$2 -j3d. [-2],0,0,0,1,1,0,0 -rm..
   -endl -v +
@@ -13910,7 +13911,7 @@ stars : -check "${1=10%}>=0 && ${2=1}>=0 && ${3=32}>0 && ${4=5}>=1 && ${5=0.38}>
 
   # Generate star sprites.
   -star3d $4,$5 -col3d. 255 -*3d. $3
-  -l. -repeat 4 {round(2*$3)},{round(2*$3)} -j3d. [0],50%,50%,0,1,2,0,0 -r3d[0] 0,0,1,90 -done -rm[0] -endl
+  -l. -repeat 4 {round(2*$3)},{round(2*$3)} -j3d. [0],50%,50%,0,1,2,0,0 -r3d[0] 0,0,1,-90 -done -rm[0] -endl
   -autocrop[-4--1] 0 -r2dy[-4--1] $3 -b[-4--1] $6,0 -r[-4--1] 100%,100%,1,4
   -repeat 4 -sh[{-1-$>}] 0,2 -fc. $7,$8,$9 -rm. -done
 
@@ -15307,7 +15308,7 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
       x=0
       -repeat $2
         lw={$i,w} lh={$i,h}
-        -imageplane3d[$i] -imageplane3d[$N] -r3d[$N] ${rot$i},-180 -c3d[$i,$N] -+3d[$i,$N]
+        -imageplane3d[$i] -imageplane3d[$N] -r3d[$N] ${rot$i},180 -c3d[$i,$N] -+3d[$i,$N]
         x$i=$x y$i=$y x+=$lw i+=1
       -done
       y+=$lh
@@ -15315,7 +15316,7 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
 
     # Generate intermediate animation frames.
     -repeat {$1-2}
-      -repeat $N -r3d[$>] ${rot$>},{180/($1-1)} --+3d[$>] ${x$>},${y$>},0 -done
+      -repeat $N -r3d[$>] ${rot$>},{180/(1-$1)} --+3d[$>] ${x$>},${y$>},0 -done
       -+3d[-$N--1] -c3d.
 
       -if $7 # Antialiased rendering.
@@ -20565,7 +20566,7 @@ gimp_logo_version1 : -skip "${1=Plug-in for GIMP}"
   -isosurface3d 50%
   -col3d {u(150,255)},{u(150,255)},{u(150,255)}
   -sphere3d 8 -col3d. {u(150,255)},{u(150,255)},{u(150,255)} -+3d. 72,-6 -+3d -c3d. -rv3d
-  -db3d 0 -sl3d 0.2 -ss3d 1.3 -r3d. 1,0,0,30 -f3d 120 -*3d. 1.5
+  -db3d 0 -sl3d 0.2 -ss3d 1.3 -r3d. 1,0,0,-30 -f3d 120 -*3d. 1.5
   230,120,1,3 -j3d. [-2],50%,30%,0,1,4 -rm..
   0 -t. "$1",0,0,13,1,255,255,255 -j.. [-1],{({-2,w}-w)/2},75% -rm.
   -to_rgba -replace_color 0,0,0,0,0,255,0,0,0,0 -drop_shadow 6,6,2
@@ -28442,7 +28443,7 @@ gimp_render3d : -skip ${14=1}
   -n3d -c3d -m3d {round($13)} f3d={0.5*max($width,$height)/tan($7*pi/360)}
   -f3d $f3d -l3d {$8*$f3d},{$9*$f3d},{$10*$f3d} -sl3d $11 -ss3d $12
   -repeat $! -l[$>]
-    -*3d {$3*max($width,$height)} -r3d 0,0,1,$6 -r3d 0,1,0,$5 -r3d 1,0,0,$4
+    -*3d {$3*max($width,$height)} -r3d 0,0,1,{-$6} -r3d 0,1,0,{-$5} -r3d 1,0,0,{-$4}
     $width,$height,1,3,-1
     -j3d. [-2],50%,50% -rm..
     -to_rgba -replace_color 0,0,-1,-1,-1,255,0,0,0,0
@@ -28481,7 +28482,7 @@ gimp_blocks3d :
     -imageblocks3d $3,$2%
     --3d. {$w/2},{$h/2} f={$4*$M/($m*(2-$16))} -*3d $f,$f,{$f*abs($3*$1/100)}
     -if {$3>0} -r3d 1,0,0,180 -endif
-    -r3d 0,0,1,$5 -r3d 1,0,0,$6
+    -r3d 0,0,1,$5 -r3d 1,0,0,-$6
 
     # Render object.
     -if $16 {2*$M},{2*$M},1,4,-1 -else $M,$M,1,4,-1 -endif
