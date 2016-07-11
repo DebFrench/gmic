@@ -14995,8 +14995,8 @@ apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
   -while {{*}" && "!{*,ESC}" && "!{*,Q}} -camera $2,0 -endl -v +
 
 #@gmic apply_files : "filename_pattern",_"command",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Apply a G'MIC command on specified input files, in a streamed way.
-#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : Apply a G'MIC command on specified input image files, in a streamed way.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'command=(undefined)', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 apply_files : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${2=},${6=}"
@@ -15005,7 +15005,7 @@ apply_files : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==
 
 #@gmic apply_video : video_filename,_"command",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Apply a G'MIC command on all frames of the specified input video file, in a streamed way.
-#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 apply_video : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${2=},${6=}"
@@ -15040,8 +15040,8 @@ _apply_stream : -skip "${2=},${6=}"
   -if $is_outavi -o[] "$6",25,mp4v,0 -endif
 
 #@gmic average_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Average specified input files, in a streamed way.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Average specified input image files, in a streamed way.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
@@ -15050,7 +15050,7 @@ average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
 
 #@gmic average_video : video_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Average frames of specified input video file, in a streamed way.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
@@ -15088,8 +15088,8 @@ _average_stream : -skip "${5=}"
   -if $is_outavi -o[] "$5",25,mp4v,0 -endif
 
 #@gmic fade_files : "filename_pattern",_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Generate a temporal fading from specified input files, in a streamed way.
-#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : Generate a temporal fading from specified input image files, in a streamed way.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension 'avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
@@ -15097,8 +15097,8 @@ fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint($
   -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_fade_stream[] "${_file{$frame+1}}",${2-5},"$6" -v +
 
 #@gmic fade_video : video_filename,_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal fading sequence from frames of an input video file.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Create a temporal fading sequence from frames of an input video file, in a streamed way.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_video : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
   -e[^-1] "Fade frames of input video file '$1', with $2 inner frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
@@ -15156,20 +15156,32 @@ files2video : -check "isint(${3=25}) && $3>0" -skip "${2=output.avi}",${4=mp4v}
   -o $"$2",0,0,0 -v +
 
 #@gmic median_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1,_is_fast_approximation={ 0 | 1 }
-#@gmic : Compute the median frame of a video file, doing it by blocks of rows to save memory usage.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Compute the median frame of specified input image files, in a streamed way.
+#@gmic : If a display window is opened, rendered frame is displayed in it during processing.
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1', 'frame_rows=20%' and 'is_fast_approximation=1'.
 median_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=20%}>0 && isval(${6=1})"
   -v - s0="fast" s1="precise"
-  -v + -e[^-1] "Compute median frame of file sequence '$1', with first frame $2, last frame $3, frame step $4, frame rows $5, using "${s{!$6}}" algorithm." -v -
+  -v + -e[^-1] "Compute median of input image files '$1', with first frame $2, last frame $3, frame step $4, frame rows $5, using "${s{!$6}}" algorithm." -v -
+  -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${}
   -l[]
-    -arg2var _file,${"-files \"$1\""}
     -i[res] ${_file{$frame+1}} -f. 0
-    -_median_files "${_file{$frame+1}}",${2-6}
+    -_median_stream "${_file{$frame+1}}",${2-6}
   -endl -v +
 
-_median_files :
-  -if {$3==-1} max_frame="(undefined)" -else max_frame=$3 -endif
+#@gmic median_video : video_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1,_is_fast_approximation={ 0 | 1 }
+#@gmic : Compute the median of all frames of a video file, in a streamed way.
+#@gmic : If a display window is opened, rendered frame is displayed in it during processing.
+#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1', 'frame_rows=100%' and 'is_fast_approximation=1'.
+median_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=100%}>0 && isval(${6=1})"
+  -v - s0="fast" s1="precise"
+  -v + -e[^-1] "Compute median frame of input video file '$1', with first frame $2, last frame $3, frame step $4, frame rows $5, using "${s{!$6}}" algorithm." -v -
+  _N=
+  -l[]
+    -i[res] "$1",0 -f. 0
+    -_median_stream "\"$1\",$frame",${2-6}
+  -endl -v +
+
+_median_stream :
   h1={h-1} drows={round(${-is_percent\ $5}?$5*h:$5)}
   nb_iter={round(h/$drows,1,1)}
   -repeat $nb_iter
@@ -15184,10 +15196,11 @@ _median_files :
       -do
         -l[] $1 -nm. img -onfail go_on=0 -endl
         -if $img
-          -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
+          -v + -e[] "\r    > Frame ""#"$frame$_N"        " -v -
           -if {{*}" && "!$>}
-            -if {!narg($wh)} wh=${-fitscreen[]\ {img,w},{img,h}} -w[img] $wh,0,"Frame ""#"$frame
-            -else -w[img] -1,-1,0,"Frame ""#"$frame
+            title="[G'MIC] Frame ""#"$frame
+            -if {!narg($wh)} wh=${-fitscreen[]\ {img,w},{img,h}} -w[img] $wh,0,$title
+            -else -w[img] -1,-1,0,$title
             -endif
           -endif
           -rows[img] $row0,$row1 -f[img] ":++i(#-2,x,y,i,c)"
@@ -15215,10 +15228,11 @@ _median_files :
         -do
           -l[] $1 -nm. img -onfail go_on=0 -endl
           -if $go_on
-            -v + -e[] "\r    > Frame "$frame"/"$max_frame"." -v -
+            -v + -e[] "\r    > Frame ""#"$frame$_N"        " -v -
             -if {{*}" && "!$>}
-              -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,"Frame ""#"$frame
-              -else -w. -1,-1,0,"Frame ""#"$frame
+              title="[G'MIC] Frame ""#"$frame
+              -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,$title
+              -else -w. -1,-1,0,$title
               -endif
             -endif
             -rows. $row0,$row1
@@ -15226,20 +15240,20 @@ _median_files :
           -endif
         -while {$go_on" && "($3==-1" || "$frame<=$3)}
         -v + -e[] "\r    > Compute median blending of "$!" frames." -v -
-        -__median_files
+        -__median_stream
       -endl
     -endif
 
-    max_frame={$frame-$4}
+    _N=/{$frame-$4}
     -j[res] [-1],0,$row0
-    -if {*} -w[res] -1,-1,0,"Iteration ""#"$> -endif
+    -if {*} -w[res] -1,-1,0,"[G'MIC] Iteration ""#"$> -endif
     -rm.
 
   -done
   -v + -e[] "- Done!" -v -
 
 # Median blending optimized to deal with a lot of input frames.
-__median_files :
+__median_stream :
   -if {$!<2} -return
   -elif {$!==2} -+ -/ 2
   -else
@@ -15267,18 +15281,6 @@ __median_files :
     -endif
   -endif
 
-#@gmic median_video : input_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_frame_rows[%]>=1,_is_fast_approximation={ 0 | 1 }
-#@gmic : Compute the median frame of a video file, doing it by blocks of rows to save memory usage.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1', 'frame_rows=100%' and 'is_fast_approximation=1'.
-median_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1 && ${5=100%}>0 && isval(${6=1})"
-  -v - s0="fast" s1="precise"
-  -v + -e[^-1] "Compute median frame of video file '$1', with first frame $2, last frame $3, frame step $4, frame rows $5, using "${s{!$6}}" algorithm." -v -
-  -l[]
-    -i[res] "$1",0 -f. 0
-    -_median_files "\"$1\",$frame",${2-6}
-  -endl -v +
-
 #@gmic morph : nb_inner_frames>=1,_smoothness>=0,_precision>=0
 #@gmic : Create morphing sequence between selected images.
 #@gmic : Default values: 'smoothness=0.1' and 'precision=4'.
@@ -15301,12 +15303,21 @@ morph : -check "$1>=0 && ${2=0.1}>=0 && ${3=4}>=0"
 
 #@gmic morph_files : "filename_pattern",_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Create a temporal morphing sequence from an input file sequence.
-#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
-#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 morph_files : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
   -e[^-1] "Morph frames of file sequence '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
   -v - -arg2var _file,${"-files \"$1\""} -_morph_files[] "${_file{$frame+1}}",${2-7},"$8" -v +
+
+#@gmic morph_video : input_filename,_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Create a temporal morphing sequence from frames of an input video file.
+#@gmic : If a display window is opened, rendered frames are displayed in it during processing.
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
+#@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+morph_video : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
+  -e[^-1] "Morph frames of video file '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
+  -v - -_morph_files[] "\"$1\",$frame",${2-7},"$8" -v +
 
 _morph_files : -skip "${8=}"
   -is_ext "$8",avi is_outavi=${}
@@ -15344,14 +15355,6 @@ _morph_files : -skip "${8=}"
   -onfail -rm
   -if $is_outavi -o[] "$8",25,mp4v,0 -endif
   -endl
-
-#@gmic morph_video : input_filename,_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal morphing sequence from frames of an input video file.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
-morph_video : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
-  -e[^-1] "Morph frames of video file '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
-  -v - -_morph_files[] "\"$1\",$frame",${2-7},"$8" -v +
 
 #@gmic register_nonrigid : [destination],_smoothness>=0,_precision>0,_nb_scale>=0
 #@gmic : Register selected source images with specified destination image, using non-rigid warp.
