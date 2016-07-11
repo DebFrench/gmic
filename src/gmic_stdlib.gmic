@@ -15117,7 +15117,7 @@ _fade_stream : -skip "${6=}"
     -l[] $1 -onfail go_on=0 -endl
     -if {!$go_on} -break -endif
     -to_colormode. $s -r. $w,$h
-    -repeat {$2+2}
+    -repeat {$2+2} -if {$<}
       title="[G'MIC] Frame ""#"$pframe" -> ""#"$frame$_N" ("{1+$>}/$2")"
       -v + -e[] "\r  - "$title -v -
       --j[0] [1],0,0,0,0,{$>/($2+1)}
@@ -15131,10 +15131,14 @@ _fade_stream : -skip "${6=}"
         -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
       -endif
       -rm.
-    -done
+    -endif -done
     -rm[0] pframe=$frame frame+=$5
   -while {$go_on" && "($4==-1" || "$frame<=$4)}
-  -if $is_outavi -o[] "$6",25,mp4v,0 -endif
+
+  # Output last frame.
+  -if {narg("$6")}
+    -if $is_outavi -z. 0,{w-(w%8)-1} -o[] "$6",25,mp4v,0 -else -filename "$6",$i -o. ${} -endif
+  -endif
   -rm
 
 #@gmic files2video : "filename_pattern",_output_filename,_fps>0,_codec
@@ -15329,7 +15333,7 @@ _morph_stream : -skip "${8=}"
   -if {*} -w. ${-fitscreen\ $w,$h},0,"[G'MIC]" -endif
   pframe=$frame frame+=$7
   -do
-    -l[] $1 -onfail $go_on=0 -endl
+    -l[] $1 -onfail go_on=0 -endl
     -if {!$go_on} -break -endif
     -to_colormode. $s -r. $w,$h
     cutvals={[min(im#0,im#1),max(iM#0,iM#1)]}
@@ -15356,7 +15360,11 @@ _morph_stream : -skip "${8=}"
     -endif -done
     -rm[0,-2,-1] pframe=$frame frame+=$7
   -while {$go_on" && "($6==-1" || "$frame<=$6)}
-  -if $is_outavi -o[] "$8",25,mp4v,0 -endif
+
+  # Output last frame.
+  -if {narg("$8")}
+    -if $is_outavi -z. 0,{w-(w%8)-1} -o[] "$8",25,mp4v,0 -else -filename "$8",$i -o. ${} -endif
+  -endif
   -rm
 
 #@gmic register_nonrigid : [destination],_smoothness>=0,_precision>0,_nb_scale>=0
