@@ -15108,7 +15108,7 @@ _fade_files : -skip "${6=}"
       -repeat {$2+2}
         title="Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")"
         -v + -e[] "\r  - "$title -v -
-        --j[0] [1],0,0,0,0,{$>/$2}
+        --j[0] [1],0,0,0,0,{$>/($2+1)}
         -if {narg("$6")}
           -if $is_outavi -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
         -endif
@@ -15288,7 +15288,7 @@ morph : -check "$1>=0 && ${2=0.1}>=0 && ${3=4}>=0"
     --equalize[0,1] -n[-2,-1] 0,255
     --displacement[3] [2],$2,$3 --displacement[2] [3],$2,$3 -rm[-4,-3]
     -repeat {$1+2} -if {$>&&$<}
-      t={$>/$1} omt={1-$t}
+      t={$>/($1+1)} omt={1-$t}
       --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
       --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
       -+[-2,-1]
@@ -15314,16 +15314,17 @@ _morph_files : -skip "${8=}"
     pframe=$frame frame+=$7
     -do
       $1 -to_colormode. $s -r. $w,$h
+      cutvals={[min(im#0,im#1),max(iM#0,iM#1)]}
       -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame"            " -v -
       --equalize[0,1] -n[-2,-1] 0,255
       --displacement[3] [2],$3,$4 --displacement[2] [3],$3,$4 -rm[-4,-3]
-      -repeat {$2+2}
-        title="Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")"
+      -repeat {$2+2} -if {$<}
+        title="Frame ""#"$pframe" -> ""#"$frame" ("$>/$2")"
         -v + -e[] "\r  - "$title -v -
-        t={$>/$2} omt={1-$t}
+        t={$>/($2+1)} omt={1-$t}
         --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
         --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
-        -+[-2,-1]
+        -+[-2,-1] -c. $cutvals
         -if {narg("$8")}
           -if $is_outavi -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
         -endif
@@ -15334,7 +15335,7 @@ _morph_files : -skip "${8=}"
           -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
         -endif
         -rm.
-      -done
+      -endif -done
       -rm[0,-2,-1] pframe=$frame frame+=$7
     -while {($6==-1" || "$frame<=$6)}
   -onfail -rm
@@ -20948,7 +20949,7 @@ _gimp_download_all_data :
 #@gimp : note = note{" <b>-</b> A big hug goes to these friends who supported the project:"}
 #@gimp : note = note{"<i>
 #@gimp : <a href=" http://www.lesnoy-tanets.com">Andrey Pivovarova</a>,
-#@gimp : David Oliver,
+#@gimp : <a href="http://doliver.co.uk/">David Oliver</a>,
 #@gimp : <a href="https://ello.co/errore">errore</a>,
 #@gimp : <a href="http://www.anudai.de">Anudai</a>,
 #@gimp : James Stalnaker,
