@@ -15051,7 +15051,7 @@ average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3
   -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",$2,$3,$4,"$5" -v +
 
 _average_files : -skip "${5=}"
-  -is_avifilename "$5" is_outavi=${}
+  -is_ext "$5",avi is_outavi=${}
   frame=$2 i=0 go_on=1 N=0
   -do
     -l[] $1 -nm. img -onfail go_on=0 -endl
@@ -15097,7 +15097,7 @@ fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint($
   -v - -arg2var _file,${"-files \"$1\""} -_fade_files[] "${_file{$frame+1}}",$2,$3,$4,$5,"$6" -v +
 
 _fade_files : -skip "${6=}"
-  -is_avifilename "$6" is_outavi=${}
+  -is_ext "$6",avi is_outavi=${}
   frame=$3 i=0
   -l
     $1 w={w} h={h} s={s} # Load first image.
@@ -16146,10 +16146,10 @@ is_3d :
 _is_3d :
   -v - -u {"h>6 && int(i[0])==67 && int(i[1])==73 && int(i[2])==109 && int(i[3])==103 && int(i[4])==51 && int(i[5])==100"} -v +
 
-#@gmic is_avifilename
-#@gmic : Return 1 if extension of specified filename is typical from video files.
-is_avifilename : -skip "${1=}"
-  -v - 0 -nm. "_$1" -u {"lowercase(['"{x}"'])=='avi'"} -rm. -v +
+#@gmic is_ext : filename,_extension
+#@gmic : Return 1 if specified filename has a given extensioin.
+is_ext : -skip "${1=}"
+  -v - 0 -nm. "_$1" -u {"lowercase(['"{x}"'])==lowercase(['$2'])"} -rm. -v +
 
 #@gmic is_image_arg : string
 #@gmic : Return 1 if specified string looks like '[ind]'.
