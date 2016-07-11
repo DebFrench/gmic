@@ -15048,7 +15048,7 @@ apply_video : -skip "${1=},${2=},${3=}" -check "isint(${4=0}) && $4>=0 && isint(
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
   -e[^-1] "Average frames of file sequence '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
-  -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",$2,$3,$4,"$5" -v +
+  -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",${2-4},"$5" -v +
 
 _average_files : -skip "${5=}"
   -is_ext "$5",avi is_outavi=${}
@@ -15085,16 +15085,16 @@ _average_files : -skip "${5=}"
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
   -e[^-1] "Average frames of video file '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
-  -v - -_average_files[] "\"$1\",$frame",$2,$3,$4,"$5" -v +
+  -v - -_average_files[] "\"$1\",$frame",${2-4},"$5" -v +
 
-#@gmic fade_files : "filename_pattern",_number_of_fading_frames>=1,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic fade_files : "filename_pattern",_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
 #@gmic : Create temporal fading sequence from an input file sequence.
 #@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
 #@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
-#@gmic : Default values: '_number_of_fading_frames=20', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+#@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
   -e[^-1] "Fade frames of file sequence '$1', with $2 fading frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - -arg2var _file,${"-files \"$1\""} -_fade_files[] "${_file{$frame+1}}",$2,$3,$4,$5,"$6" -v +
+  -v - -arg2var _file,${"-files \"$1\""} -_fade_files[] "${_file{$frame+1}}",${2-5},"$6" -v +
 
 _fade_files : -skip "${6=}"
   -is_ext "$6",avi is_outavi=${}
@@ -15105,7 +15105,7 @@ _fade_files : -skip "${6=}"
     pframe=$frame frame+=$5
     -do
       $1 -to_colormode. $s -r. $w,$h
-      -repeat $2
+      -repeat {$2+2}
         title="Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")"
         -v + -e[] "\r  - "$title -v -
         --j[0] [1],0,0,0,0,{$>/$2}
@@ -15126,13 +15126,13 @@ _fade_files : -skip "${6=}"
   -if $is_outavi -o[] "$6",25,mp4v,0 -endif
   -endl
 
-#@gmic fade_video : input_filename,_number_of_fading_frames>=1,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Compute the average frame of a video file.
+#@gmic fade_video : input_filename,_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Create temporal fading sequence from frames of an input video file.
 #@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+#@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_video : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
   -e[^-1] "Fade frames of video file '$1', with $2 fading frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - -_fade_files[] "\"$1\",$frame",$2,$3,$4,$5,"$6" -v +
+  -v - -_fade_files[] "\"$1\",$frame",${2-5},"$6" -v +
 
 #@gmic files2video : "filename_pattern",_output_filename,_fps>0,_codec
 #@gmic : Convert several files into a single video file.
@@ -15276,22 +15276,78 @@ median_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3=
     -_median_files "\"$1\",$frame",${2-6}
   -endl -v +
 
-#@gmic morph : nb_frames>0,_smoothness>=0,_precision>=0
+#@gmic morph : nb_inner_frames>=1,_smoothness>=0,_precision>=0
 #@gmic : Create morphing sequence between selected images.
-#@gmic : Default values: 'smoothness=0.1' and 'precision=5'.
+#@gmic : Default values: 'smoothness=0.1' and 'precision=4'.
 #@gmic : $ image.jpg --rotate 20,1,1,50%,50% -morph 9
-morph : -check "$1>=0 && ${2=0.1}>=0 && ${3=5}>=0"
-  -e[^-1] "Create morphing sequence between image$?, with $1 added frames, smoothness $2 and precision $3.\n"
+morph : -check "$1>=0 && ${2=0.1}>=0 && ${3=4}>=0"
+  -e[^-1] "Create morphing sequence between image$?, with $1 inner frames, smoothness $2 and precision $3.\n"
   -if {!$1} -return -endif
-  -v - -r[^0] [0],3 -repeat {$!-1} -l[$<,{$<+1}]
-    nm={0,n}
+  -v - -r[^0] [0],3 -repeat {$!-1} nm={$>,n} -l[$<,{$<+1}]
     -v + -e[] "\r > Morph image "$>" to image "{$>+1}".    " -v -
-    --equalize[-2,-1] -n[-2,-1] 0,255
-    --displacement. [-2],$2,$3 --warp[0] [-1],1,1,1,$1 -a[-$1--1] z -rm..
-    --displacement... [-2],$2,$3 --warp[1] [-1],1,1,1,$1 -a[-$1--1] z -k[0,1,-3,-1] -mirror. z
-    (0/1) -r. [-2],[-2],[-2],1,3 -j... [-2],0,0,0,0,1,[-1] -rm[-2,-1]
-    -mv. 1 -s[1] z -nm[^-1] $nm
+    --equalize[0,1] -n[-2,-1] 0,255
+    --displacement[3] [2],$2,$3 --displacement[2] [3],$2,$3 -rm[-4,-3]
+    -repeat {$1+2} -if {$>&&$<}
+      t={$>/$1} omt={1-$t}
+      --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
+      --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
+      -+[-2,-1]
+    -endif -done
+    -rm[2,3] -mv[2--1] 1 -nm $nm
   -endl -done -v +
+
+#@gmic morph_files : "filename_pattern",_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Create temporal morphing sequence from an input file sequence.
+#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
+#@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+morph_files : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
+  -e[^-1] "Morph frames of file sequence '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
+  -v - -arg2var _file,${"-files \"$1\""} -_morph_files[] "${_file{$frame+1}}",${2-7},"$8" -v +
+
+_morph_files : -skip "${8=}"
+  -is_ext "$8",avi is_outavi=${}
+  frame=$5 i=0
+  -l
+    $1 w={w} h={h} s={s} # Load first image.
+    -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
+    pframe=$frame frame+=$7
+    -do
+      $1 -to_colormode. $s -r. $w,$h
+      -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame"            " -v -
+      --equalize[0,1] -n[-2,-1] 0,255
+      --displacement[3] [2],$3,$4 --displacement[2] [3],$3,$4 -rm[-4,-3]
+      -repeat {$2+2}
+        title="Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")"
+        -v + -e[] "\r  - "$title -v -
+        t={$>/$2} omt={1-$t}
+        --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
+        --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
+        -+[-2,-1]
+        -if {narg("$8")}
+          -if $is_outavi -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
+        -endif
+        -if {*}
+          -w. -1,-1,0,$title
+          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
+          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
+          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
+        -endif
+        -rm.
+      -done
+      -rm[0,-2,-1] pframe=$frame frame+=$7
+    -while {($6==-1" || "$frame<=$6)}
+  -onfail -rm
+  -if $is_outavi -o[] "$8",25,mp4v,0 -endif
+  -endl
+
+#@gmic morph_video : input_filename,_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Create temporal morphing sequence from frames of an input video file.
+#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+morph_video : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
+  -e[^-1] "Morph frames of video file '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
+  -v - -_morph_files[] "\"$1\",$frame",${2-7},"$8" -v +
 
 #@gmic register_nonrigid : [destination],_smoothness>=0,_precision>0,_nb_scale>=0
 #@gmic : Register selected source images with specified destination image, using non-rigid warp.
