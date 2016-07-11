@@ -15097,7 +15097,7 @@ fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint($
   -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_fade_stream[] "${_file{$frame+1}}",${2-5},"$6" -v +
 
 #@gmic fade_video : video_filename,_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal fading sequence from frames of an input video file, in a streamed way.
+#@gmic : Create a temporal fading sequence from frames of specified input video file, in a streamed way.
 #@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_video : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
@@ -15108,34 +15108,34 @@ _fade_stream : -skip "${6=}"
   -is_ext "$6",avi is_outavi=${}
   frame=$3 i=0 go_on=1
 
-  -l $1 -onfail go_on=0 -endl
-  -if $go_on
-    w={w} h={h} s={s} # Load first image.
-    -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
-    pframe=$frame frame+=$5
-    -do
-      -l[] $1 -onfail go_on=0 -endl
-      -if {!$go_on} -break -endif
-      -to_colormode. $s -r. $w,$h
-      -repeat {$2+2}
-        title="Frame ""#"$pframe" -> ""#"$frame$_N" ("{1+$>}/$2")"
-        -v + -e[] "\r  - "$title -v -
-        --j[0] [1],0,0,0,0,{$>/($2+1)}
-        -if {narg("$6")}
-          -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
-        -endif
-        -if {*}
-          -w. -1,-1,0,$title
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
-        -endif
-        -rm.
-      -done
-      -rm[0] pframe=$frame frame+=$5
-    -while {($4==-1" || "$frame<=$4)}
-    -if $is_outavi -o[] "$6",25,mp4v,0 -endif
-  -endif -rm
+  -l $1 -onfail go_on=0 -endl # Load first image.
+  -if {!$go_on} -return -endif
+  w={w} h={h} s={s}
+  -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
+  pframe=$frame frame+=$5
+  -do
+    -l[] $1 -onfail go_on=0 -endl
+    -if {!$go_on} -break -endif
+    -to_colormode. $s -r. $w,$h
+    -repeat {$2+2}
+      title="[G'MIC] Frame ""#"$pframe" -> ""#"$frame$_N" ("{1+$>}/$2")"
+      -v + -e[] "\r  - "$title -v -
+      --j[0] [1],0,0,0,0,{$>/($2+1)}
+      -if {narg("$6")}
+        -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
+      -endif
+      -if {*}
+        -w. -1,-1,0,$title
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
+      -endif
+      -rm.
+    -done
+    -rm[0] pframe=$frame frame+=$5
+  -while {$go_on" && "($4==-1" || "$frame<=$4)}
+  -if $is_outavi -o[] "$6",25,mp4v,0 -endif
+  -rm
 
 #@gmic files2video : "filename_pattern",_output_filename,_fps>0,_codec
 #@gmic : Convert several files into a single video file.
@@ -15302,59 +15302,62 @@ morph : -check "$1>=0 && ${2=0.1}>=0 && ${3=4}>=0"
   -endl -done -v +
 
 #@gmic morph_files : "filename_pattern",_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal morphing sequence from an input file sequence.
+#@gmic : Generate a temporal morphing from specified input image files, in a streamed way.
 #@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 morph_files : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
-  -e[^-1] "Morph frames of file sequence '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
-  -v - -arg2var _file,${"-files \"$1\""} -_morph_files[] "${_file{$frame+1}}",${2-7},"$8" -v +
+  -e[^-1] "Morph input image files '$1', with $2 inner frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
+  -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_morph_stream[] "${_file{$frame+1}}",${2-7},"$8" -v +
 
-#@gmic morph_video : input_filename,_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal morphing sequence from frames of an input video file.
+#@gmic morph_video : video_filename,_nb_inner_frames>0,_smoothness>=0,_precision>=0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Generate a temporal morphing from frames of specified input video file, in a streamed way.
 #@gmic : If a display window is opened, rendered frames are displayed in it during processing.
 #@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'nb_inner_frames=10', 'smoothness=0.1', 'precision=4', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 morph_video : -check "isint(${2=10}) && $2>0 && ${3=0.1}>=0 && ${4=4}>=0 && isint(${5=0}) && $5>=0 && isint(${6=-1}) && ($6>=0 || $6==-1) && ${7=1}>=1" -skip "${8=}"
   -e[^-1] "Morph frames of video file '$1', with $2 fading frames, smoothness $3, precision $4, first frame $5, last frame $6, frame step $7 and output filename '$8'.\n"
-  -v - -_morph_files[] "\"$1\",$frame",${2-7},"$8" -v +
+  -v - _N= -_morph_stream[] "\"$1\",$frame",${2-7},"$8" -v +
 
-_morph_files : -skip "${8=}"
+_morph_stream : -skip "${8=}"
   -is_ext "$8",avi is_outavi=${}
-  frame=$5 i=0
-  -l
-    $1 w={w} h={h} s={s} # Load first image.
-    -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
-    pframe=$frame frame+=$7
-    -do
-      $1 -to_colormode. $s -r. $w,$h
-      cutvals={[min(im#0,im#1),max(iM#0,iM#1)]}
-      -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame"            " -v -
-      --equalize[0,1] -n[-2,-1] 0,255
-      --displacement[3] [2],$3,$4 --displacement[2] [3],$3,$4 -rm[-4,-3]
-      -repeat {$2+2} -if {$<}
-        title="Frame ""#"$pframe" -> ""#"$frame" ("$>/$2")"
-        -v + -e[] "\r  - "$title -v -
-        t={$>/($2+1)} omt={1-$t}
-        --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
-        --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
-        -+[-2,-1] -c. $cutvals
-        -if {narg("$8")}
-          -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
-        -endif
-        -if {*}
-          -w. -1,-1,0,$title
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
-          -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
-        -endif
-        -rm.
-      -endif -done
-      -rm[0,-2,-1] pframe=$frame frame+=$7
-    -while {($6==-1" || "$frame<=$6)}
-  -onfail -rm
+  frame=$5 i=0 go_on=1
+
+  -l $1 -onfail go_on=0 -endl # Load first image.
+  -if {!$go_on} -return -endif
+  w={w} h={h} s={s}
+  -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
+  pframe=$frame frame+=$7
+  -do
+    -l[] $1 -onfail $go_on=0 -endl
+    -if {!$go_on} -break -endif
+    -to_colormode. $s -r. $w,$h
+    cutvals={[min(im#0,im#1),max(iM#0,iM#1)]}
+    -v + -e[] "\r  - Frame ""#"$pframe" -> ""#"$frame"            " -v -
+    --equalize[0,1] -n[-2,-1] 0,255
+    --displacement[3] [2],$3,$4 --displacement[2] [3],$3,$4 -rm[-4,-3]
+    -repeat {$2+2} -if {$<}
+      title="Frame ""#"$pframe" -> ""#"$frame" ("$>/$2")        "
+      -v + -e[] "\r  - "$title -v -
+      t={$>/($2+1)} omt={1-$t}
+      --*[2] $t --warp[0] [-1],1,1,1 -rm.. -*. $omt
+      --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
+      -+[-2,-1] -c. $cutvals
+      -if {narg("$8")}
+        -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
+      -endif
+      -if {*}
+        -w. -1,-1,0,$title
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
+      -endif
+      -rm.
+    -endif -done
+    -rm[0,-2,-1] pframe=$frame frame+=$7
+  -while {$go_on" && "($6==-1" || "$frame<=$6)}
   -if $is_outavi -o[] "$8",25,mp4v,0 -endif
-  -endl
+  -rm
 
 #@gmic register_nonrigid : [destination],_smoothness>=0,_precision>0,_nb_scale>=0
 #@gmic : Register selected source images with specified destination image, using non-rigid warp.
