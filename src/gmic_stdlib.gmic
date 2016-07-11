@@ -14995,25 +14995,36 @@ apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
   -while {{*}" && "!{*,ESC}" && "!{*,Q}} -camera $2,0 -endl -v +
 
 #@gmic apply_files : "filename_pattern",_"command",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Apply a G'MIC command on all frames of the specified input pattern.
+#@gmic : Apply a G'MIC command on specified input files, in a streamed way.
 #@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
-#@gmic : The output filename may have extension 'avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'command=(undefined)', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 apply_files : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${2=},${6=}"
-  -e[^-1] "Apply command '$2' on input sequence '$1', with first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - -files "$1" _N={narg(${})-1} -arg2var _file,${} -_apply_files[] "${_file{$frame+1}}","$2",${3-5},"$6" -v +
+  -e[^-1] "Apply command '$2' on input image files '$1', with first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
+  -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_apply_stream[] "${_file{$frame+1}}","$2",${3-5},"$6" -v +
 
-_apply_files : -skip "${2=},${6=}"
+#@gmic apply_video : video_filename,_"command",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Apply a G'MIC command on all frames of the specified input video file, in a streamed way.
+#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
+#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+apply_video : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${2=},${6=}"
+  -e[^-1] "Apply command '$2' on input video file '$1', with first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
+  -v - _N= -_apply_stream[] "\"$1\",$frame","$2",${3-5},"$6" -v +
+
+_apply_stream : -skip "${2=},${6=}"
   -is_ext "$6",avi is_outavi=${}
   frame=$3 i=0 go_on=1
   -do
     -l[] $1 -onfail go_on=0 -endl
     -if $go_on
-      -v + -e[] "\r  > Frame ""#"$frame"/"$_N"        " -v -
+      -v + -e[] "\r  > Frame ""#"$frame$_N"        " -v -
       frame+=$5
       -l $2 -onfail -error[0--5] "Command '-apply_files': Specified command errored: "${} -endl
       -if {!$!} -continue -endif
-      -if {narg("$6")} -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$6",25,mp4v,1 -else -o. ${-filename\ "$6",$i} i+=1 -endif -endif
+      -if {narg("$6")}
+        -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$6",25,mp4v,1 -else -o. ${-filename\ "$6",$i} i+=1 -endif
+      -endif
       -if {*}
         title="[G'MIC] Frame ""#"$frame
         -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,$title
@@ -15028,81 +15039,86 @@ _apply_files : -skip "${2=},${6=}"
   -while {$go_on" && "($4==-1" || "$frame<=$4)}
   -if $is_outavi -o[] "$6",25,mp4v,0 -endif
 
-#@gmic apply_video : input_filename,_"command",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Apply a command on all frames of the specified input video file.
-#@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
-#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
-apply_video : -check "isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${2=},${6=}"
-  -e[^-1] "Apply command '$2' on frames of video file '$1', with first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - _N=(undefined) -_apply_files[] "\"$1\",$frame","$2",${3-5},"$6" -v +
-
 #@gmic average_files : "filename_pattern",_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Compute the average frame of a file sequence.
+#@gmic : Average specified input files, in a streamed way.
 #@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 average_files : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
-  -e[^-1] "Average frames of file sequence '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
-  -v - -arg2var _file,${"-files \"$1\""} -_average_files[] "${_file{$frame+1}}",${2-4},"$5" -v +
+  -e[^-1] "Average input image files '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
+  -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_average_stream[] "${_file{$frame+1}}",${2-4},"$5" -v +
 
-_average_files : -skip "${5=}"
+#@gmic average_video : video_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Average frames of specified input video file, in a streamed way.
+#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : The output filename may have extension '.avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
+#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+average_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
+  -e[^-1] "Average frames of input video file '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
+  -v - _N= -_average_stream[] "\"$1\",$frame",${2-4},"$5" -v +
+
+_average_stream : -skip "${5=}"
   -is_ext "$5",avi is_outavi=${}
   frame=$2 i=0 go_on=1 N=0
   -do
-    -l[] $1 -nm. img -onfail go_on=0 -endl
-    -if $img
-      -v + -e[] "\r  > Frame ""#"$frame -v -
+    -l[] $1 -onfail go_on=0 -endl
+    -if $go_on
+      -v + -e[] "\r  > Frame ""#"$frame$_N"        " -v -
       frame+=$4 N+=1
-    -endif
-    -if {$!>1} -+ -endif
-    -if {narg("$5")}
-      --/. $N -c. 0,255
-      -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} -endif
-      -rm. i+=1
-    -endif
-    -if {*}
-      --n 0,255
-      -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,"Frame ""#"$frame
-      -else -w. -1,-1,0,"Frame ""#"$frame
+      -if {$!>1} -+ -endif
+      -if {narg("$5")}
+        --/. $N -c. 0,255
+        -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} i+=1 -endif
+        -rm.
       -endif
-      -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
-      -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
-      -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
-      -rm.
+      -if {*}
+        title="[G'MIC] Frame ""#"$frame
+        --n 0,255
+        -if {!narg($wh)} wh=${-fitscreen[]\ {w},{h}} -w. $wh,0,$title
+        -else -w. -1,-1,0,$title
+        -endif
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,D}} -w[] {{*,w}*1.5},{{*,h}*1.5} -wait -1 -endif # Increase window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,C}} -w[] {{*,w}/1.5},{{*,h}/1.5} -wait -1 -endif # Decrease window size.
+        -if {({*,CTRLLEFT}" || "{*,CTRLRIGHT})" && "{*,R}} -w[] {0,w},{0,h} -wait -1 -endif             # Reset window size.
+        -rm.
+      -endif
     -endif
   -while {$go_on" && "($3==-1" || "$frame<=$3)}
   -/ $N -c 0,255
   -if $is_outavi -o[] "$5",25,mp4v,0 -endif
 
-#@gmic average_video : input_filename,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Compute the average frame of a video file.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
-average_video : -check "isint(${2=0}) && $2>=0 && isint(${3=-1}) && ($3>=0 || $3==-1) && ${4=1}>=1" -skip "${5=}"
-  -e[^-1] "Average frames of video file '$1', with first frame $2, last frame $3, frame step $4 and output filename '$5'.\n"
-  -v - -_average_files[] "\"$1\",$frame",${2-4},"$5" -v +
-
 #@gmic fade_files : "filename_pattern",_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal fading sequence from an input file sequence.
+#@gmic : Generate a temporal fading from specified input files, in a streamed way.
 #@gmic : If a display window is opened, the rendered frames are displayed in it during processing.
-#@gmic : Output filename may have extension 'avi' (saved as a video), or any usual image file extension (saved as a sequence of frames).
+#@gmic : The output filename may have extension 'avi' (saved as a video), or any other usual image file extension (saved as a sequence of images).
 #@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
 fade_files : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
-  -e[^-1] "Fade frames of file sequence '$1', with $2 fading frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - -arg2var _file,${"-files \"$1\""} -_fade_files[] "${_file{$frame+1}}",${2-5},"$6" -v +
+  -e[^-1] "Fade input image files '$1', with $2 inner frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
+  -v - -files 3,"$1" _N=/{narg(${})-1} -arg2var _file,${} -_fade_stream[] "${_file{$frame+1}}",${2-5},"$6" -v +
 
-_fade_files : -skip "${6=}"
+#@gmic fade_video : video_filename,_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
+#@gmic : Create a temporal fading sequence from frames of an input video file.
+#@gmic : If a display window is opened, the frames are displayed in it during processing.
+#@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
+fade_video : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
+  -e[^-1] "Fade frames of input video file '$1', with $2 inner frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
+  -v - _N= -_fade_stream[] "\"$1\",$frame",${2-5},"$6" -v +
+
+_fade_stream : -skip "${6=}"
   -is_ext "$6",avi is_outavi=${}
-  frame=$3 i=0
-  -l
-    $1 w={w} h={h} s={s} # Load first image.
+  frame=$3 i=0 go_on=1
+
+  -l $1 -onfail go_on=0 -endl
+  -if $go_on
+    w={w} h={h} s={s} # Load first image.
     -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
     pframe=$frame frame+=$5
     -do
-      $1 -to_colormode. $s -r. $w,$h
+      -l[] $1 -onfail go_on=0 -endl
+      -if {!$go_on} -break -endif
+      -to_colormode. $s -r. $w,$h
       -repeat {$2+2}
-        title="Frame ""#"$pframe" -> ""#"$frame" ("{1+$>}/$2")"
+        title="Frame ""#"$pframe" -> ""#"$frame$_N" ("{1+$>}/$2")"
         -v + -e[] "\r  - "$title -v -
         --j[0] [1],0,0,0,0,{$>/($2+1)}
         -if {narg("$6")}
@@ -15118,17 +15134,8 @@ _fade_files : -skip "${6=}"
       -done
       -rm[0] pframe=$frame frame+=$5
     -while {($4==-1" || "$frame<=$4)}
-  -onfail -rm
-  -if $is_outavi -o[] "$6",25,mp4v,0 -endif
-  -endl
-
-#@gmic fade_video : input_filename,_nb_inner_frames>0,_first_frame>=0,_last_frame={ >=0 | -1=last },_frame_step>=1,_output_filename
-#@gmic : Create a temporal fading sequence from frames of an input video file.
-#@gmic : If a display window is opened, the frames are displayed in it during processing.
-#@gmic : Default values: 'nb_inner_frames=10', 'first_frame=0', 'last_frame=-1', 'frame_step=1' and 'output_filename=(undefined)'.
-fade_video : -check "isint(${2=10}) && $2>0 && isint(${3=0}) && $3>=0 && isint(${4=-1}) && ($4>=0 || $4==-1) && ${5=1}>=1" -skip "${6=}"
-  -e[^-1] "Fade frames of video file '$1', with $2 fading frames, first frame $3, last frame $4, frame step $5 and output filename '$6'.\n"
-  -v - -_fade_files[] "\"$1\",$frame",${2-5},"$6" -v +
+    -if $is_outavi -o[] "$6",25,mp4v,0 -endif
+  -endif -rm
 
 #@gmic files2video : "filename_pattern",_output_filename,_fps>0,_codec
 #@gmic : Convert several files into a single video file.
@@ -16042,7 +16049,7 @@ filename : -skip "${1=default}"
 #@gmic : Return the list of files and/or subfolders from specified path.
 #@gmic : 'path' can be eventually a matching pattern.
 #@gmic : 'mode' can be { 0=files only | 1=folders only | 2=files + folders }.
-#@gmic : Add '3' to 'mode' to return full paths instead of relative paths.
+#@gmic : Add '3' to 'mode' to return full paths instead of filenames only.
 #@gmic : Default value: 'mode=5'.
 
 #@gmic fitratio_wh : min_width,min_height,ratio_wh
