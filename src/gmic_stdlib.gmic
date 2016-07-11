@@ -15111,7 +15111,7 @@ _fade_stream : -skip "${6=}"
   -l $1 -onfail go_on=0 -endl # Load first image.
   -if {!$go_on} -return -endif
   w={w} h={h} s={s}
-  -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
+  -if {*} -w. ${-fitscreen\ $w,$h},0,"[G'MIC]" -endif
   pframe=$frame frame+=$5
   -do
     -l[] $1 -onfail go_on=0 -endl
@@ -15326,7 +15326,7 @@ _morph_stream : -skip "${8=}"
   -l $1 -onfail go_on=0 -endl # Load first image.
   -if {!$go_on} -return -endif
   w={w} h={h} s={s}
-  -if {*} -w. ${-fitscreen\ $w,$h},0 -endif
+  -if {*} -w. ${-fitscreen\ $w,$h},0,"[G'MIC]" -endif
   pframe=$frame frame+=$7
   -do
     -l[] $1 -onfail $go_on=0 -endl
