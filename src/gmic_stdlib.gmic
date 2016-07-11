@@ -15062,7 +15062,7 @@ _average_files : -skip "${5=}"
     -if {$!>1} -+ -endif
     -if {narg("$5")}
       --/. $N -c. 0,255
-      -if $is_outavi -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} -endif
+      -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$5",25,mp4v,1 -else -o. ${-filename\ "$5",$i} -endif
       -rm. i+=1
     -endif
     -if {*}
@@ -15110,7 +15110,7 @@ _fade_files : -skip "${6=}"
         -v + -e[] "\r  - "$title -v -
         --j[0] [1],0,0,0,0,{$>/($2+1)}
         -if {narg("$6")}
-          -if $is_outavi -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
+          -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$6",25,mp4v,1 -else -filename "$6",$i i+=1 -o. ${} -endif
         -endif
         -if {*}
           -w. -1,-1,0,$title
@@ -15326,7 +15326,7 @@ _morph_files : -skip "${8=}"
         --*[3] {1-$t} --warp[1] [-1],1,1,1 -rm.. -*. $t
         -+[-2,-1] -c. $cutvals
         -if {narg("$8")}
-          -if $is_outavi -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
+          -if $is_outavi -z. 0,{w-(w%8)-1} -o. "$8",25,mp4v,1 -else -filename "$8",$i i+=1 -o. ${} -endif
         -endif
         -if {*}
           -w. -1,-1,0,$title
