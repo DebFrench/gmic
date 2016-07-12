@@ -1787,8 +1787,8 @@ _display_rgba :
   -e[0--3] "Render RGBA image$? over a checkerboard background."
   -v - -repeat $! -l[$>] -if {s==2" || "s==4}
     -i[0] (160,128;128,160) -nm[0] {1,n} -r[0] 16,16 -r[0] [1],[1],1,{s-1},0,2
-    -sh. {s-1} -j[0] [1],0,0,0,0,1,[2],255 -k[0] -to_rgb
-  -endif -endl -done -v +
+    -sh. {s-1} -j[0] [1],0,0,0,0,1,[2],255 -k[0]
+  -endif -endl -done -to_rgb -v +
 
 #@gmic dt : eq. to '-display_tensors'.
 dt :
