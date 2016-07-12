@@ -16074,7 +16074,7 @@ fitratio_wh :
 
 #@gmic fitscreen : width,height,_depth,_minimal_size[%],_maximal_size[%]
 #@gmic : Return the 'ideal' size WxH for a window intended to display an image of specified size on screen.
-#gmic : Default values: 'depth=1', 'minimal_size=128' and 'maximal_size=85%'.
+#@gmic : Default values: 'depth=1', 'minimal_size=128' and 'maximal_size=85%'.
 fitscreen : -check "$1>0 && $2>0 && ${3=1}>0 && ${4=128}>0 && ${5=85%}>0"
   -v -
   mp=${-is_percent\ $4}
