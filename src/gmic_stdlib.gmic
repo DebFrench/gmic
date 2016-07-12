@@ -1785,9 +1785,10 @@ display_rgba :
 
 _display_rgba :
   -e[0--3] "Render RGBA image$? over a checkerboard background."
-  -v - -to_a -repeat $! -l[$>]
-    -i[0] (160,128;128,160) -nm[0] {1,n} -r[0] 16,16 -r[0] [1],[1],1,{s-1},0,2 -blend alpha
-  -endl -done -v +
+  -v - -repeat $! -l[$>] -if {s==2" || "s==4}
+    -i[0] (160,128;128,160) -nm[0] {1,n} -r[0] 16,16 -r[0] [1],[1],1,{s-1},0,2
+    -sh. {s-1} -j[0] [1],0,0,0,0,1,[2],255 -k[0]
+  -endif -endl -done -v +
 
 #@gmic dt : eq. to '-display_tensors'.
 dt :
@@ -19781,10 +19782,10 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
   -if $is_additional_data -rm[^0] -else -rm -endif
   -v +
 
-#@gmic x_select_palette : _variable_name,_number_of_columns= { 0=auto | >0 }
+#@gmic x_select_palette : _variable_name,_number_of_columns={ 0=auto | >0 }
 #@gmic : Open a RGB or RGBA color selector widget from a palette.
 #@gmic : The palette is given as a selected image.
-#@gmic : Argument 'variable_name' specifies the variable that contains the selected color values (ad R,G,B,[A]) at any time.
+#@gmic : Argument 'variable_name' specifies the variable that contains the selected color values (as R,G,B,[A]) at any time.
 #@gmic : Assigning '-1' to it forces the interactive window to close.
 #@gmic : Default values: 'variable_name=xsp_variable' and 'number_of_columns=2'.
 x_select_palette : -skip ${1=xsp_variable},${2=0}
