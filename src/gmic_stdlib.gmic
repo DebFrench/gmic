@@ -17730,14 +17730,14 @@ x_grab_color : -skip ${1=xpc_variable}
 
     -if {narg($current_color)}
       24,24,1,[img] -fc. $current_color -drgba. -frame. 1,1,0 -frame. 1,1,255 -j[visu] [-1],$xc,$yc -rm.
-      0 -t. "Position ("$X","$Y")\nColor ("{``$current_color}")",1,0,14,1,255 --dilate. 5 -r.. 100%,100%,1,3
-      -j[visu] [-2],{30+$xc},{1+$yc},0,0,1,[-1],255 -rm[-2,-1]
+      0 -t. "Position ("$X","$Y")\nColor ("{``$current_color}")",1,0,15,1,255 --dilate. 5 -r.. 100%,100%,1,3
+      -j[visu] [-2],{30+$xc},$yc,0,0,1,[-1],255 -rm[-2,-1]
     -endif
 
     -if $mouse_over
       X={img,round($x*(w-1)/({*,w}-1))}
       Y={img,round($y*(h-1)/({*,h}-1))}
-      current_color={img,I($X,$Y)}
+      current_color={img,round(I($X,$Y))}
       -j[visu] [icon_sprite],$x,{icon_sprite,$y-h+1},0,0,1,[icon_mask]
       -if {{*,b}&1} $1=$current_color -endif
     -endif
