@@ -22958,7 +22958,7 @@ gimp_colorize_comics_preview :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>You can find more information on how to use this filter here :</small>")
 #@gimp : link = link("David Revoy's G'MIC Colorization Page","http://www.davidrevoy.com/article240/gmic-line-art-colorization")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/09/2014</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/12/2016</i>.</small>")
 gimp_colorize_interactive :
   N=$! nm={n}
   resolution={arg(1+$3,512,1024,2048,0)}
