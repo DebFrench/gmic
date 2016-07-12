@@ -12522,7 +12522,7 @@ apply_timeout :
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
 
 # The implementation below allows to use parallel as a regular command with selections.
-parallel :
+parallel : -skip "${1=},${2=},${3=},${4=},${5=},${6=},${7=},${8=},${9=},${10=},${11=},${12=},${13=},${14=},${15=}"
   -if {$1==0||$1==1||$1==2} -e[0--3] "Execute "{$#-1}" commands '${2--1}' in parallel on image$?."
   -else -e[0--3] "Execute "$#" commands '$*' in parallel on image$?."
   -endif
@@ -17150,11 +17150,11 @@ __x_color_curves :
   -else -v + -error[0--3] "Command 'x_color_curves': Unknown specified color space '$1'."
   -endif
 
-#@gmic x_colorize : _is_lineart={ 0 | 1 },_max_resolution={ 0 | >=128 },_multichannels_output={ 0 | 1 },_[palette1],_[palette2]
+#@gmic x_colorize : _is_lineart={ 0 | 1 },_max_resolution={ 0 | >=128 },_multichannels_output={ 0 | 1 },_[palette1],_[palette2],_[grabber1]
 #@gmic : Colorized selected B&W images, using an interactive window.
 #@gmic : When >0, argument 'max_resolution' defines the maximal image resolution used in the interactive window.
 #@gmic : Default values: 'is_lineart=1', 'max_resolution=1024' and 'multichannels_output=0'.
-x_colorize : -skip ${1=0},${3=0},${4=0},${5=0} -check "${2=1024}==0 || $2>=128"
+x_colorize : -skip ${1=0},${3=0},${4=0},${5=0},${6=0} -check "${2=1024}==0 || $2>=128"
   -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
   -v - s0="image" s1="lineart" s2="multichannel" s3="merged" -v +
   -v - -use_vt100 g=$_gmic_g c=$_gmic_c n=$_gmic_n r=$_gmic_r -v +
@@ -17180,30 +17180,40 @@ x_colorize : -skip ${1=0},${3=0},${4=0},${5=0} -check "${2=1024}==0 || $2>=128"
 ----\n
 --------------------------------------------------------------------------------------"
   -v -
+  N=$!
+  thread_main="-_x_colorize[0] ${1--1}"
+  thread_color="-w[] 400,320,0,Palette -x_select_color[] __color,255,255,255"
+
   is_palette1=${"-is_image_arg[] $4"}
-  -if $is_palette1 -pass$4 1 ({'{b}'}) -discard. {'~'} palette_title1={t} -rm. -endif
+  -if $is_palette1
+    -pass$4 1 ({'{b}'}) -discard. {'~'} palette_title1={t} -rm.
+    thread_palette1="-w[] 400,400,0,\""$palette_title1"\" -x_select_palette["{$!-1}"] __color"
+  -endif
+
   is_palette2=${"-is_image_arg[] $5"}
-  -if $is_palette2 -pass$5 1 ({'{b}'}) -discard. {'~'} palette_title2={t} -rm. -endif
+  -if $is_palette2
+    -pass$5 1 ({'{b}'}) -discard. {'~'} palette_title2={t} -rm.
+    thread_palette2="-w[] 400,400,0,\""$palette_title2"\" -x_select_palette["{$!-1}"] __color"
+  -endif
+
+  is_grabber=${"-is_image_arg[] $6"}
+  -if $is_grabber
+    -pass$6 1 ({'{b}'}) -discard. {'~'} palette_grabber={t} -rm.
+    thread_grabber="-w[] ${\"-fitscreen[] {w},{h},1,128,50%\"},0,\""$palette_grabber"\" -x_grab_color["{$!-1}"] __color"
+  -endif
+
   __color=255,255,255
 
-  -if {$is_palette1" && "$is_palette2} # With two additional palettes.
-    -repeat {$!-2} -l[$>,-2,-1]
-      -parallel "-_x_colorize[0] ${1--1}","-w[] 400,320,0,Palette -x_select_color[] __color,255,255,255",\
-                "-w[] 400,400,0,\""$palette_title1"\" -x_select_palette[1] __color",\
-                "-w[] 400,400,0,\""$palette_title2"\" -x_select_palette[2] __color"
+  -if {!$is_palette1" && "!$is_palette2" &&" !$is_grabber}
+    -repeat $N -l[$>]
+      -parallel $thread_main,$thread_color
     -endl -done
-    -rm[-2,-1]
-  -elif $is_palette1  # With one additional palette.
-    -repeat {$!-1} -l[$>,-1]
-       -parallel "-_x_colorize[0] ${1--1}","-w[] 400,320,0,Palette -x_select_color[] __color,255,255,255",\
-                "-w[] 400,400,0,\""$palette_title1"\" -x_select_palette[1] __color"
-    -endl -done
-    -rm.
-  -else # Without additional palettes.
-    -repeat $! -l[$>]
-      -parallel "-_x_colorize[0] ${1--1}","-w[] 400,320,0,Palette -x_select_color[] __color,255,255,255"
+  -else
+    -repeat $N -l[$>,$N--1]
+      -parallel $thread_main,$thread_color,$thread_palette1,$thread_palette2,$thread_grabber
     -endl -done
   -endif
+  -k[0-{$N-1}]
   -v +
 
 _x_colorize :
@@ -17721,7 +17731,6 @@ x_grab_color : -skip ${1=xpc_variable}
 
   -cursor[0] 0
   -do
-
     -if {!narg($visu0)}
       --r[img] {*,w},{*,h},1,100%,2 -drgba. -w. -nm. visu0
     -endif
@@ -17755,9 +17764,7 @@ x_grab_color : -skip ${1=xpc_variable}
       -if {{*,b}&1} $1=$current_color -endif
     -endif
     -w[visu] -rm[visu] -wait[0]
-
     -if {*,r} -w[] -1 -rm[visu0] yc=5 -v - -endif
-
     -if {['$$1']=='-1'} -break -endif # Close request
   -while {{*}" && "!{*,ESC}" && "!{*,Q}}
   -w 0 -k[img] -nm $nm -endl
