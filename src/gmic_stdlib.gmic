@@ -17727,15 +17727,24 @@ x_grab_color : -skip ${1=xpc_variable}
     -endif
 
     x={*,x} y={*,y} mouse_over={$x>=0" && "$y>=0}
-    -if $mouse_over -if {$y<40} yc={visu0,h-30} -elif {visu0,$y>=h-30} yc=5 -endif -endif
+    hc={narg($$1)?40:24}
+    yc={visu0,nhc=h-$hc-8;!$mouse_over?$yc:$y<$hc||$yc+$hc>=h?nhc:$y>=nhc?5:$yc}
 
     # Display image.
     -i[visu] [visu0]
 
     -if {narg($current_color)}
-      24,24,1,[img] -fc. $current_color -drgba. -frame. 1,1,0 -frame. 1,1,255 -j[visu] [-1],$xc,$yc -rm.
-      0 -t. "Position ("$X","$Y")\nColor ("{``$current_color}")",1,0,15,1,255 --dilate. 5 -r.. 100%,100%,1,3
-      -j[visu] [-2],{30+$xc},$yc,0,0,1,[-1],255 -rm[-2,-1]
+      24,$hc,1,[img] -fc. $current_color
+      -if {narg($$1)} -rectangle. 0,24,100%,100%,1,$$1 -line. 0,24,100%,24,1,0 -endif
+      -drgba. -frame. 1,1,0 -frame. 1,1,255 -j[visu] [-1],$xc,$yc -rm.
+      0
+      -if {narg($$1)}
+        -t. "Position ("$X","$Y")\nColor    ("{``$current_color}")\nSelected ("{``$$1}")",1,0,15,1,255
+      -else
+        -t. "Position ("$X","$Y")\nColor ("{``$current_color}")",1,0,15,1,255
+      -endif
+      --dilate. 5 -r.. 100%,100%,1,3
+      -j[visu] [-2],{30+$xc},$yc,0,0,0.85,[-1],255 -rm[-2,-1]
     -endif
 
     -if $mouse_over
