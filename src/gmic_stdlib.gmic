@@ -17182,24 +17182,24 @@ x_colorize : -skip ${1=0},${3=0},${4=0},${5=0},${6=0} -check "${2=1024}==0 || $2
   -v -
   N=$!
   thread_main="-_x_colorize[0] ${1--1}"
-  thread_color="-w[] 400,320,0,Palette -x_select_color[] __color,255,255,255"
+  thread_color="-w[] 400,320,0,\"Palette: main\" -x_select_color[] __color,255,255,255"
 
   is_palette1=${"-is_image_arg[] $4"}
   -if $is_palette1
     -pass$4 1 ({'{b}'}) -discard. {'~'} palette_title1={t} -rm.
-    thread_palette1="-w[] 400,400,0,\""$palette_title1"\" -x_select_palette["{$!-1}"] __color"
+    thread_palette1="-w[] 400,400,0,\"Palette: "$palette_title1"\" -x_select_palette["{$!-1}"] __color"
   -endif
 
   is_palette2=${"-is_image_arg[] $5"}
   -if $is_palette2
     -pass$5 1 ({'{b}'}) -discard. {'~'} palette_title2={t} -rm.
-    thread_palette2="-w[] 400,400,0,\""$palette_title2"\" -x_select_palette["{$!-1}"] __color"
+    thread_palette2="-w[] 400,400,0,\"Palette: "$palette_title2"\" -x_select_palette["{$!-1}"] __color"
   -endif
 
   is_grabber=${"-is_image_arg[] $6"}
   -if $is_grabber
     -pass$6 1 ({'{b}'}) -discard. {'~'} palette_grabber={t} -rm.
-    thread_grabber="-w[] ${\"-fitscreen[] {w},{h},1,128,50%\"},0,\""$palette_grabber"\" -x_grab_color["{$!-1}"] __color"
+    thread_grabber="-w[] ${\"-fitscreen[] {w},{h},1,128,50%\"},0,\"Grabber: "$palette_grabber"\" -x_grab_color["{$!-1}"] __color"
   -endif
 
   __color=255,255,255
@@ -22925,7 +22925,7 @@ gimp_colorize_comics_preview :
 #@gimp : View resolution = _choice{1,"Small (faster)","Medium","High (slower)","Very high (even slower)"}
 #@gimp : 1st additional palette (.gpl file) = _file("")
 #@gimp : 2nd additional palette (.gpl file) = _file("")
-#@gimp : Image to pick color from (.png file) = _file("")
+#@gimp : Image to grab color from (.png file) = _file("")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Description:</b>\n
 #@gimp : This filter allows to quickly colorize a B&amp;W image or lineart.
@@ -22968,7 +22968,7 @@ gimp_colorize_interactive :
 
   arg_palette1=0 -l[] 0 -nm. "$4" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$4" arg_palette1=1 -endif -onfail -rm -endl -if $arg_palette1 arg_palette1=[{$!-1}] -endif
   arg_palette2=0 -l[] 0 -nm. "$5" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$5" arg_palette2=1 -endif -onfail -rm -endl -if $arg_palette2 arg_palette2=[{$!-1}] -endif
-  arg_grabber=0 -l[] 0 -nm. "$6" ext={x} -rm -if {same(['$ext'],'png',-1,0)} -input "$6" arg_grabber=1 -endif -onfail -rm -endl -if $arg_grabber arg_grabber=[{$!-1}] -endif
+  arg_grabber=0 -l[] 0 -nm. "$6" ext={x} -rm -input "$6" -to_rgb arg_grabber=1 -onfail -rm -endl -if $arg_grabber arg_grabber=[{$!-1}] -endif
 
   -repeat $N
     status=${-x_colorize[$>]\ $1,$resolution,$2,$arg_palette1,$arg_palette2,$arg_grabber}
