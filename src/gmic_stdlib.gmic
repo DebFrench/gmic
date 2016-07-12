@@ -17702,6 +17702,80 @@ x_fourier :
     -rm[^0] # Clean images and window.
   -endl -done -rm -v +
 
+#@gmic x_grab_color : _variable_name
+#@gmic : Open a color grabber widget from the first selected image.
+#@gmic : Argument 'variable_name' specifies the variable that contains the selected color values at any time.
+#@gmic : Assigning '-1' to it forces the interactive window to close.
+#@gmic : Default values: 'variable_name=xpc_variable'.
+x_grab_color : -skip ${1=xpc_variable}
+  -if {!{*,u}} -error[0--3] "Command '-$0': No display available." -return -endif
+  -if {!$!} -error[0--3] "Command '-x_grab_color': Missing specified input image." -endif
+  -v - -l[0] nm={n} -nm. img -v +
+  -e[^-1] "Open "${-arg\ {0,s},GRAY,GRAYA,RGB,RGBA}" color grabber widget for image$?, with variable name '$1'."
+  -v -
+
+  -if {!{*}} -w[] ${-fitscreen[]\ {w},{h},1,128,50%},0,0,-1,-1,"Grab a color" -endif
+  -_x_grab_color --dilate. 3 -nm. icon_mask -*.. 255 -to_rgb.. -nm.. icon_sprite
+  --r[img] {*,w},{*,h},1,100%,2 -drgba. -w. -nm. visu0
+
+  xc=5 yc=5
+
+  -cursor[0] 0
+  -do
+    x={*,x} y={*,y} mouse_over={$x>=0" && "$y>=0}
+    -if $mouse_over -if {$y<40} yc={visu0,h-30} -elif {visu0,$y>=h-30} yc=5 -endif -endif
+
+    # Display image.
+    -i[visu] [visu0]
+
+    -if {narg($current_color)}
+      24,24,1,[img] -fc. $current_color -drgba. -frame. 1,1,0 -frame. 1,1,255 -j[visu] [-1],$xc,$yc -rm.
+      0 -t. "XY ("$X","$Y")\nRGB ("{``$current_color}")",1,0,14,1,255 --dilate. 5 -r.. 100%,100%,1,3
+      -j[visu] [-2],{30+$xc},{1+$yc},0,0,1,[-1],255 -rm[-2,-1]
+    -endif
+
+    -if $mouse_over
+      X={img,round($x*(w-1)/({*,w}-1))}
+      Y={img,round($y*(h-1)/({*,h}-1))}
+      current_color={img,I($X,$Y)}
+      -j[visu] [icon_sprite],$x,{icon_sprite,$y-h+1},0,0,1,[icon_mask]
+      -if {{*,b}&1} $1=$current_color -endif
+    -endif
+    -w[visu] -rm[visu] -wait[0]
+
+    -if {['$$1']=='-1'} -break -endif # Close request
+  -while {{*}" && "!{*,ESC}" && "!{*,Q}}
+  -k[img] -nm $nm -endl
+  -u $current_color
+  -v +
+
+# Define color grabber icon.
+_x_grab_color :
+  (49,32,117,110,115,105,103,110,101,100,95,99,104,97,114,32,\
+   108,105,116,116,108,101,95,101,110,100,105,97,110,10,49,32,\
+   51,51,55,32,49,32,49,32,35,50,55,55,10,120,156,141,\
+   136,217,78,194,80,24,6,47,72,12,55,26,99,226,198,166,\
+   34,91,143,187,65,40,70,224,149,52,4,237,215,27,145,148,\
+   181,129,243,87,20,44,101,43,165,132,243,124,62,128,54,154,\
+   120,109,38,153,100,230,235,179,82,121,174,108,212,252,250,58,\
+   223,52,182,122,219,253,221,193,158,25,24,6,173,208,40,60,\
+   142,76,14,103,153,250,131,157,109,150,230,114,187,236,200,250,\
+   211,34,215,129,155,235,170,110,142,171,142,204,97,103,56,102,\
+   25,194,36,77,176,174,8,230,5,97,112,70,106,255,132,212,\
+   55,102,168,175,41,2,37,8,221,24,65,151,94,64,104,49,\
+   205,115,131,213,61,215,88,67,33,85,99,45,207,85,166,195,\
+   136,117,64,113,14,74,26,32,169,7,58,237,131,206,7,10,\
+   93,154,10,93,91,48,210,99,208,205,20,148,181,193,101,7,\
+   252,214,69,247,110,133,78,94,40,122,94,60,182,11,162,220,\
+   46,138,82,179,40,238,181,130,96,43,201,131,137,63,126,250,\
+   127,231,247,73,171,212,50,185,76,184,241,69,204,57,158,71,\
+   237,168,125,52,61,152,68,198,225,81,120,20,178,130,195,128,\
+   233,241,177,255,190,211,244,215,215,52,95,213,247,13,107,72,\
+   143,131)
+  -unserialize. --. 127 -decompress_rle.
+  -frame. 10,10,0
+  -r2dx. 24
+
 #@gmic x_histogram
 #@gmic : Launch the histogram demo.
 x_histogram :
@@ -19647,7 +19721,7 @@ x_select_color : -skip ${1=xsc_variable}
     -endif
 
     # Check RGB variable modification from another thread.
-    -if {['$$1']=='-1'} -break -endif  # Close request.
+    -if {['$$1']=='-1'} -break -endif # Close request
     -if {(($rgba_mode" && "['$$1']!='$R,$G,$B,$A')" || "(!$rgba_mode" && "['$$1']!='$R,$G,$B'))" && "$x<0" && "$y<0" && "!$is_sv" && "!$is_h" && "!$is_a}
       ($$1) -y. c --. 255 -r. 1,1,1,4,0 -+. 255 -sh. 0,2 -rgb2hsv. -rm.
       H={i[0]} S={i[1]} V={i[2]} A={i[3]} -rm
@@ -19774,7 +19848,7 @@ x_select_function1d : -skip ${1=xsf_variable},${2=220},${3=$2},${4=$2}
     -if {$oww!=$ww" || "$owh!=$wh} -w[] $ww,$wh -rm[baseview,view] -endif
 
     # Check points variable modification from another thread.
-    -if {['$$1']=='-1'} -break -endif  # Close request.
+    -if {['$$1']=='-1'} -break -endif # Close request
     -if {['$$1']!=['{points,^}']} -rm[points] -i[points] ($$1) -y. x -r. 2,{w/2},1,1,-1 -l -rm[view] -onfail -endl -endif # Keypoints changed.
 
   -while {{*}" && "!{*,ESC}" && "!{*,Q}}
