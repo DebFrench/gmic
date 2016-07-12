@@ -17716,12 +17716,16 @@ x_grab_color : -skip ${1=xpc_variable}
 
   -if {!{*}} -w[] ${-fitscreen[]\ {w},{h},1,128,50%},0,0,-1,-1,"Grab a color" -endif
   -_x_grab_color --dilate. 3 -nm. icon_mask -*.. 255 -to_rgb.. -nm.. icon_sprite
-  --r[img] {*,w},{*,h},1,100%,2 -drgba. -w. -nm. visu0
 
   xc=5 yc=5
 
   -cursor[0] 0
   -do
+
+    -if {!narg($visu0)}
+      --r[img] {*,w},{*,h},1,100%,2 -drgba. -w. -nm. visu0
+    -endif
+
     x={*,x} y={*,y} mouse_over={$x>=0" && "$y>=0}
     -if $mouse_over -if {$y<40} yc={visu0,h-30} -elif {visu0,$y>=h-30} yc=5 -endif -endif
 
@@ -17743,9 +17747,11 @@ x_grab_color : -skip ${1=xpc_variable}
     -endif
     -w[visu] -rm[visu] -wait[0]
 
+    -if {*,r} -w[] -1 -rm[visu0] yc=5 -v - -endif
+
     -if {['$$1']=='-1'} -break -endif # Close request
   -while {{*}" && "!{*,ESC}" && "!{*,Q}}
-  -k[img] -nm $nm -endl
+  -w 0 -k[img] -nm $nm -endl
   -u $current_color
   -v +
 
