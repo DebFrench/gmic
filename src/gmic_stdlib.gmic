@@ -17204,7 +17204,7 @@ x_colorize : -skip ${1=0},${3=0},${4=0},${5=0},${6=0} -check "${2=1024}==0 || $2
 
   __color=255,255,255
 
-  -if {!$is_palette1" && "!$is_palette2" &&" !$is_grabber}
+  -if {!$is_palette1" && "!$is_palette2" && "!$is_grabber}
     -repeat $N -l[$>]
       -parallel $thread_main,$thread_color
     -endl -done
@@ -22920,6 +22920,7 @@ gimp_colorize_comics_preview :
 #@gimp : View resolution = _choice{1,"Small (faster)","Medium","High (slower)","Very high (even slower)"}
 #@gimp : 1st additional palette (.gpl file) = _file("")
 #@gimp : 2nd additional palette (.gpl file) = _file("")
+#@gimp : Image to pick color from (.png file) = _file("")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Description:</b>\n
 #@gimp : This filter allows to quickly colorize a B&amp;W image or lineart.
@@ -22957,18 +22958,18 @@ gimp_colorize_interactive :
   N=$! nm={n}
   resolution={arg(1+$3,512,1024,2048,0)}
   -nm "[G"{`39`}"MIC] Colorize"
-  -if {$8==-1" || "$7!=w" || "$8!=h} _gimp_control_points= -else _gimp_control_points=${9--1} -endif
-  -l[] 0 -nm. "$4" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$4" -endif -onfail -rm -endl
-  -l[] 0 -nm. "$5" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$5" -endif -onfail -rm -endl
-  -if {$!==$N+2} # Two additional palettes.
-    -repeat {$!-2} status=${-x_colorize[$>]\ $1,$resolution,$2,[-2],[-1]} -done
-    -rm[-2,-1]
-  -elif {$!==$N+1} # One additional palette.
-    -repeat {$!-1} status=${-x_colorize[$>]\ $1,$resolution,$2,[-1]} -done
-    -rm.
-  -else # No additional palette.
-    -repeat $! status=${-x_colorize[$>]\ $1,$resolution,$2} -done
-  -endif
+  -if {$9==-1" || "$8!=w" || "$9!=h} _gimp_control_points= -else _gimp_control_points=${10--1} -endif
+  N=$!
+
+  arg_palette1=0 -l[] 0 -nm. "$4" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$4" arg_palette1=1 -endif -onfail -rm -endl -if $arg_palette1 arg_palette1=[{$!-1}] -endif
+  arg_palette2=0 -l[] 0 -nm. "$5" ext={x} -rm -if {same(['$ext'],'gpl',-1,0)} -input_gpl "$5" arg_palette2=1 -endif -onfail -rm -endl -if $arg_palette2 arg_palette2=[{$!-1}] -endif
+  arg_grabber=0 -l[] 0 -nm. "$6" ext={x} -rm -if {same(['$ext'],'png',-1,0)} -input "$6" arg_grabber=1 -endif -onfail -rm -endl -if $arg_grabber arg_grabber=[{$!-1}] -endif
+
+  -repeat $N
+    status=${-x_colorize[$>]\ $1,$resolution,$2,$arg_palette1,$arg_palette2,$arg_grabber}
+  -done
+  -k[0-{$N-1}]
+
   -if {$2==1} -repeat $! -l[$<] # Output : colors only (1 layer).
       -channels {s-3},{s-1}
     -endl -done
@@ -22978,12 +22979,12 @@ gimp_colorize_interactive :
     -if {$2>=3} -split_colors[1] 0,256,8 -endif # Split colors into layers.
   -endif
   -nm $nm
-  -u \{$1\}\{$2\}\{$3\}\{"$4"\}\{"$5"\}\{0\}\{{w},{h}\}\{$status\}
+  -u \{$1\}\{$2\}\{$3\}\{"$4"\}\{"$5"\}\{"$6"\}\{0\}\{{w},{h}\}\{$status\}
 
 gimp_colorize_interactive_preview :
-  -if $6  # Clear control points.
+  -if $7  # Clear control points.
     -gimp_print_preview "No preview\n  available",,"(Control points cleared)"
-    -u \{$1\}\{$2\}\{$3\}\{"$4"\}\{"$5"\}\{0\}\{{w},{h}\}\{-1\}
+    -u \{$1\}\{$2\}\{$3\}\{"$4"\}\{"$5"\}\{"$6"\}\{0\}\{{w},{h}\}\{-1\}
   -else -gimp_no_preview ,
   -endif
 
